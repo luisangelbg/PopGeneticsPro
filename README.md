@@ -144,4 +144,5 @@ it is used and listed on the home page.
 > Barrera-Guzmán, L.Á. (2026). *PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data* (Version 1.0.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22740171
 
 The DOI above is the concept DOI and always resolves to the latest version; each release also has its own DOI
-(v1.0.0: [10.5281/zenodo.22740172](https://doi.org/10.5281/zenodo.22740172)).
+(v1.0.1: [10.5281/zenodo.22740663](https://doi.org/10.5281/zenodo.22740663);
+v1.0.0: [10.5281/zenodo.22740172](https://doi.org/10.5281/zenodo.22740172)).
