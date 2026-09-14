@@ -11,7 +11,7 @@ let figN = 0, tabN = 0;
 Report.CITE = {
   author: 'Barrera-Guzmán, L. Á.', year: 2026, version: '1.0.0',
   title: 'PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data',
-  doi: null, url: 'https://github.com/luisangelbg/PopGeneticsPro', repo: 'https://github.com/luisangelbg/PopGeneticsPro', online: 'https://luisangelbg.github.io/PopGeneticsPro/',
+  doi: '10.5281/zenodo.22740171', url: 'https://github.com/luisangelbg/PopGeneticsPro', repo: 'https://github.com/luisangelbg/PopGeneticsPro', online: 'https://luisangelbg.github.io/PopGeneticsPro/',
 };
 Report.citation = () => { const c = Report.CITE; return `${c.author} (${c.year}). ${c.title} (Version ${c.version}) [Computer software]. ${c.doi ? 'Zenodo. https://doi.org/' + c.doi : c.url}`; };
 Report.citeSection = () => {

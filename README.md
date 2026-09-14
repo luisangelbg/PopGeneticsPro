@@ -1,5 +1,6 @@
 # PopGeneticsPro
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22740171.svg)](https://doi.org/10.5281/zenodo.22740171)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 **Population genetics for plants, from the field to the paper — without writing code.** All ten blocks are complete (version 1.0.0).
@@ -140,4 +141,7 @@ Released under the GNU General Public License, version 3 or later (GPL-3.0-or-la
 paper, please cite the software and the original method papers it implements — each one is named at the point where
 it is used and listed on the home page.
 
-> Barrera-Guzmán, L.Á. (2026). *PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data* (Version 1.0.0) [Computer software]. https://github.com/luisangelbg/PopGeneticsPro
+> Barrera-Guzmán, L.Á. (2026). *PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data* (Version 1.0.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22740171
+
+The DOI above is the concept DOI and always resolves to the latest version; each release also has its own DOI
+(v1.0.0: [10.5281/zenodo.22740172](https://doi.org/10.5281/zenodo.22740172)).
