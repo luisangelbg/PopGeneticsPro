@@ -9,7 +9,7 @@ let figN = 0, tabN = 0;
 
 /* ---------- software citation (kept in sync with CITATION.cff) ---------- */
 Report.CITE = {
-  author: 'Barrera-Guzmán, L. Á.', year: 2026, version: '1.0.0',
+  author: 'Barrera-Guzmán, L. Á.', year: 2026, version: '1.0.1',
   title: 'PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data',
   doi: '10.5281/zenodo.22740171', url: 'https://github.com/luisangelbg/PopGeneticsPro', repo: 'https://github.com/luisangelbg/PopGeneticsPro', online: 'https://luisangelbg.github.io/PopGeneticsPro/',
 };

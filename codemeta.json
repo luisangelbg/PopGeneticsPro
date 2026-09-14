@@ -4,7 +4,7 @@
   "identifier": "https://doi.org/10.5281/zenodo.22740171",
   "name": "PopGeneticsPro",
   "description": "A self-contained, browser-based platform for plant population genetics. It handles codominant markers (microsatellites, SNPs, isozymes), dominant binary markers (AFLP, ISSR, RAPD), haploid and sequence data (chloroplast and mitochondrial alignments) and morphological characters in one guided workflow: data import from spreadsheets, .str, .gen and .arp genotype files, FASTA and VCF, a built-in data sheet and template designer, with quality control; allele frequencies and diversity indices with rarefaction; Hardy-Weinberg exact tests, F_IS, null alleles and linkage disequilibrium; F-statistics (Weir & Cockerham, Nei, Hedrick, Jost) and hierarchical AMOVA; genetic distances, PCoA, NJ/UPGMA trees with bootstrap and isolation by distance; Bayesian admixture clustering in a Web Worker with Evanno's delta K, DAPC and assignment tests; sequence diversity, neutrality tests with coalescent P-values, mismatch distributions and median-joining networks; bottleneck tests, effective population size, fine-scale spatial genetic structure, selfing rate and P_ST; editable publication-quality figures and an automatic report.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dateCreated": "2026-09-11",
   "datePublished": "2026-09-14",
   "license": "https://spdx.org/licenses/GPL-3.0-or-later",
