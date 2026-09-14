@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>captura</title>
+<!-- Herramienta interna del manual: abre la app en un marco, ejecuta una receta de pasos
+     y deja la vista lista para una captura de pantalla con el navegador sin ventana.
+     Uso (con el servidor local de la app en el puerto 9000):
+       msedge --headless=new --hide-scrollbars --window-size=1400,860 --force-device-scale-factor=2
+              --virtual-time-budget=30000 --screenshot=salida.png
+              "http://localhost:9000/manual/herramientas/captura.html?w=1400&h=860&do=ex:1;build;step:6;run:btnRunDist;scroll:#fig6PcoaInd"
+     Pasos: ex:N (carga el ejemplo N, desde 0) · build · step:N · run:idBoton · wait:ms ·
+            scroll:selector[,desfase] · click:selector · open:selector (abre un <details>) ·
+            select:selector=valor (elige una opción) · csv:archivo.csv (lo pega en la hoja de datos y lo analiza) ·
+            img:Nombre=archivo.svg (imagen de una OTU, confirmada) · cfg:figura.clave=valor (opción del editor de figuras) ·
+            hide:selector (oculta, por ejemplo, .fig-editor y .fig-tools) · noworker (cálculos largos sin hilo de fondo) ·
+            frame:selector (un iframe de la app, como la vista previa del informe, crece a la altura de su página) ·
+            scrollin:iframe|elemento,desfase (como scroll, para un elemento dentro de ese iframe) · top ·
+            report (al final: la página se vuelve el informe del Bloque 10, para imprimirlo con --print-to-pdf) -->
+<style>html,body{margin:0;overflow:hidden;background:#fff}iframe{border:0;display:block;position:absolute;left:0;top:0}</style>
+</head>
+<body>
+<iframe id="app" src="../../index.html"></iframe>
+<script>
+(async function () {
+  const p = new URLSearchParams(location.search);
+  const f = document.getElementById('app');
+  f.style.width = (p.get('w') || 1400) + 'px';
+  f.style.height = (p.get('h') || 860) + 'px';
+  await new Promise(r => f.addEventListener('load', r, { once: true }));
+  const w = f.contentWindow, d = f.contentDocument;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const q = s => d.querySelector(s);
+  await sleep(600);
+  for (const raw of (p.get('do') || '').split(';').filter(Boolean)) {
+    const i = raw.indexOf(':');
+    const cmd = i < 0 ? raw : raw.slice(0, i), arg = i < 0 ? '' : raw.slice(i + 1);
+    if (cmd === 'ex') { d.querySelectorAll('#exampleRow button')[+arg].click(); await sleep(2500); }
+    else if (cmd === 'build') { q('#btnBuild').click(); await sleep(2500); }
+    else if (cmd === 'step') { q(`.step-btn[data-step="${arg}"]`).click(); await sleep(900); }
+    /* waits while the button stays disabled: up to 20 minutes, enough for the clustering MCMC of Block 7 */
+    else if (cmd === 'run') { q('#' + arg).click(); await sleep(400); for (let k = 0; k < 4800 && q('#' + arg).disabled; k++) await sleep(250); await sleep(900); }
+    else if (cmd === 'wait') await sleep(+arg);
+    else if (cmd === 'scroll') {
+      /* screenshots without a window do not follow scrolling inside a frame: the frame is
+         made as tall as the page and slid up behind the visible area instead */
+      const [sel, off] = arg.split(',');
+      f.style.height = Math.max(+(p.get('h') || 860), d.documentElement.scrollHeight + 50) + 'px';
+      await sleep(300);
+      const y = q(sel).getBoundingClientRect().top + w.scrollY - (+off || 12);
+      f.style.top = -Math.max(0, y) + 'px'; await sleep(500);
+    }
+    else if (cmd === 'click') { q(arg).click(); await sleep(700); }
+    else if (cmd === 'open') { q(arg).open = true; await sleep(500); }
+    else if (cmd === 'csv') {
+      /* a CSV next to this page, pasted into the built-in data sheet and sent to the analysis */
+      const text = await (await fetch(arg + '?v=' + Date.now())).text();
+      await w.Sheet.open({ rows: w.Data.parseDelimited(text), name: arg.replace(/\.csv$/, ''), force: true });
+      await sleep(600); q('#sheetAnalyse').click(); await sleep(1500);
+    }
+    else if (cmd === 'select') { const [sel, val] = arg.split('='); const n = q(sel); n.value = val; n.dispatchEvent(new Event('change')); await sleep(600); }
+    else if (cmd === 'img') {
+      /* img:Name=file.svg — an illustration from this folder attached to an OTU and confirmed */
+      const [name, file] = arg.split('=');
+      const blob = await (await fetch(file + '?v=' + Date.now())).blob();
+      await w.OTUImg.setImage(name, new File([blob], file.split('/').pop(), { type: blob.type || 'image/svg+xml' }));
+      await w.OTUImg.update(name, { confirmed: true, credit: 'Original illustration of an invented genus', license: 'Own work' });
+      await sleep(400);
+    }
+    else if (cmd === 'cfg') {
+      /* cfg:figureId.key=value — an option of the figure editor, then the figure is redrawn */
+      const [lhs, ...rest] = arg.split('='); const val = rest.join('=');
+      const [id, key] = lhs.split('.');
+      const api = w.Fig.registry[id];
+      if (api) { api.cfg[key] = /^-?\d+(\.\d+)?$/.test(val) ? +val : val === 'true' ? true : val === 'false' ? false : decodeURIComponent(val); api.redraw(); }
+      await sleep(500);
+    }
+    else if (cmd === 'hide') {
+      /* hide:selector — every match leaves the layout (for example the figure editor and export row
+         between a figure and the table below it) */
+      d.querySelectorAll(decodeURIComponent(arg)).forEach(n => { n.style.display = 'none'; });
+      await sleep(300);
+    }
+    else if (cmd === 'noworker') {
+      /* the browser without a window counts time virtually and does not wait for a background thread:
+         without Worker the app runs its long MCMC on the page itself, with the same seeds and results */
+      w.Worker = undefined;
+    }
+    else if (cmd === 'frame') {
+      /* frame:selector — an iframe of the app (the report preview) grows to the height of its page */
+      const fr = q(arg); await sleep(600);
+      fr.style.height = (fr.contentDocument.documentElement.scrollHeight + 24) + 'px'; await sleep(600);
+    }
+    else if (cmd === 'scrollin') {
+      /* scrollin:frame|element,offset — like scroll, for an element inside an iframe of the app
+         (a heading of the report preview) */
+      const [sels, off] = arg.split(','); const [frSel, inSel] = sels.split('|');
+      const fr = q(frSel), target = fr.contentDocument.querySelector(inSel);
+      f.style.height = Math.max(+(p.get('h') || 860), d.documentElement.scrollHeight + 50) + 'px';
+      await sleep(300);
+      const y = fr.getBoundingClientRect().top + w.scrollY + target.getBoundingClientRect().top - (+off || 12);
+      f.style.top = -Math.max(0, y) + 'px'; await sleep(500);
+    }
+    else if (cmd === 'top') { w.scrollTo(0, 0); await sleep(300); }
+    else if (cmd === 'report') {
+      /* report — this page becomes the report of Block 10 as built with its current options,
+         so the browser without a window can print it to PDF */
+      const html = w.Report.build(w.B10.opts());
+      document.open(); document.write(html); document.close();
+      return;
+    }
+  }
+  document.title = 'ready';
+})();
+</script>
+</body>
+</html>

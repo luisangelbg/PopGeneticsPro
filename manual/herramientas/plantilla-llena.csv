@@ -1,0 +1,26 @@
+#PopGeneticsPro template,v=1,kind=codominant,ploidy=2,cells=columns,coding=size,missing=0,unit=individuals,sampling=pops,orientation=rows-are-individuals,loci=5,units=24,pops=3,sizes=8|8|8,popnames=SanJuan|ElMirador|LaCumbre,id=Individual,pop=Population,← keep this row: it tells PopGeneticsPro how to read the sheet
+Individual,Population,SSR01,SSR01,SSR02,SSR02,SSR03,SSR03,SSR04,SSR04,SSR05,SSR05
+SanJuan_01,SanJuan,140,150,142,142,148,146,142,148,148,146
+SanJuan_02,SanJuan,148,146,148,142,144,148,148,140,148,144
+SanJuan_03,SanJuan,150,148,140,146,150,148,146,146,150,150
+SanJuan_04,SanJuan,144,144,150,142,140,142,144,142,150,146
+SanJuan_05,SanJuan,148,150,140,142,146,146,144,142,150,140
+SanJuan_06,SanJuan,144,144,146,150,146,140,144,142,144,144
+SanJuan_07,SanJuan,142,146,146,142,150,144,150,146,146,146
+SanJuan_08,SanJuan,146,148,150,144,148,142,146,144,142,144
+ElMirador_01,ElMirador,148,150,140,148,140,144,140,140,150,142
+ElMirador_02,ElMirador,146,140,144,146,140,150,150,150,150,150
+ElMirador_03,ElMirador,148,142,140,142,140,140,146,142,148,144
+ElMirador_04,ElMirador,148,142,150,142,144,150,140,144,140,150
+ElMirador_05,ElMirador,146,150,140,150,142,150,146,148,142,142
+ElMirador_06,ElMirador,142,146,140,148,148,148,144,140,140,150
+ElMirador_07,ElMirador,140,148,150,140,150,150,150,150,148,144
+ElMirador_08,ElMirador,142,148,150,144,142,144,150,146,144,146
+LaCumbre_01,LaCumbre,148,144,148,144,142,142,150,150,146,150
+LaCumbre_02,LaCumbre,150,142,146,140,144,146,148,150,144,142
+LaCumbre_03,LaCumbre,144,140,146,146,146,146,148,144,148,140
+LaCumbre_04,LaCumbre,142,146,142,148,142,142,146,144,140,148
+LaCumbre_05,LaCumbre,148,150,150,148,150,140,148,146,148,150
+LaCumbre_06,LaCumbre,140,140,140,140,140,140,146,150,142,140
+LaCumbre_07,LaCumbre,,,,,,,,,,
+LaCumbre_08,LaCumbre,,,,,,,,,,

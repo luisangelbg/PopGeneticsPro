@@ -1,0 +1,27 @@
+{
+  "title": "PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data",
+  "description": "<p>PopGeneticsPro is a self-contained web application for the analysis of plant population genetic data entirely in the browser, with no installation and no server-side computation. It handles codominant markers (microsatellites, SNPs, isozymes), dominant binary markers (AFLP, ISSR, RAPD), haploid and sequence data (chloroplast and mitochondrial alignments) and morphological characters within one guided workflow: data import from spreadsheets and the file formats of the classical programs, with a data template designer and quality control; allele frequencies and diversity indices; Hardy-Weinberg and linkage disequilibrium tests; F-statistics and hierarchical AMOVA; genetic distances with ordination and trees; Bayesian clustering and assignment; sequence diversity, neutrality tests, haplotype networks and divergence times; bottleneck tests, effective population size, fine-scale spatial genetic structure and the mating system. It ends in editable publication-quality figures and an automatic report with a methods paragraph.</p><p>The archive includes six example data sets and a user manual in Spanish (HTML and PDF).</p>",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Barrera-Guzmán, Luis Ángel",
+      "orcid": "0000-0001-8057-2583"
+    }
+  ],
+  "license": "gpl-3.0-or-later",
+  "access_right": "open",
+  "language": "eng",
+  "keywords": [
+    "population genetics",
+    "plant genetic resources",
+    "molecular markers",
+    "genetic diversity",
+    "AMOVA",
+    "F-statistics",
+    "Bayesian clustering",
+    "haplotype network",
+    "divergence times",
+    "effective population size",
+    "spatial genetic structure"
+  ]
+}

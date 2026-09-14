@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Bloque 8: secuencias de ADN y fechado molecular</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  figure.mini .marco { width: 50%; margin: 0 auto; }
+  figure.mini figcaption { margin-left: 12%; margin-right: 12%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b8" data-pestana="B8" data-orden="9" style="--acento: var(--b8)">
+  <div class="cap-apertura">
+    <div class="cap-num">B8</div>
+    <div class="cap-etiqueta">Capítulo nueve · Bloque 8 · Sequences</div>
+    <h1 data-corto="Bloque 8 · Secuencias y fechado">Secuencias de ADN y fechado molecular</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">Con secuencias alineadas no solo se sabe si dos plantas llevan el mismo alelo: se sabe cuántas mutaciones las separan. El Bloque 8 aprovecha esa información para medir la diversidad de haplotipos y de nucleótidos, probar si la población creció o se mantuvo estable, ver si los linajes están ordenados en el espacio, dibujar la red de haplotipos y fechar las divergencias con fósiles o con una tasa de sustitución.</p>
+    <div class="cap-franja"><span class="k8"></span><span class="k8" style="opacity:.75"></span><span class="k8" style="opacity:.5"></span><span class="k8" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>9.1</b>Diversidad haplotípica y nucleotídica</li>
+      <li><b>9.2</b>Pruebas de neutralidad y mismatch</li>
+      <li><b>9.3</b>N<sub>ST</sub> frente a G<sub>ST</sub></li>
+      <li><b>9.4</b>Redes de haplotipos</li>
+      <li><b>9.5</b>Tiempos de divergencia: fósiles y tasas</li>
+      <li><b>9.6</b>Ajustes, tablas y figuras del bloque</li>
+      <li><b>9.7</b>Paso a paso: pino y cinco géneros</li>
+    </ul>
+  </div>
+
+  <!-- 9.1 -->
+  <h2 id="s9-1"><span class="num">9.1</span>Diversidad haplotípica y nucleotídica</h2>
+  <p class="lead">Un haplotipo es una secuencia distinta. La diversidad de una muestra de secuencias tiene dos caras: cuántos haplotipos hay y qué tan diferentes son entre sí. Dos poblaciones con los mismos cuatro haplotipos pueden tener una diversidad nucleotídica muy distinta si en una difieren por una base y en la otra por veinte.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="De un alineamiento a los haplotipos y los índices de diversidad">
+      <g font-family="Jost, sans-serif" font-size="10" letter-spacing="1.2" font-weight="500" fill="#1d74b5"><text x="20" y="16">ALINEAMIENTO (10 PB)</text><text x="330" y="16">HAPLOTIPOS</text><text x="520" y="16">ÍNDICES</text></g>
+      <g transform="translate(20 30)">
+        <rect x="78" y="0" width="17" height="118" fill="#e3eef8"/><rect x="112" y="0" width="17" height="118" fill="#e3eef8"/><rect x="163" y="0" width="17" height="118" fill="#e3eef8"/>
+        <g font-family="ui-monospace, monospace" font-size="15" fill="#111">
+          <text x="0" y="20">S1</text><text x="0" y="42">S2</text><text x="0" y="64">S3</text><text x="0" y="86">S4</text><text x="0" y="108">S5</text>
+          <g letter-spacing="7"><text x="46" y="20">ACGTTAGCCA</text><text x="46" y="42">ACGTTAGCCA</text><text x="46" y="64">ACGT<tspan fill="#b4234a" font-weight="700">C</tspan>AGCCA</text><text x="46" y="86">ACGT<tspan fill="#b4234a" font-weight="700">C</tspan>AG<tspan fill="#b4234a" font-weight="700">T</tspan>CA</text><text x="46" y="108">AC<tspan fill="#b4234a" font-weight="700">A</tspan>TTAGCCA</text></g>
+        </g>
+        <text x="46" y="138" font-family="Jost, sans-serif" font-size="9.5" fill="#5d6472">las columnas sombreadas son los 3 sitios segregantes</text>
+      </g>
+      <path d="M288 90 H316" stroke="#9aa3b2" stroke-width="1.6" marker-end="url(#f91)"/>
+      <defs><marker id="f91" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#9aa3b2"/></marker></defs>
+      <g transform="translate(330 30)" font-family="Jost, sans-serif" font-size="11" fill="#111">
+        <g fill="#1d74b5"><circle cx="12" cy="16" r="9"/><circle cx="12" cy="44" r="6.4"/><circle cx="12" cy="72" r="6.4"/><circle cx="12" cy="100" r="6.4"/></g>
+        <text x="30" y="20"><tspan font-weight="600">H1</tspan> = S1, S2 (2)</text><text x="30" y="48"><tspan font-weight="600">H2</tspan> = S3</text><text x="30" y="76"><tspan font-weight="600">H3</tspan> = S4</text><text x="30" y="104"><tspan font-weight="600">H4</tspan> = S5</text>
+        <text x="0" y="138" font-size="9.5" fill="#5d6472">diferencias: H1–H2 1 · H1–H3 2 · H3–H4 3</text>
+      </g>
+      <g transform="translate(520 30)" font-family="Crimson Pro, serif" font-size="14" fill="#111">
+        <text x="0" y="18">h = 4</text>
+        <text x="0" y="40">Hd = 0.900</text>
+        <text x="0" y="62">S = 3</text>
+        <text x="0" y="84">k = 1.40</text>
+        <text x="0" y="106">π = 0.140</text>
+        <text x="0" y="128">θ<tspan dy="3" font-size="10">W</tspan><tspan dy="-3"> = 1.44</tspan></text>
+      </g>
+      <text x="350" y="222" font-family="Jost, sans-serif" font-size="10" fill="#5d6472" text-anchor="middle">Las cinco secuencias forman cuatro haplotipos; en promedio, dos secuencias difieren en 1.4 de 10 sitios.</text>
+    </svg>
+    <figcaption><b>Figura 9.1.</b> Un alineamiento de práctica de 5 secuencias y 10 pares de bases, calculado con la app. S1 y S2 son idénticas, así que forman un solo haplotipo con dos copias. Los índices se definen en la tabla 9.1.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 9.1.</b> Índices de diversidad de secuencias. n es el número de secuencias, x<sub>i</sub> la frecuencia del haplotipo i y L el número de sitios analizados.</caption>
+    <thead><tr><th style="width:24%">Índice</th><th style="width:34%">Cálculo</th><th>Qué dice</th></tr></thead>
+    <tbody>
+      <tr><td><b>h</b> · haplotipos</td><td class="f">número de secuencias distintas</td><td>Depende mucho del tamaño de muestra.</td></tr>
+      <tr><td><b>Hd</b> · diversidad haplotípica<br><span class="small">Nei (1987)</span></td><td class="f">n/(n − 1) · (1 − Σ x<sub>i</sub>²)</td><td>Probabilidad de que dos secuencias al azar sean haplotipos distintos. Va de 0 a 1.</td></tr>
+      <tr><td><b>k</b> · diferencias medias</td><td class="f">promedio de diferencias entre todos los pares de secuencias</td><td>Cuántas mutaciones separan en promedio a dos secuencias.</td></tr>
+      <tr><td><b>π</b> · diversidad nucleotídica<br><span class="small">Nei (1987)</span></td><td class="f">k / L</td><td>La misma idea por sitio; permite comparar fragmentos de distinta longitud.</td></tr>
+      <tr><td><b>S</b> · sitios segregantes</td><td class="f">sitios con más de una base</td><td>Base de θ<sub>W</sub> y de la D de Tajima.</td></tr>
+      <tr><td><b>η</b> · mutaciones mínimas</td><td class="f">Σ (bases del sitio − 1)</td><td>Igual a S si ningún sitio tiene tres o cuatro bases.</td></tr>
+      <tr><td><b>θ<sub>W</sub></b><br><span class="small">Watterson (1975)</span></td><td class="f">S / Σ<sub>i=1</sub><sup>n−1</sup> 1/i</td><td>Otra estimación de θ = 4N<sub>e</sub>μ, basada en cuántos sitios varían.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · qué sitios se analizan</div>
+    <p>La app usa <b>deleción completa</b>: un sitio con hueco (-) o base ambigua (N, R, Y…) en cualquier secuencia se excluye de todos los análisis de las tarjetas 2 a 7. Así todas las secuencias se comparan sobre los mismos sitios. El fechado de la sección 9.5 usa en cambio todos los sitios, porque su modelo de verosimilitud trata los datos faltantes. Revisa en <span class="ui">Sites</span> cuántos sitios quedaron.</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 9.2.</b> Lectura conjunta de Hd y π, la que usa la interpretación automática (Grant y Bowen, 1998).</caption>
+    <thead><tr><th style="width:26%">Hd</th><th style="width:22%">π</th><th>Lectura habitual</th></tr></thead>
+    <tbody>
+      <tr><td>Alta (&gt; 0.5)</td><td>Baja (&lt; 0.005)</td><td>Expansión reciente desde una población pequeña: muchos haplotipos, todos muy parecidos.</td></tr>
+      <tr><td>Baja</td><td>Baja</td><td>Cuello de botella o efecto fundador reciente y severo.</td></tr>
+      <tr><td>Alta</td><td>Alta</td><td>Población grande y estable, o mezcla de linajes que estuvieron separados.</td></tr>
+      <tr><td>Baja</td><td>Alta</td><td>Pocos haplotipos muy divergentes: se perdieron los intermedios.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 9.2 -->
+  <h2 id="s9-2"><span class="num">9.2</span>Pruebas de neutralidad y mismatch</h2>
+  <p>La historia de una población deja huella en la forma de su genealogía. En una población de tamaño constante, las secuencias descienden de ancestros comunes repartidos a lo largo del tiempo. Tras una expansión, casi todas coalescen al mismo tiempo, cerca del inicio del crecimiento, y las mutaciones posteriores quedan en una sola secuencia (variantes raras). Si la muestra mezcla linajes antiguos, abundan las mutaciones en frecuencias intermedias. Las pruebas de neutralidad comparan esas huellas con lo esperado en una población neutral de tamaño constante.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 214" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Tres genealogías: tamaño constante, expansión y linajes divergentes">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#1d74b5" text-anchor="middle"><text x="118" y="16">TAMAÑO CONSTANTE</text><text x="350" y="16">EXPANSIÓN RECIENTE</text><text x="582" y="16">LINAJES DIVERGENTES</text></g>
+      <g stroke="#111" stroke-width="1.8" fill="none">
+        <!-- constante -->
+        <path d="M118 40 V56 H58 V90 M118 56 H170 V110 M58 90 H38 V160 M58 90 H78 V124 M78 124 H66 V160 M78 124 H90 V160 M170 110 H146 V160 M170 110 H196 V136 M196 136 H184 V160 M196 136 H208 V160"/>
+        <!-- estrella -->
+        <path d="M350 40 V128 M278 128 H422 M278 128 V160 M302 128 V160 M326 128 V160 M350 128 V160 M374 128 V160 M398 128 V160 M422 128 V160"/>
+        <!-- dos clados profundos -->
+        <path d="M582 40 V52 H524 V144 M582 52 H640 V144 M506 144 H542 M506 144 V160 M524 144 V160 M542 144 V160 M622 144 H658 M622 144 V160 M640 144 V160 M658 144 V160"/>
+      </g>
+      <g fill="#b4234a">
+        <circle cx="38" cy="140" r="3.5"/><circle cx="118" cy="48" r="3.5"/><circle cx="170" cy="84" r="3.5"/><circle cx="90" cy="148" r="3.5"/>
+        <circle cx="278" cy="146" r="3.5"/><circle cx="302" cy="142" r="3.5"/><circle cx="350" cy="150" r="3.5"/><circle cx="374" cy="144" r="3.5"/><circle cx="422" cy="146" r="3.5"/>
+        <circle cx="524" cy="80" r="3.5"/><circle cx="524" cy="110" r="3.5"/><circle cx="640" cy="90" r="3.5"/><circle cx="640" cy="120" r="3.5"/><circle cx="506" cy="154" r="3.5"/>
+      </g>
+      <g font-size="10.5" fill="#111" text-anchor="middle">
+        <text x="118" y="182">mutaciones a todas las frecuencias</text><text x="118" y="198" font-weight="600">D ≈ 0</text>
+        <text x="350" y="182">casi solo variantes raras</text><text x="350" y="198" font-weight="600">D &lt; 0 · Fs &lt; 0 · R₂ pequeño</text>
+        <text x="582" y="182">variantes en frecuencias intermedias</text><text x="582" y="198" font-weight="600">D &gt; 0</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 9.2.</b> Tres genealogías de siete secuencias y sus mutaciones (puntos). Una mutación en una rama terminal aparece en una sola secuencia; una en una rama interna larga, en muchas. Las pruebas leen esa distribución.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 9.3.</b> Las pruebas del bloque. Todos los valores P salen de simulaciones coalescentes de una población neutral de tamaño constante con θ = θ<sub>W</sub> (Hudson, 1990).</caption>
+    <thead><tr><th style="width:22%">Prueba</th><th style="width:36%">Qué compara</th><th>Cómo se lee en la app</th></tr></thead>
+    <tbody>
+      <tr><td><b>D de Tajima</b> (1989)</td><td>k (pares) contra θ<sub>W</sub> (sitios): coinciden si hay neutralidad y tamaño constante.</td><td>Dos colas, α = 0.05. Negativa: exceso de variantes raras; positiva: exceso de intermedias.</td></tr>
+      <tr><td><b>Fs de Fu</b> (1997)</td><td>¿Hay más haplotipos de los esperados dado k? Usa la fórmula de muestreo de Ewens.</td><td>Una cola (valores negativos), α = 0.02, como recomienda Fu. La más sensible al crecimiento.</td></tr>
+      <tr><td><b>R<sub>2</sub></b> (Ramos-Onsins y Rozas, 2002)</td><td>Diferencia entre las mutaciones únicas de cada secuencia y k/2.</td><td>Una cola (valores pequeños), α = 0.05. La más potente con muestras chicas.</td></tr>
+      <tr><td><b>D* y F*</b> (Fu y Li, 1993)</td><td>Mutaciones únicas (singletons) contra el total de mutaciones η, o contra k.</td><td>Se muestran sin prueba; útiles para ver si la señal viene de las variantes únicas.</td></tr>
+      <tr><td><b>r de irregularidad</b> (Harpending, 1994)</td><td>Qué tan dentada es la distribución de diferencias por pares (mismatch).</td><td>Una cola (valores pequeños), α = 0.05: una distribución lisa sugiere expansión.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>La distribución mismatch y el modelo de expansión</div>
+    <p>Si se cuentan las diferencias entre todos los pares de secuencias, una población que creció de golpe produce una curva con un solo pico, y una población estable produce una curva irregular con varios picos. La app ajusta por mínimos cuadrados el modelo de expansión súbita de Rogers y Harpending (1992), con tres parámetros: θ<sub>0</sub> y θ<sub>1</sub> antes y después de la expansión, y <b>τ = 2ut</b>, el tiempo desde la expansión en unidades mutacionales. Si das la tasa de mutación por sitio por año, la app convierte τ en años: t = τ / (2 μ L), con L el número de sitios. Esa fecha solo tiene sentido si hay evidencia de expansión (r significativo, o Fs y R<sub>2</sub> significativos).</p>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · sitios con tres o cuatro bases</div>
+    <p>Las pruebas suponen el modelo de <b>sitios infinitos</b>: cada sitio mutó a lo más una vez. Un sitio con tres bases necesitó al menos dos mutaciones. S cuenta sitios, así que con muchos de esos sitios subestima las mutaciones, y θ<sub>W</sub>, la D de Tajima y R<sub>2</sub> se distorsionan (la D se infla hacia valores positivos). La app los cuenta en <span class="ui">Sites</span>, calcula η, usa η en D* y F*, y advierte cuando hay sitios así. Dentro de una especie son raros: si aparecen muchos, revisa el alineamiento.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · neutralidad y mismatch</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>D, Fs y R<sub>2</sub> no son significativos</b></td><td>Nada obliga a proponer cambios de tamaño: los datos son compatibles con una población estable.</td></tr>
+        <tr><td><b>Fs y R<sub>2</sub> son significativos</b> (con D negativa o no)</td><td>Evidencia de expansión. Mira la mismatch: si r también es pequeño, lee τ como la fecha de la expansión.</td></tr>
+        <tr><td><b>D negativa y significativa, pero Fs y R<sub>2</sub> no</b></td><td>Exceso de variantes raras que puede venir de un barrido selectivo tanto como de un crecimiento.</td></tr>
+        <tr><td><b>D positiva y significativa</b></td><td>Contracción, selección balanceadora o, lo más común en plantas, una muestra que mezcla linajes o poblaciones diferenciadas. Repite las pruebas población por población.</td></tr>
+        <tr><td><b>La mismatch es irregular</b> (r no significativo)</td><td>No hay evidencia de expansión; τ no es una fecha.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Selección y demografía dejan huellas parecidas en un solo locus. Solo varios loci independientes con la misma señal permiten atribuirla a la demografía.</p>
+  </div>
+
+  <!-- 9.3 -->
+  <h2 id="s9-3"><span class="num">9.3</span><span>N<sub>ST</sub> frente a G<sub>ST</sub></span></h2>
+  <p>G<sub>ST</sub> mide la diferenciación con las frecuencias de los haplotipos, como si todos fueran igual de distintos. N<sub>ST</sub> (Pons y Petit, 1996) pondera cada par de haplotipos por el número de mutaciones que los separan. Si los haplotipos emparentados tienden a estar en la misma población, N<sub>ST</sub> supera a G<sub>ST</sub>: hay <b>estructura filogeográfica</b>, es decir, los linajes están ordenados en el espacio.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 196" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="N_ST mayor que G_ST cuando los haplotipos emparentados comparten población">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#1d74b5" text-anchor="middle"><text x="170" y="16">LINAJES ORDENADOS EN EL ESPACIO</text><text x="530" y="16">LINAJES MEZCLADOS</text></g>
+      <g transform="translate(20 30)">
+        <rect x="0" y="0" width="140" height="100" rx="12" fill="#eef3f9" stroke="#b9c3d6"/><rect x="160" y="0" width="140" height="100" rx="12" fill="#eef3f9" stroke="#b9c3d6"/>
+        <text x="70" y="18" font-size="10.5" text-anchor="middle" fill="#5d6472">Población 1</text><text x="230" y="18" font-size="10.5" text-anchor="middle" fill="#5d6472">Población 2</text>
+        <g fill="#1d74b5"><circle cx="45" cy="58" r="16"/><circle cx="95" cy="58" r="16"/></g>
+        <g fill="#d9603f"><circle cx="205" cy="58" r="16"/><circle cx="255" cy="58" r="16"/></g>
+        <g font-size="10" fill="#fff" text-anchor="middle" font-weight="600"><text x="45" y="62">A1</text><text x="95" y="62">A2</text><text x="205" y="62">B1</text><text x="255" y="62">B2</text></g>
+        <text x="150" y="128" font-size="11" text-anchor="middle" fill="#111"><tspan font-weight="600">N</tspan><tspan dy="3" font-size="8" font-weight="600">ST</tspan><tspan dy="-3" font-weight="600"> &gt; G</tspan><tspan dy="3" font-size="8" font-weight="600">ST</tspan></text>
+        <text x="150" y="146" font-size="9.5" text-anchor="middle" fill="#5d6472">A1–A2 difieren en 1 sitio; A–B, en 10</text>
+      </g>
+      <line x1="350" y1="28" x2="350" y2="186" stroke="#d5dae4"/>
+      <g transform="translate(380 30)">
+        <rect x="0" y="0" width="140" height="100" rx="12" fill="#eef3f9" stroke="#b9c3d6"/><rect x="160" y="0" width="140" height="100" rx="12" fill="#eef3f9" stroke="#b9c3d6"/>
+        <text x="70" y="18" font-size="10.5" text-anchor="middle" fill="#5d6472">Población 1</text><text x="230" y="18" font-size="10.5" text-anchor="middle" fill="#5d6472">Población 2</text>
+        <g fill="#1d74b5"><circle cx="45" cy="58" r="16"/><circle cx="205" cy="58" r="16"/></g>
+        <g fill="#d9603f"><circle cx="95" cy="58" r="16"/><circle cx="255" cy="58" r="16"/></g>
+        <g font-size="10" fill="#fff" text-anchor="middle" font-weight="600"><text x="45" y="62">A1</text><text x="95" y="62">B1</text><text x="205" y="62">A2</text><text x="255" y="62">B2</text></g>
+        <text x="150" y="128" font-size="11" text-anchor="middle" fill="#111"><tspan font-weight="600">N</tspan><tspan dy="3" font-size="8" font-weight="600">ST</tspan><tspan dy="-3" font-weight="600"> ≈ G</tspan><tspan dy="3" font-size="8" font-weight="600">ST</tspan></text>
+        <text x="150" y="146" font-size="9.5" text-anchor="middle" fill="#5d6472">las mismas frecuencias, otro reparto de linajes</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 9.3.</b> En ambos casos cada población tiene dos haplotipos exclusivos, así que G<sub>ST</sub> es el mismo. A la izquierda, los dos haplotipos del linaje A (azul) están en la población 1 y los del linaje B (naranja) en la 2: las diferencias entre poblaciones son mucho mayores que dentro, y N<sub>ST</sub> sube.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo se calculan y se prueban</div>
+    <p>Con π<sub>ij</sub> las diferencias entre los haplotipos i y j y x<sub>ki</sub> la frecuencia del haplotipo i en la población k, la diversidad dentro de poblaciones es v<sub>S</sub> = (1/n) Σ<sub>k</sub> [n<sub>k</sub>/(n<sub>k</sub> − 1)] Σ<sub>ij</sub> π<sub>ij</sub> x<sub>ki</sub> x<sub>kj</sub>, la total v<sub>T</sub> promedia los pares de haplotipos de poblaciones distintas, y N<sub>ST</sub> = 1 − v<sub>S</sub>/v<sub>T</sub> (Pons y Petit, 1996, ecuaciones 6 a 8). G<sub>ST</sub> es lo mismo con π<sub>ij</sub> = 1 para todo par distinto. Para probar N<sub>ST</sub> &gt; G<sub>ST</sub>, la app baraja las identidades de los haplotipos en la matriz de distancias 999 veces: así se rompe la relación entre parentesco y población sin tocar las frecuencias. También calcula Φ<sub>ST</sub> con un AMOVA sobre el número de diferencias; con tamaños de muestra iguales coincide con N<sub>ST</sub>.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · estructura filogeográfica</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>N<sub>ST</sub> significativamente mayor que G<sub>ST</sub></b></td><td>Estructura filogeográfica: linajes emparentados comparten región. Busca en la red de haplotipos qué linajes son.</td></tr>
+        <tr><td><b>N<sub>ST</sub> ≈ G<sub>ST</sub></b>, ambos altos</td><td>Poblaciones diferenciadas en frecuencias, sin orden geográfico de los linajes: aislamiento reciente o haplotipos poco divergentes.</td></tr>
+        <tr><td><b>Seis haplotipos o menos</b></td><td>Pocas formas de barajarlos: el valor P no puede bajar mucho. La app lo advierte; lee la diferencia N<sub>ST</sub> − G<sub>ST</sub>.</td></tr>
+        <tr><td><b>ADN de organelos</b></td><td>Compara con el F<sub>ST</sub> nuclear del capítulo 6. El ADN que viaja en la semilla suele estar mucho más estructurado que el nuclear; en la mayoría de las coníferas el cloroplasto viaja en el polen.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 9.4 -->
+  <h2 id="s9-4"><span class="num">9.4</span>Redes de haplotipos</h2>
+  <p>Un árbol obliga a que cada haplotipo tenga un solo camino hacia los demás. Dentro de una especie, donde los ancestros siguen vivos en la población y hay homoplasia, una <b>red</b> representa mejor las relaciones: los haplotipos observados son nodos, las líneas unen haplotipos cercanos y los ciclos muestran caminos alternativos. La app construye la red <b>median-joining</b> de Bandelt, Forster y Röhl (1999) con ε = 0.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Un vector mediano acorta la red de tres haplotipos">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#1d74b5" text-anchor="middle"><text x="170" y="16">RED DE EXPANSIÓN MÍNIMA</text><text x="530" y="16">CON EL VECTOR MEDIANO</text></g>
+      <g transform="translate(170 110)">
+        <g stroke="#111" stroke-width="1.8"><line x1="0" y1="-62" x2="-72" y2="42"/><line x1="0" y1="-62" x2="72" y2="42"/><line x1="-72" y1="42" x2="72" y2="42"/></g>
+        <g stroke="#1d74b5" stroke-width="2"><line x1="-42" y1="-14" x2="-32" y2="-7"/><line x1="-30" y1="-31" x2="-20" y2="-24"/><line x1="42" y1="-14" x2="32" y2="-7"/><line x1="30" y1="-31" x2="20" y2="-24"/><line x1="-16" y1="36" x2="-16" y2="48"/><line x1="16" y1="36" x2="16" y2="48"/></g>
+        <g fill="#1d74b5"><circle cx="0" cy="-62" r="14"/><circle cx="-72" cy="42" r="14"/><circle cx="72" cy="42" r="14"/></g>
+        <g font-size="10.5" fill="#111" font-family="ui-monospace, monospace"><text x="20" y="-66">AAAT</text><text x="-128" y="46">AATA</text><text x="90" y="46">ATAA</text></g>
+        <text x="0" y="80" font-size="10" text-anchor="middle" fill="#5d6472">3 líneas de 2 pasos · longitud total 6</text>
+      </g>
+      <line x1="350" y1="28" x2="350" y2="190" stroke="#d5dae4"/>
+      <g transform="translate(530 110)">
+        <g stroke="#111" stroke-width="1.8"><line x1="0" y1="-62" x2="0" y2="0"/><line x1="-72" y1="42" x2="0" y2="0"/><line x1="72" y1="42" x2="0" y2="0"/></g>
+        <g stroke="#1d74b5" stroke-width="2"><line x1="-6" y1="-31" x2="6" y2="-31"/><line x1="-39" y1="15" x2="-33" y2="26"/><line x1="39" y1="15" x2="33" y2="26"/></g>
+        <g fill="#1d74b5"><circle cx="0" cy="-62" r="14"/><circle cx="-72" cy="42" r="14"/><circle cx="72" cy="42" r="14"/></g>
+        <circle cx="0" cy="0" r="5" fill="#111"/>
+        <g font-size="10.5" fill="#111" font-family="ui-monospace, monospace"><text x="20" y="-66">AAAT</text><text x="-128" y="46">AATA</text><text x="90" y="46">ATAA</text><text x="12" y="-6">AAAA</text></g>
+        <text x="0" y="80" font-size="10" text-anchor="middle" fill="#5d6472">1 vector mediano · 3 líneas de 1 paso · longitud total 3</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 9.4.</b> Tres haplotipos que difieren de dos en dos. La red de expansión mínima los une por pares con dos mutaciones cada vez (marcas azules); el algoritmo propone su mediana, AAAA, un haplotipo no muestreado que los une con una mutación a cada uno. Es el caso más simple que la app resuelve correctamente, y también los de una cadena, un cuadrado y un cubo.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Tabla 9.4.</b> Los pasos del algoritmo median-joining con ε = 0.</caption>
+    <thead><tr><th style="width:8%" class="c">Paso</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td>Construye la red de expansión mínima: la unión de todos los árboles de expansión mínima, así que conserva los empates y puede tener ciclos.</td></tr>
+      <tr><td class="c">2</td><td>Elimina los vectores medianos obsoletos, los que tienen a lo más dos vecinos, y repite el paso 1.</td></tr>
+      <tr><td class="c">3</td><td>Para cada trío de haplotipos unidos por al menos dos líneas, calcula su mediana y el costo de conectarla. Agrega las medianas nuevas con el menor costo.</td></tr>
+      <tr><td class="c">4</td><td>Vuelve al paso 1 hasta que no haya medianas nuevas. La red final es la red de expansión mínima del conjunto que queda.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · leer una red de haplotipos</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si la red muestra…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Una estrella</b>: un haplotipo central frecuente y muchos derivados raros a un paso</td><td>La imagen de una expansión reciente desde ese haplotipo.</td></tr>
+        <tr><td><b>Grupos de haplotipos separados por muchas mutaciones</b></td><td>Linajes antiguos; si cada grupo ocupa una región, estructura filogeográfica (compara con N<sub>ST</sub>).</td></tr>
+        <tr><td><b>Muchos ciclos</b></td><td>Homoplasia (el mismo cambio en dos linajes), recombinación o haplotipos intermedios que no se muestrearon.</td></tr>
+        <tr><td><b>Vectores medianos</b> (nodos negros pequeños)</td><td>Haplotipos inferidos: extintos o no muestreados. No son observaciones.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">El área de cada círculo es proporcional al número de secuencias, los sectores muestran las poblaciones y cada marca sobre una línea es una mutación.</p>
+  </div>
+
+  <!-- 9.5 -->
+  <h2 id="s9-5"><span class="num">9.5</span>Tiempos de divergencia: fósiles y tasas</h2>
+  <p>Un reloj molecular convierte sustituciones en tiempo: si dos linajes acumulan diferencias a una tasa r por sitio por millón de años, una distancia d entre ellos corresponde a t = d / (2r). Pero algo externo tiene que fijar el reloj: <b>fósiles</b> o edades publicadas para nodos de un árbol de especies o géneros, o una <b>tasa de sustitución</b> conocida para haplotipos de una misma especie, donde casi nunca hay fósiles.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico · el reloj más simple</div>
+    <p style="margin:0">Dos especies difieren en d = 0.03 sustituciones por sitio y el grupo evoluciona a r = 0.0015 sustituciones por sitio por millón de años. Cada linaje acumuló la mitad de la distancia, así que se separaron hace t = 0.03 / (2 × 0.0015) = <b>10 millones de años</b>. Si la tasa real fuera 0.001, la fecha sería 15 Ma: la tasa o las calibraciones determinan la escala de todo el árbol.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 246" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Calibración de corona y de tallo, y formas de las distribuciones previas">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#1d74b5"><text x="20" y="16">CORONA Y TALLO</text><text x="370" y="16">FORMA DE LA CALIBRACIÓN (EDAD →)</text></g>
+      <g transform="translate(24 30)" stroke="#111" stroke-width="1.8" fill="none">
+        <path d="M10 90 H70 M70 90 V40 H130 M70 90 V150 H250 M130 40 V20 H250 M130 40 V60 H250 M130 40 V50"/>
+        <path d="M130 40 V70 M130 70 H180 V100 H250 M180 70 V70"/>
+      </g>
+      <g transform="translate(24 30)">
+        <circle cx="130" cy="40" r="6" fill="#b4234a"/>
+        <circle cx="70" cy="90" r="6" fill="#1d74b5"/>
+        <text x="138" y="36" font-size="10.5" fill="#b4234a" font-weight="600">corona</text>
+        <text x="20" y="84" font-size="10.5" fill="#1d74b5" font-weight="600">tallo</text>
+        <g font-size="10" fill="#111"><text x="256" y="24">especie 1</text><text x="256" y="64">especie 2</text><text x="256" y="104">especie 3</text><text x="256" y="154">grupo externo</text></g>
+        <text x="0" y="192" font-size="9.5" fill="#5d6472">Un fósil con rasgos de un subgrupo vivo → edad mínima de la corona.</text>
+        <text x="0" y="206" font-size="9.5" fill="#5d6472">Un fósil que solo pertenece al linaje → edad mínima del tallo.</text>
+      </g>
+      <line x1="350" y1="28" x2="350" y2="220" stroke="#d5dae4"/>
+      <g transform="translate(370 30)">
+        <g stroke="#9aa3b2"><line x1="0" y1="38" x2="300" y2="38"/><line x1="0" y1="86" x2="300" y2="86"/><line x1="0" y1="134" x2="300" y2="134"/><line x1="0" y1="182" x2="300" y2="182"/></g>
+        <g stroke="#b4234a" stroke-width="1.4" stroke-dasharray="3 3"><line x1="60" y1="4" x2="60" y2="140"/></g>
+        <text x="64" y="12" font-size="9" fill="#b4234a">mínimo del fósil</text>
+        <path d="M60 38 C 70 38, 78 10, 95 12 C 115 14, 150 34, 230 37 L300 38" fill="#dbe8f4" stroke="#1d74b5" stroke-width="1.8"/>
+        <path d="M60 86 L60 56 C 90 70, 140 82, 300 85" fill="#dbe8f4" stroke="#1d74b5" stroke-width="1.8"/>
+        <path d="M60 134 V110 H200 V134" fill="#dbe8f4" stroke="#1d74b5" stroke-width="1.8"/>
+        <path d="M110 182 C 140 182, 150 150, 170 150 C 190 150, 200 182, 230 182" fill="#dbe8f4" stroke="#1d74b5" stroke-width="1.8"/>
+        <g font-size="10" fill="#111"><text x="200" y="26">lognormal con desplazamiento</text><text x="160" y="74">exponencial con desplazamiento</text><text x="206" y="124">uniforme (mínimo y máximo)</text><text x="236" y="172">normal (secundaria)</text></g>
+      </g>
+    </svg>
+    <figcaption><b>Figura 9.5.</b> A la izquierda, dónde se coloca una calibración. A la derecha, las cuatro formas que ofrece la app para la edad de un nodo calibrado. Las tres primeras parten de la edad mínima del fósil y dejan una cola hacia edades mayores; la normal centra la edad de una calibración secundaria en el valor publicado.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 9.5.</b> Los dos métodos de fechado de la app.</caption>
+    <thead><tr><th style="width:18%"></th><th>Mínimos cuadrados (LSD; To y colaboradores, 2016)</th><th>Bayesiano con reloj relajado (MCMC; Drummond et al., 2006)</th></tr></thead>
+    <tbody>
+      <tr><td><b>Reloj</b></td><td>Estricto: una tasa para todas las ramas.</td><td>Relajado lognormal no correlacionado (cada rama con su tasa) o estricto.</td></tr>
+      <tr><td><b>Calibraciones</b></td><td>Límites duros.</td><td>Distribuciones previas (figura 9.5), combinadas con un modelo del árbol: Yule entre especies o coalescente dentro de una especie.</td></tr>
+      <tr><td><b>Incertidumbre</b></td><td>Intervalo de confianza por remuestreo de las longitudes de rama.</td><td>Intervalo de máxima densidad posterior (HPD) al 95&nbsp;% de cada nodo.</td></tr>
+      <tr><td><b>Tiempo</b></td><td>Segundos.</td><td>Minutos; revisa el tamaño efectivo de muestra (ESS ≥ 200).</td></tr>
+      <tr><td><b>Úsalo para</b></td><td>Explorar y revisar calibraciones.</td><td>Reportar.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · el árbol que se fecha</div>
+    <p>Antes de fechar, la app construye el árbol: una punta por haplotipo o por secuencia, topología por neighbour-joining con distancias K2P o importada en Newick o NEXUS, raíz en un grupo externo o en el punto medio, y longitudes de rama por máxima verosimilitud. Por omisión elige el modelo de sustitución con menor AICc entre JC, K80, HKY y GTR, con o sin variación Γ entre sitios. La topología queda fija: la app no incorpora la incertidumbre del árbol, ni puntas fechadas, ni modelos de nacimiento y muerte.</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 9.6.</b> Tasas típicas que ofrece la app para fechar con una tasa (sustituciones por sitio por millón de años; entre paréntesis, por año).</caption>
+    <thead><tr><th>Marcador</th><th class="c">Media ± DE que llena la app</th><th>Intervalo publicado</th></tr></thead>
+    <tbody>
+      <tr><td>ADN de cloroplasto no codificante</td><td class="c">0.002 ± 0.0006</td><td>1.1–2.9 × 10⁻⁹ (Wolfe et al., 1987)</td></tr>
+      <tr><td>ADN mitocondrial de plantas</td><td class="c">0.0006 ± 0.0002</td><td>0.2–1.0 × 10⁻⁹ (Wolfe et al., 1987)</td></tr>
+      <tr><td>Genes nucleares, sitios sinónimos</td><td class="c">0.006 ± 0.0005</td><td>5.1–7.1 × 10⁻⁹ (Wolfe et al., 1987)</td></tr>
+      <tr><td>ITS ribosomal nuclear</td><td class="c">0.0024 ± 0.0015</td><td>0.38–8.34 × 10⁻⁹ (Kay et al., 2006)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · calibrar y leer un árbol fechado</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Solo hay edades mínimas</b></td><td>Las fechas pueden derivar hacia edades mayores: da un máximo a alguna calibración, una secundaria o una edad máxima para la raíz. La app lo advierte.</td></tr>
+        <tr><td><b>Algún ESS es menor que 200</b></td><td>La cadena no exploró bien la distribución posterior: alárgala o repítela con otra semilla antes de reportar.</td></tr>
+        <tr><td><b>El intervalo de σ llega cerca de cero</b></td><td>Los datos son compatibles con un reloj estricto.</td></tr>
+        <tr><td><b>Una calibración posterior se parece a su previa</b></td><td>Las secuencias dicen poco de esa edad. Compáralo con la opción <span class="ui">Sample from the prior only</span>.</td></tr>
+        <tr><td><b>Datos de una sola especie</b></td><td>Usa una tasa y el modelo coalescente. Las edades son de coalescencia de los haplotipos, más antiguas que la separación de las poblaciones que los llevan.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 9.6 -->
+  <h2 id="s9-6"><span class="num">9.6</span>Ajustes, tablas y figuras del bloque</h2>
+  <p>El Bloque 8 se abre solo con secuencias alineadas (FASTA o una hoja con secuencias). Al entrar se analizan las secuencias con los ajustes predeterminados; el fechado de la tarjeta 8 se corre paso a paso.</p>
+
+  <table>
+    <caption><b>Tabla 9.7.</b> Ajustes del Bloque 8.</caption>
+    <thead><tr><th style="width:34%">Ajuste</th><th>Opciones</th><th style="width:28%">Recomendación</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Coalescent simulations</span></td><td>0 a 20&nbsp;000 (predeterminado 1000).</td><td>1000; 10&nbsp;000 para publicar.</td></tr>
+      <tr><td><span class="ui">Permutations</span></td><td>0 a 9999 (predeterminado 999), para N<sub>ST</sub> y Φ<sub>ST</sub>.</td><td>999.</td></tr>
+      <tr><td><span class="ui">Mutation rate (per site per year)</span></td><td>Opcional; convierte τ en años.</td><td>La publicada para tu marcador y grupo.</td></tr>
+      <tr><td><span class="ui">Generation time (years)</span></td><td>Predeterminado 1; convierte los años en generaciones.</td><td>La edad de reproducción de tu especie.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Número entero.</td><td>Repórtala.</td></tr>
+      <tr><td colspan="3" style="background:#f3f6fb"><b>Tarjeta 8 · fechado</b></td></tr>
+      <tr><td><span class="ui">Tips of the tree</span> · <span class="ui">Topology</span> · <span class="ui">Root</span></td><td>Haplotipos o secuencias; neighbour-joining o árbol importado; grupo externo o punto medio.</td><td>Grupo externo siempre que exista.</td></tr>
+      <tr><td><span class="ui">Substitution model</span></td><td>El mejor por AICc o uno fijo, con o sin Γ.</td><td>El mejor por AICc.</td></tr>
+      <tr><td><span class="ui">What sets the clock</span></td><td>Calibraciones (fósiles o secundarias) o una tasa con su desviación estándar.</td><td>Calibraciones entre especies; tasa dentro de una especie.</td></tr>
+      <tr><td><span class="ui">Clock</span> · <span class="ui">Tree prior</span></td><td>Relajado o estricto; Yule o coalescente.</td><td>Relajado; Yule entre especies.</td></tr>
+      <tr><td><span class="ui">Chain length</span> · <span class="ui">Burn-in (%)</span></td><td>Predeterminado 200&nbsp;000 y 25&nbsp;%.</td><td>Lo necesario para ESS ≥ 200.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Tabla 9.8.</b> Tarjetas de resultados del Bloque 8.</caption>
+    <thead><tr><th style="width:30%">Tarjeta</th><th>Contenido</th><th class="c" style="width:24%">Se descarga</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · What the sequences say</span></td><td>Cifras e interpretación de diversidad, pruebas, mismatch, estructura y red.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Sites</span></td><td>Sitios analizados, segregantes, con tres o cuatro bases, η, informativos, transiciones y transversiones; mapa de sitios variables.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">4 · Haplotypes</span></td><td>Frecuencia de cada haplotipo por población, sus sitios variables y haplotipos privados.</td><td class="c"><span class="ui">FASTA</span> · <span class="ui">CSV</span></td></tr>
+      <tr><td><span class="ui">5 · Diversity and neutrality tests</span></td><td>Índices y pruebas por población y total, gráfica por población y distribución mismatch.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">6 · Structure among populations</span></td><td>h<sub>S</sub>, h<sub>T</sub>, G<sub>ST</sub>, v<sub>S</sub>, v<sub>T</sub>, N<sub>ST</sub> y Φ<sub>ST</sub> con sus pruebas.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">7 · Haplotype network</span></td><td>Red median-joining con sectores por población.</td><td class="c"><span class="ui">Network links (CSV)</span></td></tr>
+      <tr><td><span class="ui">8 · Divergence times</span></td><td>Modelos comparados, calibraciones, árbol fechado, edad de cada nodo y diagnóstico de la cadena.</td><td class="c"><span class="ui">NEXUS</span> · <span class="ui">Newick</span> · <span class="ui">CSV</span> · registro MCMC</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 9.7 -->
+  <h2 id="s9-7"><span class="num">9.7</span>Paso a paso: pino y cinco géneros</h2>
+  <p>Dos ejemplos recorren el bloque: 48 secuencias de cloroplasto de un pino en cuatro poblaciones (12 por población, 480 pares de bases) y 16 especies de cinco géneros inventados más un grupo externo, simuladas sobre un árbol de edades conocidas. Los valores son los que produce la app con los ajustes predeterminados y la semilla 1.</p>
+
+  <h3>El pino: diversidad, pruebas, estructura y red</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En el Bloque 2 carga <span class="ui">Pine · chloroplast DNA</span> y abre el Bloque 8: el análisis corre solo con los ajustes de la tabla 9.7.</li>
+      <li>Lee las cifras y la interpretación (figura 9.6) y revisa los sitios (figura 9.7) y los haplotipos (figura 9.8).</li>
+      <li>Compara las pruebas por población (figura 9.9) y mira la distribución mismatch (figura 9.10).</li>
+      <li>Revisa la estructura (figura 9.11) y la red de haplotipos (figura 9.12).</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-pino-resumen.png" alt="Resumen del análisis del pino"></div>
+    <figcaption><b>Figura 9.6.</b> <span class="ui">What the sequences say</span>. Las 48 secuencias forman 8 haplotipos (Hd = 0.882, π = 0.0152). La app advierte que los 11 sitios variables tienen tres o cuatro bases (η = 28), así que la D de Tajima de 5.70 está inflada.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-pino-sitios.png" alt="Sitios del alineamiento del pino"></div>
+    <figcaption><b>Figura 9.7.</b> <span class="ui">Sites</span>: 480 sitios analizados, 11 segregantes, todos informativos y todos con tres o cuatro bases. El mapa muestra dónde están a lo largo del fragmento.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-pino-haplotipos.png" alt="Tabla de haplotipos del pino"></div>
+    <figcaption><b>Figura 9.8.</b> <span class="ui">Haplotypes</span>: H1 es el más frecuente (10 secuencias, en Sierra Norte y Cofre). Sierra Sur y Cofre tienen un haplotipo privado cada una y Nevado dos; Sierra Norte ninguno.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-pino-diversidad.png" alt="Diversidad y pruebas por población"></div>
+    <figcaption><b>Figura 9.9.</b> Diversidad y pruebas por población. Cada población tiene 3 haplotipos; π va de 0.0105 (Cofre) a 0.0133 (Sierra Sur). La D de Tajima es positiva en todas, significativa en tres, mientras Fs, R<sub>2</sub> y r están lejos de indicar expansión.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b8-pino-mismatch.png" alt="Distribución mismatch del pino"></div>
+    <figcaption><b>Figura 9.10.</b> Distribución mismatch de las 48 secuencias. Tiene dos picos, en 0 diferencias (pares del mismo haplotipo) y en 8, y r = 0.087 (P = 0.46): nada que no produzca una población estable. El modelo de expansión ajustado da τ = 8.98, pero no debe leerse como fecha.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-pino-estructura.png" alt="Estructura entre poblaciones del pino"></div>
+    <figcaption><b>Figura 9.11.</b> <span class="ui">Structure among populations</span>: G<sub>ST</sub> = 0.287 y N<sub>ST</sub> = 0.288, sin diferencia significativa (P = 0.47). Φ<sub>ST</sub> = 0.288 es significativo (P = 0.001) e igual a N<sub>ST</sub>, porque las cuatro poblaciones tienen 12 secuencias.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-pino-red.png" alt="Red de haplotipos del pino"></div>
+    <figcaption><b>Figura 9.12.</b> Red median-joining: 8 haplotipos observados, 10 vectores medianos y 22 líneas con ciclos. Los ciclos reflejan los sitios con varias mutaciones; los sectores muestran que H2 y H3 comparten Sierra Norte y Sierra Sur, y H5 Cofre y Nevado.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer los resultados del pino</div>
+    <ul style="margin:0">
+      <li><b>Mucha diversidad, sin expansión.</b> Hd y π son altas, Fs es positiva, R<sub>2</sub> es grande (ambas lejos de la significación) y la mismatch es irregular: nada indica crecimiento.</li>
+      <li><b>La D positiva no es una señal demográfica fiable aquí.</b> Viene en parte de los sitios con varias bases (los datos de práctica son sintéticos) y en parte de mezclar poblaciones diferenciadas.</li>
+      <li><b>Poblaciones diferenciadas, linajes no ordenados.</b> Casi 29&nbsp;% de la variación está entre poblaciones, el mismo valor que el θ de 0.287 del capítulo 6, pero N<sub>ST</sub> no supera a G<sub>ST</sub>: los haplotipos emparentados no se concentran en una región.</li>
+      <li><b>Una fecha con tasa, con cautela.</b> Con la tasa de cloroplasto que ofrece la app (0.002 ± 0.0006 por sitio por millón de años), el LSD sobre los 8 haplotipos pone su ancestro común en 8.5 Ma (4.4–17.5); la app advierte que el α de la variación Γ quedó en su límite, porque solo 11 de 480 sitios varían.</li>
+    </ul>
+  </div>
+
+  <h3>Cinco géneros: fechar con fósiles</h3>
+  <p>Las secuencias se simularon con un modelo HKY + Γ y un reloj relajado de 0.0015 sustituciones por sitio por millón de años sobre un árbol con la raíz en 62 Ma. Los géneros y los fósiles son inventados, así que cada fecha se puede comparar con la verdadera.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Carga <span class="ui">Five genera · dating with fossils</span>, abre el Bloque 8 y baja a la tarjeta 8. Pulsa <span class="ui">Fill in the example setup</span>: fija el grupo externo (<i>Exterocarpus</i>) y cuatro calibraciones.</li>
+      <li>Pulsa <span class="ui">Build and fit the tree</span>. En unos segundos compara ocho modelos y elige HKY + Γ (figura 9.13). Revisa las calibraciones del paso 2 (figura 9.14 y tabla 9.9).</li>
+      <li>Pulsa <span class="ui">Run LSD</span> y revisa la tabla de nodos (figura 9.15).</li>
+      <li>Sube <span class="ui">Chain length</span> a 1&nbsp;000&nbsp;000 y pulsa <span class="ui">Run the MCMC</span> (unos 4 minutos). Revisa el resumen, el árbol fechado, las edades y la convergencia (figuras 9.16 a 9.19).</li>
+    </ol>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 9.9.</b> Las cuatro calibraciones del ejemplo.</caption>
+    <thead><tr><th style="width:11%">Nombre</th><th style="width:26%">Nodo</th><th style="width:27%">Evidencia</th><th class="c" style="width:22%">Edades (Ma)</th><th style="width:14%">Forma</th></tr></thead>
+    <tbody>
+      <tr><td>F1</td><td>Corona de <i>Fictaria</i> + <i>Modelanthus</i></td><td>Fósil del Rupeliano (Oligoceno temprano)</td><td class="c">mínimo 27.82 · máximo suave 45</td><td>lognormal</td></tr>
+      <tr><td>F2</td><td>Corona de <i>Demoxylon</i></td><td>Fósil del Aquitaniano (Mioceno temprano)</td><td class="c">mínimo 20.44</td><td>lognormal</td></tr>
+      <tr><td>F3</td><td>Tallo de <i>Probocarpa</i></td><td>Fósil del Chattiano (Oligoceno tardío)</td><td class="c">mínimo 23.03</td><td>exponencial</td></tr>
+      <tr><td>S1</td><td>Corona de los cinco géneros</td><td>Secundaria, de un árbol publicado</td><td class="c">50 ± 4</td><td>normal</td></tr>
+    </tbody>
+  </table>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b8-generos-preparacion.png" alt="El árbol a fechar y la comparación de modelos"></div>
+    <figcaption><b>Figura 9.13.</b> Paso 1 con el ejemplo: todas las secuencias como puntas, neighbour-joining, raíz en el grupo externo y el mejor modelo por AICc. HKY + Γ tiene peso de Akaike 0.971, con κ = 3.93 y α = 0.465, cerca de los valores con que se simularon los datos (4 y 0.5).</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b8-generos-calibraciones.png" alt="Calibraciones del ejemplo"></div>
+    <figcaption><b>Figura 9.14.</b> Paso 2: las cuatro calibraciones con su nodo, tipo de evidencia, edades, forma, unidad estratigráfica y el intervalo previo al 95&nbsp;% que resulta (por ejemplo, 28.29–51.36 Ma para F1). La nota bajo cada intervalo dice cuántas puntas tiene el clado calibrado.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b8-generos-lsd.png" alt="Edades de los nodos con LSD"></div>
+    <figcaption><b>Figura 9.15.</b> Edades con el LSD y reloj estricto: raíz en 78.8 Ma (62.1–100.6) y 12 de 15 edades simuladas dentro del intervalo. La raíz y el grupo externo salen demasiado antiguos porque en esta simulación el grupo externo evolucionó más rápido, algo que un reloj estricto no puede absorber; la tercera falla es el par <i>F.&nbsp;montana</i>–<i>F.&nbsp;rubra</i>.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-generos-mcmc-resumen.png" alt="Resumen del MCMC"></div>
+    <figcaption><b>Figura 9.16.</b> Resumen del MCMC con reloj relajado y 1&nbsp;000&nbsp;000 de generaciones: raíz en 63.5 Ma (47.8–83.0), tasa media 1.68 × 10⁻³, σ = 0.276 y el ESS más bajo de 208.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-generos-arbol.png" alt="Árbol fechado de los cinco géneros"></div>
+    <figcaption><b>Figura 9.17.</b> El árbol fechado: barras de HPD al 95&nbsp;% en cada nodo, los cuatro nodos calibrados marcados en rojo y la escala geológica. La barra de la raíz es la más ancha: ninguna calibración la acota directamente.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-generos-nodos.png" alt="Edades de los nodos con el MCMC"></div>
+    <figcaption><b>Figura 9.18.</b> <span class="ui">Age of every node</span>: la raíz queda a 1.5 Ma de la verdadera (62 Ma) y 13 de 15 edades simuladas caen dentro del HPD. Fallan el clado de <i>Demoxylon</i>, <i>Probocarpa</i> y <i>Testiflora</i> (33.0 contra 40 Ma) y el par <i>F.&nbsp;montana</i>–<i>F.&nbsp;rubra</i>.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b8-generos-convergencia.png" alt="Diagnóstico de la cadena"></div>
+    <figcaption><b>Figura 9.19.</b> <span class="ui">Did the chain converge?</span>: parámetros con su ESS (todos ≥ 200), la traza del log de la verosimilitud y, para cada calibración, la previa ingresada frente a la posterior. En S1 la posterior (44 Ma) queda más joven que la previa de 50 ± 4 Ma: las secuencias y las otras calibraciones la corrigen. La tasa estimada y σ quedan cerca de los valores simulados (1.5 × 10⁻³ y 0.25).</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer los resultados de los géneros</div>
+    <ul style="margin:0">
+      <li><b>El reloj relajado corrige al estricto.</b> El LSD dejó la raíz 17 Ma más antigua; el MCMC la recupera porque permite que el grupo externo tenga su propia tasa.</li>
+      <li><b>La longitud de la cadena importa.</b> Con las 200&nbsp;000 generaciones predeterminadas, la raíz sale en 66.3 Ma pero su ESS es de 29 y 12 nodos quedan bajo 200; con 1&nbsp;000&nbsp;000, todos superan 200.</li>
+      <li><b>Dos fallas de 15 son lo esperable.</b> Con intervalos al 95&nbsp;% se espera fallar en uno de cada veinte nodos en promedio; en una sola simulación, dos fallas son normales.</li>
+    </ul>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · qué reportar en un artículo</div>
+    <p>De la diversidad: n, h, Hd, π y S por población, con la deleción completa y los sitios analizados. De las pruebas: el estadístico, su valor P, el número de simulaciones y el modelo nulo (población neutral de tamaño constante). De la estructura: G<sub>ST</sub>, N<sub>ST</sub> y el número de permutaciones. De la red: el método y ε. Del fechado: modelo de sustitución, árbol y raíz, cada calibración con su evidencia, forma y edades (o la tasa y su fuente), reloj, modelo del árbol, longitud de la cadena, burn-in, ESS mínimo y la semilla. La sección de métodos del informe del Bloque 10 redacta todo esto.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · verificación de los cálculos</div>
+    <p>Para este manual, Hd, k, π, S, η y θ<sub>W</sub> del pino se recalcularon de forma independiente sin diferencias; G<sub>ST</sub> y N<sub>ST</sub> se recalcularon con las ecuaciones 6 y 7 de Pons y Petit (10<sup>−16</sup>), el índice r con la fórmula de Harpending y los números de Stirling de Fs con aritmética exacta de enteros. Con 4000 muestras de un simulador coalescente independiente, D, D* y F* tuvieron media cercana a 0. Con 250 muestras neutrales, las pruebas rechazaron 4.8&nbsp;% (D), 3.6&nbsp;% (Fs, α = 0.02), 4.0&nbsp;% (R<sub>2</sub>) y 6.4&nbsp;% (r). El modelo de expansión coincidió con una implementación independiente, y la red median-joining reprodujo los casos de estrella, cadena, cuadrado y cubo. El motor de fechado pasa sus pruebas de matrices de transición, distribución Γ, verosimilitud exacta y colocación de la raíz, y en el ejemplo recupera 13 de 15 edades simuladas.</p>
+  </div>
+
+  <p style="margin-top:0.25in">El siguiente capítulo vuelve a los marcadores para estudiar la demografía y el espacio: el Bloque 9 busca cuellos de botella, estima el tamaño efectivo, mide la estructura genética espacial y la autofecundación, y compara la diferenciación de caracteres con la genética.</p>
+</section>
+
+</body>
+</html>

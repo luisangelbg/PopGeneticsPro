@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Testiflora: invented genus, drawn as a stem of bell-shaped flowers (original illustration for the manual) -->
+  <rect width="400" height="400" fill="#f1f5f9"/>
+  <path d="M110 380 C 130 300, 170 180, 300 70" stroke="#3f6d2a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M150 300 C 110 270, 70 272, 44 292 C 84 314, 124 316, 150 300 Z" fill="#6aa84f" stroke="#3f6d2a" stroke-width="2"/>
+  <g stroke="#3f6d2a" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M190 190 C 214 200, 226 214, 230 236"/>
+    <path d="M232 138 C 256 146, 270 160, 276 182"/>
+    <path d="M160 246 C 184 256, 196 272, 198 294"/>
+    <path d="M276 98 C 300 104, 314 118, 322 138"/>
+  </g>
+  <g fill="#3b78c2" stroke="#1d4577" stroke-width="2.5">
+    <path d="M204 234 C 206 212, 254 212, 256 234 L 262 276 C 250 268, 240 284, 230 272 C 220 284, 210 268, 198 276 Z"/>
+    <path d="M250 180 C 252 158, 300 158, 302 180 L 308 222 C 296 214, 286 230, 276 218 C 266 230, 256 214, 244 222 Z"/>
+    <path d="M172 292 C 174 270, 222 270, 224 292 L 230 334 C 218 326, 208 342, 198 330 C 188 342, 178 326, 166 334 Z"/>
+    <path d="M298 136 C 300 118, 340 118, 342 136 L 346 170 C 336 164, 328 176, 320 166 C 312 176, 304 164, 294 170 Z"/>
+  </g>
+  <g fill="#f5d547"><circle cx="230" cy="280" r="5"/><circle cx="276" cy="226" r="5"/><circle cx="198" cy="338" r="5"/><circle cx="320" cy="174" r="4"/></g>
+</svg>

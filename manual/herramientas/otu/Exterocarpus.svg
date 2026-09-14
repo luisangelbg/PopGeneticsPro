@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Exterocarpus: invented outgroup genus, drawn as a ribbed capsule with winged seeds (original illustration for the manual) -->
+  <rect width="400" height="400" fill="#f7f3ec"/>
+  <path d="M200 30 L200 88" stroke="#5b3d1f" stroke-width="7" stroke-linecap="round"/>
+  <g stroke="#6b4a22" stroke-width="3">
+    <path d="M200 86 C 120 96, 92 200, 118 270 C 140 322, 176 346, 200 350 C 224 346, 260 322, 282 270 C 308 200, 280 96, 200 86 Z" fill="#c98d3f"/>
+    <path d="M200 86 C 164 120, 156 230, 200 350" fill="none"/>
+    <path d="M200 86 C 236 120, 244 230, 200 350" fill="none"/>
+    <path d="M200 86 C 138 116, 118 236, 170 336" fill="none" opacity=".6"/>
+    <path d="M200 86 C 262 116, 282 236, 230 336" fill="none" opacity=".6"/>
+  </g>
+  <g transform="translate(78 318) rotate(-28)">
+    <path d="M0 0 C 30 -22, 70 -20, 86 -4 C 70 10, 30 14, 0 0 Z" fill="#e9d7b0" stroke="#8a6a3a" stroke-width="2"/>
+    <ellipse cx="10" cy="-2" rx="11" ry="8" fill="#7a5125"/>
+  </g>
+  <g transform="translate(322 318) rotate(208)">
+    <path d="M0 0 C 30 -22, 70 -20, 86 -4 C 70 10, 30 14, 0 0 Z" fill="#e9d7b0" stroke="#8a6a3a" stroke-width="2"/>
+    <ellipse cx="10" cy="-2" rx="11" ry="8" fill="#7a5125"/>
+  </g>
+</svg>

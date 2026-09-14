@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Bloque 2: datos y control de calidad</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  /* celdas de ejemplo con error */
+  td.err { background: #fde8e6 !important; color: #9b1c1c; font-weight: 500; }
+  table.hoja-mini td, table.hoja-mini th { font-family: var(--mono); font-size: 8pt; padding: 0.03in 0.05in; text-align: center; }
+  table.hoja-mini th { background: #24365f; }
+  table.hoja-mini td:first-child, table.hoja-mini th:first-child { background: #e9edf5; color: #5d6472; font-family: var(--sans); width: 0.3in; }
+  .kbd { font-family: var(--sans); font-size: 0.78em; border: 1px solid #b9c3d6; border-bottom-width: 2px; border-radius: 3px; padding: 0 0.35em; background: #fff; white-space: nowrap; color: var(--negro); }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b2" data-pestana="B2" data-orden="3" style="--acento: var(--b2)">
+  <div class="cap-apertura">
+    <div class="cap-num">B2</div>
+    <div class="cap-etiqueta">Capítulo tres · Bloque 2 · Data</div>
+    <h1 data-corto="Bloque 2 · Datos y control de calidad">Datos y control de calidad</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">Todo análisis empieza aquí. El Bloque 2 lee tu archivo, te muestra cómo lo interpretó para que lo confirmes, revisa la calidad de la matriz antes de calcular una sola estadística y te dice qué análisis admiten tus datos. Si no sabes cómo acomodar la información, te prepara una plantilla; si un archivo no se deja subir, puedes pegar los datos en su hoja integrada.</p>
+    <div class="cap-franja"><span class="k2"></span><span class="k2" style="opacity:.75"></span><span class="k2" style="opacity:.5"></span><span class="k2" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>3.1</b>Formatos de entrada</li>
+      <li><b>3.2</b>La hoja de datos integrada</li>
+      <li><b>3.3</b>El diseñador de plantillas</li>
+      <li><b>3.4</b>Interpretación y papel de cada columna</li>
+      <li><b>3.5</b>Control de calidad</li>
+      <li><b>3.6</b>Qué análisis permiten tus datos</li>
+      <li><b>3.7</b>Paso a paso con los seis ejemplos</li>
+    </ul>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Teoría en breve · por qué revisar antes de calcular</div>
+    <p>Los programas estadísticos calculan lo que se les da, aunque esté mal. Un alelo escrito <code>18O</code> (con la letra O) cuenta como un alelo nuevo e infla la diversidad; una planta capturada dos veces parece un clon; una fila sin población queda fuera de todos los grupos; una latitud de 190° desplaza una población al otro lado del planeta. Ninguno de estos errores detiene el cálculo, pero todos cambian los resultados. Por eso el Bloque 2 sigue una regla: <b>nada se supone en silencio</b>. Cada decisión que toma la app se muestra, se explica y se puede corregir antes de continuar.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 118" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Las cinco tarjetas del Bloque 2">
+      <defs><marker id="fb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0f766e"/></marker></defs>
+      <g font-size="10">
+        <rect x="4" y="14" width="124" height="74" rx="9" fill="#0f766e"/>
+        <text x="66" y="40" text-anchor="middle" fill="#fff" font-size="17" font-weight="600">1</text>
+        <text x="66" y="58" text-anchor="middle" fill="#fff" font-weight="600">Cargar</text>
+        <text x="66" y="74" text-anchor="middle" fill="#cfe9e6" font-size="8.5">archivo · hoja · plantilla</text>
+
+        <rect x="146" y="14" width="124" height="74" rx="9" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
+        <text x="208" y="40" text-anchor="middle" fill="#0f766e" font-size="17" font-weight="600">2</text>
+        <text x="208" y="58" text-anchor="middle" fill="#111" font-weight="600">Interpretar</text>
+        <text x="208" y="74" text-anchor="middle" fill="#5d6472" font-size="8.5">orientación · tipo de dato</text>
+
+        <rect x="288" y="14" width="124" height="74" rx="9" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
+        <text x="350" y="40" text-anchor="middle" fill="#0f766e" font-size="17" font-weight="600">3</text>
+        <text x="350" y="58" text-anchor="middle" fill="#111" font-weight="600">Asignar papeles</text>
+        <text x="350" y="74" text-anchor="middle" fill="#5d6472" font-size="8.5">ID · población · región</text>
+
+        <rect x="430" y="14" width="124" height="74" rx="9" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
+        <text x="492" y="40" text-anchor="middle" fill="#0f766e" font-size="17" font-weight="600">4</text>
+        <text x="492" y="58" text-anchor="middle" fill="#111" font-weight="600">Control de calidad</text>
+        <text x="492" y="74" text-anchor="middle" fill="#5d6472" font-size="8.5">faltantes · clones · errores</text>
+
+        <rect x="572" y="14" width="124" height="74" rx="9" fill="#14213d"/>
+        <text x="634" y="40" text-anchor="middle" fill="#fff" font-size="17" font-weight="600">5</text>
+        <text x="634" y="58" text-anchor="middle" fill="#fff" font-weight="600">Qué puedes correr</text>
+        <text x="634" y="74" text-anchor="middle" fill="#b9c7e2" font-size="8.5">11 familias de análisis</text>
+      </g>
+      <g stroke="#0f766e" stroke-width="1.5"><line x1="128" y1="51" x2="144" y2="51" marker-end="url(#fb)"/><line x1="270" y1="51" x2="286" y2="51" marker-end="url(#fb)"/><line x1="412" y1="51" x2="428" y2="51" marker-end="url(#fb)"/><line x1="554" y1="51" x2="570" y2="51" marker-end="url(#fb)"/></g>
+      <text x="350" y="110" text-anchor="middle" font-size="9" fill="#5d6472">Los archivos FASTA, VCF, .str, .gen y .arp traen su propia estructura: pasan directo de 1 a 4.</text>
+    </svg>
+    <figcaption><b>Figura 3.1.</b> Las cinco tarjetas del Bloque 2, en el orden en que aparecen. Cada una se abre cuando terminas la anterior.</figcaption>
+  </figure>
+
+  <!-- 3.1 -->
+  <h2 id="s3-1"><span class="num">3.1</span>Formatos de entrada</h2>
+  <p class="lead">Hay cuatro caminos para meter datos al programa: arrastrar un archivo, pegar los datos en la hoja integrada, llenar una plantilla hecha por la app o cargar uno de los ejemplos. Todos terminan en las mismas revisiones.</p>
+
+  <figure>
+    <div class="marco" style="position:relative">
+      <img src="../img/b2-carga.png" alt="Tarjeta 1 Load your data del Bloque 2">
+      <span class="marca" style="left:36%;top:38.9%">1</span>
+      <span class="marca" style="left:7.4%;top:58.1%">2</span>
+      <span class="marca" style="left:7.4%;top:63.1%">3</span>
+      <span class="marca" style="left:89%;top:73.4%">4</span>
+      <span class="marca" style="left:89%;top:89.7%">5</span>
+    </div>
+    <figcaption><b>Figura 3.2.</b> La tarjeta <span class="ui">1 · Load your data</span>.</figcaption>
+  </figure>
+  <ul class="leyenda-marcas">
+    <li><span class="n">1</span>Arrastra tu archivo aquí o haz clic para elegirlo. Debajo aparecen las extensiones que acepta.</li>
+    <li><span class="n">2</span><span class="ui">Or try an example</span>: los seis ejemplos incluidos (sección 3.7).</li>
+    <li><span class="n">3</span>Nombre del archivo cargado.</li>
+    <li><span class="n">4</span><span class="ui">Design a data template</span>: abre el diseñador de plantillas (sección 3.3).</li>
+    <li><span class="n">5</span><span class="ui">Open the data sheet</span>: abre la hoja de datos integrada (sección 3.2).</li>
+  </ul>
+
+  <table>
+    <caption><b>Tabla 3.1.</b> Formatos que lee el Bloque 2.</caption>
+    <thead><tr><th style="width:21%">Formato</th><th style="width:25%">Qué contiene</th><th>Qué hace la app</th><th class="c" style="width:12%">Pobl. · coord.</th></tr></thead>
+    <tbody>
+      <tr><td><b>Hoja de cálculo</b><br><code>.xlsx</code> <code>.xls</code> <code>.xlsm</code></td><td>Una tabla por hoja; cualquier tipo de dato.</td><td>Si el libro tiene varias hojas, aparece el selector <span class="ui">Sheet</span>. Luego pasa por la interpretación y los papeles de cada columna.</td><td class="c"><span class="si">●</span> <span class="si">●</span></td></tr>
+      <tr><td><b>Texto delimitado</b><br><code>.csv</code> <code>.txt</code> <code>.tsv</code></td><td>La misma tabla, separada por comas, punto y coma o tabuladores.</td><td>Detecta el separador y sigue el mismo camino que la hoja de cálculo.</td><td class="c"><span class="si">●</span> <span class="si">●</span></td></tr>
+      <tr><td><b>Archivo de genotipos para agrupamiento bayesiano</b><br><code>.str</code> <code>.stru</code></td><td>Una o dos filas por individuo, con el ID, la población y un alelo por columna; −9 = faltante.</td><td>Detecta si hay una o dos filas por individuo y lee los nombres de los loci de la primera fila.</td><td class="c"><span class="si">●</span> <span class="no">—</span></td></tr>
+      <tr><td><b>Archivo de poblaciones</b><br><code>.gen</code></td><td>Título, nombres de loci y bloques separados por la palabra <code>POP</code>; genotipos como <code>182186</code>.</td><td>Cada bloque <code>POP</code> se vuelve una población.</td><td class="c"><span class="si">●</span> <span class="no">—</span></td></tr>
+      <tr><td><b>Archivo de proyecto</b><br><code>.arp</code></td><td>Secciones <code>[Profile]</code> y <code>SampleData</code> por población.</td><td>Lee cada muestra con su nombre de población.</td><td class="c"><span class="si">●</span> <span class="no">—</span></td></tr>
+      <tr><td><b>Secuencias alineadas</b><br><code>.fasta</code> <code>.fas</code> <code>.fa</code></td><td>Una línea <code>&gt;nombre</code> seguida de la secuencia.</td><td>Agrupa secuencias idénticas en haplotipos. Si el encabezado es <code>&gt;ID | Población | Región</code>, lee también la población y la región.</td><td class="c"><span class="parcial">◐</span> <span class="no">—</span></td></tr>
+      <tr><td><b>Variantes</b><br><code>.vcf</code></td><td>SNP con los genotipos de cada muestra.</td><td>Toma el primer alelo alternativo de cada sitio.</td><td class="c"><span class="no">—</span> <span class="no">—</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · formatos que no traen poblaciones o coordenadas</div>
+    <p>Los archivos FASTA, VCF, <code>.str</code>, <code>.gen</code> y <code>.arp</code> pasan directo al control de calidad. Como casi nunca incluyen regiones ni coordenadas (y el VCF ni siquiera poblaciones), aparece la tarjeta <span class="ui">Add sample information</span>. Ahí cargas una hoja con una columna <b>ID</b>, con los mismos nombres del archivo, y cualquiera de <b>Population</b>, <b>Region</b>, <b>Latitude</b> y <b>Longitude</b>. El botón <span class="ui">Download an empty sample sheet with these IDs</span> te la entrega con los IDs ya escritos (figura 3.20).</p>
+  </div>
+
+  <h3>Cómo acomodar una tabla</h3>
+  <p>Una tabla se lee sin problemas si sigue una regla sencilla: <b>una fila por individuo y una columna por variable</b>, con los nombres de las columnas en la primera fila. La figura 3.3 muestra las cuatro disposiciones que la app reconoce.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Cuatro disposiciones de tabla que reconoce la app">
+      <g font-size="9.5" letter-spacing="1.2" fill="#0f766e" font-weight="500">
+        <text x="6" y="14">A · CODOMINANTE, UN ALELO POR COLUMNA</text>
+        <text x="362" y="14">B · CODOMINANTE, GENOTIPO EN UNA CELDA</text>
+        <text x="6" y="162">C · DOMINANTE, INDIVIDUOS EN FILAS</text>
+        <text x="362" y="162">D · DOMINANTE, BANDAS EN FILAS (SE TRANSPONE)</text>
+      </g>
+      <g font-family="ui-monospace, Consolas, monospace" font-size="9.5">
+        <!-- A -->
+        <g transform="translate(6 24)">
+          <rect width="330" height="18" fill="#24365f"/>
+          <g fill="#fff"><text x="6" y="13">ID</text><text x="54" y="13">Pop</text><text x="112" y="13">SSR1</text><text x="158" y="13">SSR1</text><text x="204" y="13">SSR2</text><text x="250" y="13">SSR2</text><text x="296" y="13">…</text></g>
+          <g fill="#111"><text x="6" y="33">P01</text><text x="54" y="33">Tlaxco</text><text x="112" y="33">182</text><text x="158" y="33">186</text><text x="204" y="33">140</text><text x="250" y="33">142</text>
+          <text x="6" y="51">P02</text><text x="54" y="51">Tlaxco</text><text x="112" y="51">184</text><text x="158" y="51">184</text><text x="204" y="51">0</text><text x="250" y="51">0</text>
+          <text x="6" y="69">P03</text><text x="54" y="69">Apizaco</text><text x="112" y="69">182</text><text x="158" y="69">188</text><text x="204" y="69">144</text><text x="250" y="69">146</text></g>
+          <g stroke="#d5dae4"><line x1="0" y1="38" x2="330" y2="38"/><line x1="0" y1="56" x2="330" y2="56"/><line x1="0" y1="74" x2="330" y2="74"/></g>
+          <rect x="108" y="0" width="84" height="74" fill="none" stroke="#0f766e" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <text x="0" y="94" font-family="Jost, sans-serif" font-size="8.5" fill="#5d6472">dos columnas con el mismo nombre = un locus · 0 = faltante · 184 | 184 = homocigoto</text>
+          <text x="0" y="106" font-family="Jost, sans-serif" font-size="8.5" fill="#5d6472">la disposición más segura para capturar a mano</text>
+        </g>
+        <!-- B -->
+        <g transform="translate(362 24)">
+          <rect width="330" height="18" fill="#24365f"/>
+          <g fill="#fff"><text x="6" y="13">ID</text><text x="54" y="13">Pop</text><text x="118" y="13">SSR1</text><text x="190" y="13">SSR2</text><text x="262" y="13">SSR3</text></g>
+          <g fill="#111"><text x="6" y="33">P01</text><text x="54" y="33">Tlaxco</text><text x="118" y="33">182/186</text><text x="190" y="33">140/142</text><text x="262" y="33">96/98</text>
+          <text x="6" y="51">P02</text><text x="54" y="51">Tlaxco</text><text x="118" y="51">184/184</text><text x="190" y="51">0/0</text><text x="262" y="51">96/96</text>
+          <text x="6" y="69">P03</text><text x="54" y="69">Apizaco</text><text x="118" y="69">182/188</text><text x="190" y="69">144/146</text><text x="262" y="69">100/102</text></g>
+          <g stroke="#d5dae4"><line x1="0" y1="38" x2="330" y2="38"/><line x1="0" y1="56" x2="330" y2="56"/><line x1="0" y1="74" x2="330" y2="74"/></g>
+          <rect x="112" y="0" width="64" height="74" fill="none" stroke="#0f766e" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <text x="0" y="94" font-family="Jost, sans-serif" font-size="8.5" fill="#5d6472">separadores aceptados: 182/186 · 182|186 · 182-186 · 182 186 · 182186 · A/G</text>
+          <text x="0" y="106" font-family="Jost, sans-serif" font-size="8.5" fill="#5d6472">en <tspan font-family="ui-monospace, Consolas, monospace">How genotypes are written</tspan> se elige “Whole genotype in one cell”</text>
+        </g>
+        <!-- C -->
+        <g transform="translate(6 172)">
+          <rect width="330" height="18" fill="#24365f"/>
+          <g fill="#fff"><text x="6" y="13">Plant</text><text x="60" y="13">Population</text><text x="148" y="13">B01</text><text x="186" y="13">B02</text><text x="224" y="13">B03</text><text x="262" y="13">B04</text><text x="300" y="13">…</text></g>
+          <g fill="#111"><text x="6" y="33">Oax_01</text><text x="60" y="33">Oaxaca</text><text x="152" y="33">1</text><text x="190" y="33">0</text><text x="228" y="33">1</text><text x="266" y="33">1</text>
+          <text x="6" y="51">Oax_02</text><text x="60" y="51">Oaxaca</text><text x="152" y="51">1</text><text x="190" y="51">1</text><text x="228" y="51">0</text><text x="266" y="51">1</text>
+          <text x="6" y="69">Pue_01</text><text x="60" y="69">Puebla</text><text x="152" y="69">0</text><text x="190" y="69">1</text><text x="228" y="69">?</text><text x="266" y="69">1</text></g>
+          <g stroke="#d5dae4"><line x1="0" y1="38" x2="330" y2="38"/><line x1="0" y1="56" x2="330" y2="56"/><line x1="0" y1="74" x2="330" y2="74"/></g>
+          <text x="0" y="94" font-family="Jost, sans-serif" font-size="8.5" fill="#5d6472">una columna por banda · 1 presente, 0 ausente (también p/a, +/−, yes/no) · ? = faltante</text>
+        </g>
+        <!-- D -->
+        <g transform="translate(362 172)">
+          <rect width="330" height="18" fill="#24365f"/>
+          <g fill="#fff"><text x="6" y="13">ISSR</text><text x="70" y="13">Ancho</text><text x="130" y="13">Azul</text><text x="184" y="13">Bofo</text><text x="238" y="13">Conejo</text><text x="296" y="13">…</text></g>
+          <g fill="#111"><text x="6" y="33">7945</text><text x="82" y="33">0</text><text x="138" y="33">1</text><text x="192" y="33">1</text><text x="252" y="33">1</text>
+          <text x="6" y="51">7945</text><text x="82" y="51">0</text><text x="138" y="51">0</text><text x="192" y="51">0</text><text x="252" y="51">0</text>
+          <text x="6" y="69">P2</text><text x="82" y="69">1</text><text x="138" y="69">1</text><text x="192" y="69">1</text><text x="252" y="69">0</text></g>
+          <g stroke="#d5dae4"><line x1="0" y1="38" x2="330" y2="38"/><line x1="0" y1="56" x2="330" y2="56"/><line x1="0" y1="74" x2="330" y2="74"/></g>
+          <rect x="2" y="20" width="44" height="54" fill="none" stroke="#c2410c" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <text x="0" y="94" font-family="Jost, sans-serif" font-size="8.5" fill="#5d6472">la primera columna repite nombres (primers) → la app entiende que las filas son bandas</text>
+          <text x="0" y="106" font-family="Jost, sans-serif" font-size="8.5" fill="#5d6472">y gira la tabla: cada columna (raza, accesión) se vuelve una fila</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><b>Figura 3.3.</b> Las cuatro disposiciones de tabla que la app reconoce sola. A y C son las recomendadas. D es la forma habitual de leer un gel y la app la transpone automáticamente; el ejemplo de razas de maíz con ISSR está escrito así.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 3.2.</b> Cómo escribir cada tipo de dato.</caption>
+    <thead><tr><th style="width:15%">Tipo</th><th>Cómo se escribe cada celda</th><th style="width:30%">Faltante y errores comunes</th></tr></thead>
+    <tbody>
+      <tr><td><b>Codominante</b></td><td>El tamaño del fragmento en pares de bases (182) o el número de repeticiones. Un homocigoto repite el alelo: 182 | 182. Para SNP se usan nucleótidos: A | G.</td><td>0 o celda vacía. Si solo amplificó un alelo, deja <b>ambas</b> celdas vacías: los genotipos a medias se descartan.</td></tr>
+      <tr><td><b>Dominante</b></td><td>1 si la banda está presente y 0 si está ausente. También acepta p/a, present/absent, +/− y yes/no.</td><td>Vacía, ?, −9 o −1. Cualquier otro valor (2, “x1”) se marca como error.</td></tr>
+      <tr><td><b>Haploide</b></td><td>Un código por locus: el tamaño de un microsatélite de cloroplasto o el nombre del haplotipo (H1, H2).</td><td>Vacía, o el código que declares como faltante. Una celda con “182/186” se señala, porque un haploide no tiene dos alelos.</td></tr>
+      <tr><td><b>Secuencias</b></td><td>En FASTA, o una columna por región génica con la secuencia completa. Letras IUPAC (A C G T N R Y S W K M B D H V); huecos con −.</td><td>? o N. La U se convierte en T. Secuencias de distinta longitud se señalan como no alineadas.</td></tr>
+      <tr><td><b>Morfológico</b></td><td>Números. Se acepta la coma decimal (13,5). Los caracteres de clase (color) pueden ir como texto.</td><td>Vacía o NA. Texto en una columna numérica se vuelve faltante y se señala.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dos">
+    <div class="caja nota" style="margin:0">
+      <div class="caja-t"><span class="ico">i</span>Valores que siempre son faltantes</div>
+      <p>Celda vacía, <code>NA</code>, <code>n/a</code>, <code>NaN</code>, <code>?</code>, <code>.</code>, <code>..</code>, <code>x</code>, <code>null</code>, <code>missing</code>, <code>−9</code>, <code>−99</code> y <code>−999</code>. Además, el código que escribas en <span class="ui">Code used for missing data</span> (por omisión, 0 para codominantes).</p>
+    </div>
+    <div class="caja nota" style="margin:0">
+      <div class="caja-t"><span class="ico">i</span>Nombres de columna que la app reconoce</div>
+      <p><b>ID:</b> ID, Ind, Individual, Sample, Plant, Tree, Accession, Genotype, Name, Clave, Individuo, Muestra, Planta. <b>Población:</b> Pop, Population, Población, Site, Locality, Race, Raza, Landrace, Sitio, Localidad, Procedencia. <b>Región:</b> Region, Zone, Group, State, Estado, Area, Province, Country, País. <b>Coordenadas:</b> Lat, Latitude, Latitud, Northing; Lon, Long, Longitude, Longitud, Easting. Cuenta el nombre completo, con plural o unidad entre paréntesis: <code>Longitud_mazorca</code> es un carácter.</p>
+    </div>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · lo que confunde a cualquier programa</div>
+    <ul style="margin:0">
+      <li><b>Celdas combinadas</b>, títulos encima de la tabla o filas de totales al final.</li>
+      <li><b>Colores con significado</b> (“en rojo las dudosas”): el color no viaja con los datos. Usa una columna.</li>
+      <li><b>Fórmulas</b> en lugar de valores, o varias tablas en la misma hoja.</li>
+      <li><b>IDs repetidos</b> y nombres de población escritos de dos maneras (<i>Tlaxco</i> y <i>tlaxco </i>) que la app tomaría como poblaciones distintas.</li>
+      <li><b>La letra O en lugar del cero</b> (18O) o la letra l en lugar del uno.</li>
+    </ul>
+  </div>
+
+  <!-- 3.2 -->
+  <h2 id="s3-2"><span class="num">3.2</span>La hoja de datos integrada</h2>
+  <p class="lead">Si un archivo no se deja subir, si te enviaron los datos en el cuerpo de un correo o si prefieres capturarlos directamente, abre la hoja de datos con <span class="ui">Open the data sheet</span>. Funciona como una hoja de cálculo sencilla: pegas o escribes, corriges y, cuando está lista, la mandas a analizar.</p>
+
+  <ol class="pasos">
+    <li>Pulsa <span class="ui">Open the data sheet</span>. Aparece una rejilla vacía con columnas A, B, C…</li>
+    <li>Copia la tabla desde tu hoja de cálculo, un archivo de texto o un correo, incluyendo la fila de nombres. Haz clic en la celda <b>A1</b> y pega con <span class="kbd">Ctrl</span>+<span class="kbd">V</span>. Las columnas separadas por tabuladores, comas o punto y coma se reparten solas.</li>
+    <li>Corrige lo que haga falta: escribe sobre una celda, borra con <span class="kbd">Supr</span> o inserta filas y columnas con la barra de herramientas.</li>
+    <li>Escribe un nombre en <span class="ui">File name</span> y guarda una copia con uno de los botones de <span class="ui">Save as</span>.</li>
+    <li>Pulsa <span class="ui">Use these data</span>. Los datos siguen el mismo camino que un archivo: interpretación, papeles de las columnas y control de calidad.</li>
+  </ol>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-hoja-acciones.png" alt="Acciones al pie de la hoja de datos"></div>
+    <figcaption><b>Figura 3.4.</b> El pie de la hoja de datos: empezar desde una plantilla o desde el archivo cargado, guardar en cinco formatos y enviar los datos al análisis con <span class="ui">Use these data</span>.</figcaption>
+  </figure>
+
+  <div class="dos">
+    <table class="compacta" style="margin:0">
+      <caption><b>Tabla 3.3.</b> Teclado en la hoja.</caption>
+      <thead><tr><th style="width:44%">Teclas</th><th>Acción</th></tr></thead>
+      <tbody>
+        <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">V</span> / <span class="kbd">C</span> / <span class="kbd">X</span></td><td>Pegar, copiar, cortar</td></tr>
+        <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">Z</span> / <span class="kbd">Y</span></td><td>Deshacer, rehacer</td></tr>
+        <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">A</span></td><td>Seleccionar lo usado</td></tr>
+        <tr><td>Flechas · <span class="kbd">Tab</span> · <span class="kbd">Enter</span></td><td>Moverse (con <span class="kbd">Mayús</span>, hacia atrás o ampliar la selección)</td></tr>
+        <tr><td><span class="kbd">Inicio</span> · <span class="kbd">Fin</span> · <span class="kbd">RePág</span> · <span class="kbd">AvPág</span></td><td>Saltar a los extremos</td></tr>
+        <tr><td><span class="kbd">F2</span> o doble clic</td><td>Editar la celda</td></tr>
+        <tr><td><span class="kbd">Supr</span></td><td>Borrar la selección</td></tr>
+        <tr><td><span class="kbd">Esc</span></td><td>Cancelar la edición</td></tr>
+      </tbody>
+    </table>
+    <table class="compacta" style="margin:0">
+      <caption><b>Tabla 3.4.</b> Formatos para guardar la hoja.</caption>
+      <thead><tr><th style="width:36%">Botón</th><th>Úsalo cuando…</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ui">.xlsx</span></td><td>quieras seguir trabajando en una hoja de cálculo.</td></tr>
+        <tr><td><span class="ui">.ods</span></td><td>uses un programa de oficina de formato abierto.</td></tr>
+        <tr><td><span class="ui">.csv (comma)</span></td><td>necesites texto simple con punto decimal.</td></tr>
+        <tr><td><span class="ui">.csv (semicolon)</span></td><td>tu computadora use coma decimal, como es común en español.</td></tr>
+        <tr><td><span class="ui">.tsv (tab)</span></td><td>vayas a pegar los datos en otro programa.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="caja dato" style="margin-top:0.2in">
+    <div class="dato-cifra">20 000</div>
+    <div class="dato-txt"><div class="caja-t">Capacidad de la hoja</div>Hasta <b>20 000 filas y 5 000 columnas</b>. La hoja se guarda sola en tu navegador mientras trabajas: si cierras la app por error, los datos siguen ahí al volver.</div>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 3.5.</b> La barra de herramientas y los otros controles de la hoja.</caption>
+    <thead><tr><th style="width:32%">Control</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Undo</span> · <span class="ui">Redo</span></td><td>Deshace o rehace el último cambio, incluso un pegado completo.</td></tr>
+      <tr><td><span class="ui">Rows</span>: <span class="ui">+&nbsp;above</span> · <span class="ui">+&nbsp;below</span> · <span class="ui">−&nbsp;delete</span> · <span class="ui">+100</span></td><td>Inserta filas arriba o abajo de la selección, borra las seleccionadas o añade 100 filas vacías al final.</td></tr>
+      <tr><td><span class="ui">Columns</span>: <span class="ui">+&nbsp;left</span> · <span class="ui">+&nbsp;right</span> · <span class="ui">−&nbsp;delete</span> · <span class="ui">width</span></td><td>Lo mismo para columnas; el deslizador ajusta el ancho con que se ven.</td></tr>
+      <tr><td><span class="ui">First row = column names</span></td><td>Desmárcala si tus datos empiezan sin fila de nombres.</td></tr>
+      <tr><td><span class="ui">Clear the sheet</span></td><td>Vacía la hoja (se puede deshacer).</td></tr>
+      <tr><td><span class="ui">Start from</span>: <span class="ui">a template…</span> · <span class="ui">the file loaded</span></td><td>Abre el diseñador de plantillas, o copia a la hoja el archivo que cargaste para corregirlo ahí.</td></tr>
+      <tr><td><span class="ui">Pasting does not work in this browser?</span></td><td>Un cuadro de texto alternativo: pega ahí y pulsa <span class="ui">Put it in the sheet at the selected cell</span>. Útil si el navegador bloquea el portapapeles.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · corregir en la hoja lo que el control de calidad encontró</div>
+    <p>Cuando cargas un archivo y el control de calidad encuentra valores problemáticos, el botón <span class="ui">Correct them in the data sheet</span> abre tus datos en la hoja con esas celdas <b>marcadas en rojo</b>. Al pasar el ratón sobre una celda marcada se lee el motivo. Corriges, pulsas <span class="ui">Use these data</span> y el control se repite (sección 3.5).</p>
+  </div>
+
+  <!-- 3.3 -->
+  <h2 id="s3-3"><span class="num">3.3</span>El diseñador de plantillas</h2>
+  <p class="lead">La mejor forma de evitar errores de formato es no inventar el formato. Con <span class="ui">Design a data template</span> describes lo que muestreaste y la app escribe la hoja por ti: IDs y poblaciones ya puestos, una columna por locus o carácter y una primera fila que declara la disposición, para que al cargarla no haya nada que adivinar.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-disenador.png" alt="Diseñador de plantillas, pasos 1 a 3"></div>
+    <figcaption><b>Figura 3.5.</b> El diseñador de plantillas. <b>1</b> tipo de dato; <b>2</b> diseño de muestreo, con la tabla de poblaciones y el número de plantas de cada una; <b>3</b> loci, bandas, regiones o caracteres. Los números de los círculos son de la propia app.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 3.6.</b> Los seis tipos de dato del diseñador (paso <span class="ui">What did you score?</span>).</caption>
+    <thead><tr><th style="width:24%">Tarjeta</th><th style="width:30%">Para</th><th>Qué pide en el paso 3</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Codominant markers</span></td><td>Microsatélites, isoenzimas</td><td>Número de loci o sus nombres, prefijo, ploidía, disposición del genotipo (dos columnas o una celda) y código de faltante.</td></tr>
+      <tr><td><span class="ui">SNP genotypes</span></td><td>SNP bialélicos, genotipado por secuenciación</td><td>Lo mismo; los alelos se escriben como nucleótidos.</td></tr>
+      <tr><td><span class="ui">Dominant markers</span></td><td>AFLP, ISSR, RAPD, SRAP</td><td>Bandas por primer (un nombre por primer y cuántas bandas leíste) y si la hoja va con individuos o con bandas en filas.</td></tr>
+      <tr><td><span class="ui">Haplotype codes</span></td><td>Microsatélites de cloroplasto, PCR-RFLP</td><td>Loci con un código por celda.</td></tr>
+      <tr><td><span class="ui">DNA sequences</span></td><td>cpDNA, mtDNA, ITS alineados</td><td>Regiones génicas y su longitud alineada; propone un esqueleto FASTA con hoja de muestras.</td></tr>
+      <tr><td><span class="ui">Morphological traits</span></td><td>Medidas, conteos, escalas</td><td>Nombre, unidad y tipo de cada carácter (cuantitativo, discreto u ordinal).</td></tr>
+    </tbody>
+  </table>
+
+  <table class="compacta">
+    <caption><b>Tabla 3.7.</b> Opciones del diseño de muestreo (paso <span class="ui">Sampling design</span>).</caption>
+    <thead><tr><th style="width:30%">Opción</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Each row of the sheet is</span></td><td>Qué es cada fila: una planta, una raza, una accesión, una variedad, un clon, un genotipo, una muestra, una población en mezcla o una OTU. El nombre elegido se usa en todas las tablas y textos.</td></tr>
+      <tr><td><span class="ui">How the material was sampled</span></td><td>Varias plantas por población, o una muestra compuesta por unidad (<i>bulk</i>). Con muestras compuestas no hay análisis dentro de poblaciones.</td></tr>
+      <tr><td><span class="ui">IDs</span></td><td>Pop1_01, Pop1_02… · 001, 002… · vacíos para escribirlos tú.</td></tr>
+      <tr><td><span class="ui">Geographic coordinates</span></td><td>Ninguna, un punto por población o un punto por planta. Con un punto por planta y al menos 10 plantas se abre la estructura espacial fina (Bloque 9).</td></tr>
+      <tr><td><span class="ui">Region column</span> · <span class="ui">Group column</span></td><td>Añaden una columna para un AMOVA jerárquico o para un grupo como el complejo racial.</td></tr>
+      <tr><td>Tabla de poblaciones</td><td>Nombre y número de plantas de cada población. Puedes pegar una columna de nombres copiada de una hoja de cálculo en la primera celda; <span class="ui">Apply to all</span> pone el mismo tamaño a todas.</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-disenador-plantilla.png" alt="Paso 4 del diseñador: la plantilla"></div>
+    <figcaption><b>Figura 3.6.</b> El paso <span class="ui">Your template</span>: tamaño de la hoja y celdas por llenar, revisiones del diseño, análisis que podrás correr (tachados los que no), vista previa de la hoja y botones de descarga. En la vista previa, la fila 1 declara la disposición y los puntos grises son las celdas por llenar.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 3.8.</b> Lo que puedes descargar desde el diseñador.</caption>
+    <thead><tr><th style="width:12%">Botón</th><th style="width:30%">Archivo</th><th>Cuándo usarlo</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">XLSX</span></td><td>Hoja de cálculo con tres hojas: datos, instrucciones y diseño.</td><td>La opción recomendada para llenar en la computadora.</td></tr>
+      <tr><td><span class="ui">CSV</span></td><td>La misma plantilla como texto.</td><td>Para programas que no leen .xlsx.</td></tr>
+      <tr><td><span class="ui">PARAM</span></td><td>Disposición con fila de parámetros: conteos en la fila 1, nombres en la 2 y encabezados en la 3 (figura 3.7).</td><td>Si también usarás programas que leen esa disposición. Solo se habilita para diseños que caben en ella.</td></tr>
+      <tr><td><span class="ui">SHEET</span></td><td>Abre la plantilla en la hoja de datos integrada.</td><td>Para capturar directamente, sin descargar nada.</td></tr>
+      <tr><td><span class="ui">FASTA</span></td><td>Esqueleto con un encabezado por secuencia.</td><td>Con secuencias: pegas cada secuencia debajo de su nombre.</td></tr>
+      <tr><td><span class="ui">TXT</span></td><td>Instrucciones de llenado y revisiones del diseño.</td><td>Para compartir con quien capture los datos en el laboratorio.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>La fila que declara la disposición</h3>
+  <p>La primera fila de una plantilla empieza con <code>#PopGeneticsPro template</code> y lleva, celda por celda, pares <code>clave=valor</code>. Al cargar la hoja, la app la lee y aplica la disposición tal como está declarada, sin adivinar. <b>No la borres ni la modifiques.</b></p>
+  <table class="compacta">
+    <caption><b>Tabla 3.9.</b> Claves de la fila 1 de una plantilla.</caption>
+    <thead><tr><th style="width:17%">Clave</th><th>Significado</th><th style="width:17%">Clave</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td><code>kind</code></td><td>tipo de dato</td><td><code>loci</code></td><td>número de loci, bandas o caracteres</td></tr>
+      <tr><td><code>ploidy</code></td><td>ploidía</td><td><code>units</code></td><td>número de filas de datos</td></tr>
+      <tr><td><code>cells</code></td><td>un alelo por columna o genotipo en una celda</td><td><code>pops</code></td><td>número de poblaciones</td></tr>
+      <tr><td><code>coding</code></td><td>tamaños, nucleótidos, 0/1 o valores</td><td><code>sizes</code></td><td>plantas por población (8|8|8)</td></tr>
+      <tr><td><code>missing</code></td><td>código de faltante</td><td><code>popnames</code></td><td>nombres de las poblaciones</td></tr>
+      <tr><td><code>unit</code> · <code>sampling</code> · <code>orientation</code></td><td>qué es cada fila, cómo se muestreó y si las filas son individuos o bandas</td><td><code>id</code> · <code>pop</code> · <code>region</code></td><td>nombres de las columnas de etiquetas</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 700 172" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Disposición con fila de parámetros">
+      <!-- what each cell of row 1 means, written above its column -->
+      <g font-size="8.5" fill="#0f766e" font-weight="500">
+        <text x="46" y="12">A1 · loci</text><text x="116" y="12">B1 · individuos</text><text x="186" y="24">C1 · poblaciones</text><text x="256" y="12">D1, E1 · plantas por población</text><text x="396" y="24">F1 · regiones</text><text x="466" y="12">G1, H1 · plantas por región</text>
+      </g>
+      <g stroke="#0f766e" stroke-width="0.8"><line x1="48" y1="15" x2="48" y2="30"/><line x1="118" y1="15" x2="118" y2="30"/><line x1="188" y1="27" x2="188" y2="30"/><line x1="258" y1="15" x2="258" y2="30"/><line x1="398" y1="27" x2="398" y2="30"/><line x1="468" y1="15" x2="468" y2="30"/></g>
+      <g font-family="ui-monospace, Consolas, monospace" font-size="9.5">
+        <g transform="translate(40 30)">
+          <rect width="560" height="18" fill="#e9edf5"/><rect y="18" width="560" height="18" fill="#f7f8fb"/><rect y="36" width="560" height="18" fill="#24365f"/>
+          <g fill="#5d6472" font-family="Jost, sans-serif" font-size="8.5" text-anchor="end"><text x="-6" y="13">1</text><text x="-6" y="31">2</text><text x="-6" y="49">3</text><text x="-6" y="67">4</text><text x="-6" y="85">5</text><text x="-6" y="103">…</text></g>
+          <g fill="#0f766e" font-weight="700"><text x="6" y="13">3</text><text x="76" y="13">5</text><text x="146" y="13">2</text><text x="216" y="13">3</text><text x="286" y="13">2</text><text x="356" y="13">2</text><text x="426" y="13">3</text><text x="496" y="13">2</text></g>
+          <g fill="#111"><text x="6" y="31">Título</text><text x="216" y="31">SanJuan</text><text x="286" y="31">LaCumbre</text><text x="426" y="31">Norte</text><text x="496" y="31">Sur</text></g>
+          <g fill="#fff"><text x="6" y="49">Sample</text><text x="76" y="49">Pop</text><text x="146" y="49">SSR01</text><text x="286" y="49">SSR02</text><text x="426" y="49">SSR03</text></g>
+          <g fill="#111"><text x="6" y="67">SanJuan_01</text><text x="100" y="67">SanJuan</text><text x="146" y="67">182</text><text x="216" y="67">186</text><text x="286" y="67">140</text><text x="356" y="67">142</text><text x="426" y="67">96</text><text x="496" y="67">98</text>
+          <text x="6" y="85">SanJuan_02</text><text x="100" y="85">SanJuan</text><text x="146" y="85">184</text><text x="216" y="85">184</text><text x="286" y="85">138</text><text x="356" y="85">142</text><text x="426" y="85">96</text><text x="496" y="85">96</text></g>
+          <g stroke="#d5dae4"><line x1="0" y1="72" x2="560" y2="72"/><line x1="0" y1="90" x2="560" y2="90"/></g>
+        </g>
+      </g>
+      <g font-size="8.5" fill="#5d6472">
+        <text x="40" y="150"><tspan font-weight="600" fill="#111">Fila 2:</tspan> título en A2; los nombres de las poblaciones y de las regiones van debajo de sus tamaños.</text>
+        <text x="40" y="164"><tspan font-weight="600" fill="#111">Fila 3:</tspan> encabezados; cada locus ocupa dos columnas y solo la primera lleva nombre. Los datos empiezan en la fila 4.</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 3.7.</b> La disposición con fila de parámetros para 3 loci, 5 individuos en 2 poblaciones (3 y 2 plantas) y 2 regiones. La app la reconoce sola al cargarla y convierte las regiones en una columna. En esta disposición, el faltante de una banda dominante suele escribirse −1.</figcaption>
+  </figure>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo · de la plantilla a la verificación</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En el diseñador elige <span class="ui">Codominant markers</span>, tres poblaciones (SanJuan, ElMirador y LaCumbre) con 8 plantas cada una y 5 loci.</li>
+      <li>En <span class="ui">Your template</span> pulsa <span class="ui">Fill it in here</span>. La plantilla se abre en la hoja de datos con 24 filas listas.</li>
+      <li>Captura los genotipos. Para el ejemplo, deja sin llenar las dos últimas plantas de LaCumbre.</li>
+      <li>Pulsa <span class="ui">Use these data</span> y luego <span class="ui">Build the dataset and run the checks</span>. La tarjeta de interpretación dice <i>this is a PopGeneticsPro template</i>: nada fue adivinado.</li>
+      <li>En el control de calidad aparece <span class="ui">Checked against your template</span> (figura 3.8): lo declarado contra lo encontrado.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-plantilla-verificacion.png" alt="Verificación contra la plantilla"></div>
+    <figcaption><b>Figura 3.8.</b> Verificación contra la plantilla. Todo coincide excepto dos filas de LaCumbre que siguen vacías, marcadas en ámbar: la app las detecta y no las confunde con plantas reales. Los elementos en <b>rojo</b> cambiarían el análisis (por ejemplo, un número de loci distinto del declarado); los <b>ámbar</b> merecen revisión.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · las revisiones del diseño</div>
+    <table class="compacta">
+      <thead><tr><th style="width:36%">Si el diseño tiene…</th><th>el diseñador advierte que…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Menos de 5 plantas</b> en una población</td><td>no alcanza para ninguna prueba dentro de poblaciones; se necesitan 20 a 30 para estimar bien las frecuencias (Hale y colaboradores, 2012).</td></tr>
+        <tr><td><b>20 o más plantas</b> por población</td><td>alcanzan para frecuencias alélicas, H<sub>e</sub>, F<sub>IS</sub> y pruebas de Hardy–Weinberg.</td></tr>
+        <tr><td><b>Menos de 5 loci</b> polimórficos</td><td>los análisis multilocus (agrupamiento bayesiano, asignación, r̄<sub>d</sub>) no son confiables; el agrupamiento suele correrse con 10 o más.</td></tr>
+        <tr><td><b>Pocas poblaciones por región</b></td><td>el número de permutaciones posibles limita el valor P más pequeño de Φ<sub>CT</sub> en el AMOVA (Fitzpatrick, 2009). Con 2 + 2 poblaciones solo hay 3 arreglos distintos y P nunca baja de 0.33.</td></tr>
+        <tr><td><b>10 o más plantas</b> por población (codominantes)</td><td>se abren N<sub>e</sub> por desequilibrio de ligamiento y las pruebas de cuello de botella del Bloque 9; su precisión mejora mucho con 30 o más plantas y 10 o más loci polimórficos.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · convertir un conjunto que ya cargaste</div>
+    <p>Al final del Bloque 2, el botón <span class="ui">Export in another layout</span> abre el diseñador con tus datos ya cargados. Así puedes guardar, por ejemplo, un archivo <code>.str</code> o <code>.gen</code> como plantilla de PopGeneticsPro con sus poblaciones, en la disposición con fila de parámetros, o un alineamiento como FASTA con su hoja de muestras.</p>
+  </div>
+
+  <!-- 3.4 -->
+  <h2 id="s3-4"><span class="num">3.4</span>Interpretación y papel de cada columna</h2>
+  <p class="lead">Una tabla simple no dice qué es. Antes de calcular, la app deduce tres cosas: si las filas son individuos o loci, qué tipo de marcador contiene y qué papel tiene cada columna. Te lo muestra en dos tarjetas para que lo confirmes.</p>
+
+  <figure>
+    <div class="marco" style="position:relative">
+      <img src="../img/b2-interpretacion-issr.png" alt="Tarjeta What this file contains con el ejemplo de ISSR">
+      <span class="marca" style="left:6.4%;top:10.7%">1</span>
+      <span class="marca" style="left:6.4%;top:16.9%">2</span>
+      <span class="marca" style="left:28.6%;top:16.9%">3</span>
+      <span class="marca" style="left:67.8%;top:16.9%">4</span>
+      <span class="marca" style="left:6.4%;top:34.4%">5</span>
+      <span class="marca" style="left:6.4%;top:49.1%">6</span>
+    </div>
+    <figcaption><b>Figura 3.9.</b> La tarjeta <span class="ui">2 · What this file contains</span> con el ejemplo de razas de maíz con ISSR.</figcaption>
+  </figure>
+  <ul class="leyenda-marcas">
+    <li><span class="n">1</span>La explicación: por qué leyó las filas como loci y por qué el dato es dominante.</li>
+    <li><span class="n">2</span>Orientación. La app transpuso la tabla porque la primera columna repite nombres de primers.</li>
+    <li><span class="n">3</span>Tipo de marcador: decide qué estadísticas existen más adelante.</li>
+    <li><span class="n">4</span>Nombre de las filas. Con una tabla transpuesta propone <i>Landraces</i> (razas).</li>
+    <li><span class="n">5</span>Código de faltante, además de los que siempre se reconocen.</li>
+    <li><span class="n">6</span>Vista previa y aviso sobre la celda de la esquina (“ISSR”), que no se usa como nombre de columna.</li>
+  </ul>
+
+  <table>
+    <caption><b>Tabla 3.10.</b> Opciones de la tarjeta <span class="ui">What this file contains</span>.</caption>
+    <thead><tr><th style="width:27%">Opción</th><th>Qué decide</th><th style="width:27%">Cuándo cambiarla</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">The rows of the file are</span></td><td>Individuos (una fila por planta) o loci y bandas (una fila por marcador).</td><td>Si la app transpuso una tabla que no debía, o al revés.</td></tr>
+      <tr><td><span class="ui">Marker type</span></td><td>Codominante, dominante, haploide, secuencias o morfológico.</td><td>Siempre que lo leído no coincida con tu marcador.</td></tr>
+      <tr><td><span class="ui">Ploidy</span></td><td>Diploide, haploide, triploide, tetraploide o hexaploide (solo codominantes).</td><td>En especies poliploides, con una columna por copia del gen.</td></tr>
+      <tr><td><span class="ui">How genotypes are written</span></td><td>Un alelo por columna o el genotipo completo en una celda.</td><td>Si tus celdas dicen 182/186.</td></tr>
+      <tr><td><span class="ui">What the rows are called</span></td><td>Individuos, razas, accesiones, variedades, poblaciones, clones, genotipos, muestras u OTU.</td><td>Para que tablas, textos e informe usen tu término.</td></tr>
+      <tr><td><span class="ui">Code used for missing data</span></td><td>Un código propio de faltante.</td><td>Si en tu laboratorio se usa, por ejemplo, 999.</td></tr>
+      <tr><td><span class="ui">The first row holds column names</span></td><td>Si la primera fila son nombres.</td><td>Desmárcala si el archivo empieza directo con datos.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · cómo deduce la app el tipo de marcador</div>
+    <table class="compacta">
+      <thead><tr><th style="width:6%">#</th><th style="width:48%">Si encuentra…</th><th>entonces el dato es…</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>la fila 1 de una plantilla de PopGeneticsPro</td><td>el tipo declarado en ella</td></tr>
+        <tr><td>2</td><td>una fila de parámetros con dos columnas por locus</td><td>codominante (con una columna por locus: dominante o haploide)</td></tr>
+        <tr><td>3</td><td>más del 90 % de las columnas de datos solo con 0 y 1</td><td>dominante</td></tr>
+        <tr><td>4</td><td>columnas con secuencias completas de ADN</td><td>secuencias</td></tr>
+        <tr><td>5</td><td>columnas con genotipos en una celda (182/186, A/G)</td><td>codominante, genotipo en una celda</td></tr>
+        <tr><td>6</td><td>nombres de columna que vienen en pares</td><td>codominante, un alelo por columna</td></tr>
+        <tr><td>7</td><td>mayoría de columnas con medidas continuas</td><td>morfológico</td></tr>
+        <tr><td>8</td><td>mayoría de columnas con un código de texto</td><td>haploide</td></tr>
+        <tr><td>9</td><td>ninguno de los anteriores</td><td>codominante (revísalo)</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Solo se examinan las columnas de datos: una columna de latitud o de IDs no convierte una matriz de 0 y 1 en medidas. La orientación se deduce antes: una matriz de 0 y 1 cuya primera columna repite nombres, o con muchas más filas que columnas, se lee con las bandas en filas.</p>
+  </div>
+
+  <figure>
+    <div class="marco" style="position:relative">
+      <img src="../img/b2-roles-ssr.png" alt="Tarjeta What each column is con el ejemplo de microsatélites">
+      <span class="marca" style="left:6.4%;top:19%">1</span>
+      <span class="marca" style="left:21.8%;top:24%">2</span>
+      <span class="marca" style="left:68.8%;top:24%">3</span>
+      <span class="marca" style="left:6.4%;top:95%">4</span>
+    </div>
+    <figcaption><b>Figura 3.10.</b> La tarjeta <span class="ui">3 · What each column is</span> con el ejemplo de maíz con microsatélites.</figcaption>
+  </figure>
+  <ul class="leyenda-marcas">
+    <li><span class="n">1</span>Muestra todas las columnas, no solo las diez primeras.</li>
+    <li><span class="n">2</span>Cómo se ve cada columna: <i>nominal</i> (texto), <i>discrete</i> (enteros), <i>binary</i> (0/1) o <i>quantitative</i>, con valores distintos, faltantes y ejemplos.</li>
+    <li><span class="n">3</span>El papel asignado; cámbialo con el menú.</li>
+    <li><span class="n">4</span>Resumen: de dónde salen los IDs, las poblaciones, las regiones y las coordenadas.</li>
+  </ul>
+
+  <table class="compacta">
+    <caption><b>Tabla 3.11.</b> Papeles posibles de una columna.</caption>
+    <thead><tr><th style="width:30%">Papel</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Data (locus / trait)</span></td><td>Una columna de datos: alelo, banda, secuencia o carácter. Es el papel por omisión.</td></tr>
+      <tr><td><span class="ui">Individual ID</span></td><td>El nombre de cada fila. Si no hay, la app genera Ind1, Ind2…</td></tr>
+      <tr><td><span class="ui">Population</span></td><td>El grupo de cada fila. Sin esta columna, cada fila se trata como su propia unidad.</td></tr>
+      <tr><td><span class="ui">Region / group</span></td><td>El nivel superior para un AMOVA jerárquico o para colorear figuras.</td></tr>
+      <tr><td><span class="ui">Latitude</span> · <span class="ui">Longitude</span></td><td>Coordenadas en grados decimales (19.62, −98.12) o proyectadas en metros, como UTM (Northing, Easting).</td></tr>
+      <tr><td><span class="ui">Ignore this column</span></td><td>Una columna que no debe usarse: observaciones, fechas, número de gel.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · la columna de población</div>
+    <p>Casi todos los análisis posteriores se calculan <b>dentro</b> y <b>entre</b> los grupos que define la columna <span class="ui">Population</span>. Si la app tomó por población una columna equivocada (por ejemplo, la del número de placa) o no encontró ninguna, corrígelo aquí antes de pulsar <span class="ui">Build the dataset and run the checks</span>. Un error en este paso invalida la diversidad por población, F<sub>ST</sub>, el AMOVA y todo lo que sigue.</p>
+  </div>
+
+  <!-- 3.5 -->
+  <h2 id="s3-5"><span class="num">3.5</span>Control de calidad</h2>
+  <p class="lead">Al pulsar <span class="ui">Build the dataset and run the checks</span>, la app arma el conjunto de datos y lo revisa. La tarjeta <span class="ui">4 · Quality control</span> muestra primero seis cifras, luego los avisos y, debajo, tablas y figuras de la matriz.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-qc-ssr.png" alt="Cifras y avisos del control de calidad, ejemplo de microsatélites"></div>
+    <figcaption><b>Figura 3.11.</b> Control de calidad del ejemplo de maíz con microsatélites. Las tarjetas con borde verde están dentro de lo aceptable y las de borde ámbar requieren atención. El único aviso señala a Con01, que no tiene datos en 3 de sus 8 loci.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 3.12.</b> Las cifras del control de calidad y cómo leerlas.</caption>
+    <thead><tr><th style="width:25%">Tarjeta</th><th>Qué mide</th><th style="width:34%">Señal de alerta</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Individuals</span> (o el nombre de tus unidades)</td><td>Filas leídas y número de poblaciones.</td><td>Menos filas de las que capturaste: revisa la tabla de problemas.</td></tr>
+      <tr><td><span class="ui">Loci</span> · <span class="ui">Bands</span> · <span class="ui">Haplotypes</span> · <span class="ui">Traits</span></td><td>Columnas de datos y cuántas son polimórficas.</td><td>Muchos loci monomórficos: no aportan información.</td></tr>
+      <tr><td><span class="ui">Missing data</span></td><td>Porcentaje de celdas de datos faltantes.</td><td>Más de 10 % (borde ámbar).</td></tr>
+      <tr><td><span class="ui">Mean alleles per locus</span> · <span class="ui">Mean band frequency</span></td><td>N<sub>a</sub> promedio (codominantes) o frecuencia promedio de la banda (dominantes).</td><td>N<sub>a</sub> muy alto en un solo locus: posibles errores de lectura.</td></tr>
+      <tr><td><span class="ui">Repeated genotypes</span></td><td>Pares de individuos con genotipo multilocus idéntico.</td><td>Cualquier valor mayor que 0: posibles clones o plantas duplicadas.</td></tr>
+      <tr><td><span class="ui">Smallest population</span></td><td>Tamaño de la población más pequeña. No aparece si no hay columna de población.</td><td>Menos de 5 (borde ámbar).</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · datos faltantes</div>
+    <table class="compacta">
+      <thead><tr><th style="width:26%">Faltantes</th><th style="width:22%">Lectura</th><th>Qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td><b>Menos de 5 %</b></td><td>Muy bueno</td><td>Continúa sin cambios.</td></tr>
+        <tr><td><b>5 a 10 %</b></td><td>Aceptable</td><td>Continúa, pero revisa si los faltantes se concentran en un locus o en una población.</td></tr>
+        <tr><td><b>Más de 10 %</b></td><td>Preocupante</td><td>Elimina los loci o individuos con más faltantes en lugar de dejar que los huecos dirijan el resultado.</td></tr>
+        <tr><td><b>Un individuo con más de 25 %</b></td><td>Individuo débil</td><td>La app lo nombra. Repite su genotipado o exclúyelo si su ausencia no deja la población demasiado pequeña.</td></tr>
+        <tr><td><b>Un locus con muchos más faltantes que el resto</b></td><td>Locus problemático</td><td>Puede tener alelos nulos o amplificar mal. Revísalo también en el Bloque 4.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Tablas y figuras de la matriz</h3>
+  <figure>
+    <div class="marco"><img src="../img/b2-matriz-issr.png" alt="Matriz de genotipos del ejemplo de ISSR"></div>
+    <figcaption><b>Figura 3.12.</b> <span class="ui">The genotype matrix</span> con las 15 razas y las 31 bandas ISSR. Cada celda es un individuo en un locus: con dominantes, banda presente o ausente; con codominantes, homocigoto o heterocigoto; en gris, faltante. Las columnas llenas o vacías de arriba abajo son bandas monomórficas. En <span class="ui">Edit figure</span> puedes mostrar solo los faltantes, que revela a simple vista loci o plantas problemáticos.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-locus-ssr.png" alt="Tabla y figura locus por locus del ejemplo de microsatélites"></div>
+    <figcaption><b>Figura 3.13.</b> <span class="ui">Locus by locus</span> con los 8 microsatélites. La tabla da los individuos con dato, los faltantes, el número de alelos N<sub>a</sub> y la heterocigosis observada H<sub>o</sub>; la figura ordena los loci por variabilidad. Con dominantes la tabla da la frecuencia de cada banda; con caracteres morfológicos, media, desviación estándar, coeficiente de variación, mínimo y máximo.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-poblaciones-ssr.png" alt="Tamaño de muestra por población y distribución de frecuencias alélicas"></div>
+    <figcaption><b>Figura 3.14.</b> <span class="ui">Sampling and frequencies</span>. Izquierda: plantas por población, con la línea roja del mínimo recomendado (5, ajustable). Derecha: cuántos de los 45 alelos caen en cada clase de frecuencia. En una población en equilibrio se espera que la clase más baja sea la más numerosa, en forma de L; si la moda se desplaza a frecuencias intermedias puede haber un cuello de botella reciente. Aquí la clase 0.1–0.2 es la más frecuente, pero con las tres poblaciones juntas esto es solo una primera mirada: la prueba formal se hace por población en el Bloque 9.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · loci monomórficos y bandas extremas</div>
+    <table class="compacta">
+      <thead><tr><th style="width:38%">Si un locus o banda…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Es monomórfico</b> (un solo alelo, o banda en todos o en ninguno)</td><td>No aporta a la diferenciación ni a las distancias. La app lo conserva y lo avisa; cuenta para el porcentaje de loci polimórficos (%P).</td></tr>
+        <tr><td><b>Es una banda dominante con frecuencia menor de 5 % o mayor de 95 %</b></td><td>Su frecuencia se estima mal a partir de un gel. Es práctica común eliminarla antes de analizar; la app las cuenta en un aviso.</td></tr>
+        <tr><td><b>Tiene un alelo único en una sola planta</b></td><td>Puede ser real (un alelo raro) o un error de lectura. Revisa el electroferograma antes de reportarlo como alelo privado.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Clones y genotipos repetidos</h3>
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Teoría en breve · rametos y genetos</div>
+    <p>Muchas plantas se reproducen también de forma vegetativa: por rizomas, estolones, bulbilos o hijuelos, como los agaves. Cada tallo o planta independiente es un <b>rameto</b>, pero todos los que salieron del mismo individuo original forman un solo <b>geneto</b> y comparten el mismo genotipo. Si se muestrean 40 rametos de un geneto como si fueran 40 plantas, el tamaño de muestra se infla, la diversidad se subestima y F<sub>IS</sub> se distorsiona. La práctica habitual es conservar un representante por genotipo multilocus. La app compara todos los pares de individuos con al menos la mitad de los loci genotipados y reporta los idénticos y los que coinciden en 95 % o más de sus loci.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · genotipos repetidos</div>
+    <table class="compacta">
+      <thead><tr><th style="width:34%">Si encuentras…</th><th>lo más probable es…</th><th style="width:30%">qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td><b>Pares idénticos en una especie clonal</b></td><td>rametos del mismo geneto</td><td>conservar uno por genotipo</td></tr>
+        <tr><td><b>Pares idénticos en una especie sin reproducción vegetativa</b></td><td>la misma planta muestreada o capturada dos veces, o muy pocos loci</td><td>revisar etiquetas y hoja de campo</td></tr>
+        <tr><td><b>Pares que coinciden en 95 % o más, sin ser idénticos</b></td><td>parientes cercanos, o la misma planta con un error de lectura</td><td>revisar los loci que difieren</td></tr>
+        <tr><td><b>Muchos pares idénticos con pocos loci</b></td><td>falta de poder para distinguir individuos</td><td>añadir loci antes de concluir clonalidad</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Con secuencias es normal compartir haplotipo, y con caracteres no existe un genotipo multilocus: en ambos casos esta revisión no se aplica.</p>
+  </div>
+
+  <h3>Valores por corregir: un ejemplo con errores a propósito</h3>
+  <p>Para ver cómo reacciona el control de calidad, la tabla 3.13 reproduce una pequeña matriz de 20 plantas y 4 microsatélites con seis errores sembrados a propósito. Puedes capturarla en la hoja de datos y seguir los pasos.</p>
+
+  <table class="hoja-mini">
+    <caption><b>Tabla 3.13.</b> Filas con errores de la matriz de práctica (las demás filas son correctas). En rojo, el valor equivocado; en la fila 8 la celda dice 18O, con la letra O mayúscula en lugar del cero. Los números de fila son los de la hoja, con los nombres de columna en la fila 1.</caption>
+    <thead><tr><th>Fila</th><th>ID</th><th>Population</th><th>Latitude</th><th>Longitude</th><th>SSR1</th><th>SSR1</th><th>SSR2</th><th>SSR2</th><th>SSR3</th><th>SSR3</th><th>SSR4</th><th>SSR4</th></tr></thead>
+    <tbody>
+      <tr><td>3</td><td>A02</td><td>Tlaxco</td><td>19.62</td><td>−98.12</td><td class="err">182</td><td class="err">184</td><td class="err">138</td><td class="err">142</td><td class="err">96</td><td class="err">96</td><td class="err">210</td><td class="err">210</td></tr>
+      <tr><td>4</td><td>A03</td><td>Tlaxco</td><td>19.62</td><td>−98.12</td><td class="err">182</td><td class="err">184</td><td class="err">138</td><td class="err">142</td><td class="err">96</td><td class="err">96</td><td class="err">210</td><td class="err">210</td></tr>
+      <tr><td>6</td><td class="err">A05</td><td>Tlaxco</td><td>19.62</td><td>−98.12</td><td>184</td><td>186</td><td>142</td><td>144</td><td>96</td><td>100</td><td>210</td><td>216</td></tr>
+      <tr><td>7</td><td class="err">A05</td><td>Tlaxco</td><td>19.62</td><td>−98.12</td><td>182</td><td>182</td><td>138</td><td>140</td><td>100</td><td>102</td><td>212</td><td>214</td></tr>
+      <tr><td>8</td><td>A07</td><td>Tlaxco</td><td>19.62</td><td>−98.12</td><td class="err">18O</td><td>186</td><td>140</td><td>142</td><td>96</td><td>98</td><td>210</td><td>212</td></tr>
+      <tr><td>9</td><td>A08</td><td>Tlaxco</td><td>19.62</td><td>−98.12</td><td>184</td><td>184</td><td>142</td><td>142</td><td>98</td><td>98</td><td class="err">0</td><td>214</td></tr>
+      <tr><td>11</td><td>A10</td><td class="err">(vacía)</td><td>19.62</td><td>−98.12</td><td>186</td><td>188</td><td>140</td><td>144</td><td>98</td><td>100</td><td>210</td><td>214</td></tr>
+      <tr><td>12</td><td>B01</td><td>Apizaco</td><td class="err">190.41</td><td>−98.14</td><td>182</td><td>184</td><td>144</td><td>146</td><td>100</td><td>102</td><td>216</td><td>218</td></tr>
+      <tr><td>20</td><td>B09</td><td>Apizaco</td><td>19.41</td><td>−98.14</td><td class="err">·</td><td class="err">·</td><td class="err">·</td><td class="err">·</td><td class="err">·</td><td class="err">·</td><td class="err">·</td><td class="err">·</td></tr>
+    </tbody>
+  </table>
+
+  <ol class="pasos">
+    <li>Abre la hoja de datos, pega la matriz completa y pulsa <span class="ui">Use these data</span>.</li>
+    <li>Confirma la interpretación (codominante, 4 loci en pares) y pulsa <span class="ui">Build the dataset and run the checks</span>.</li>
+    <li>Lee los avisos y la tabla <span class="ui">Values to fix in the sheet</span> (figura 3.15).</li>
+    <li>Sube a la hoja de datos: las celdas con problemas están en rojo (figura 3.16). Corrige cada una y vuelve a pulsar <span class="ui">Use these data</span>.</li>
+  </ol>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-errores-qc.png" alt="Control de calidad con errores detectados"></div>
+    <figcaption><b>Figura 3.15.</b> El control de calidad con la matriz de práctica. Los avisos resumen lo encontrado y la tabla <span class="ui">Values to fix in the sheet</span> dice, para cada problema, qué hizo la app y dónde está. Con ✕ rojo, errores que cambian los datos; con ! ámbar, advertencias. Si cargaste un archivo en lugar de usar la hoja, el botón <span class="ui">Correct them in the data sheet</span> lo abre en la hoja con las marcas.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-errores-hoja.png" alt="Hoja de datos con celdas marcadas en rojo"></div>
+    <figcaption><b>Figura 3.16.</b> La hoja de datos con los problemas marcados: la celda <code>18O</code> (con letra O) y su pareja en la fila 8, las filas completas 6 y 7 (ID repetido), 11 (sin población) y 12 (latitud imposible). Al pasar el ratón sobre una celda roja se lee el motivo.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 3.14.</b> Qué detectó el control de calidad en la matriz de práctica y cómo corregirlo.</caption>
+    <thead><tr><th style="width:22%">Error sembrado</th><th style="width:34%">Cómo lo reporta la app</th><th>Qué hizo y cómo se corrige</th></tr></thead>
+    <tbody>
+      <tr><td><code>18O</code> (con la letra O) en la fila 8</td><td>✕ <i>text codes among numeric fragment sizes (a letter O for a zero?) were set to missing</i></td><td>Quitó el genotipo para no inflar N<sub>a</sub> con un alelo falso. Escribe 180.</td></tr>
+      <tr><td>A05 dos veces (filas 6 y 7)</td><td>✕ <i>repeated IDs (both rows are kept: give one of them another name)</i></td><td>Conservó ambas filas. Renombra la segunda como A06.</td></tr>
+      <tr><td>Latitud 190.41 (fila 12)</td><td>✕ <i>coordinates out of range … were set to missing</i></td><td>Borró la latitud para no distorsionar las distancias. Escribe 19.41.</td></tr>
+      <tr><td>Población vacía (fila 11)</td><td>! <i>rows without a population name (left out of every population)</i></td><td>A10 queda fuera de todos los grupos. Escribe Tlaxco.</td></tr>
+      <tr><td>0 | 214 en SSR4 (fila 9)</td><td>! <i>genotypes with only some alleles scored were set to missing</i></td><td>Un genotipo a medias no es un homocigoto. Repite la lectura o deja ambos alelos vacíos.</td></tr>
+      <tr><td>B09 sin datos (fila 20)</td><td>! <i>rows with no data at all (not filled in yet?)</i> y aviso de más de 25 % de faltantes</td><td>Genotipa la planta o elimina la fila.</td></tr>
+      <tr><td>A02 y A03 idénticas</td><td><span class="ui">Repeated genotypes</span> = 1 y la tabla de genotipos repetidos</td><td>¿Clon o planta capturada dos veces? Revisa las etiquetas de campo.</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-errores-duplicados.png" alt="Tabla de genotipos repetidos"></div>
+    <figcaption><b>Figura 3.17.</b> La tabla <span class="ui">Repeated and near-identical genotypes</span>: A02 y A03, de Tlaxco, coinciden en el 100 % de sus loci.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Tabla 3.15.</b> Todos los problemas que puede reportar la tabla <span class="ui">Values to fix in the sheet</span>.</caption>
+    <thead><tr><th style="width:5%"></th><th style="width:40%">Problema</th><th>Qué hace la app con el valor</th></tr></thead>
+    <tbody>
+      <tr><td class="c">✕</td><td>Banda que no es 0 ni 1</td><td>La vuelve faltante.</td></tr>
+      <tr><td class="c">✕</td><td>Genotipo con un número de alelos distinto de la ploidía</td><td>Lo vuelve faltante.</td></tr>
+      <tr><td class="c">✕</td><td>Genotipo completo (182/186) en una disposición de un alelo por columna</td><td>Lo vuelve faltante; si toda la hoja es así, elige “genotipo en una celda”.</td></tr>
+      <tr><td class="c">✕</td><td>Número de columnas de genotipo que no corresponde a la ploidía</td><td>Ignora las columnas sobrantes del final.</td></tr>
+      <tr><td class="c">✕</td><td>Alelo no numérico en una plantilla de tamaños · código de texto entre tamaños</td><td>Lo vuelve faltante.</td></tr>
+      <tr><td class="c">✕</td><td>ID repetido</td><td>Conserva ambas filas.</td></tr>
+      <tr><td class="c">✕</td><td>Coordenada fuera de rango (±90°, ±180°) entre coordenadas en grados</td><td>La vuelve faltante.</td></tr>
+      <tr><td class="c">✕</td><td>Letras que no son nucleótidos IUPAC · sin columnas de datos</td><td>Lo señala para corregir.</td></tr>
+      <tr><td class="c">!</td><td>Genotipo con solo algunos alelos leídos</td><td>Lo vuelve faltante.</td></tr>
+      <tr><td class="c">!</td><td>Celda haploide que parece tener dos alelos</td><td>La conserva y la señala.</td></tr>
+      <tr><td class="c">!</td><td>Fila o locus sin ningún dato</td><td>Lo conserva; suele ser una plantilla sin terminar.</td></tr>
+      <tr><td class="c">!</td><td>Fila sin nombre de población</td><td>La deja fuera de todas las poblaciones.</td></tr>
+      <tr><td class="c">!</td><td>Coordenada que no es un número</td><td>La vuelve faltante.</td></tr>
+      <tr><td class="c">!</td><td>Secuencia más corta que la más larga de su región · secuencia sin capturar</td><td>La señala como no alineada · la rellena con ? para mantener el alineamiento.</td></tr>
+      <tr><td class="c">!</td><td>Texto en una columna numérica de caracteres</td><td>Lo vuelve faltante.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · la app protege el análisis, no corrige tu archivo</div>
+    <p>Cada problema se maneja de forma segura para que los cálculos no se contaminen, pero <b>tu archivo original no cambia</b>. Corrige la hoja de origen o guarda la versión corregida desde la hoja de datos integrada. Así, la próxima vez que cargues los datos, o cuando otra persona los use, estarán limpios.</p>
+  </div>
+
+  <!-- 3.6 -->
+  <h2 id="s3-6"><span class="num">3.6</span>Qué análisis permiten tus datos</h2>
+  <p class="lead">La última tarjeta del bloque, <span class="ui">5 · What you can run with these data</span>, resume qué familias de análisis admite el conjunto tal como quedó y, para las que no, explica por qué.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b2-capacidades-agave.png" alt="Tarjeta de análisis disponibles con el ejemplo de agave"></div>
+    <figcaption><b>Figura 3.18.</b> Análisis disponibles con el ejemplo de agave con AFLP: 8 de 11. Faltan Hardy–Weinberg y la historia demográfica, porque los marcadores dominantes no muestran heterocigotos, y las estadísticas de secuencias. La estructura espacial sí está disponible, porque el archivo trae coordenadas.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 3.16.</b> Las 11 familias de análisis y lo que cada una requiere.</caption>
+    <thead><tr><th style="width:26%">Familia en la app</th><th class="c" style="width:8%">Bloque</th><th>Requisito</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Diversity indices</span></td><td class="c"><span class="chip k3">3</span></td><td>Marcadores y al menos una población con 2 o más individuos.</td></tr>
+      <tr><td><span class="ui">Hardy–Weinberg &amp; F_IS</span></td><td class="c"><span class="chip k4">4</span></td><td>Codominantes y al menos una población con individuos repetidos.</td></tr>
+      <tr><td><span class="ui">Linkage disequilibrium</span></td><td class="c"><span class="chip k4">4</span></td><td>Dos o más loci (no secuencias ni caracteres) y poblaciones con individuos repetidos.</td></tr>
+      <tr><td><span class="ui">F-statistics</span> · <span class="ui">AMOVA</span></td><td class="c"><span class="chip k5">5</span></td><td>Marcadores y al menos dos poblaciones con 2 o más individuos cada una.</td></tr>
+      <tr><td><span class="ui">Genetic distances</span></td><td class="c"><span class="chip k6">6</span></td><td>Tres o más unidades, con al menos un locus polimórfico o caracteres.</td></tr>
+      <tr><td><span class="ui">PCoA &amp; trees</span></td><td class="c"><span class="chip k6">6</span></td><td>Tres o más unidades.</td></tr>
+      <tr><td><span class="ui">Bayesian clustering</span></td><td class="c"><span class="chip k7">7</span></td><td>Marcadores multilocus (no secuencias ni caracteres), 6 o más individuos y 5 o más loci polimórficos.</td></tr>
+      <tr><td><span class="ui">Sequence statistics</span></td><td class="c"><span class="chip k8">8</span></td><td>Secuencias alineadas.</td></tr>
+      <tr><td><span class="ui">Demographic history</span></td><td class="c"><span class="chip k9">9</span></td><td>Codominantes, dos o más loci y poblaciones con individuos repetidos.</td></tr>
+      <tr><td><span class="ui">Spatial genetic structure</span></td><td class="c"><span class="chip k9">9</span></td><td>Coordenadas en 10 o más individuos.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · la tarjeta recomienda, los botones de bloque se abren antes</div>
+    <p>La tarjeta usa los mínimos recomendados. Los botones de la barra superior son algo más permisivos para que puedas explorar: el Bloque 7 se abre desde 3 loci polimórficos, aunque la tarjeta pide 5, y el Bloque 3 se abre incluso con una muestra por unidad para mostrar la diversidad del conjunto. Cuando un análisis está por debajo del mínimo recomendado, el bloque correspondiente lo advierte en su interpretación.</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 3.17.</b> Botones al final del bloque.</caption>
+    <thead><tr><th style="width:30%">Botón</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">← Home</span></td><td>Vuelve a la portada; los datos permanecen cargados.</td></tr>
+      <tr><td><span class="ui">Export in another layout</span></td><td>Abre el diseñador con los datos para guardarlos como plantilla, disposición con fila de parámetros o FASTA con hoja de muestras (sección 3.3).</td></tr>
+      <tr><td><span class="ui">Continue to diversity →</span></td><td>Pasa al Bloque 3.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 3.7 -->
+  <h2 id="s3-7"><span class="num">3.7</span>Paso a paso con los seis ejemplos</h2>
+  <p>Cada ejemplo muestra una situación distinta del Bloque 2. Todos se cargan desde <span class="ui">Or try an example</span> y, salvo los FASTA, se terminan con <span class="ui">Build the dataset and run the checks</span>. La tabla 3.18 resume lo que debes obtener.</p>
+
+  <table>
+    <caption><b>Tabla 3.18.</b> Resultado del Bloque 2 con cada ejemplo.</caption>
+    <thead><tr><th style="width:21%">Ejemplo</th><th>Leído como</th><th class="c" style="width:9%">Faltantes</th><th style="width:28%">Avisos</th><th class="c" style="width:10%">Análisis</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Maize landraces · ISSR</span></td><td>Dominante, transpuesto; 15 razas, 31 bandas (25 polimórficas, 80.6 %); sin columna de población</td><td class="c">0 %</td><td>6 bandas monomórficas</td><td class="c">3 de 11</td></tr>
+      <tr><td><span class="ui">Maize populations · SSR</span></td><td>Codominante, un alelo por columna; 75 plantas, 3 poblaciones de 25, 8 loci; N<sub>a</sub> = 5.63</td><td class="c">3.8 %</td><td>Con01 sin datos en 3 de 8 loci</td><td class="c">9 de 11</td></tr>
+      <tr><td><span class="ui">Agave · AFLP</span></td><td>Dominante; 80 plantas, 4 poblaciones de 20, 60 bandas polimórficas, con coordenadas</td><td class="c">0 %</td><td>Ninguno: matriz lista</td><td class="c">8 de 11</td></tr>
+      <tr><td><span class="ui">Pine · chloroplast DNA</span></td><td>FASTA; 48 secuencias de 480 pb, 4 poblaciones de 12, 8 haplotipos</td><td class="c">0 %</td><td>Ofrece añadir información de muestras</td><td class="c">6 de 11</td></tr>
+      <tr><td><span class="ui">Maize · morphology</span></td><td>Morfológico; 75 plantas, 3 poblaciones, 9 caracteres</td><td class="c">0 %</td><td>Ninguno: matriz lista</td><td class="c">2 de 11</td></tr>
+      <tr><td><span class="ui">Five genera · dating with fossils</span></td><td>FASTA; 16 secuencias de 1600 pb, 6 géneros como poblaciones, 16 haplotipos</td><td class="c">0 %</td><td>Ofrece añadir información de muestras</td><td class="c">6 de 11</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ISSR -->
+  <h3>Ejemplo 1 · Razas de maíz con ISSR: una tabla que hay que girar</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Pulsa <span class="ui">Maize landraces · ISSR</span>. El archivo es un libro de hoja de cálculo con las bandas en filas y las razas en columnas, como se lee un gel.</li>
+      <li>Lee la tarjeta de interpretación (figura 3.9): la app notó que la primera columna repite los nombres de los primers (7945, P2, P5, A8), transpuso la tabla y propone llamar <i>landraces</i> a las filas.</li>
+      <li>En los papeles, la primera columna, ahora <b>Landrace</b>, es el <span class="ui">Individual ID</span> y no hay población. Es correcto: cada raza es una muestra compuesta.</li>
+      <li>Pulsa <span class="ui">Build the dataset and run the checks</span>.</li>
+    </ol>
+  </div>
+  <figure>
+    <div class="marco"><img src="../img/b2-qc-issr.png" alt="Control de calidad del ejemplo de ISSR"></div>
+    <figcaption><b>Figura 3.19.</b> Control de calidad de las razas con ISSR. Al no haber columna de población, cada fila se trata como una raza independiente y la tarjeta de población más pequeña no aparece. Seis bandas son monomórficas.</figcaption>
+  </figure>
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Qué significa para el análisis</div>
+    <p>Con una sola muestra por raza no hay variación <b>dentro</b> de las unidades, así que no existen la diversidad por población, el equilibrio de Hardy–Weinberg ni el AMOVA. Sí se pueden estudiar las <b>relaciones entre razas</b>: distancias genéticas, coordenadas principales, árboles con bootstrap y agrupamiento bayesiano (3 de 11 familias). Es el camino del Bloque 6, donde este ejemplo se retoma.</p>
+  </div>
+
+  <!-- SSR -->
+  <h3>Ejemplo 2 · Poblaciones de maíz con microsatélites: el caso completo</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Pulsa <span class="ui">Maize populations · SSR</span>. Es un CSV con columnas <code>Ind</code>, <code>Pop</code> y dos columnas por locus.</li>
+      <li>La interpretación dice <i>the column names come in 8 pairs, two per locus</i>: codominante, un alelo por columna, faltante 0.</li>
+      <li>En los papeles (figura 3.10), <code>Ind</code> es el ID y <code>Pop</code> la población, con 3 valores distintos: Cónico, Chalqueño y Palomero.</li>
+      <li>Construye el conjunto y revisa: 75 plantas, 8 loci polimórficos, 3.8 % de faltantes y un solo aviso (figura 3.11).</li>
+      <li>Baja a <span class="ui">Locus by locus</span> (figura 3.13): los faltantes van de 0 % en phi096 a 6.7 % en phi024 y bnlg1621, y N<sub>a</sub> de 4 a 8 alelos.</li>
+    </ol>
+  </div>
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer este resultado</div>
+    <p>Todo está dentro de lo recomendable: 25 plantas por población, menos de 5 % de faltantes y ningún locus con más de 7 %. La planta Con01 carece de 3 de sus 8 loci (37.5 %); con 25 plantas en su población, conviene conservarla y dejar que cada análisis use los loci que sí tiene. Con 9 de 11 familias disponibles, este conjunto recorre casi todo el manual.</p>
+  </div>
+
+  <!-- Agave -->
+  <h3>Ejemplo 3 · Agave con AFLP: dominantes con coordenadas</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Pulsa <span class="ui">Agave · AFLP</span>. La interpretación dice <i>100% of the data columns hold only 0 and 1</i>: dominante.</li>
+      <li>En los papeles, <code>Plant</code> es el ID, <code>Population</code> la población y dos columnas son latitud y longitud; el resumen dice <i>coordinates found</i>.</li>
+      <li>Construye el conjunto: 80 plantas, 60 bandas polimórficas, sin faltantes ni genotipos repetidos.</li>
+      <li>Revisa la tarjeta de análisis (figura 3.18).</li>
+    </ol>
+  </div>
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · por qué no hay clones en un agave</div>
+    <p>Los agaves producen hijuelos, así que en un estudio real conviene revisar con cuidado la tabla de genotipos repetidos. En este ejemplo simulado no hay ninguno. Con 60 bandas, dos rametos del mismo geneto aparecerían como un par idéntico.</p>
+  </div>
+
+  <!-- Pine -->
+  <h3>Ejemplo 4 · Pino con ADN de cloroplasto: un archivo FASTA</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Pulsa <span class="ui">Pine · chloroplast DNA</span>. El mensaje dice <i>Read as a FASTA alignment: 48 individuals, 1 alignment, 4 populations</i>. No hay tarjetas de interpretación ni de papeles: el formato ya trae su estructura.</li>
+      <li>La población salió del encabezado de cada secuencia: <code>&gt;Sierra_Norte_01 | Sierra_Norte</code>.</li>
+      <li>Aparece <span class="ui">Add sample information</span> para añadir regiones o coordenadas con una hoja de muestras (figura 3.20).</li>
+      <li>El control de calidad reporta 8 haplotipos en 48 secuencias de 480 pb.</li>
+    </ol>
+  </div>
+  <figure>
+    <div class="marco"><img src="../img/b2-fasta-pino.png" alt="Tarjeta para añadir información de muestras y control de calidad del FASTA de pino"></div>
+    <figcaption><b>Figura 3.20.</b> Con un FASTA, la app ofrece completar la información de las muestras y el control de calidad avisa que compartir haplotipo es lo esperado, no una duplicación.</figcaption>
+  </figure>
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · el encabezado de un FASTA</div>
+    <p>Escribe los encabezados como <code>&gt;ID | Población | Región</code> para no necesitar hoja de muestras. Si ya tienes el archivo sin poblaciones, pulsa <span class="ui">Download an empty sample sheet with these IDs</span>, llena las columnas y cárgala con <span class="ui">Choose a sample sheet</span>; los IDs deben coincidir con los del FASTA (la app no distingue mayúsculas de minúsculas ni toma en cuenta los espacios de los extremos).</p>
+  </div>
+
+  <!-- Morph -->
+  <h3>Ejemplo 5 · Morfología de maíz: caracteres en lugar de marcadores</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Pulsa <span class="ui">Maize · morphology</span>. La interpretación dice <i>the data columns hold continuous measurements</i>: morfológico.</li>
+      <li>Construye el conjunto. En lugar de la tabla de loci aparece <span class="ui">Trait by trait</span> con media, desviación estándar, coeficiente de variación, mínimo y máximo (figura 3.21).</li>
+      <li>La tarjeta de análisis ofrece 2 de 11 familias: distancias y PCoA. Además se abren la diversidad fenotípica del Bloque 3 y P<sub>ST</sub> del Bloque 9.</li>
+    </ol>
+  </div>
+  <figure>
+    <div class="marco"><img src="../img/b2-morfologia.png" alt="Tabla de caracteres morfológicos"></div>
+    <figcaption><b>Figura 3.21.</b> Los 9 caracteres del ejemplo morfológico. El número de hileras de la mazorca se reconoce como <i>discrete</i> (entero) y el resto como cuantitativos.</figcaption>
+  </figure>
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · leer el coeficiente de variación de un carácter</div>
+    <table class="compacta">
+      <thead><tr><th style="width:22%">CV</th><th style="width:24%">Variación</th><th>En el ejemplo</th></tr></thead>
+      <tbody>
+        <tr><td><b>Menos de 10 %</b></td><td>Baja</td><td>Días a floración, 9.8 %: carácter muy estable entre plantas.</td></tr>
+        <tr><td><b>10 a 30 %</b></td><td>Moderada</td><td>Altura de planta (17.3 %), longitud (25.9 %) y diámetro de mazorca (25.8 %).</td></tr>
+        <tr><td><b>Más de 30 %</b></td><td>Alta</td><td>Peso de olote (41.6 %) y de 100 granos (39.3 %): buenos candidatos para diferenciar poblaciones o para selección.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Guía orientativa: el CV esperado depende del carácter y del ambiente. Un CV muy alto también puede revelar errores de captura, como un peso en gramos escrito en kilogramos; revisa el mínimo y el máximo.</p>
+  </div>
+
+  <!-- Five genera -->
+  <h3>Ejemplo 6 · Cinco géneros para fechar con fósiles</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Pulsa <span class="ui">Five genera · dating with fossils</span>. Se lee como FASTA con 16 secuencias de 1600 pb, y el nombre del género en cada encabezado se toma como población.</li>
+      <li>El control de calidad reporta 16 haplotipos: cada especie es distinta, como corresponde a una comparación entre especies.</li>
+      <li>La población más pequeña tiene 2 secuencias: no importa, porque este ejemplo no se usa para estadísticas de poblaciones sino para el fechado del Bloque 8.</li>
+    </ol>
+  </div>
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · poblaciones que en realidad son géneros</div>
+    <p>En estudios entre especies, la columna de población sirve para agrupar taxones (géneros, secciones, clados) y colorear los árboles. Los análisis dentro de poblaciones del Bloque 3 al 5 no tienen sentido biológico en ese caso, aunque la app los permita; ve directo a los Bloques 6 y 8.</p>
+  </div>
+
+  <div class="caja dato" style="margin-top:0.25in">
+    <div class="dato-cifra">5 min</div>
+    <div class="dato-txt"><div class="caja-t">Antes de seguir</div>Dedica cinco minutos al Bloque 2 cada vez que cargues datos nuevos: confirma el tipo de marcador y la columna de población, revisa los faltantes y la tabla de valores por corregir. Es el paso que más errores evita en todo el estudio.</div>
+  </div>
+
+  <p style="margin-top:0.25in">Con los datos limpios y confirmados, el siguiente capítulo entra al primer análisis propiamente dicho: las frecuencias alélicas y los índices de diversidad del Bloque 3.</p>
+</section>
+
+</body>
+</html>

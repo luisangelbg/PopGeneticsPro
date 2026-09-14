@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Probocarpa: invented genus, drawn as a cluster of berries (original illustration for the manual) -->
+  <rect width="400" height="400" fill="#f4f1f8"/>
+  <path d="M206 40 C 200 80, 214 110, 200 150" stroke="#5b3d1f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M204 70 C 250 40, 300 52, 326 80 C 280 96, 236 92, 204 70 Z" fill="#4f8a3a" stroke="#2f5a20" stroke-width="2"/>
+  <path d="M204 70 L 316 80" stroke="#cfe6c0" stroke-width="2"/>
+  <g stroke="#5b3d1f" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M200 150 L150 196"/><path d="M200 150 L250 196"/><path d="M200 150 L200 210"/><path d="M175 180 L130 250"/><path d="M225 180 L270 250"/><path d="M200 210 L170 280"/><path d="M200 210 L230 280"/><path d="M200 210 L200 320"/>
+  </g>
+  <g stroke="#2c1446" stroke-width="2.5">
+    <circle cx="150" cy="200" r="30" fill="#5b2c8a"/><circle cx="250" cy="200" r="30" fill="#6a3399"/>
+    <circle cx="200" cy="222" r="30" fill="#4a2372"/>
+    <circle cx="128" cy="258" r="30" fill="#6a3399"/><circle cx="272" cy="258" r="30" fill="#5b2c8a"/>
+    <circle cx="170" cy="288" r="30" fill="#5b2c8a"/><circle cx="230" cy="288" r="30" fill="#4a2372"/>
+    <circle cx="200" cy="332" r="30" fill="#6a3399"/>
+  </g>
+  <g fill="#e6d2f5" opacity=".85"><circle cx="140" cy="190" r="7"/><circle cx="240" cy="190" r="7"/><circle cx="190" cy="212" r="7"/><circle cx="118" cy="248" r="7"/><circle cx="262" cy="248" r="7"/><circle cx="160" cy="278" r="7"/><circle cx="220" cy="278" r="7"/><circle cx="190" cy="322" r="7"/></g>
+</svg>

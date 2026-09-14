@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Bloque 5: diferenciación y AMOVA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  .nc { text-transform: none; letter-spacing: 0; }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+  .kbd { font-family: var(--sans); font-size: 0.78em; border: 1px solid #b9c3d6; border-bottom-width: 2px; border-radius: 3px; padding: 0 0.35em; background: #fff; white-space: nowrap; color: var(--negro); }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b5" data-pestana="B5" data-orden="6" style="--acento: var(--b5)">
+  <div class="cap-apertura">
+    <div class="cap-num">B5</div>
+    <div class="cap-etiqueta">Capítulo seis · Bloque 5 · AMOVA</div>
+    <h1 data-corto="Bloque 5 · Diferenciación y AMOVA">Diferenciación y AMOVA</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">¿Cuánta de la variación genética separa a las poblaciones? ¿Qué pares difieren? ¿Las regiones que definiste agrupan de verdad a las poblaciones? El Bloque 5 calcula los estimadores clásicos y modernos de diferenciación (F<sub>ST</sub>, G<sub>ST</sub>, G′<sub>ST</sub> y D de Jost), el análisis de varianza molecular (AMOVA) con o sin regiones, las matrices por pares con sus pruebas y una conversión orientativa a número de migrantes.</p>
+    <div class="cap-franja"><span class="k5"></span><span class="k5" style="opacity:.75"></span><span class="k5" style="opacity:.5"></span><span class="k5" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>6.1</b>Medir la diferenciación</li>
+      <li><b>6.2</b>AMOVA jerárquico</li>
+      <li><b>6.3</b>Matrices por pares y flujo génico</li>
+      <li><b>6.4</b>Reglas de decisión</li>
+      <li><b>6.5</b>Ajustes, tablas y figuras del bloque</li>
+      <li><b>6.6</b>Paso a paso: maíz, agave y pino</li>
+    </ul>
+  </div>
+
+  <!-- 6.1 -->
+  <h2 id="s6-1"><span class="num">6.1</span>Medir la diferenciación</h2>
+  <p class="lead">Cuando las poblaciones intercambian pocos migrantes, la deriva cambia sus frecuencias alélicas en direcciones distintas y se van separando. La diferenciación mide cuánto se han alejado: compara la diversidad de cada población con la del conjunto.</p>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span><span>La idea de <span class="sym">F<sub>ST</sub></span>, en una frase</span></div>
+    <p>Si las poblaciones fueran una sola, la diversidad dentro de ellas (H<sub>S</sub>) sería igual a la del conjunto (H<sub>T</sub>). Cuanto más difieren sus frecuencias, más diversidad “aparece” al juntarlas: <b>F<sub>ST</sub> = (H<sub>T</sub> − H<sub>S</sub>)/H<sub>T</sub></b> es la fracción de la diversidad total que se debe a las diferencias entre poblaciones. Vale 0 si todas tienen las mismas frecuencias y 1 si cada una está fija en un alelo distinto. Es el mismo razonamiento del efecto Wahlund del capítulo 4.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Poca y mucha diferenciación entre tres poblaciones">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#c2410c"><text x="20" y="16">POCA DIFERENCIACIÓN</text><text x="370" y="16">MUCHA DIFERENCIACIÓN</text></g>
+      <g transform="translate(20 30)" font-size="10">
+        <g><rect x="20" y="10" width="54" height="150" fill="#f3e3d8"/><rect x="20" y="85" width="54" height="75" fill="#c2410c"/></g>
+        <g><rect x="120" y="10" width="54" height="150" fill="#f3e3d8"/><rect x="120" y="77.5" width="54" height="82.5" fill="#c2410c"/></g>
+        <g><rect x="220" y="10" width="54" height="150" fill="#f3e3d8"/><rect x="220" y="92.5" width="54" height="67.5" fill="#c2410c"/></g>
+        <g text-anchor="middle" fill="#111"><text x="47" y="176">Pob. 1</text><text x="147" y="176">Pob. 2</text><text x="247" y="176">Pob. 3</text>
+        <text x="47" y="191" fill="#5d6472">p = 0.50</text><text x="147" y="191" fill="#5d6472">p = 0.55</text><text x="247" y="191" fill="#5d6472">p = 0.45</text></g>
+        <text x="20" y="214" font-size="11" fill="#111">H<tspan dy="3" font-size="8">S</tspan><tspan dy="-3"> = 0.497  ·  H</tspan><tspan dy="3" font-size="8">T</tspan><tspan dy="-3"> = 0.500  ·  </tspan><tspan font-weight="600">G</tspan><tspan dy="3" font-size="8" font-weight="600">ST</tspan><tspan dy="-3" font-weight="600"> = 0.007</tspan></text>
+      </g>
+      <line x1="350" y1="28" x2="350" y2="240" stroke="#d5dae4"/>
+      <g transform="translate(370 30)" font-size="10">
+        <g><rect x="20" y="10" width="54" height="150" fill="#f3e3d8"/><rect x="20" y="25" width="54" height="135" fill="#c2410c"/></g>
+        <g><rect x="120" y="10" width="54" height="150" fill="#f3e3d8"/><rect x="120" y="85" width="54" height="75" fill="#c2410c"/></g>
+        <g><rect x="220" y="10" width="54" height="150" fill="#f3e3d8"/><rect x="220" y="145" width="54" height="15" fill="#c2410c"/></g>
+        <g text-anchor="middle" fill="#111"><text x="47" y="176">Pob. 1</text><text x="147" y="176">Pob. 2</text><text x="247" y="176">Pob. 3</text>
+        <text x="47" y="191" fill="#5d6472">p = 0.90</text><text x="147" y="191" fill="#5d6472">p = 0.50</text><text x="247" y="191" fill="#5d6472">p = 0.10</text></g>
+        <text x="20" y="214" font-size="11" fill="#111">H<tspan dy="3" font-size="8">S</tspan><tspan dy="-3"> = 0.287  ·  H</tspan><tspan dy="3" font-size="8">T</tspan><tspan dy="-3"> = 0.500  ·  </tspan><tspan font-weight="600">G</tspan><tspan dy="3" font-size="8" font-weight="600">ST</tspan><tspan dy="-3" font-weight="600"> = 0.427</tspan></text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 6.1.</b> Tres poblaciones con un locus de dos alelos; la barra oscura es la frecuencia <i>p</i> del alelo A. En ambos casos la frecuencia media es 0.5, así que H<sub>T</sub> = 0.5. A la izquierda cada población conserva casi toda esa diversidad; a la derecha dos poblaciones están cerca de fijar alelos opuestos y H<sub>S</sub> baja a 0.287.</figcaption>
+  </figure>
+
+  <h3>Cuatro estimadores y por qué no coinciden</h3>
+  <p>G<sub>ST</sub> tiene un techo: nunca puede superar 1 − H<sub>S</sub>, así que con marcadores muy diversos, como los microsatélites, queda cerca de cero aunque las poblaciones no compartan ni un alelo (figura 6.2). Hedrick (2005) propuso G′<sub>ST</sub>, que divide G<sub>ST</sub> entre su máximo posible, y Jost (2008) propuso D, que mide directamente qué tan distintos son los conjuntos de alelos. Ninguno sustituye a los otros: miden cosas relacionadas pero diferentes (Meirmans y Hedrick, 2011).</p>
+
+  <figure>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="El techo de G_ST con muchos alelos">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#c2410c"><text x="20" y="16">DOS POBLACIONES SIN NINGÚN ALELO EN COMÚN</text></g>
+      <g transform="translate(20 34)" font-size="10">
+        <text x="0" y="12" fill="#111" font-weight="600">Población 1</text>
+        <g fill="#c2410c"><rect x="0" y="22" width="56" height="26" opacity="1"/><rect x="58" y="22" width="56" height="26" opacity=".82"/><rect x="116" y="22" width="56" height="26" opacity=".64"/><rect x="174" y="22" width="56" height="26" opacity=".48"/><rect x="232" y="22" width="56" height="26" opacity=".34"/></g>
+        <g fill="#fff" text-anchor="middle" font-size="9.5"><text x="28" y="39">A1 · 0.2</text><text x="86" y="39">A2 · 0.2</text><text x="144" y="39">A3 · 0.2</text><text x="202" y="39">A4 · 0.2</text><text x="260" y="39" fill="#111">A5 · 0.2</text></g>
+        <text x="0" y="78" fill="#111" font-weight="600">Población 2</text>
+        <g fill="#14213d"><rect x="0" y="88" width="56" height="26" opacity="1"/><rect x="58" y="88" width="56" height="26" opacity=".82"/><rect x="116" y="88" width="56" height="26" opacity=".64"/><rect x="174" y="88" width="56" height="26" opacity=".48"/><rect x="232" y="88" width="56" height="26" opacity=".34"/></g>
+        <g fill="#fff" text-anchor="middle" font-size="9.5"><text x="28" y="105">A6 · 0.2</text><text x="86" y="105">A7 · 0.2</text><text x="144" y="105">A8 · 0.2</text><text x="202" y="105">A9 · 0.2</text><text x="260" y="105">A10 · 0.2</text></g>
+        <text x="0" y="146" font-size="11" fill="#111">H<tspan dy="3" font-size="8">S</tspan><tspan dy="-3"> = 0.80  ·  H</tspan><tspan dy="3" font-size="8">T</tspan><tspan dy="-3"> = 0.90</tspan></text>
+      </g>
+      <line x1="345" y1="30" x2="345" y2="190" stroke="#d5dae4"/>
+      <g transform="translate(370 44)" font-size="11" fill="#111">
+        <rect x="0" y="0" width="300" height="30" rx="4" fill="#fbeee6"/><text x="12" y="20">G<tspan dy="3" font-size="8">ST</tspan><tspan dy="-3"> = 0.10 / 0.90 = </tspan><tspan font-weight="700">0.111</tspan></text>
+        <rect x="0" y="40" width="300" height="30" rx="4" fill="#eef1f7"/><text x="12" y="60">G′<tspan dy="3" font-size="8">ST</tspan><tspan dy="-3"> = 0.111 / 0.111 máximo = </tspan><tspan font-weight="700">1</tspan></text>
+        <rect x="0" y="80" width="300" height="30" rx="4" fill="#eef1f7"/><text x="12" y="100">D = 2 × 0.10 / 0.20 = <tspan font-weight="700">1</tspan></text>
+        <text x="0" y="136" font-size="9.5" fill="#5d6472">Totalmente distintas, pero G<tspan dy="2.5" font-size="7">ST</tspan><tspan dy="-2.5"> no pasa de 0.11 porque</tspan></text>
+        <text x="0" y="150" font-size="9.5" fill="#5d6472">cada población conserva mucha diversidad propia.</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 6.2.</b> El techo de G<sub>ST</sub>. Con cinco alelos igual de frecuentes en cada población y ninguno compartido, G<sub>ST</sub> (y también F<sub>ST</sub>) vale 0.111, mientras que G′<sub>ST</sub> y D valen 1, su máximo. Por eso los microsatélites, con H<sub>S</sub> alta, dan F<sub>ST</sub> pequeños aunque las poblaciones sean muy distintas.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 6.1.</b> Estadísticos del Bloque 5. <i>r</i> es el número de poblaciones; H<sub>S</sub> y H<sub>T</sub> llevan las correcciones por tamaño de muestra de Nei y Chesser (1983).</caption>
+    <thead><tr><th style="width:17%">Estadístico</th><th style="width:30%">Fórmula</th><th>Qué mide y cuándo usarlo</th><th class="c" style="width:10%">Intervalo</th></tr></thead>
+    <tbody>
+      <tr><td><b>θ</b> · F<sub>ST</sub><br><span class="small">Weir y Cockerham (1984)</span></td><td class="f">σ²<sub>entre</sub> / σ²<sub>total</sub>, con componentes de varianza sumados sobre alelos y loci</td><td>Diferenciación como correlación entre alelos de la misma población. Corrige por tamaño y número de muestras. <b>El estimador que se reporta</b> y el que se relaciona con flujo génico y deriva.</td><td class="c">≈ 0 a 1</td></tr>
+      <tr><td><b>θ<sub>B</sub></b><br><span class="small">bandas dominantes</span></td><td class="f">θ para unidades haploides aplicado a presencia o ausencia de bandas</td><td>La misma idea con AFLP, ISSR o RAPD. Igual a Φ<sub>PT</sub> del AMOVA.</td><td class="c">≈ 0 a 1</td></tr>
+      <tr><td><b>G<sub>ST</sub></b><br><span class="small">Nei (1973)</span></td><td class="f">(H<sub>T</sub> − H<sub>S</sub>) / H<sub>T</sub></td><td>Fracción de la diversidad total entre poblaciones. Útil para comparar con estudios antiguos; limitado por el techo 1 − H<sub>S</sub>.</td><td class="c">0 a 1 − H<sub>S</sub></td></tr>
+      <tr><td><b>G′<sub>ST</sub></b><br><span class="small">Hedrick (2005)</span></td><td class="f">G<sub>ST</sub> (<i>r</i> − 1 + H<sub>S</sub>) / [(<i>r</i> − 1)(1 − H<sub>S</sub>)]</td><td>G<sub>ST</sub> dividido entre su máximo posible: comparable entre marcadores con diversidad distinta.</td><td class="c">0 a 1</td></tr>
+      <tr><td><b>D</b><br><span class="small">Jost (2008)</span></td><td class="f"><i>r</i>/(<i>r</i> − 1) · (H<sub>T</sub> − H<sub>S</sub>) / (1 − H<sub>S</sub>)</td><td>Qué tan distintos son los conjuntos de alelos: 0 si son idénticos, 1 si no comparten ninguno. No informa sobre migración.</td><td class="c">0 a 1</td></tr>
+      <tr><td><b>Φ<sub>ST</sub></b> · <b>Φ<sub>PT</sub></b><br><span class="small">AMOVA</span></td><td class="f">σ²<sub>entre poblaciones</sub> / σ²<sub>total</sub></td><td>La diferenciación del AMOVA; Φ<sub>PT</sub> con bandas. Sin regiones, igual a θ o θ<sub>B</sub> (sección 6.2).</td><td class="c">≈ 0 a 1</td></tr>
+      <tr><td><b>Nm</b><br><span class="small">Wright</span></td><td class="f">(1 − θ) / (4θ); (1 − θ) / (2θ) en haplotipos</td><td>Migrantes por generación que producirían ese θ en el modelo de islas. Solo un orden de magnitud (sección 6.3).</td><td class="c">0 a ∞</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · cómo se combinan los loci</div>
+    <p>El θ multilocus es una razón de sumas: se suman los componentes de varianza de todos los loci y luego se divide, de modo que los loci más informativos pesan más. G<sub>ST</sub>, G′<sub>ST</sub> y D se calculan con el promedio de H<sub>S</sub> y H<sub>T</sub> sobre loci, así los tres son comparables entre sí. Algunos estudios promedian en cambio los D de cada locus, con media aritmética o armónica; la app muestra ambas en la nota de la tabla por locus para que compares con el mismo tipo de promedio. Los intervalos al 95&nbsp;% se obtienen remuestreando loci (<i>bootstrap</i>) y los errores estándar con <i>jackknife</i> sobre loci.</p>
+  </div>
+
+  <!-- 6.2 -->
+  <h2 id="s6-2"><span class="num">6.2</span>AMOVA jerárquico</h2>
+  <p>El análisis de varianza molecular (AMOVA; Excoffier, Smouse y Quattro, 1992) reparte las distancias genéticas al cuadrado entre los niveles del diseño de muestreo, igual que un análisis de varianza reparte la suma de cuadrados entre tratamientos y repeticiones. De cada nivel sale un <b>componente de varianza</b> y un <b>estadístico Φ</b>, que es la fracción de la variación que ese nivel explica.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Niveles del AMOVA jerárquico">
+      <defs><marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#c2410c"/></marker></defs>
+      <g font-size="10.5">
+        <rect x="250" y="8" width="200" height="30" rx="6" fill="#14213d"/><text x="350" y="28" fill="#fff" text-anchor="middle" font-weight="600">Total · σ²</text>
+        <rect x="100" y="62" width="180" height="30" rx="6" fill="#c2410c"/><text x="190" y="82" fill="#fff" text-anchor="middle" font-weight="600">Región Oaxaca</text>
+        <rect x="420" y="62" width="180" height="30" rx="6" fill="#c2410c"/><text x="510" y="82" fill="#fff" text-anchor="middle" font-weight="600">Región Puebla-Guerrero</text>
+        <g fill="#fff" stroke="#c2410c" stroke-width="1.3"><rect x="60" y="116" width="120" height="28" rx="6"/><rect x="200" y="116" width="120" height="28" rx="6"/><rect x="380" y="116" width="120" height="28" rx="6"/><rect x="520" y="116" width="120" height="28" rx="6"/></g>
+        <g fill="#111" text-anchor="middle"><text x="120" y="134">Oaxaca_north</text><text x="260" y="134">Oaxaca_south</text><text x="440" y="134">Puebla</text><text x="580" y="134">Guerrero</text></g>
+        <g fill="#c2410c"><circle cx="85" cy="172" r="6"/><circle cx="105" cy="172" r="6"/><circle cx="125" cy="172" r="6"/><circle cx="145" cy="172" r="6" opacity=".5"/><circle cx="225" cy="172" r="6"/><circle cx="245" cy="172" r="6"/><circle cx="265" cy="172" r="6"/><circle cx="285" cy="172" r="6" opacity=".5"/><circle cx="405" cy="172" r="6"/><circle cx="425" cy="172" r="6"/><circle cx="445" cy="172" r="6"/><circle cx="465" cy="172" r="6" opacity=".5"/><circle cx="545" cy="172" r="6"/><circle cx="565" cy="172" r="6"/><circle cx="585" cy="172" r="6"/><circle cx="605" cy="172" r="6" opacity=".5"/></g>
+        <g stroke="#9aa3b2" stroke-width="1"><line x1="350" y1="38" x2="190" y2="62"/><line x1="350" y1="38" x2="510" y2="62"/><line x1="190" y1="92" x2="120" y2="116"/><line x1="190" y1="92" x2="260" y2="116"/><line x1="510" y1="92" x2="440" y2="116"/><line x1="510" y1="92" x2="580" y2="116"/><line x1="120" y1="144" x2="115" y2="164"/><line x1="260" y1="144" x2="255" y2="164"/><line x1="440" y1="144" x2="435" y2="164"/><line x1="580" y1="144" x2="575" y2="164"/></g>
+        <g font-size="10" fill="#22252c">
+          <text x="12" y="82">σ²<tspan dy="3" font-size="7.5">a</tspan><tspan dy="-3"> regiones</tspan></text>
+          <text x="12" y="134">σ²<tspan dy="3" font-size="7.5">b</tspan><tspan dy="-3"> pobl.</tspan></text>
+          <text x="12" y="176">σ²<tspan dy="3" font-size="7.5">c</tspan><tspan dy="-3"> plantas</tspan></text>
+        </g>
+        <g font-size="10.5" fill="#111">
+          <text x="60" y="212">Φ<tspan dy="3" font-size="8">CT</tspan><tspan dy="-3"> = σ²</tspan><tspan dy="3" font-size="8">a</tspan><tspan dy="-3"> / σ²: cuánto separan las regiones</tspan></text>
+          <text x="60" y="230">Φ<tspan dy="3" font-size="8">SC</tspan><tspan dy="-3"> = σ²</tspan><tspan dy="3" font-size="8">b</tspan><tspan dy="-3"> / (σ²</tspan><tspan dy="3" font-size="8">b</tspan><tspan dy="-3"> + σ²</tspan><tspan dy="3" font-size="8">c</tspan><tspan dy="-3">): poblaciones dentro de su región</tspan></text>
+          <text x="400" y="212">Φ<tspan dy="3" font-size="8">PT</tspan><tspan dy="-3"> = (σ²</tspan><tspan dy="3" font-size="8">a</tspan><tspan dy="-3"> + σ²</tspan><tspan dy="3" font-size="8">b</tspan><tspan dy="-3">) / σ²: entre poblaciones</tspan></text>
+          <text x="400" y="230">con codominantes se añade el nivel dentro de individuos</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><b>Figura 6.3.</b> Los niveles del AMOVA jerárquico con el diseño de la práctica de agave: dos regiones, dos poblaciones en cada una y 20 plantas por población. Con datos codominantes el nivel de las plantas se divide en “entre individuos” y “dentro de individuos”, lo que da Φ<sub>IS</sub> y Φ<sub>IT</sub>.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 6.2.</b> Niveles del AMOVA en la app. N es el número de individuos, P el de poblaciones y G el de regiones.</caption>
+    <thead><tr><th style="width:24%">Fuente de variación</th><th class="c" style="width:9%">g.l.</th><th style="width:26%">Estadístico Φ</th><th>Prueba: qué se permuta</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Among regions</span></td><td class="c">G − 1</td><td>Φ<sub>CT</sub> = σ²<sub>a</sub> / σ²</td><td>Poblaciones completas entre regiones.</td></tr>
+      <tr><td><span class="ui">Among populations within regions</span></td><td class="c">P − G</td><td>Φ<sub>SC</sub> = σ²<sub>b</sub> / (σ²<sub>b</sub> + σ²<sub>c</sub> + σ²<sub>d</sub>)</td><td>Individuos entre las poblaciones de su misma región.</td></tr>
+      <tr><td><span class="ui">Among populations</span> (sin regiones)</td><td class="c">P − 1</td><td>Φ<sub>ST</sub> (Φ<sub>PT</sub> con bandas)</td><td>Individuos entre todas las poblaciones.</td></tr>
+      <tr><td><span class="ui">Among individuals within populations</span></td><td class="c">N − P</td><td>Φ<sub>IS</sub> = σ²<sub>c</sub> / (σ²<sub>c</sub> + σ²<sub>d</sub>)</td><td>Copias del gen entre individuos de la misma población.</td></tr>
+      <tr><td><span class="ui">Within individuals</span></td><td class="c">N</td><td>Φ<sub>IT</sub> = (σ²<sub>a</sub> + σ²<sub>b</sub> + σ²<sub>c</sub>) / σ²</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>La distancia que usa el AMOVA según el marcador</div>
+    <ul style="margin:0">
+      <li><b>Codominantes:</b> entre dos copias del gen, 1 si llevan alelos distintos y 0 si iguales, sumado sobre loci. Sin regiones, Φ<sub>ST</sub>, Φ<sub>IS</sub> y Φ<sub>IT</sub> son exactamente iguales a θ, <i>f</i> y F de Weir y Cockerham: son dos caminos hacia el mismo número.</li>
+      <li><b>Dominantes:</b> entre dos plantas, el número de bandas en que difieren (Peakall, Smouse y Huff, 1995). Da Φ<sub>PT</sub>, igual a θ<sub>B</sub>.</li>
+      <li><b>Haplotipos:</b> 1 si dos secuencias llevan haplotipos distintos. El AMOVA que pondera cuántas mutaciones separan a los haplotipos está en el Bloque 8.</li>
+    </ul>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · componentes negativos</div>
+    <p>Un componente de varianza puede salir negativo cuando un nivel no aporta variación y el azar del muestreo empuja la estimación por debajo de cero. No es un error del cálculo: se interpreta como cero. La app lo conserva en la tabla, para que la suma cuadre, y lo dibuja como cero en la figura.</p>
+  </div>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico · de cuadrados medios a componentes</div>
+    <p>En la práctica de agave (sección 6.6) el diseño está balanceado: 2 regiones, 2 poblaciones por región, 20 plantas por población y sin datos faltantes. Los cuadrados medios son 45.60 entre regiones, 38.65 entre poblaciones dentro de regiones y 10.653 dentro de poblaciones. Cada cuadrado medio contiene los componentes de los niveles de abajo, multiplicados por el número de plantas que hay en cada unidad:</p>
+    <table class="compacta" style="margin:0.04in 0 0.06in">
+      <thead><tr><th style="width:26%">Componente</th><th>Cálculo</th><th class="c" style="width:21%">Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>σ²<sub>c</sub> dentro de poblaciones</td><td>CM dentro</td><td class="c"><b>10.653</b></td></tr>
+        <tr><td>σ²<sub>b</sub> poblaciones en regiones</td><td>(38.65 − 10.653) / 20</td><td class="c"><b>1.400</b></td></tr>
+        <tr><td>σ²<sub>a</sub> regiones</td><td>(45.60 − 10.653 − 20 × 1.400) / 40</td><td class="c"><b>0.174</b></td></tr>
+        <tr><td>Φ<sub>CT</sub> · Φ<sub>SC</sub> · Φ<sub>PT</sub></td><td>σ²<sub>a</sub>/σ² · σ²<sub>b</sub>/(σ²<sub>b</sub> + σ²<sub>c</sub>) · (σ²<sub>a</sub> + σ²<sub>b</sub>)/σ², con σ² = 12.226</td><td class="c" style="white-space:nowrap"><b>0.014 · 0.116 · 0.129</b></td></tr>
+      </tbody>
+    </table>
+    <p style="margin:0">Con diseños desbalanceados los multiplicadores (20 y 40) se sustituyen por los coeficientes <i>n</i>, <i>n</i>′ y <i>n</i>″ de Excoffier y colaboradores (1992), y con datos faltantes la app los calcula locus por locus.</p>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span><span>Importante · con pocas poblaciones, <span class="sym">Φ<sub>CT</sub></span> no puede ser significativo</span></div>
+    <p>La prueba de Φ<sub>CT</sub> permuta <b>poblaciones completas</b> entre regiones. Si hay pocas poblaciones, hay pocas formas distintas de repartirlas, y el valor P nunca baja de 1 entre ese número de formas, sin importar cuántas permutaciones pidas. La app calcula ese número y lo advierte (tabla 6.3). Con menos de unas 8 poblaciones, juzga el nivel regional por el tamaño de su componente, no por su P.</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 6.3.</b> Formas distintas de repartir las poblaciones entre regiones del mismo tamaño y P mínimo posible de Φ<sub>CT</sub>.</caption>
+    <thead><tr><th>Diseño</th><th class="c">4 pobl. en 2 + 2</th><th class="c">4 en 3 + 1</th><th class="c">6 en 3 + 3</th><th class="c">8 en 4 + 4</th><th class="c">10 en 5 + 5</th><th class="c">12 en 4 + 4 + 4</th></tr></thead>
+    <tbody>
+      <tr><td>Formas distintas</td><td class="c">3</td><td class="c">4</td><td class="c">10</td><td class="c">35</td><td class="c">126</td><td class="c">5775</td></tr>
+      <tr><td>P mínimo</td><td class="c">0.33</td><td class="c">0.25</td><td class="c">0.10</td><td class="c">0.029</td><td class="c">0.008</td><td class="c">0.0002</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 6.3 -->
+  <h2 id="s6-3"><span class="num">6.3</span>Matrices por pares y flujo génico</h2>
+  <p>La diferenciación global dice cuánto difieren las poblaciones en conjunto; las matrices por pares dicen <b>cuáles</b>. Para cada par la app calcula θ, Φ del AMOVA, G<sub>ST</sub>, G′<sub>ST</sub>, D y Nm, y prueba θ y Φ permutando los individuos de las dos poblaciones. Como se hacen tantas pruebas como pares, los valores P se corrigen con el método de Holm (capítulo 5).</p>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span><span>De <span class="sym">F<sub>ST</sub></span> a migrantes: el modelo de islas de Wright</span></div>
+    <p>Si muchas poblaciones del mismo tamaño intercambian migrantes al azar, a la misma tasa, durante el tiempo suficiente para alcanzar el equilibrio entre deriva y migración, F<sub>ST</sub> ≈ 1/(1 + 4N<sub>e</sub>m) para genes nucleares de un organismo diploide, con marcadores codominantes o dominantes. Despejando, N<sub>e</sub>m ≈ (1 − F<sub>ST</sub>)/(4F<sub>ST</sub>). Para genomas haploides de herencia uniparental, como el cloroplasto, F<sub>ST</sub> ≈ 1/(1 + 2N<sub>e</sub>m). La regla clásica dice que con más de un migrante por generación la deriva no alcanza a diferenciar mucho a las poblaciones. El capítulo 2 muestra esta relación con el simulador.</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 6.4.</b> Número de migrantes por generación que corresponde a cada F<sub>ST</sub> en el modelo de islas.</caption>
+    <thead><tr><th>F<sub>ST</sub></th><th class="c">0.01</th><th class="c">0.05</th><th class="c">0.10</th><th class="c">0.15</th><th class="c">0.20</th><th class="c">0.25</th><th class="c">0.33</th><th class="c">0.50</th></tr></thead>
+    <tbody>
+      <tr><td>Nm, genes nucleares diploides</td><td class="c">24.8</td><td class="c">4.75</td><td class="c">2.25</td><td class="c">1.42</td><td class="c">1.00</td><td class="c">0.75</td><td class="c">0.51</td><td class="c">0.25</td></tr>
+      <tr><td>Nm, haplotipos</td><td class="c">49.5</td><td class="c">9.50</td><td class="c">4.50</td><td class="c">2.83</td><td class="c">2.00</td><td class="c">1.50</td><td class="c">1.02</td><td class="c">0.50</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · Nm es una conversión, no una medición</div>
+    <p>Ninguna población real cumple el modelo de islas: los tamaños difieren, la migración es mayor entre vecinas, la diferenciación puede venir de un aislamiento antiguo y no de poca migración actual, y el equilibrio tarda muchas generaciones en alcanzarse. Por eso Nm sirve para decir “varios migrantes por generación” o “menos de uno”, no para dar un número exacto de semillas o granos de polen (Whitlock y McCauley, 1999). La app lo marca como <span class="ui">indicative</span>. Para el patrón geográfico de la diferenciación usa el aislamiento por distancia del Bloque 6.</p>
+  </div>
+
+  <!-- 6.4 -->
+  <h2 id="s6-4"><span class="num">6.4</span>Reglas de decisión</h2>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿cuánta diferenciación es mucha?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:24%">F<sub>ST</sub> o θ</th><th style="width:26%">Diferenciación</th><th>Lectura</th></tr></thead>
+      <tbody>
+        <tr><td><b>Menor que 0.05</b></td><td>Poca</td><td>Las poblaciones comparten casi todas sus frecuencias; flujo génico abundante o separación reciente.</td></tr>
+        <tr><td><b>0.05 a 0.15</b></td><td>Moderada</td><td>Estructura clara pero no profunda. Frecuente en plantas alógamas con marcadores nucleares.</td></tr>
+        <tr><td><b>0.15 a 0.25</b></td><td>Grande</td><td>Poblaciones bien diferenciadas; poco intercambio o historia separada.</td></tr>
+        <tr><td><b>Mayor que 0.25</b></td><td>Muy grande</td><td>Común en especies autógamas, poblaciones aisladas y marcadores de cloroplasto.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Escala de Wright (1978). Se pensó para F<sub>ST</sub> con marcadores de pocos alelos: con microsatélites, cuya H<sub>S</sub> es alta, un θ de 0.05 puede esconder poblaciones bastante distintas (figura 6.2), así que léelo junto con G′<sub>ST</sub> o D.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿qué estimador reportar?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:38%">Si tu pregunta es…</th><th>reporta…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Cuánta estructura hay</b> y su relación con deriva y migración</td><td>θ (F<sub>ST</sub>) con su intervalo, y Φ<sub>ST</sub> o Φ<sub>PT</sub> del AMOVA con su P.</td></tr>
+        <tr><td><b>Qué tan distintos son los acervos de alelos</b>, por ejemplo para conservación</td><td>D de Jost o G′<sub>ST</sub>, además de θ.</td></tr>
+        <tr><td><b>Comparar con otro estudio o con otro marcador</b></td><td>G′<sub>ST</sub> o D, que no dependen del techo de H<sub>S</sub>, y el mismo tipo de promedio de loci que usó el otro estudio.</td></tr>
+        <tr><td><b>Comparar con un estudio antiguo</b> que solo dio G<sub>ST</sub></td><td>G<sub>ST</sub> como referencia, advirtiendo su techo.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">La recomendación general es no reportar un solo estimador: θ más D o G′<sub>ST</sub> cubren las dos lecturas (Meirmans y Hedrick, 2011).</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · leer el AMOVA con regiones</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Φ<sub>CT</sub> significativo</b> y el componente de regiones mayor que el de poblaciones</td><td>La agrupación en regiones es real y captura la mayor parte de la estructura.</td></tr>
+        <tr><td><b>Φ<sub>CT</sub> y Φ<sub>SC</sub> significativos</b>, poblaciones con más peso</td><td>Las regiones difieren, pero dentro de cada una las poblaciones difieren todavía más.</td></tr>
+        <tr><td><b>Φ<sub>SC</sub> significativo y Φ<sub>CT</sub> no</b></td><td>Las poblaciones difieren, pero no se agrupan según las regiones que definiste. Prueba una agrupación sugerida por los datos (Bloque 7).</td></tr>
+        <tr><td><b>Pocas poblaciones</b> (tabla 6.3)</td><td>La prueba de Φ<sub>CT</sub> no puede dar significancia: lee el tamaño del componente.</td></tr>
+        <tr><td><b>Ninguno significativo</b></td><td>A esta escala, la especie se comporta casi como una sola población grande.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · pares de poblaciones y migrantes</div>
+    <table class="compacta">
+      <thead><tr><th style="width:38%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>La P corregida de un par es menor que 0.05</b></td><td>Las dos poblaciones difieren en frecuencias; trátalas como unidades distintas.</td></tr>
+        <tr><td><b>Nm mayor que 4</b></td><td>Flujo génico suficiente para mantenerlas parecidas.</td></tr>
+        <tr><td><b>Nm entre 1 y 4</b></td><td>Intercambio moderado; la deriva deja huella pero no las separa por completo.</td></tr>
+        <tr><td><b>Nm menor que 1</b></td><td>La deriva domina y las poblaciones divergen; prioridad para conservar cada una.</td></tr>
+        <tr><td><b>Todas las P corregidas son iguales</b> y pequeñas</td><td>Es el mínimo posible con esas permutaciones (con 199 y 3 pares, 0.005 × 3 = 0.015). Sube las permutaciones para distinguirlas.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Los límites de Nm son orientativos y heredan todas las limitaciones del modelo de islas.</p>
+  </div>
+
+  <!-- 6.5 -->
+  <h2 id="s6-5"><span class="num">6.5</span>Ajustes, tablas y figuras del bloque</h2>
+  <p>El Bloque 5 se abre cuando hay al menos dos poblaciones con dos o más individuos cada una y marcadores moleculares; no aplica a caracteres morfológicos ni a razas con una sola muestra. Al entrar se calcula todo con los ajustes predeterminados; si cambias alguno, pulsa <span class="ui">Compute differentiation</span>.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-ajustes.png" alt="Ajustes del Bloque 5"></div>
+    <figcaption><b>Figura 6.4.</b> La tarjeta <span class="ui">1 · Settings</span> con el maíz, que no tiene regiones. Las casillas del AMOVA jerárquico y de exclusión de loci aparecen solo cuando aplican (figura 6.13).</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 6.5.</b> Ajustes del Bloque 5.</caption>
+    <thead><tr><th style="width:33%">Ajuste</th><th>Opciones</th><th style="width:30%">Recomendación</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Permutations (global θ and AMOVA)</span></td><td>0 a 99 999 (predeterminado 999).</td><td>999; 9999 para el artículo.</td></tr>
+      <tr><td><span class="ui">Permutations per population pair</span></td><td>0 a 9999 (predeterminado 199).</td><td>199 para explorar; 999 si los pares son pocos.</td></tr>
+      <tr><td><span class="ui">Bootstrap replicates over loci</span></td><td>0 a 10 000 (predeterminado 1000).</td><td>1000. Requiere tres loci o más.</td></tr>
+      <tr><td><span class="ui">Hierarchical AMOVA (regions › populations)</span></td><td>Activada por omisión. Aparece si en el Bloque 2 hay dos regiones o más.</td><td>Desactívala para ver el AMOVA de un solo nivel.</td></tr>
+      <tr><td><span class="ui">Leave out the loci flagged for null alleles in Block 4</span></td><td>Aparece si el Bloque 4 marcó algún locus.</td><td>Corre con y sin los loci marcados y compara.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Número entero.</td><td>Repórtala en los métodos.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · cómo declarar regiones</div>
+    <p>La app toma las regiones de una columna de tus datos. Se reconoce sola si su nombre empieza con <code>Region</code>, <code>Zone</code>, <code>Group</code>, <code>State</code>, <code>Estado</code>, <code>Area</code>, <code>Cluster</code>, <code>Subregion</code>, <code>Watershed</code>, <code>Province</code>, <code>País</code> o <code>Country</code>; si no, asígnale el papel <span class="ui">Region / group</span> en el Bloque 2. Cada población debe pertenecer a una sola región. En archivos FASTA, la región puede ir en el nombre de la secuencia, como <code>ID|población|región</code>, o en una hoja de muestras.</p>
+  </div>
+
+  <table>
+    <caption><b>Tabla 6.6.</b> Tarjetas de resultados del Bloque 5.</caption>
+    <thead><tr><th style="width:30%">Tarjeta</th><th>Contenido</th><th class="c" style="width:22%">Se descarga</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · What the numbers say</span></td><td>Cifras principales e interpretación: nivel de diferenciación, techo de G<sub>ST</sub>, regiones, endogamia y pares.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Analysis of molecular variance</span></td><td>Tabla del AMOVA con grados de libertad, sumas de cuadrados, componentes, porcentajes, Φ y P, y la figura de la partición.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">4 · Global F-statistics, locus by locus</span></td><td>H<sub>O</sub>, H<sub>S</sub>, H<sub>T</sub>, G<sub>ST</sub>, G′<sub>ST</sub>, D, θ, <i>f</i> y F por locus, el valor multilocus con su intervalo y la figura por locus.</td><td class="c"><span class="ui">Per-locus statistics (CSV)</span></td></tr>
+      <tr><td><span class="ui">5 · Pairwise differentiation</span></td><td>Matriz del estadístico elegido en <span class="ui">Statistic</span> bajo la diagonal y P corregidas encima; mapa de calor y comparación de estimadores por par.</td><td class="c"><span class="ui">All pairs, all statistics (CSV)</span></td></tr>
+    </tbody>
+  </table>
+
+  <table class="compacta">
+    <caption><b>Tabla 6.7.</b> Las cuatro figuras del bloque. Se editan y exportan como se explica en el capítulo del Bloque 10.</caption>
+    <thead><tr><th style="width:34%">Figura en la app</th><th>Qué muestra</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">AMOVA: where the molecular variance sits</span></td><td>Barra con el porcentaje de cada nivel y sus Φ con P.</td></tr>
+      <tr><td><span class="ui">Differentiation locus by locus</span></td><td>θ, G<sub>ST</sub>, G′<sub>ST</sub> o D de cada locus, con el valor multilocus y su intervalo sombreado. Un locus muy por encima del intervalo resalta en otro color.</td></tr>
+      <tr><td><span class="ui">Pairwise differentiation</span></td><td>Mapa de calor del estadístico por pares, con los P corregidos en la mitad superior.</td></tr>
+      <tr><td><span class="ui">Four estimators, pair by pair</span></td><td>G<sub>ST</sub>, G′<sub>ST</sub>, D y θ lado a lado para cada par, ordenados por D.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 6.6 -->
+  <h2 id="s6-6"><span class="num">6.6</span>Paso a paso: maíz, agave y pino</h2>
+
+  <h3>Maíz con microsatélites: diferenciación sin regiones</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En el Bloque 2 carga <span class="ui">Maize populations · SSR</span>, construye el conjunto y abre el Bloque 5 desde la barra de pasos o con <span class="ui">Continue to F-statistics &amp; AMOVA</span> al final del Bloque 4.</li>
+      <li>El cálculo tarda alrededor de un segundo. Lee las cifras y la interpretación (figura 6.5).</li>
+      <li>Revisa la tabla y la figura del AMOVA (figuras 6.6 y 6.7).</li>
+      <li>En la tarjeta 4 compara los estimadores por locus y busca loci extremos (figuras 6.8 y 6.9).</li>
+      <li>Termina con los pares: cambia <span class="ui">Statistic</span> para ver cada estimador (figuras 6.10 a 6.12).</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-resumen.png" alt="Resumen del Bloque 5 con microsatélites de maíz"></div>
+    <figcaption><b>Figura 6.5.</b> <span class="ui">What the numbers say</span> con las tres razas de maíz. θ = 0.049 es significativo, pero cae en la categoría de poca diferenciación; la interpretación advierte que con H<sub>S</sub> = 0.729 el G<sub>ST</sub> de 0.033 está limitado por su techo, y que G′<sub>ST</sub> y D son varias veces mayores.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 6.8.</b> Diferenciación multilocus de las tres razas de maíz (8 microsatélites, 75 plantas).</caption>
+    <thead><tr><th>Estimador</th><th class="c">Valor</th><th class="c">IC 95&nbsp;% (<i>bootstrap</i>)</th><th class="c">EE (<i>jackknife</i>)</th><th>Lectura</th></tr></thead>
+    <tbody>
+      <tr><td>θ (F<sub>ST</sub>)</td><td class="c"><b>0.049</b></td><td class="c">0.023 a 0.079</td><td class="c">0.016</td><td>Poca a moderada; P = 0.001.</td></tr>
+      <tr><td>G<sub>ST</sub></td><td class="c">0.033</td><td class="c">0.016 a 0.054</td><td class="c">0.011</td><td>Limitado por H<sub>S</sub> = 0.729.</td></tr>
+      <tr><td>G′<sub>ST</sub></td><td class="c">0.166</td><td class="c">0.082 a 0.262</td><td class="c">0.051</td><td>Cinco veces G<sub>ST</sub> al corregir el techo.</td></tr>
+      <tr><td>D de Jost</td><td class="c">0.137</td><td class="c">0.067 a 0.218</td><td class="c">0.043</td><td>Los acervos de alelos difieren bastante más de lo que sugiere θ.</td></tr>
+      <tr><td><i>f</i> (F<sub>IS</sub>) · F (F<sub>IT</sub>)</td><td class="c">0.127 · 0.169</td><td class="c">0.083 a 0.169 · 0.136 a 0.204</td><td class="c">0.024 · 0.019</td><td>Endogamia del conjunto, igual a Φ<sub>IS</sub> del AMOVA.</td></tr>
+      <tr><td>Nm</td><td class="c">4.9</td><td class="c">—</td><td class="c">—</td><td>Varios migrantes por generación.</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-amova-tabla.png" alt="Tabla del AMOVA con microsatélites de maíz"></div>
+    <figcaption><b>Figura 6.6.</b> AMOVA de tres niveles. El 4.88&nbsp;% de la variación está entre razas, el 12.05&nbsp;% entre plantas de la misma raza y el 83.08&nbsp;% dentro de cada planta. Φ<sub>ST</sub> = 0.049, Φ<sub>IS</sub> = 0.127 y Φ<sub>IT</sub> = 0.169 coinciden exactamente con θ, <i>f</i> y F de la tabla 6.8.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b5-amova-fig.png" alt="Partición de la varianza molecular"></div>
+    <figcaption><b>Figura 6.7.</b> <span class="ui">AMOVA: where the molecular variance sits</span>. La franja pequeña de la izquierda es la variación entre razas; el asterisco marca los Φ significativos.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer estos resultados</div>
+    <ul style="margin:0">
+      <li><b>La mayor parte de la variación está dentro de las plantas.</b> Es lo esperado en una planta alógama con microsatélites: cada planta lleva dos alelos distintos en la mayoría de sus loci.</li>
+      <li><b>Las razas difieren, aunque poco en términos de F<sub>ST</sub>.</b> El 4.9&nbsp;% entre razas es significativo; G′<sub>ST</sub> = 0.166 y D = 0.137 muestran que sus acervos de alelos son más distintos de lo que el número pequeño de θ sugiere.</li>
+      <li><b>El nivel entre plantas confirma la endogamia del capítulo 5.</b> Φ<sub>IS</sub> = 0.127 es el equivalente del conjunto a los <i>f</i> de 0.045, 0.222 y 0.118 de cada raza.</li>
+      <li><b>Nm ≈ 5</b> indicaría flujo génico abundante si las razas estuvieran en equilibrio; en razas de maíz, cuya diferenciación depende de la selección y el intercambio de semilla entre agricultores, tómalo solo como orden de magnitud.</li>
+    </ul>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-locus-tabla.png" alt="Estadísticos F por locus"></div>
+    <figcaption><b>Figura 6.8.</b> <span class="ui">Global F-statistics, locus by locus</span>. Debajo de la tabla, la nota muestra que promediar los D de cada locus daría 0.133 (media aritmética) o 0.062 (media armónica); la media armónica queda arrastrada por bnlg1621, con D = 0.017.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-locus-fig.png" alt="θ por locus"></div>
+    <figcaption><b>Figura 6.9.</b> θ por locus con el valor multilocus (línea discontinua) y su intervalo sombreado. bnlg1017 (0.141) está casi tres veces por encima del multilocus y fuera del intervalo; bnlg1621 (0.004) casi no diferencia a las razas.</figcaption>
+  </figure>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · un locus extremo no prueba selección</div>
+    <p>Un locus con F<sub>ST</sub> muy por encima del resto puede estar ligado a un gen bajo selección, pero también puede deberse a alelos nulos, errores de lectura o simple azar: con 8 loci, alguno siempre queda en un extremo. En este ejemplo simulado, bnlg1017 no está bajo selección. Para afirmar selección se necesitan decenas o cientos de loci y pruebas específicas de loci atípicos; aquí basta con revisar sus geles y comprobar que las conclusiones no cambian si se excluye.</p>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-pares-tabla.png" alt="Matriz de θ por pares"></div>
+    <figcaption><b>Figura 6.10.</b> θ por pares bajo la diagonal y P corregidos por Holm encima. Los tres pares tienen P = 0.015, el mínimo posible con 199 permutaciones y tres pares.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Tabla 6.9.</b> Diferenciación entre pares de razas de maíz.</caption>
+    <thead><tr><th>Par</th><th class="c">θ</th><th class="c">G<sub>ST</sub></th><th class="c">G′<sub>ST</sub></th><th class="c">D</th><th class="c">Nm</th><th class="c">P (Holm)</th></tr></thead>
+    <tbody>
+      <tr><td>Cónico × Chalqueño</td><td class="c"><b>0.064</b></td><td class="c">0.033</td><td class="c">0.202</td><td class="c">0.175</td><td class="c">3.6</td><td class="c">0.015</td></tr>
+      <tr><td>Chalqueño × Palomero</td><td class="c">0.047</td><td class="c">0.024</td><td class="c">0.152</td><td class="c">0.131</td><td class="c">5.0</td><td class="c">0.015</td></tr>
+      <tr><td>Cónico × Palomero</td><td class="c">0.035</td><td class="c">0.018</td><td class="c">0.119</td><td class="c">0.103</td><td class="c">7.0</td><td class="c">0.015</td></tr>
+    </tbody>
+  </table>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b5-pares-mapa.png" alt="Mapa de calor de diferenciación por pares"></div>
+    <figcaption><b>Figura 6.11.</b> <span class="ui">Pairwise differentiation</span>. Chalqueño es la raza más distinta de las otras dos; Cónico y Palomero son las más parecidas.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b5-escalera.png" alt="Cuatro estimadores por par"></div>
+    <figcaption><b>Figura 6.12.</b> <span class="ui">Four estimators, pair by pair</span>. Los cuatro estimadores ordenan los pares igual, pero sus valores son muy distintos: G<sub>ST</sub> y θ quedan bajos por el techo de la diversidad y G′<sub>ST</sub> y D, varias veces por encima.</figcaption>
+  </figure>
+
+  <h3>Agave con AFLP y regiones: el AMOVA jerárquico</h3>
+  <p>Ninguno de los ejemplos incluidos trae regiones, pero es fácil agregarlas al del agave con la hoja de datos integrada. Las plantas vienen ordenadas por población: las filas 2 a 41 son las dos poblaciones de Oaxaca y las filas 42 a 81, Puebla y Guerrero.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso · agregar una columna de regiones</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En el Bloque 2 carga <span class="ui">Agave · AFLP</span>, pulsa <span class="ui">Open the data sheet</span> y, en la hoja, <span class="ui">the file loaded</span>.</li>
+      <li>Haz clic en cualquier celda de la columna B (<code>Population</code>) y pulsa <span class="ui">+ right</span>: se inserta una columna C vacía.</li>
+      <li>Escribe <code>Region</code> en C1 y <code>Oaxaca</code> en C2. Copia C2 con <span class="kbd">Ctrl</span>+<span class="kbd">C</span>, selecciona de C2 a C41 (clic en C2 y <span class="kbd">Shift</span>+clic en C41) y pega con <span class="kbd">Ctrl</span>+<span class="kbd">V</span>: un valor pegado sobre un rango llena todo el rango.</li>
+      <li>Repite con <code>Puebla-Guerrero</code> de C42 a C81.</li>
+      <li>Pulsa <span class="ui">Use these data →</span>, revisa que la columna tenga el papel <span class="ui">Region / group</span>, construye el conjunto y abre el Bloque 5.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-agave-ajustes.png" alt="Ajustes del Bloque 5 con regiones"></div>
+    <figcaption><b>Figura 6.13.</b> Con dos regiones declaradas aparece la casilla <span class="ui">Hierarchical AMOVA (regions › populations)</span>, activada, con los nombres de las regiones.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-agave-amova.png" alt="AMOVA jerárquico del agave"></div>
+    <figcaption><b>Figura 6.14.</b> AMOVA jerárquico del agave. Las regiones explican el 1.42&nbsp;% de la variación (Φ<sub>CT</sub> = 0.014, P = 0.343), las poblaciones dentro de regiones el 11.45&nbsp;% (Φ<sub>SC</sub> = 0.116, P = 0.001) y el resto está dentro de las poblaciones. La nota advierte que con 4 poblaciones solo hay 3 formas de repartirlas entre dos regiones.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b5-agave-amova-fig.png" alt="Partición de la varianza del agave con regiones"></div>
+    <figcaption><b>Figura 6.15.</b> La partición con tres niveles. Con bandas dominantes no hay nivel dentro de individuos.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-agave-resumen.png" alt="Interpretación del Bloque 5 con agave y regiones"></div>
+    <figcaption><b>Figura 6.16.</b> La interpretación con regiones. θ<sub>B</sub> = 0.125 indica diferenciación moderada entre las cuatro poblaciones; los seis pares difieren. Sobre las regiones, la app concluye que el nivel regional no se puede probar con tan pocas poblaciones y que, por el tamaño de su componente, la agrupación geográfica explica poco.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer estos resultados</div>
+    <ul style="margin:0">
+      <li><b>La agrupación Oaxaca contra Puebla-Guerrero no captura la estructura.</b> Las poblaciones de la misma región difieren entre sí casi tanto como las de regiones distintas: el par más distinto, Oaxaca norte × Puebla (θ<sub>B</sub> = 0.163), cruza regiones, pero el menos distinto, Oaxaca norte × Guerrero (0.104), también.</li>
+      <li><b>Aunque se agregaran más permutaciones, P de Φ<sub>CT</sub> no bajaría de 0.33.</b> Para probar regiones hacen falta más poblaciones por región.</li>
+      <li><b>Con bandas, D (0.078) queda por debajo de G<sub>ST</sub> (0.096).</b> H<sub>S</sub> = 0.355 es baja y el techo de G<sub>ST</sub> no actúa; D y G′<sub>ST</sub> no necesitan corregir nada aquí.</li>
+      <li><b>Φ<sub>PT</sub> cambia un poco con regiones</b> (0.129 contra 0.125 sin ellas), porque el diseño con regiones estima los componentes con otros coeficientes; sin regiones, Φ<sub>PT</sub> es igual a θ<sub>B</sub>.</li>
+      <li><b>Nm ≈ 1.8</b> para el conjunto y entre 1.3 y 2.2 por pares: intercambio moderado.</li>
+    </ul>
+  </div>
+
+  <h3>Pino con ADN de cloroplasto: haplotipos</h3>
+  <figure>
+    <div class="marco"><img src="../img/b5-pino-resumen.png" alt="Resumen del Bloque 5 con haplotipos de pino"></div>
+    <figcaption><b>Figura 6.17.</b> Con haplotipos, θ = 0.287 es diferenciación muy grande y el AMOVA pone el 28.7&nbsp;% de la variación entre poblaciones. Como hay un solo alineamiento, no hay intervalo de <i>bootstrap</i>. G′<sub>ST</sub> = 0.872 y D = 0.833 muestran que las poblaciones casi no comparten haplotipos.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b5-pino-pares.png" alt="θ por pares en el pino"></div>
+    <figcaption><b>Figura 6.18.</b> θ por pares en el pino; los seis pares difieren (P = 0.030 tras Holm, el mínimo con 199 permutaciones y seis pares).</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Tabla 6.10.</b> Pares de poblaciones de pino: θ, D y haplotipos compartidos.</caption>
+    <thead><tr><th>Par</th><th class="c">θ</th><th class="c">D</th><th class="c">Nm (haploide)</th><th>Haplotipos en común</th></tr></thead>
+    <tbody>
+      <tr><td>Sierra Norte × Nevado</td><td class="c"><b>0.348</b></td><td class="c">1</td><td class="c">0.9</td><td>Ninguno</td></tr>
+      <tr><td>Sierra Sur × Cofre</td><td class="c">0.303</td><td class="c">1</td><td class="c">1.2</td><td>Ninguno</td></tr>
+      <tr><td>Sierra Sur × Nevado</td><td class="c">0.303</td><td class="c">1</td><td class="c">1.2</td><td>Ninguno</td></tr>
+      <tr><td>Cofre × Nevado</td><td class="c">0.273</td><td class="c">0.804</td><td class="c">1.3</td><td>H5</td></tr>
+      <tr><td>Sierra Norte × Sierra Sur</td><td class="c">0.244</td><td class="c">0.646</td><td class="c">1.5</td><td>H2 y H3</td></tr>
+      <tr><td>Sierra Norte × Cofre</td><td class="c">0.237</td><td class="c">0.582</td><td class="c">1.6</td><td>H1</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Por qué D llega a 1 cuando θ no pasa de 0.35</div>
+    <p>Tres pares no comparten ningún haplotipo, así que sus acervos son totalmente distintos y D = 1. θ no llega a 1 porque cada población conserva tres haplotipos: dos secuencias de la misma población también suelen ser distintas, y θ mide la diferencia entre poblaciones <b>en relación con</b> la que hay dentro. Es el techo de la figura 6.2 con datos reales. Para el cloroplasto, que se hereda por un solo progenitor y tiene un tamaño efectivo menor que el de los genes nucleares, se espera una diferenciación mayor que con microsatélites de las mismas poblaciones.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · qué reportar en un artículo</div>
+    <p>La tabla del AMOVA completa (g.l., sumas de cuadrados, componentes, porcentajes, Φ y P con el número de permutaciones); θ o θ<sub>B</sub> con su intervalo, junto con D o G′<sub>ST</sub>; la matriz de pares con P corregidos e indicando el método de corrección; y, si lo usas, Nm como valor orientativo. Con regiones, indica cuántas poblaciones hay por región y cuántas formas distintas de repartirlas existen. Las descargas <span class="ui">Per-locus statistics (CSV)</span> y <span class="ui">All pairs, all statistics (CSV)</span> traen todos los valores con cinco decimales.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · verificación de los cálculos</div>
+    <p>Para este manual, θ, <i>f</i>, F, H<sub>S</sub>, H<sub>T</sub>, G<sub>ST</sub>, G′<sub>ST</sub> y D se recalcularon con código independiente para el maíz, por locus, en conjunto y por pares, y para el agave con la versión haploide y con un análisis de varianza sobre las bandas: las diferencias no pasan de 10<sup>−12</sup>. Las sumas de cuadrados del AMOVA se compararon con la suma directa de todas las distancias entre copias del gen o entre plantas, y el AMOVA jerárquico del agave con las fórmulas del diseño balanceado. Los coeficientes para diseños desbalanceados se comprobaron simulando 300 conjuntos con componentes conocidos: los promedios estimados fueron 0.0143, 0.0064 y 0.229 contra 0.0144, 0.0064 y 0.229 reales. Bajo la hipótesis nula, con poblaciones barajadas al azar, la prueba de θ dio P ≤ 0.05 en 3 de 60 conjuntos, lo esperado por azar.</p>
+  </div>
+
+  <p style="margin-top:0.25in">El siguiente capítulo pasa de cuánto difieren las poblaciones a cómo se relacionan: el Bloque 6 calcula distancias genéticas, ordena poblaciones e individuos en una PCoA, construye árboles con soporte de <i>bootstrap</i> y prueba el aislamiento por distancia.</p>
+</section>
+
+</body>
+</html>

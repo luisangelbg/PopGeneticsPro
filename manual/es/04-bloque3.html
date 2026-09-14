@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Bloque 3: frecuencias alélicas y diversidad</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  .formula { font-family: var(--serif); font-size: 13pt; text-align: center; margin: 0.08in 0 0.1in; color: var(--negro); }
+  td.f { font-family: var(--serif); font-size: 10.5pt; white-space: nowrap; color: var(--negro); }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b3" data-pestana="B3" data-orden="4" style="--acento: var(--b3)">
+  <div class="cap-apertura">
+    <div class="cap-num">B3</div>
+    <div class="cap-etiqueta">Capítulo cuatro · Bloque 3 · Diversity</div>
+    <h1 data-corto="Bloque 3 · Frecuencias alélicas y diversidad">Frecuencias alélicas y diversidad</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">¿Cuánta variación genética hay y cómo se reparte entre las poblaciones? El Bloque 3 calcula las frecuencias de cada alelo y, a partir de ellas, los índices de diversidad que se reportan en casi todo artículo: número de alelos, heterocigosis observada y esperada, alelos efectivos, índice de Shannon, riqueza alélica rarefaccionada, contenido de información polimórfica, alelos privados y el índice de fijación.</p>
+    <div class="cap-franja"><span class="k3"></span><span class="k3" style="opacity:.75"></span><span class="k3" style="opacity:.5"></span><span class="k3" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>4.1</b>Teoría en breve</li>
+      <li><b>4.2</b>Los índices y qué significan</li>
+      <li><b>4.3</b>Reglas de decisión</li>
+      <li><b>4.4</b>Ajustes, tablas y figuras del bloque</li>
+      <li><b>4.5</b>Paso a paso: maíz con microsatélites</li>
+      <li><b>4.6</b>Datos dominantes, haplotipos y morfología</li>
+    </ul>
+  </div>
+
+  <!-- 4.1 -->
+  <h2 id="s4-1"><span class="num">4.1</span>Teoría en breve</h2>
+  <p class="lead">La diversidad genética es la materia prima de la evolución y del mejoramiento: una población con muchos alelos y bien repartidos puede responder a cambios del ambiente, a nuevas plagas o a la selección que haga un mejorador. Medirla bien es el primer resultado de cualquier estudio.</p>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Dos formas de medir la variación: cuántos alelos y qué tan repartidos</div>
+    <p>Imagina dos poblaciones con los mismos cuatro alelos. En la primera, cada alelo tiene una frecuencia de 25&nbsp;%; en la segunda, uno domina con 85&nbsp;% y los otros tres son raros. Ambas tienen <b>cuatro alelos</b> (la misma <b>riqueza</b>), pero la primera es mucho más <b>diversa</b>: si tomas al azar dos copias del gen, es mucho más probable que sean distintas. Por eso la genética de poblaciones usa índices de dos familias: los que cuentan alelos (N<sub>a</sub>, riqueza alélica, alelos privados) y los que toman en cuenta sus frecuencias (H<sub>e</sub>, N<sub>e</sub>, índice de Shannon, PIC).</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Dos poblaciones con la misma riqueza y distinta diversidad">
+      <g font-size="10" letter-spacing="1.2" fill="#3f7d20" font-weight="500"><text x="20" y="16">POBLACIÓN A · ALELOS BIEN REPARTIDOS</text><text x="370" y="16">POBLACIÓN B · UN ALELO DOMINA</text></g>
+      <!-- A -->
+      <g transform="translate(20 30)">
+        <line x1="30" y1="150" x2="290" y2="150" stroke="#111"/>
+        <g font-size="8.5" fill="#5d6472" text-anchor="end"><text x="24" y="153">0</text><text x="24" y="103">0.5</text><text x="24" y="53">1</text></g>
+        <g stroke="#e3e7ee"><line x1="30" y1="100" x2="290" y2="100"/><line x1="30" y1="50" x2="290" y2="50"/></g>
+        <g fill="#3f7d20"><rect x="45" y="125" width="44" height="25"/><rect x="108" y="125" width="44" height="25" opacity=".8"/><rect x="171" y="125" width="44" height="25" opacity=".6"/><rect x="234" y="125" width="44" height="25" opacity=".45"/></g>
+        <g font-size="9" text-anchor="middle" fill="#111"><text x="67" y="120">0.25</text><text x="130" y="120">0.25</text><text x="193" y="120">0.25</text><text x="256" y="120">0.25</text>
+        <text x="67" y="166">A1</text><text x="130" y="166">A2</text><text x="193" y="166">A3</text><text x="256" y="166">A4</text></g>
+        <text x="30" y="192" font-size="11" fill="#111">N<tspan dy="3" font-size="8">a</tspan><tspan dy="-3"> = 4  ·  H</tspan><tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 0.750  ·  N</tspan><tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 4.00</tspan></text>
+        <text x="30" y="212" font-size="11" fill="#111">I = 1.386  ·  PIC = 0.703</text>
+      </g>
+      <!-- B -->
+      <g transform="translate(370 30)">
+        <line x1="30" y1="150" x2="290" y2="150" stroke="#111"/>
+        <g font-size="8.5" fill="#5d6472" text-anchor="end"><text x="24" y="153">0</text><text x="24" y="103">0.5</text><text x="24" y="53">1</text></g>
+        <g stroke="#e3e7ee"><line x1="30" y1="100" x2="290" y2="100"/><line x1="30" y1="50" x2="290" y2="50"/></g>
+        <g fill="#b7791f"><rect x="45" y="65" width="44" height="85"/><rect x="108" y="145" width="44" height="5" opacity=".8"/><rect x="171" y="145" width="44" height="5" opacity=".6"/><rect x="234" y="145" width="44" height="5" opacity=".45"/></g>
+        <g font-size="9" text-anchor="middle" fill="#111"><text x="67" y="60">0.85</text><text x="130" y="140">0.05</text><text x="193" y="140">0.05</text><text x="256" y="140">0.05</text>
+        <text x="67" y="166">A1</text><text x="130" y="166">A2</text><text x="193" y="166">A3</text><text x="256" y="166">A4</text></g>
+        <text x="30" y="192" font-size="11" fill="#111">N<tspan dy="3" font-size="8">a</tspan><tspan dy="-3"> = 4  ·  H</tspan><tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 0.270  ·  N</tspan><tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 1.37</tspan></text>
+        <text x="30" y="212" font-size="11" fill="#111">I = 0.588  ·  PIC = 0.259</text>
+      </g>
+      <line x1="350" y1="28" x2="350" y2="240" stroke="#d5dae4"/>
+    </svg>
+    <figcaption><b>Figura 4.1.</b> Misma riqueza, distinta diversidad. Ambas poblaciones tienen cuatro alelos en un locus, pero en B uno de ellos domina. N<sub>a</sub> no ve la diferencia; H<sub>e</sub>, N<sub>e</sub>, el índice de Shannon (I) y el PIC sí. N<sub>e</sub> = 1.37 significa que B se comporta como si tuviera poco más de un alelo igualmente frecuente.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>La heterocigosis esperada, en una frase</div>
+    <p>H<sub>e</sub> es la <b>probabilidad de que dos copias del gen tomadas al azar de la población sean distintas</b>. Si una población se apareara al azar, esa sería también la proporción de individuos heterocigotos; por eso se llama heterocigosis “esperada”. Nei (1973) la llamó <b>diversidad génica</b> y mostró que se puede calcular con cualquier tipo de marcador, incluso en especies que se autofecundan o son haploides, donde no hay heterocigotos que contar. Es el índice de diversidad más usado y el que conviene reportar siempre.</p>
+  </div>
+
+  <div class="dos">
+    <div class="caja teoria" style="margin:0">
+      <div class="caja-t"><span class="ico">1</span>Frecuencias con marcadores dominantes</div>
+      <p>En AFLP o ISSR solo se ve si la banda está o no. La ausencia corresponde al homocigoto recesivo, cuya frecuencia es <i>q</i>² si hay equilibrio de Hardy–Weinberg. Por eso <i>q</i> se estima como la raíz cuadrada de la proporción de plantas sin banda, con la corrección de Lynch y Milligan (1994) para muestras pequeñas. Todo índice con dominantes descansa en ese supuesto.</p>
+    </div>
+    <div class="caja teoria" style="margin:0">
+      <div class="caja-t"><span class="ico">2</span>Haplotipos y caracteres</div>
+      <p>Con secuencias o códigos de cloroplasto cada individuo lleva un solo haplotipo: la diversidad se mide con la <b>diversidad haplotípica</b> Hd, que es H<sub>e</sub> con corrección por tamaño de muestra (Nei, 1987). Con caracteres morfológicos se reparte cada carácter en clases y se calcula el índice de Shannon estandarizado H′, que va de 0 a 1.</p>
+    </div>
+  </div>
+
+  <div class="caja teoria" style="margin-top:0.18in">
+    <div class="caja-t"><span class="ico">3</span>Por qué hace falta rarefaccionar</div>
+    <p>El número de alelos que encuentras depende de cuántas plantas muestreas: con más plantas aparecen más alelos raros. Si una población tiene 40 plantas y otra 15, su N<sub>a</sub> no es comparable. La <b>riqueza alélica</b> (A<sub>r</sub>) resuelve el problema: calcula cuántos alelos se esperarían si de cada población se tomara la misma cantidad <i>g</i> de copias del gen, igual a la de la muestra más pequeña (Hurlbert, 1971; El Mousadik y Petit, 1996). Es un cálculo exacto, no un sorteo: siempre da el mismo valor.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h2 id="s4-2"><span class="num">4.2</span>Los índices y qué significan</h2>
+  <p>Todos los índices se calculan locus por locus en cada población y luego se promedian sobre los loci. En las fórmulas, <i>p<sub>i</sub></i> es la frecuencia del alelo <i>i</i>, <i>n</i> el número de individuos con dato y <i>k</i> el número de alelos.</p>
+
+  <table>
+    <caption><b>Tabla 4.1.</b> Índices del Bloque 3. Columna “Marcador”: C codominante, D dominante, H haploide o secuencias.</caption>
+    <thead><tr><th style="width:15%">Índice</th><th style="width:20%">Fórmula</th><th>Qué mide</th><th class="c" style="width:12%">Intervalo</th><th class="c" style="width:10%">Marcador</th></tr></thead>
+    <tbody>
+      <tr><td><b>N<sub>a</sub></b><br><span class="small">número de alelos</span></td><td class="f">k</td><td>Alelos distintos observados en la muestra. Sensible al tamaño de muestra.</td><td class="c">1 a ∞</td><td class="c">C D H</td></tr>
+      <tr><td><b>N<sub>a ≥ 5&nbsp;%</sub></b></td><td class="f">alelos con p<sub>i</sub> ≥ 0.05</td><td>Alelos comunes; descarta los raros, que dependen mucho del muestreo.</td><td class="c">0 a k</td><td class="c">C D H</td></tr>
+      <tr><td><b>N<sub>e</sub></b><br><span class="small">alelos efectivos</span></td><td class="f">1 / Σ p<sub>i</sub>²</td><td>Cuántos alelos igualmente frecuentes darían la misma diversidad.</td><td class="c">1 a k</td><td class="c">C D H</td></tr>
+      <tr><td><b>I</b><br><span class="small">índice de Shannon</span></td><td class="f">− Σ p<sub>i</sub> ln p<sub>i</sub></td><td>Diversidad con más peso a los alelos raros que H<sub>e</sub>.</td><td class="c">0 a ln k</td><td class="c">C D H</td></tr>
+      <tr><td><b>H<sub>o</sub></b><br><span class="small">heterocigosis observada</span></td><td class="f">heterocigotos / n</td><td>Proporción de individuos heterocigotos contados.</td><td class="c">0 a 1</td><td class="c">C</td></tr>
+      <tr><td><b>H<sub>e</sub></b><br><span class="small">heterocigosis esperada</span></td><td class="f">1 − Σ p<sub>i</sub>²</td><td>Probabilidad de que dos copias al azar sean distintas (diversidad génica de Nei).</td><td class="c">0 a 1 − 1/k</td><td class="c">C D H</td></tr>
+      <tr><td><b>uH<sub>e</sub></b> · <b><i>h</i></b><br><span class="small">sin sesgo</span></td><td class="f">2n/(2n − 1) · H<sub>e</sub></td><td>H<sub>e</sub> corregida por tamaño de muestra (Nei, 1978). Con haplotipos: <i>n</i>/(<i>n</i> − 1) · H<sub>e</sub>.</td><td class="c">0 a 1</td><td class="c">C D H</td></tr>
+      <tr><td><b>F</b><br><span class="small">índice de fijación</span></td><td class="f">(H<sub>e</sub> − H<sub>o</sub>) / H<sub>e</sub></td><td>Déficit (positivo) o exceso (negativo) de heterocigotos.</td><td class="c">−1 a 1</td><td class="c">C</td></tr>
+      <tr><td><b>PIC</b></td><td class="f">H<sub>e</sub> − Σ<sub>i&lt;j</sub> 2p<sub>i</sub>²p<sub>j</sub>²</td><td>Capacidad de un marcador para distinguir individuos (Botstein y colaboradores, 1980).</td><td class="c">0 a 1</td><td class="c">C</td></tr>
+      <tr><td><b>A<sub>r</sub></b><br><span class="small">riqueza alélica</span></td><td class="f">Σ [1 − C(N−N<sub>i</sub>, g) / C(N, g)]</td><td>Alelos esperados en <i>g</i> copias del gen; N copias en total, N<sub>i</sub> del alelo <i>i</i>.</td><td class="c">1 a k</td><td class="c">C H</td></tr>
+      <tr><td><b>%P</b></td><td class="f">loci polimórficos / loci</td><td>Porcentaje de loci polimórficos; por omisión, el alelo más común no pasa de 95&nbsp;%.</td><td class="c">0 a 100&nbsp;%</td><td class="c">C D H</td></tr>
+      <tr><td><b>Alelos privados</b></td><td class="f">—</td><td>Alelos presentes en una sola población. Con dominantes, bandas exclusivas.</td><td class="c">0 a ∞</td><td class="c">C D H</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico · un locus con tres alelos</div>
+    <p>En una población de 25 plantas, un microsatélite tiene tres alelos con frecuencias 0.5, 0.3 y 0.2.</p>
+    <table class="compacta" style="margin:0.04in 0 0.06in">
+      <thead><tr><th style="width:18%">Índice</th><th>Cálculo</th><th class="c" style="width:14%">Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>Σ p<sub>i</sub>²</td><td>0.5² + 0.3² + 0.2² = 0.25 + 0.09 + 0.04</td><td class="c"><b>0.38</b></td></tr>
+        <tr><td>H<sub>e</sub></td><td>1 − 0.38</td><td class="c"><b>0.620</b></td></tr>
+        <tr><td>uH<sub>e</sub></td><td>(50/49) × 0.620</td><td class="c"><b>0.633</b></td></tr>
+        <tr><td>N<sub>e</sub></td><td>1 / 0.38</td><td class="c"><b>2.63</b></td></tr>
+        <tr><td>I</td><td>−(0.5 ln 0.5 + 0.3 ln 0.3 + 0.2 ln 0.2) = 0.347 + 0.361 + 0.322</td><td class="c"><b>1.030</b></td></tr>
+        <tr><td>PIC</td><td>0.620 − 2(0.25×0.09 + 0.25×0.04 + 0.09×0.04) = 0.620 − 0.072</td><td class="c"><b>0.548</b></td></tr>
+      </tbody>
+    </table>
+    <p style="margin:0">Si 13 de las 25 plantas fueran heterocigotas, H<sub>o</sub> = 13/25 = 0.520 y F = (0.620 − 0.520)/0.620 = <b>0.161</b>: un déficit de heterocigotos del 16&nbsp;%.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Efecto Wahlund">
+      <g font-size="10" letter-spacing="1.2" font-weight="500"><text x="14" y="16" fill="#3f7d20">DOS POBLACIONES POR SEPARADO</text><text x="430" y="16" fill="#b4234a">LAS MISMAS PLANTAS, MEZCLADAS</text></g>
+      <!-- pop 1 -->
+      <g transform="translate(14 28)">
+        <rect width="180" height="118" rx="10" fill="#f1f7ee" stroke="#3f7d20"/>
+        <text x="90" y="18" text-anchor="middle" font-size="10" fill="#111" font-weight="600">Población 1</text>
+        <g fill="#3f7d20"><circle cx="30" cy="42" r="9"/><circle cx="60" cy="42" r="9"/><circle cx="90" cy="42" r="9"/><circle cx="120" cy="42" r="9"/><circle cx="150" cy="42" r="9"/><circle cx="45" cy="70" r="9"/><circle cx="75" cy="70" r="9"/><circle cx="105" cy="70" r="9"/><circle cx="135" cy="70" r="9"/></g>
+        <text x="90" y="98" text-anchor="middle" font-size="9" fill="#111">todas AA · p = 1</text>
+        <text x="90" y="112" text-anchor="middle" font-size="9" fill="#5d6472">H<tspan dy="2.5" font-size="7">o</tspan><tspan dy="-2.5"> = 0 · H</tspan><tspan dy="2.5" font-size="7">e</tspan><tspan dy="-2.5"> = 0 · F no definido</tspan></text>
+      </g>
+      <g transform="translate(214 28)">
+        <rect width="180" height="118" rx="10" fill="#fbf4e8" stroke="#b7791f"/>
+        <text x="90" y="18" text-anchor="middle" font-size="10" fill="#111" font-weight="600">Población 2</text>
+        <g fill="#b7791f"><circle cx="30" cy="42" r="9"/><circle cx="60" cy="42" r="9"/><circle cx="90" cy="42" r="9"/><circle cx="120" cy="42" r="9"/><circle cx="150" cy="42" r="9"/><circle cx="45" cy="70" r="9"/><circle cx="75" cy="70" r="9"/><circle cx="105" cy="70" r="9"/><circle cx="135" cy="70" r="9"/></g>
+        <text x="90" y="98" text-anchor="middle" font-size="9" fill="#111">todas aa · p = 0</text>
+        <text x="90" y="112" text-anchor="middle" font-size="9" fill="#5d6472">H<tspan dy="2.5" font-size="7">o</tspan><tspan dy="-2.5"> = 0 · H</tspan><tspan dy="2.5" font-size="7">e</tspan><tspan dy="-2.5"> = 0 · F no definido</tspan></text>
+      </g>
+      <defs><marker id="fw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b4234a"/></marker></defs>
+      <path d="M398 87 H422" stroke="#b4234a" stroke-width="1.6" marker-end="url(#fw)"/>
+      <g transform="translate(430 28)">
+        <rect width="256" height="118" rx="10" fill="#fbeef1" stroke="#b4234a"/>
+        <text x="128" y="18" text-anchor="middle" font-size="10" fill="#111" font-weight="600">Poblaciones 1 + 2 juntas</text>
+        <g><circle cx="30" cy="42" r="9" fill="#3f7d20"/><circle cx="60" cy="42" r="9" fill="#b7791f"/><circle cx="90" cy="42" r="9" fill="#3f7d20"/><circle cx="120" cy="42" r="9" fill="#b7791f"/><circle cx="150" cy="42" r="9" fill="#3f7d20"/><circle cx="180" cy="42" r="9" fill="#b7791f"/><circle cx="210" cy="42" r="9" fill="#3f7d20"/><circle cx="45" cy="70" r="9" fill="#b7791f"/><circle cx="75" cy="70" r="9" fill="#3f7d20"/><circle cx="105" cy="70" r="9" fill="#b7791f"/><circle cx="135" cy="70" r="9" fill="#3f7d20"/><circle cx="165" cy="70" r="9" fill="#b7791f"/><circle cx="195" cy="70" r="9" fill="#3f7d20"/><circle cx="225" cy="70" r="9" fill="#b7791f"/></g>
+        <text x="128" y="98" text-anchor="middle" font-size="9" fill="#111">p = 0.5 · se esperan 50&nbsp;% de heterocigotos</text>
+        <text x="128" y="112" text-anchor="middle" font-size="9.5" fill="#b4234a" font-weight="600">H<tspan dy="2.5" font-size="7">o</tspan><tspan dy="-2.5"> = 0 · H</tspan><tspan dy="2.5" font-size="7">e</tspan><tspan dy="-2.5"> = 0.5 · F = 1</tspan></text>
+      </g>
+      <text x="14" y="172" font-size="9.5" fill="#22252c">Ninguna planta es endogámica, pero al mezclar dos poblaciones distintas en una sola “población” desaparecen los heterocigotos esperados.</text>
+      <text x="14" y="188" font-size="9.5" fill="#22252c">El déficit de heterocigotos del conjunto mide la diferencia entre las poblaciones, no la endogamia. Es el efecto Wahlund (1928).</text>
+    </svg>
+    <figcaption><b>Figura 4.2.</b> El efecto Wahlund, en su forma extrema. Por eso el índice de fijación del conjunto (fila <span class="ui">Pooled</span>) suele ser mayor que el promedio de las poblaciones: incluye su diferenciación. En el ejemplo de maíz de la sección 4.5, F promedio = 0.104 y F del conjunto = 0.148.</figcaption>
+  </figure>
+
+  <!-- 4.3 -->
+  <h2 id="s4-3"><span class="num">4.3</span>Reglas de decisión</h2>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿la diversidad es alta o baja?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:30%">Marcador</th><th style="width:22%">H<sub>e</sub> habitual</th><th>Lectura</th></tr></thead>
+      <tbody>
+        <tr><td><b>Microsatélites</b> en plantas alógamas</td><td>0.45 a 0.85</td><td>Por debajo de 0.45, diversidad baja (cuello de botella, aislamiento, autogamia); arriba de 0.85, muy alta.</td></tr>
+        <tr><td><b>Microsatélites</b> en autógamas</td><td>por debajo de 0.45</td><td>Valores bajos son normales; compara con otras especies de sistema de apareamiento similar.</td></tr>
+        <tr><td><b>AFLP, ISSR, RAPD</b></td><td>0.15 a 0.40</td><td>El máximo teórico es 0.5, porque cada banda tiene solo dos estados. Nunca compares H<sub>e</sub> de dominantes con H<sub>e</sub> de microsatélites.</td></tr>
+        <tr><td><b>Haplotipos</b> de cloroplasto o secuencias</td><td>muy variable</td><td>Depende del marcador y de la historia. Reporta junto con el número de haplotipos y la diversidad nucleotídica del Bloque 8.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Son intervalos orientativos tomados de la literatura de plantas: sirven para ubicar un número, no para juzgar un conjunto de datos. Lo que realmente informa es la comparación entre tus poblaciones con el mismo marcador.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿dos poblaciones difieren en diversidad?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Los intervalos al 95&nbsp;% de H<sub>e</sub> no se traslapan</b></td><td>La diferencia está respaldada por los loci muestreados.</td></tr>
+        <tr><td><b>Los intervalos se traslapan</b></td><td>La diferencia no está resuelta: trata a las poblaciones como igual de diversas. La app lo dice explícitamente.</td></tr>
+        <tr><td><b>Hay menos de tres loci</b></td><td>No se pueden remuestrear los loci ni calcular intervalos: la diferencia no se prueba (caso de un solo alineamiento de secuencias).</td></tr>
+        <tr><td><b>El tamaño de muestra difiere más del doble</b> entre poblaciones</td><td>No compares N<sub>a</sub> ni el número de alelos privados; usa uH<sub>e</sub> y A<sub>r</sub>. La app lo advierte.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Los intervalos se obtienen por <i>bootstrap</i> sobre loci: se remuestrean los loci con reemplazo 1000 veces y se toman los percentiles 2.5 y 97.5 del promedio. Reflejan cuánto cambiaría el resultado con otros loci, no con otras plantas.</p>
+  </div>
+
+  <div class="dos">
+    <div class="caja regla" style="margin:0">
+      <div class="caja-t"><span class="ico">✓</span>Índice de fijación F</div>
+      <table class="compacta">
+        <thead><tr><th style="width:42%">F</th><th>Lectura</th></tr></thead>
+        <tbody>
+          <tr><td><b>Mayor que 0.1</b></td><td>Déficit claro de heterocigotos.</td></tr>
+          <tr><td><b>−0.05 a 0.1</b></td><td>Cerca del equilibrio.</td></tr>
+          <tr><td><b>Menor que −0.05</b></td><td>Exceso de heterocigotos.</td></tr>
+        </tbody>
+      </table>
+      <p class="regla-pie">F es una descripción. Si hay endogamia, alelos nulos o efecto Wahlund se decide en el Bloque 4 con F<sub>IS</sub> y sus pruebas.</p>
+    </div>
+    <div class="caja regla" style="margin:0">
+      <div class="caja-t"><span class="ico">✓</span>PIC de un marcador</div>
+      <table class="compacta">
+        <thead><tr><th style="width:42%">PIC</th><th>Lectura</th></tr></thead>
+        <tbody>
+          <tr><td><b>Mayor que 0.5</b></td><td>Muy informativo.</td></tr>
+          <tr><td><b>0.25 a 0.5</b></td><td>Medianamente informativo.</td></tr>
+          <tr><td><b>Menor que 0.25</b></td><td>Poco informativo.</td></tr>
+        </tbody>
+      </table>
+      <p class="regla-pie">Categorías de Botstein y colaboradores (1980). Útil para elegir loci para identificación de variedades o pruebas de paternidad.</p>
+    </div>
+  </div>
+
+  <div class="caja regla" style="margin-top:0.18in">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · alelos privados y alelos localmente comunes</div>
+    <table class="compacta">
+      <thead><tr><th style="width:38%">Si encuentras…</th><th>la lectura es…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Un alelo privado con frecuencia ≥ 5&nbsp;%</b> (<i>frequent</i>)</td><td>Evidencia de un acervo genético propio: flujo génico restringido o historia independiente. Prioritario para conservación.</td></tr>
+        <tr><td><b>Un alelo privado raro</b> (<i>rare</i>, &lt; 5&nbsp;%)</td><td>Puede ser real o simple azar del muestreo; con más plantas quizá aparezca en otras poblaciones.</td></tr>
+        <tr><td><b>Un alelo localmente común</b>, ≥ 5&nbsp;% en 25&nbsp;% o menos de las poblaciones</td><td>Señal fuerte de flujo génico restringido.</td></tr>
+        <tr><td><b>Un alelo localmente común</b>, ≥ 5&nbsp;% en la mitad o menos de las poblaciones</td><td>Señal moderada. La app reporta ambos umbrales cuando hay cuatro poblaciones o más.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4.4 -->
+  <h2 id="s4-4"><span class="num">4.4</span>Ajustes, tablas y figuras del bloque</h2>
+  <p>Al entrar al Bloque 3 la app calcula todo con los ajustes predeterminados. Si cambias un ajuste, pulsa <span class="ui">Compute diversity</span> y el bloque se recalcula completo.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-ajustes.png" alt="Ajustes del Bloque 3"></div>
+    <figcaption><b>Figura 4.3.</b> La tarjeta <span class="ui">1 · Settings</span> con datos codominantes. Con dominantes aparecen además el método para estimar frecuencias y, con caracteres, el número de clases.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 4.2.</b> Ajustes del Bloque 3.</caption>
+    <thead><tr><th style="width:30%">Ajuste</th><th>Opciones</th><th style="width:30%">Recomendación</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">A locus counts as polymorphic when</span></td><td>El alelo más común ≤ 95&nbsp;% (predeterminado) · ≤ 99&nbsp;% · más de un alelo presente.</td><td>95&nbsp;%, el criterio más usado. Con muestras de 20 plantas o menos los tres suelen coincidir.</td></tr>
+      <tr><td><span class="ui">Rarefy allelic richness to</span></td><td>Número de copias del gen <i>g</i>. Vacío: la muestra más pequeña.</td><td>Déjalo vacío. Solo en codominantes y haploides.</td></tr>
+      <tr><td><span class="ui">Allele frequencies from dominant bands</span></td><td>Lynch y Milligan (predeterminado) · raíz cuadrada · bayesiano con distribución previa uniforme.</td><td>Lynch y Milligan para alógamas; bayesiano con F alto para autógamas.</td></tr>
+      <tr><td><span class="ui">Inbreeding F assumed by the Bayesian estimator</span></td><td>0 a 1.</td><td>0 en alógamas; 0.8 a 0.95 en especies que se autofecundan.</td></tr>
+      <tr><td><span class="ui">Classes per trait</span></td><td>4 a 20 (predeterminado 10).</td><td>10 clases de media desviación estándar, la convención habitual.</td></tr>
+      <tr><td><span class="ui">Bootstrap replicates over loci</span></td><td>0 a 10 000 (predeterminado 1000).</td><td>1000; 0 omite los intervalos.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Número entero.</td><td>Repórtala en los métodos para que los intervalos sean reproducibles.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Tabla 4.3.</b> Tarjetas de resultados del Bloque 3.</caption>
+    <thead><tr><th style="width:30%">Tarjeta</th><th>Contenido</th><th class="c" style="width:18%">Se descarga</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · What the numbers say</span></td><td>Cifras del conjunto y párrafos de interpretación.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Diversity of every population</span></td><td>Tabla de índices por población con la fila del conjunto (<span class="ui">Pooled</span>), errores estándar sobre loci, figura de barras y curvas de rarefacción.</td><td class="c"><span class="ui">Summary (CSV)</span></td></tr>
+      <tr><td><span class="ui">4 · Locus by locus</span></td><td>El índice elegido en <span class="ui">Show</span> para cada locus en cada población, y la figura H<sub>o</sub> contra H<sub>e</sub>.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">5 · Allele frequencies</span></td><td>Frecuencia de cada alelo en cada población, con los privados marcados; barras apiladas por locus y mapa de calor.</td><td class="c"><span class="ui">All frequencies (CSV)</span></td></tr>
+      <tr><td><span class="ui">6 · Private alleles</span></td><td>Alelos privados con su frecuencia y alelos localmente comunes. Solo aparece si hay alguno.</td><td class="c">—</td></tr>
+    </tbody>
+  </table>
+
+  <table class="compacta">
+    <caption><b>Tabla 4.4.</b> Las siete figuras del bloque. Todas se editan y exportan como se explica en el capítulo del Bloque 10.</caption>
+    <thead><tr><th style="width:30%">Figura en la app</th><th>Qué muestra</th><th style="width:22%">Cuándo aparece</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Diversity of every population</span></td><td>Barras del índice elegido por población, con intervalos o errores estándar y la línea del conjunto.</td><td>Dos o más poblaciones con varias muestras</td></tr>
+      <tr><td><span class="ui">Allelic richness against sampling effort</span></td><td>Curvas de rarefacción: alelos esperados según las copias del gen muestreadas.</td><td>Codominantes y haploides</td></tr>
+      <tr><td><span class="ui">Observed against expected heterozygosity</span></td><td>Cada locus en cada población; los puntos bajo la diagonal tienen déficit de heterocigotos.</td><td>Codominantes</td></tr>
+      <tr><td><span class="ui">Allele frequencies, locus by locus</span></td><td>Barras apiladas con la composición alélica de cada población.</td><td>Datos moleculares</td></tr>
+      <tr><td><span class="ui">Every allele in every population</span></td><td>Mapa de calor de todas las frecuencias; en blanco, alelo ausente en esa población.</td><td>Datos moleculares</td></tr>
+      <tr><td><span class="ui">Private alleles</span></td><td>Alelos privados por población, separando frecuentes y raros.</td><td>Si hay alelos privados</td></tr>
+      <tr><td><span class="ui">Phenotypic diversity by trait and population</span></td><td>Mapa de calor de H′ por carácter y población.</td><td>Datos morfológicos</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.5 -->
+  <h2 id="s4-5"><span class="num">4.5</span>Paso a paso: maíz con microsatélites</h2>
+  <p>El ejemplo de tres poblaciones de maíz con 8 microsatélites recorre todas las tarjetas del bloque. Los valores de este capítulo son los que produce la app con los ajustes predeterminados y la semilla 1.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En el Bloque 2 carga <span class="ui">Maize populations · SSR</span> y pulsa <span class="ui">Build the dataset and run the checks</span>.</li>
+      <li>Pulsa <span class="ui">Continue to diversity</span>. El bloque se calcula solo en una fracción de segundo, con 1000 remuestreos.</li>
+      <li>Lee las cifras y la interpretación en <span class="ui">2 · What the numbers say</span> (figura 4.4).</li>
+      <li>Revisa la tabla por población y la figura de barras (figuras 4.5 y 4.6).</li>
+      <li>En <span class="ui">4 · Locus by locus</span> cambia <span class="ui">Show</span> a <span class="ui">F · fixation index</span> para buscar loci problemáticos.</li>
+      <li>Explora las frecuencias alélicas de cada locus: abre <span class="ui">Edit figure</span> bajo las barras apiladas y elige el locus en el menú <span class="ui">Locus</span>.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-resumen-ssr.png" alt="Resumen del Bloque 3 con el ejemplo de microsatélites"></div>
+    <figcaption><b>Figura 4.4.</b> <span class="ui">What the numbers say</span> con el maíz: 45 alelos en 8 loci, H<sub>e</sub> del conjunto 0.747, H<sub>o</sub> 0.636 y F del conjunto 0.148 (tarjeta ámbar: déficit de heterocigotos). La interpretación compara la población más y la menos diversa y explica el significado de F.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-tabla-ssr.png" alt="Tabla de diversidad por población"></div>
+    <figcaption><b>Figura 4.5.</b> <span class="ui">Diversity of every population</span>: índices promediados sobre los 8 loci y, debajo, sus errores estándar.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 4.5.</b> Diversidad de las tres poblaciones de maíz (8 microsatélites, 25 plantas cada una).</caption>
+    <thead><tr><th>Población</th><th class="c">N<sub>a</sub></th><th class="c">N<sub>e</sub></th><th class="c">I</th><th class="c">H<sub>o</sub></th><th class="c">H<sub>e</sub> (IC 95&nbsp;%)</th><th class="c">uH<sub>e</sub></th><th class="c">F</th><th class="c">PIC</th><th class="c">A<sub>r</sub></th></tr></thead>
+    <tbody>
+      <tr><td>Cónico</td><td class="c">5.25</td><td class="c">3.76</td><td class="c">1.433</td><td class="c">0.701</td><td class="c">0.718 (0.661–0.763)</td><td class="c">0.734</td><td class="c">0.027</td><td class="c">0.678</td><td class="c">5.24</td></tr>
+      <tr><td>Chalqueño</td><td class="c">5.38</td><td class="c">3.49</td><td class="c">1.370</td><td class="c">0.546</td><td class="c">0.684 (0.601–0.751)</td><td class="c">0.698</td><td class="c"><b>0.186</b></td><td class="c">0.642</td><td class="c">5.35</td></tr>
+      <tr><td>Palomero</td><td class="c">5.50</td><td class="c">4.00</td><td class="c">1.475</td><td class="c">0.661</td><td class="c">0.733 (0.676–0.779)</td><td class="c">0.748</td><td class="c">0.098</td><td class="c">0.690</td><td class="c">5.47</td></tr>
+      <tr><td><b>Conjunto</b></td><td class="c"><b>5.63</b></td><td class="c"><b>4.12</b></td><td class="c"><b>1.523</b></td><td class="c"><b>0.636</b></td><td class="c"><b>0.747</b></td><td class="c"><b>0.752</b></td><td class="c"><b>0.148</b></td><td class="c"><b>0.710</b></td><td class="c"><b>5.49</b></td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer estos resultados</div>
+    <ul style="margin:0">
+      <li><b>Las tres razas son igual de diversas.</b> H<sub>e</sub> va de 0.684 en Chalqueño a 0.733 en Palomero, pero los intervalos se traslapan: con estos 8 loci la diferencia no está resuelta. Los valores caen en el intervalo habitual de microsatélites en plantas alógamas.</li>
+      <li><b>La riqueza alélica confirma lo mismo.</b> Rarefaccionada a <i>g</i> = 44 copias del gen, el tamaño del locus con menos datos, A<sub>r</sub> va de 5.24 a 5.47. Como las tres poblaciones tienen 25 plantas, N<sub>a</sub> y A<sub>r</sub> casi coinciden.</li>
+      <li><b>Chalqueño tiene un déficit de heterocigotos.</b> F = 0.186, frente a 0.027 en Cónico. Puede ser endogamia en esa población o un problema en algún locus; el Bloque 4 lo distingue.</li>
+      <li><b>El F del conjunto es mayor que el promedio.</b> 0.148 frente a 0.104: la diferencia es el efecto Wahlund de la figura 4.2 y anticipa que las razas están algo diferenciadas (Bloque 5).</li>
+      <li><b>Los marcadores son muy informativos.</b> PIC entre 0.642 y 0.690, por encima de 0.5 en las tres poblaciones.</li>
+    </ul>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-barras-ssr.png" alt="Figura de diversidad por población"></div>
+    <figcaption><b>Figura 4.6.</b> H<sub>e</sub> por población con intervalos de <i>bootstrap</i> al 95&nbsp;% y la línea del conjunto. Los tres intervalos se traslapan ampliamente. La línea del conjunto (0.747) queda por encima de las tres barras: al juntar las razas sus frecuencias se promedian y los alelos quedan más repartidos, lo que solo ocurre si las razas difieren en sus frecuencias. Esa diferencia entre la diversidad total y la de cada población es la base de F<sub>ST</sub> (Bloque 5).</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-rarefaccion-ssr.png" alt="Curvas de rarefacción"></div>
+    <figcaption><b>Figura 4.7.</b> Curvas de rarefacción. Cada curva da los alelos esperados, en promedio sobre los loci, al muestrear un número creciente de copias del gen; la línea vertical marca <i>g</i> = 44. Las curvas casi se aplanan antes de 44: muestrear más plantas añadiría pocos alelos nuevos. Una curva que sigue subiendo al final indica que la población tiene alelos raros sin descubrir.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-locus-ssr.png" alt="Tabla locus por locus"></div>
+    <figcaption><b>Figura 4.8.</b> <span class="ui">Locus by locus</span> con H<sub>e</sub>. Destaca bnlg1017 en Chalqueño (0.437), muy por debajo de su valor en las otras razas.</figcaption>
+  </figure>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · ¿endogamia o un locus defectuoso?</div>
+    <p>Con <span class="ui">Show</span> en <span class="ui">F · fixation index</span> se ve que en Chalqueño F va de −0.007 en bnlg1017 a <b>0.440</b> en umc1304, con 0.317 en bnlg1621, 0.305 en phi053 y 0.229 en umc1147. Esa variación, por sí sola, no decide nada: con 25 plantas, F de un locus fluctúa mucho por azar. La endogamia eleva F en la mayoría de los loci; un <b>alelo nulo</b> lo eleva en el mismo locus en casi todas las poblaciones. El Bloque 4 hace esa comparación con pruebas formales y, en este ejemplo, concluye que el déficit es general (capítulo 5). No saques conclusiones sobre endogamia antes de revisarlo.</p>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-hohe-ssr.png" alt="Figura Ho contra He"></div>
+    <figcaption><b>Figura 4.9.</b> H<sub>o</sub> contra H<sub>e</sub> para los 8 loci en las 3 poblaciones: 19 de los 24 puntos quedan bajo la diagonal. El punto naranja más bajo (Chalqueño, umc1304) tiene H<sub>o</sub> = 0.41 con H<sub>e</sub> = 0.73, es decir F = 0.44.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-frecuencias-ssr.png" alt="Frecuencias alélicas del locus phi024"></div>
+    <figcaption><b>Figura 4.10.</b> Frecuencias alélicas de phi024. Los cinco alelos están en las tres razas, pero en proporciones muy distintas: el alelo 126 domina en Chalqueño (0.44) y el 122 en Palomero (0.48). Diferencias así, repetidas en varios loci, son las que miden F<sub>ST</sub> y las distancias genéticas.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b3-heatmap-ssr.png" alt="Mapa de calor de frecuencias alélicas"></div>
+    <figcaption><b>Figura 4.11.</b> Las 45 frecuencias alélicas del ejemplo en un solo mapa de calor. En blanco, alelos ausentes en una población, como phi053·158 en Cónico o phi072·222 en Palomero. Con <span class="ui">Hide alleles below</span> se ocultan los alelos raros para ver el patrón principal.</figcaption>
+  </figure>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · verificación de los cálculos</div>
+    <p>Para este manual, los índices del ejemplo se recalcularon con un programa independiente escrito a partir de los genotipos: H<sub>e</sub>, H<sub>o</sub>, uH<sub>e</sub>, N<sub>e</sub>, I, PIC, F y A<sub>r</sub> coinciden con la app hasta el decimal 15. La riqueza alélica se comprobó además con 40 000 submuestreos al azar, que difieren de la fórmula exacta en la cuarta cifra decimal (4.9879 y 4.9878), y el estimador de Lynch y Milligan contra su fórmula publicada.</p>
+  </div>
+
+  <!-- 4.6 -->
+  <h2 id="s4-6"><span class="num">4.6</span>Datos dominantes, haplotipos y morfología</h2>
+
+  <h3>Agave con AFLP: frecuencias estimadas desde bandas</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Carga <span class="ui">Agave · AFLP</span> en el Bloque 2, construye el conjunto y ve al Bloque 3.</li>
+      <li>En los ajustes aparece <span class="ui">Allele frequencies from dominant bands</span>, con Lynch y Milligan como opción predeterminada.</li>
+      <li>Lee el resumen (figura 4.12). No hay H<sub>o</sub>, F, PIC ni A<sub>r</sub>: con bandas no se ven los heterocigotos.</li>
+      <li>Baja a <span class="ui">6 · Private alleles</span>: no hay bandas privadas, pero sí seis bandas localmente comunes (figura 4.13).</li>
+    </ol>
+  </div>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b3-agave-resumen.png" alt="Resumen del Bloque 3 con AFLP de agave"></div>
+    <figcaption><b>Figura 4.12.</b> Diversidad con 60 bandas AFLP en 4 poblaciones de agave. H<sub>e</sub> va de 0.307 en Oaxaca sur a 0.345 en Oaxaca norte, con intervalos traslapados, y el conjunto llega a 0.368, dentro del intervalo habitual de 0.15 a 0.40 para marcadores dominantes.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Tabla 4.6.</b> H<sub>e</sub> del agave según el método para estimar frecuencias desde bandas.</caption>
+    <thead><tr><th style="width:34%">Método</th><th class="c">Oaxaca norte</th><th class="c">Oaxaca sur</th><th class="c">Puebla</th><th class="c">Guerrero</th><th class="c">Conjunto</th></tr></thead>
+    <tbody>
+      <tr><td>Raíz cuadrada</td><td class="c">0.345</td><td class="c">0.305</td><td class="c">0.340</td><td class="c">0.342</td><td class="c">0.368</td></tr>
+      <tr><td>Lynch y Milligan (predeterminado)</td><td class="c">0.345</td><td class="c">0.307</td><td class="c">0.340</td><td class="c">0.341</td><td class="c">0.368</td></tr>
+      <tr><td>Bayesiano, F = 0</td><td class="c">0.361</td><td class="c">0.331</td><td class="c">0.356</td><td class="c">0.364</td><td class="c">0.372</td></tr>
+      <tr><td>Bayesiano, F = 0.9</td><td class="c">0.379</td><td class="c">0.329</td><td class="c">0.365</td><td class="c">0.389</td><td class="c">0.394</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿qué estimador usar con bandas?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:36%">Si tu especie…</th><th>usa…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Es alógama</b> y tienes 20 o más plantas por población</td><td>Lynch y Milligan. Con muestras grandes coincide con la raíz cuadrada; con pocas plantas corrige su sesgo.</td></tr>
+        <tr><td><b>Es alógama</b> pero hay bandas ausentes en casi todas las plantas</td><td>Bayesiano con F = 0: no deja frecuencias en 0 o 1 cuando una banda falta en toda la muestra.</td></tr>
+        <tr><td><b>Se autofecunda</b> o tiene endogamia conocida</td><td>Bayesiano con F entre 0.8 y 0.95: sin esa corrección se subestima la frecuencia del alelo recesivo.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Sea cual sea el método, repórtalo: la H<sub>e</sub> de dominantes depende de él. Las comparaciones entre poblaciones casi no cambian, como muestra la tabla 4.6.</p>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-agave-locales.png" alt="Alelos localmente comunes en agave"></div>
+    <figcaption><b>Figura 4.13.</b> Bandas localmente comunes en agave. B005 alcanza 5&nbsp;% solo en Oaxaca norte (una de cuatro poblaciones, 25&nbsp;% o menos); las otras cinco, en dos poblaciones. Son indicios de flujo génico restringido aunque no haya bandas privadas.</figcaption>
+  </figure>
+
+  <h3>Razas de maíz con ISSR: una muestra por unidad</h3>
+  <p>Con el ejemplo de razas de maíz cada fila es una muestra compuesta de una raza. No hay diversidad <b>dentro</b> de las razas que medir, así que el bloque cambia su presentación: la tabla por población muestra cuántas bandas tiene cada raza y cuáles le son exclusivas, y la interpretación se centra en el conjunto.</p>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b3-issr-perfiles.png" alt="Bloque 3 con una muestra por raza"></div>
+    <figcaption><b>Figura 4.14.</b> Las 15 razas con ISSR. Del conjunto: 25 de 31 bandas polimórficas (80.6&nbsp;%), H<sub>e</sub> = 0.262 y 4 bandas exclusivas de una sola raza (Comiteco, Bolita, Celaya y Chiquito). Por raza, la tabla da las bandas presentes (de 9 en Chapalote a 17 en Comiteco), su porcentaje y las bandas exclusivas.</figcaption>
+  </figure>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · bandas exclusivas en muestras compuestas</div>
+    <p>Una banda exclusiva de una raza es un buen candidato a marcador de identidad para esa raza, pero con una sola muestra compuesta no se sabe con qué frecuencia la tienen sus plantas. Para confirmarla hacen falta varias plantas por raza. Las relaciones entre las razas se estudian en el Bloque 6.</p>
+  </div>
+
+  <h3>Pino con ADN de cloroplasto: diversidad haplotípica</h3>
+  <figure class="media">
+    <div class="marco"><img src="../img/b3-pino-resumen.png" alt="Bloque 3 con haplotipos de pino"></div>
+    <figcaption><b>Figura 4.15.</b> Con haplotipos, el bloque reporta la diversidad haplotípica sin sesgo <i>h</i>. Sierra Sur es la más diversa (<i>h</i> = 0.712) y Sierra Norte la menos (0.621), pero con un solo alineamiento no hay intervalos y la diferencia no se prueba. Las 48 secuencias juntas dan Hd = 0.882 con 8 haplotipos.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b3-pino-privados.png" alt="Haplotipos privados del pino"></div>
+    <figcaption><b>Figura 4.16.</b> Cuatro haplotipos privados, todos frecuentes: H6 en Cofre y H7 en Nevado (la mitad de las secuencias de cada población), H4 en Sierra Sur y H8 en Nevado. Nevado reúne dos haplotipos que no existen en ninguna otra población.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Qué significan los haplotipos privados en el cloroplasto</div>
+    <p>El ADN de cloroplasto se hereda por un solo progenitor. En la mayoría de las angiospermas viene de la madre y solo viaja en la semilla; en los pinos y demás coníferas viene del padre y viaja en el polen y en la semilla. Por eso, en un pino, que Nevado y Cofre conserven haplotipos propios y frecuentes indica que el flujo génico entre esas poblaciones es escaso tanto por polen como por semilla; en una angiosperma hablaría solo del movimiento de semillas. La distribución geográfica y la genealogía de los haplotipos se estudian con la red del Bloque 8.</p>
+  </div>
+
+  <h3>Morfología de maíz: diversidad fenotípica</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Carga <span class="ui">Maize · morphology</span>, construye el conjunto y ve al Bloque 3.</li>
+      <li>En los ajustes aparece <span class="ui">Classes per trait</span> con 10 clases.</li>
+      <li>Lee la interpretación y la tabla de H′ por población (figura 4.17).</li>
+      <li>Revisa el mapa de calor por carácter y población (figura 4.18).</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-morfologia.png" alt="Diversidad fenotípica del maíz"></div>
+    <figcaption><b>Figura 4.17.</b> Diversidad fenotípica de 9 caracteres. Chalqueño es la más diversa (H′ = 0.629 ± 0.044) y Palomero la menos (0.500 ± 0.062). El conjunto llega a 0.846, porque al juntar las razas las plantas ocupan un intervalo mucho más amplio de cada carácter.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b3-morfologia-mapa.png" alt="Mapa de calor de H′ por carácter y población"></div>
+    <figcaption><b>Figura 4.18.</b> H′ por carácter y población. El número de hileras (0.73 a 0.82) es el carácter más variable dentro de las razas, y el peso de 100 granos (0.19 a 0.46) el más uniforme. El peso de olote separa bien a Chalqueño (0.69) de Palomero (0.26).</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo se calcula H′</div>
+    <p>Cada carácter cuantitativo se divide en 10 clases de media desviación estándar, centradas en la media de todas las plantas; los valores más allá de 2.5 desviaciones caen en las clases extremas. En cada población se cuenta la proporción <i>p<sub>i</sub></i> de plantas en cada clase, se calcula H = −Σ <i>p<sub>i</sub></i> ln <i>p<sub>i</sub></i> y se divide entre ln 10 para que H′ vaya de 0 (todas las plantas en una clase) a 1 (plantas repartidas por igual en las 10 clases). Los caracteres de texto usan sus propias categorías.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · H′ fenotípico</div>
+    <table class="compacta">
+      <thead><tr><th style="width:24%">H′</th><th style="width:24%">Diversidad</th><th>Lectura</th></tr></thead>
+      <tbody>
+        <tr><td><b>0.6 o más</b></td><td>Alta</td><td>Las plantas cubren casi todo el intervalo del carácter. Material útil como fuente de variación.</td></tr>
+        <tr><td><b>0.4 a 0.6</b></td><td>Media</td><td>Variación moderada, frecuente dentro de una raza o variedad local.</td></tr>
+        <tr><td><b>Menor que 0.4</b></td><td>Baja</td><td>Carácter uniforme en esa población: fijado por selección o de base genética estrecha.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Guía orientativa usada en estudios de variedades locales. H′ mezcla variación genética y ambiental: para saber si las diferencias entre poblaciones superan lo esperado por deriva se compara P<sub>ST</sub> con F<sub>ST</sub> en el Bloque 9.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · qué reportar en un artículo</div>
+    <p>Una tabla de diversidad típica incluye, por población, N, N<sub>a</sub>, A<sub>r</sub> con su <i>g</i>, H<sub>o</sub>, uH<sub>e</sub>, F y el número de alelos privados, con sus errores estándar o intervalos. Descárgala con <span class="ui">Summary (CSV)</span>: trae los índices y sus errores estándar con cuatro decimales. Con dominantes, reporta H<sub>e</sub>, %P y el método de estimación de frecuencias; con haplotipos, <i>h</i> y el número de haplotipos; con caracteres, H′ por carácter. En los métodos indica el criterio de polimorfismo, el valor de <i>g</i>, el número de remuestreos y la semilla.</p>
+  </div>
+
+  <div class="caja dato" style="margin-top:0.25in">
+    <div class="dato-cifra">uH<sub style="font-size:.5em">e</sub> + A<sub style="font-size:.5em">r</sub></div>
+    <div class="dato-txt"><div class="caja-t">Los dos índices que conviene comparar</div>Si solo pudieras reportar dos índices para comparar poblaciones, elige la <b>heterocigosis esperada sin sesgo</b> y la <b>riqueza alélica rarefaccionada</b>: una mide qué tan repartidos están los alelos y la otra cuántos hay, y ambas están corregidas para que el tamaño de muestra no favorezca a ninguna población.</div>
+  </div>
+
+  <p style="margin-top:0.25in">El siguiente capítulo toma el índice de fijación que aquí apenas se describió y lo pone a prueba: el Bloque 4 revisa el equilibrio de Hardy–Weinberg, separa la endogamia de los alelos nulos y mide el desequilibrio de ligamiento entre loci.</p>
+</section>
+
+</body>
+</html>

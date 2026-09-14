@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Modelanthus: invented genus, drawn as a five-petalled flower (original illustration for the manual) -->
+  <rect width="400" height="400" fill="#f8f1f6"/>
+  <path d="M200 380 C 204 320, 196 280, 200 230" stroke="#3f6d2a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M202 320 C 250 300, 286 312, 312 336 C 270 348, 232 342, 202 320 Z" fill="#6aa84f" stroke="#3f6d2a" stroke-width="2"/>
+  <g transform="translate(200 170)">
+    <g fill="#c2458a" stroke="#7a1f52" stroke-width="2.5">
+      <path d="M0 0 C -46 -40, -34 -118, 0 -128 C 34 -118, 46 -40, 0 0 Z"/>
+      <path d="M0 0 C -46 -40, -34 -118, 0 -128 C 34 -118, 46 -40, 0 0 Z" transform="rotate(72)"/>
+      <path d="M0 0 C -46 -40, -34 -118, 0 -128 C 34 -118, 46 -40, 0 0 Z" transform="rotate(144)"/>
+      <path d="M0 0 C -46 -40, -34 -118, 0 -128 C 34 -118, 46 -40, 0 0 Z" transform="rotate(216)"/>
+      <path d="M0 0 C -46 -40, -34 -118, 0 -128 C 34 -118, 46 -40, 0 0 Z" transform="rotate(288)"/>
+    </g>
+    <g stroke="#f3c6df" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M0 -22 L0 -96"/><path d="M0 -22 L0 -96" transform="rotate(72)"/><path d="M0 -22 L0 -96" transform="rotate(144)"/><path d="M0 -22 L0 -96" transform="rotate(216)"/><path d="M0 -22 L0 -96" transform="rotate(288)"/>
+    </g>
+    <circle r="26" fill="#f2c230" stroke="#9a6a07" stroke-width="3"/>
+    <g fill="#9a6a07"><circle cx="-8" cy="-6" r="3"/><circle cx="7" cy="-8" r="3"/><circle cx="0" cy="8" r="3"/><circle cx="10" cy="6" r="3"/><circle cx="-10" cy="7" r="3"/></g>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Demoxylon: invented genus, drawn as a lobed tree leaf (original illustration for the manual) -->
+  <rect width="400" height="400" fill="#f3f5ea"/>
+  <path d="M200 64 C 222 96, 252 90, 268 118 C 250 132, 290 150, 318 146 C 314 176, 284 186, 300 214 C 272 214, 262 234, 276 262 C 244 256, 226 276, 214 306 L 206 342 L 194 342 L 186 306 C 174 276, 156 256, 124 262 C 138 234, 128 214, 100 214 C 116 186, 86 176, 82 146 C 110 150, 150 132, 132 118 C 148 90, 178 96, 200 64 Z"
+        fill="#8a9a2e" stroke="#4d5a14" stroke-width="3" stroke-linejoin="round"/>
+  <g stroke="#e8edc4" stroke-width="3" stroke-linecap="round" fill="none">
+    <path d="M200 90 L200 336"/>
+    <path d="M200 150 L262 128"/><path d="M200 150 L138 128"/>
+    <path d="M200 196 L290 170"/><path d="M200 196 L110 170"/>
+    <path d="M200 240 L262 238"/><path d="M200 240 L138 238"/>
+  </g>
+  <path d="M200 342 C 202 360, 196 372, 188 384" stroke="#6b4a22" stroke-width="6" fill="none" stroke-linecap="round"/>
+</svg>

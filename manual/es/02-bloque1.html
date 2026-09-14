@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Bloque 1: inicio, teoría y simulador</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b1" data-pestana="B1" data-orden="2" style="--acento: var(--b1)">
+  <div class="cap-apertura">
+    <div class="cap-num">B1</div>
+    <div class="cap-etiqueta">Capítulo dos · Bloque 1 · Home</div>
+    <h1 data-corto="Bloque 1 · Inicio, teoría y simulador">Inicio, teoría y simulador</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">La portada de la app no es solo una página de bienvenida. Es un mapa de todo el programa, un laboratorio donde puedes ver en movimiento cómo actúan la deriva, el flujo génico, la selección, la mutación y la autofecundación, y un resumen de la teoría con las referencias que respaldan cada cálculo.</p>
+    <div class="cap-franja"><span class="k1"></span><span class="k1" style="opacity:.75"></span><span class="k1" style="opacity:.5"></span><span class="k1" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>2.1</b>La portada de la app</li>
+      <li><b>2.2</b>El simulador de Wright–Fisher</li>
+      <li><b>2.3</b>Cinco prácticas con el simulador</li>
+      <li><b>2.4</b>Teoría esencial en la app</li>
+      <li><b>2.5</b>Cómo citar y referencias</li>
+    </ul>
+  </div>
+
+  <!-- 2.1 -->
+  <h2 id="s2-1"><span class="num">2.1</span>La portada de la app</h2>
+  <p class="lead">Al abrir <code>index.html</code> aparece el Bloque 1. Se lee de arriba abajo, como un folleto: primero qué hace el programa, luego cómo se recorre, después un simulador para experimentar, la lista de métodos, la teoría y, al final, cómo citarlo.</p>
+
+  <table>
+    <caption><b>Tabla 2.1.</b> Secciones de la portada, en el orden en que aparecen.</caption>
+    <thead><tr><th style="width:29%">Sección en la app</th><th>Qué contiene</th><th style="width:26%">Para qué te sirve</th></tr></thead>
+    <tbody>
+      <tr><td><b>Presentación</b><br><span class="small">cuatro botones y cinco garantías</span></td><td><span class="ui">Start with my data</span>, <span class="ui">Play with the simulator</span>, <span class="ui">Read the theory</span> y <span class="ui">How to cite</span>; ilustración con tres poblaciones y un gráfico de ancestría.</td><td>Ir directo a cargar datos o a cualquiera de las secciones de abajo.</td></tr>
+      <tr><td><span class="ui">How it works</span></td><td>Los siete pasos de un estudio, del archivo al artículo (figura 2.1).</td><td>Ubicar cada bloque dentro de la lógica de una investigación.</td></tr>
+      <tr><td><span class="ui">Try it: watch drift, migration and selection at work</span></td><td>El simulador de Wright–Fisher (secciones 2.2 y 2.3).</td><td>Entender, jugando, qué significan H<sub>S</sub>, H<sub>T</sub> y F<sub>ST</sub>.</td></tr>
+      <tr><td><span class="ui">What's inside</span></td><td>Una tarjeta por bloque de análisis, con ilustración y descripción.</td><td>Saltar a un bloque con un clic.</td></tr>
+      <tr><td><span class="ui">Every kind of data a plant study produces</span></td><td>Los cuatro grandes tipos de marcador y lo que permite cada uno.</td><td>Confirmar que tus datos caben en el programa (capítulo 1, sección 1.4).</td></tr>
+      <tr><td><span class="ui">Methods covered</span></td><td>Galería de 18 métodos agrupados por familia (tabla 2.3).</td><td>Ver de un vistazo todo lo que se puede calcular.</td></tr>
+      <tr><td><span class="ui">What it brings together</span></td><td>Las capacidades que reúne el programa en un solo flujo.</td><td>Justificar su uso en un proyecto o una tesis.</td></tr>
+      <tr><td><span class="ui">The theory, in plain language</span></td><td>Ocho temas desplegables con fórmulas, reglas prácticas y referencias (sección 2.4).</td><td>Repasar la teoría antes de interpretar o defender resultados.</td></tr>
+      <tr><td><span class="ui">How to cite</span> y <span class="ui">References behind the calculations</span></td><td>La cita del programa lista para copiar y las 25 referencias de los métodos (sección 2.5).</td><td>Citar correctamente en tu artículo.</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/b1-flujo.png" alt="Los siete pasos de How it works"></div>
+    <figcaption><b>Figura 2.1.</b> La sección <span class="ui">How it works</span>: siete pasos que siguen el orden en que se escribe un artículo de genética de poblaciones.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Tabla 2.2.</b> Los siete pasos de la portada y los bloques que los resuelven.</caption>
+    <thead><tr><th style="width:10%">Paso</th><th style="width:26%">En la app</th><th>Qué se hace</th><th style="width:18%">Bloques</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td><span class="ui">Load &amp; check</span></td><td>Cargar cualquier formato y revisar la calidad de los datos.</td><td><span class="chip k2">2</span></td></tr>
+      <tr><td class="c">2</td><td><span class="ui">Describe diversity</span></td><td>Cuánta variación hay y dónde está.</td><td><span class="chip k3">3</span></td></tr>
+      <tr><td class="c">3</td><td><span class="ui">Test equilibrium</span></td><td>Hardy–Weinberg, endogamia y ligamiento.</td><td><span class="chip k4">4</span></td></tr>
+      <tr><td class="c">4</td><td><span class="ui">Partition it</span></td><td>Repartir la variación con AMOVA y estadísticos F.</td><td><span class="chip k5">5</span></td></tr>
+      <tr><td class="c">5</td><td><span class="ui">Find the groups</span></td><td>Distancias, ordenación y agrupamiento.</td><td><span class="chip k6">6</span> <span class="chip k7">7</span></td></tr>
+      <tr><td class="c">6</td><td><span class="ui">Infer the history</span></td><td>Flujo génico, cuellos de botella, expansión y tiempos de divergencia.</td><td><span class="chip k8">8</span> <span class="chip k9">9</span></td></tr>
+      <tr><td class="c">7</td><td><span class="ui">Publish</span></td><td>Figuras editables e informe.</td><td><span class="chip k10">10</span></td></tr>
+    </tbody>
+  </table>
+
+  <table class="compacta">
+    <caption><b>Tabla 2.3.</b> La galería <span class="ui">Methods covered</span>, ordenada por familia.</caption>
+    <thead><tr><th style="width:17%">Familia</th><th>Métodos</th><th style="width:14%">Bloques</th></tr></thead>
+    <tbody>
+      <tr><td><b>Diversidad</b></td><td>Frecuencias alélicas por locus y población · índices de diversidad (N<sub>a</sub>, N<sub>e</sub>, H<sub>o</sub>, H<sub>e</sub>, uH<sub>e</sub>, I, PIC) · Hardy–Weinberg con pruebas χ² y exactas · desequilibrio de ligamiento (r², D′, r̄<sub>d</sub>)</td><td><span class="chip k3">3</span> <span class="chip k4">4</span></td></tr>
+      <tr><td><b>Estructura</b></td><td>Diferenciación por pares (F<sub>ST</sub>, G′<sub>ST</sub>, D de Jost, Φ<sub>PT</sub>) · AMOVA jerárquico · aislamiento por distancia · autocorrelación espacial y Sp</td><td><span class="chip k5">5</span> <span class="chip k6">6</span> <span class="chip k9">9</span></td></tr>
+      <tr><td><b>Distancia</b></td><td>Árboles NJ y UPGMA con bootstrap · coordenadas principales de individuos o poblaciones</td><td><span class="chip k6">6</span></td></tr>
+      <tr><td><b>Agrupamiento</b></td><td>Agrupamiento bayesiano con ΔK · pruebas de asignación y migrantes de primera generación</td><td><span class="chip k7">7</span></td></tr>
+      <tr><td><b>Secuencias</b></td><td>Redes de haplotipos (median-joining) · tiempos de divergencia con fósiles y reloj relajado · mismatch y pruebas de neutralidad (D de Tajima, Fs de Fu, R<sub>2</sub>)</td><td><span class="chip k8">8</span></td></tr>
+      <tr><td><b>Demografía</b></td><td>Cuellos de botella (exceso de heterocigosis, razón M) · sistema de apareamiento (tasa de exocruza y parentesco) · tamaño efectivo de población</td><td><span class="chip k9">9</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · navegar desde la portada</div>
+    <p>Los botones de la presentación te llevan a la sección correspondiente dentro de la misma portada, excepto <span class="ui">Start with my data</span>, que abre el Bloque 2. Las tarjetas de <span class="ui">What's inside</span> abren su bloque. Si todavía no cargaste datos, la app te lleva al Bloque 2 con el aviso <i>Load your data first</i>, porque todos los bloques leen de ahí. Para volver a la portada desde cualquier parte, pulsa el nombre del programa arriba a la izquierda o el botón <span class="ui">1 Home</span>.</p>
+  </div>
+
+  <!-- 2.2 -->
+  <h2 id="s2-2"><span class="num">2.2</span>El simulador de Wright–Fisher</h2>
+  <p class="lead">El simulador reproduce, generación tras generación, la evolución de un locus con dos alelos en varias poblaciones. No es una animación decorativa: aplica las mismas ecuaciones de los libros de texto, y las curvas de diversidad y diferenciación se calculan de las frecuencias simuladas.</p>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Teoría en breve · el modelo de Wright–Fisher</div>
+    <p>Imagina varias poblaciones del mismo tamaño que empiezan con el alelo <i>A</i> a frecuencia <i>p</i> = 0.5. En cada generación ocurren cuatro cosas, siempre en el mismo orden: la <b>selección</b> favorece a un genotipo, la <b>migración</b> mezcla a cada población con el promedio de todas, la <b>mutación</b> convierte unos alelos en otros y, por último, la <b>deriva</b> sortea al azar las 2N<sub>e</sub> copias del gen que formarán la generación siguiente. Ese último sorteo es el que hace que poblaciones idénticas se separen por puro azar.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Ciclo de una generación en el simulador">
+      <defs><marker id="fc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#3b5b92"/></marker></defs>
+      <!-- generación t -->
+      <rect x="8" y="92" width="92" height="66" rx="10" fill="#14213d"/>
+      <text x="54" y="118" text-anchor="middle" font-size="10" fill="#b9c7e2" letter-spacing="1.2">GENERACIÓN</text>
+      <text x="54" y="142" text-anchor="middle" font-size="18" fill="#fff" font-weight="500">t</text>
+      <!-- cuatro pasos -->
+      <g font-size="10">
+        <rect x="126" y="30" width="126" height="92" rx="9" fill="#fff" stroke="#3b5b92" stroke-width="1.4"/>
+        <circle cx="146" cy="50" r="11" fill="#3b5b92"/><text x="146" y="54" text-anchor="middle" fill="#fff" font-weight="600">1</text>
+        <text x="163" y="54" fill="#111" font-weight="600" font-size="11">Selección</text>
+        <text x="138" y="76" fill="#22252c">aptitud AA = 1 + s</text><text x="138" y="90" fill="#22252c">aptitud Aa = 1 + s/2</text><text x="138" y="104" fill="#22252c">aptitud aa = 1</text>
+
+        <rect x="274" y="30" width="126" height="92" rx="9" fill="#fff" stroke="#3b5b92" stroke-width="1.4"/>
+        <circle cx="294" cy="50" r="11" fill="#3b5b92"/><text x="294" y="54" text-anchor="middle" fill="#fff" font-weight="600">2</text>
+        <text x="311" y="54" fill="#111" font-weight="600" font-size="11">Migración</text>
+        <text x="286" y="78" fill="#22252c">p′ = (1 − m)·p + m·p̄</text>
+        <text x="286" y="96" fill="#5d6472" font-size="9">se mezcla con el promedio</text><text x="286" y="108" fill="#5d6472" font-size="9">de todas (modelo de islas)</text>
+
+        <rect x="422" y="30" width="126" height="92" rx="9" fill="#fff" stroke="#3b5b92" stroke-width="1.4"/>
+        <circle cx="442" cy="50" r="11" fill="#3b5b92"/><text x="442" y="54" text-anchor="middle" fill="#fff" font-weight="600">3</text>
+        <text x="459" y="54" fill="#111" font-weight="600" font-size="11">Mutación</text>
+        <text x="434" y="78" fill="#22252c">p′ = p(1 − u) + (1 − p)·u</text>
+        <text x="434" y="96" fill="#5d6472" font-size="9">A → a y a → A a la</text><text x="434" y="108" fill="#5d6472" font-size="9">misma tasa u</text>
+
+        <rect x="274" y="148" width="274" height="82" rx="9" fill="#f1f4fa" stroke="#14213d" stroke-width="1.4"/>
+        <circle cx="294" cy="168" r="11" fill="#14213d"/><text x="294" y="172" text-anchor="middle" fill="#fff" font-weight="600">4</text>
+        <text x="311" y="172" fill="#111" font-weight="600" font-size="11">Deriva génica</text>
+        <text x="286" y="196" fill="#22252c">se sortean 2Nₑ copias del gen con probabilidad p′</text>
+        <text x="286" y="214" fill="#5d6472" font-size="9">con autofecundación S: F = S/(2 − S) y Nₑ = N/(1 + F)</text>
+      </g>
+      <g fill="none" stroke="#3b5b92" stroke-width="1.6">
+        <path d="M100 110 C 112 100 116 84 124 78" marker-end="url(#fc)"/>
+        <path d="M252 76 H272" marker-end="url(#fc)"/>
+        <path d="M400 76 H420" marker-end="url(#fc)"/>
+        <path d="M548 76 C 600 76 600 150 550 180" marker-end="url(#fc)"/>
+        <path d="M274 190 C 180 190 130 170 104 150" stroke-dasharray="5 4" marker-end="url(#fc)"/>
+      </g>
+      <text x="170" y="205" font-size="9.5" fill="#3b5b92" font-style="italic">generación t + 1</text>
+      <!-- lectura -->
+      <rect x="578" y="148" width="116" height="82" rx="9" fill="#fff" stroke="#b9c3d6"/>
+      <text x="590" y="168" font-size="9.5" fill="#111" font-weight="600">Se calcula</text>
+      <text x="590" y="186" font-size="9.5" fill="#22252c">H<tspan baseline-shift="sub" font-size="7">S</tspan> = promedio 2p(1−p)</text>
+      <text x="590" y="202" font-size="9.5" fill="#22252c">H<tspan baseline-shift="sub" font-size="7">T</tspan> = 2p̄(1−p̄)</text>
+      <text x="590" y="218" font-size="9.5" fill="#22252c">F<tspan baseline-shift="sub" font-size="7">ST</tspan> = (H<tspan baseline-shift="sub" font-size="7">T</tspan>−H<tspan baseline-shift="sub" font-size="7">S</tspan>)/H<tspan baseline-shift="sub" font-size="7">T</tspan></text>
+    </svg>
+    <figcaption><b>Figura 2.2.</b> Lo que hace el simulador en cada generación. Los cuatro pasos transforman la frecuencia <i>p</i> de cada población; al final se calculan la diversidad dentro de las poblaciones (H<sub>S</sub>), la del conjunto (H<sub>T</sub>) y la diferenciación (F<sub>ST</sub>). La selección es aditiva: el heterocigoto tiene la mitad de la ventaja del homocigoto.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco" style="position:relative">
+      <img src="../img/b1-simulador-inicio.png" alt="El simulador antes de correr, con el escenario de modelo de islas">
+      <span class="marca" style="left:14.4%;top:6.8%">1</span>
+      <span class="marca" style="left:35.6%;top:6.8%">2</span>
+      <span class="marca" style="left:10.2%;top:13.8%">3</span>
+      <span class="marca" style="left:56.2%;top:13.8%">4</span>
+      <span class="marca" style="left:76.4%;top:61.5%">5</span>
+      <span class="marca" style="left:9.6%;top:75.8%">6</span>
+      <span class="marca" style="left:9.6%;top:87.7%">7</span>
+      <span class="marca" style="left:9.6%;top:94.8%">8</span>
+    </div>
+    <figcaption><b>Figura 2.3.</b> El simulador listo para correr con el escenario <span class="ui">Island model with gene flow</span>.</figcaption>
+  </figure>
+  <ul class="leyenda-marcas">
+    <li><span class="n">1</span><span class="ui">Scenario</span>: cinco escenarios preparados que ajustan todos los deslizadores.</li>
+    <li><span class="n">2</span><span class="ui">Run</span> corre 120 generaciones (vuelve a pulsar para pausar), <span class="ui">Step</span> avanza una, <span class="ui">Reset</span> reinicia con la misma semilla y <span class="ui">New random seed</span> con otra.</li>
+    <li><span class="n">3</span>Frecuencia del alelo en cada población; la línea punteada es el promedio de todas.</li>
+    <li><span class="n">4</span>Diversidad génica H<sub>T</sub> y H<sub>S</sub>, con la curva esperada si solo actuara la deriva.</li>
+    <li><span class="n">5</span>F<sub>ST</sub> entre poblaciones y, punteado, el valor de equilibrio del modelo de islas.</li>
+    <li><span class="n">6</span>Deslizadores de los seis parámetros (tabla 2.5).</li>
+    <li><span class="n">7</span>Tarjetas con los valores de la generación actual (tabla 2.6).</li>
+    <li><span class="n">8</span>Una frase que describe lo que está pasando.</li>
+  </ul>
+
+  <h3>Los controles</h3>
+  <table>
+    <caption><b>Tabla 2.4.</b> Los cinco escenarios preparados en <span class="ui">Scenario</span>.</caption>
+    <thead><tr><th style="width:31%">Escenario</th><th class="c">N</th><th class="c">Pobl.</th><th class="c">m</th><th class="c">s</th><th class="c">u</th><th class="c">Autof.</th><th style="width:22%">Qué muestra</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Small isolated populations (pure drift)</span></td><td class="c">25</td><td class="c">6</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0 %</td><td>La deriva sola</td></tr>
+      <tr><td><span class="ui">Island model with gene flow</span></td><td class="c">100</td><td class="c">6</td><td class="c">0.02</td><td class="c">0</td><td class="c">0</td><td class="c">0 %</td><td>Equilibrio entre deriva y migración</td></tr>
+      <tr><td><span class="ui">A selfing plant (90% selfing)</span></td><td class="c">100</td><td class="c">6</td><td class="c">0.005</td><td class="c">0</td><td class="c">0</td><td class="c">90 %</td><td>Efecto de la autofecundación</td></tr>
+      <tr><td><span class="ui">Selection on a favourable allele</span></td><td class="c">100</td><td class="c">6</td><td class="c">0.01</td><td class="c">0.10</td><td class="c">0</td><td class="c">0 %</td><td>Selección direccional</td></tr>
+      <tr><td><span class="ui">Mutation–drift balance</span></td><td class="c">40</td><td class="c">6</td><td class="c">0</td><td class="c">0</td><td class="c">0.001</td><td class="c">0 %</td><td>Mutación contra deriva</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Tabla 2.5.</b> Los seis parámetros y lo que hace cada uno.</caption>
+    <thead><tr><th style="width:18%">Deslizador</th><th style="width:13%">Intervalo</th><th>Significado</th><th style="width:30%">Si lo aumentas…</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">N per deme</span></td><td>10 a 500</td><td>Número de individuos diploides en cada población.</td><td>La deriva se debilita: las líneas tiemblan menos y H<sub>S</sub> baja más despacio.</td></tr>
+      <tr><td><span class="ui">Populations</span></td><td>2 a 10</td><td>Número de poblaciones que se siguen a la vez.</td><td>Más líneas; F<sub>ST</sub> se estima con menos ruido.</td></tr>
+      <tr><td><span class="ui">Migration m</span></td><td>0 a 0.2</td><td>Fracción de cada población que llega, en cada generación, del conjunto de las demás.</td><td>Las poblaciones se mantienen juntas: F<sub>ST</sub> baja.</td></tr>
+      <tr><td><span class="ui">Selection s</span></td><td>−0.2 a 0.2</td><td>Ventaja del homocigoto AA; con valores negativos, desventaja.</td><td>El alelo A sube en todas las poblaciones a la vez.</td></tr>
+      <tr><td><span class="ui">Mutation u</span></td><td>0 a 0.01</td><td>Probabilidad de que una copia del gen cambie de alelo por generación.</td><td>Aparece variación nueva; las poblaciones fijadas vuelven a variar.</td></tr>
+      <tr><td><span class="ui">Selfing rate</span></td><td>0 a 98 %</td><td>Proporción de semillas producidas por autofecundación.</td><td>Aumenta la endogamia y disminuye el tamaño efectivo N<sub>e</sub>: la deriva se acelera.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Tabla 2.6.</b> Las tarjetas de lectura.</caption>
+    <thead><tr><th style="width:18%">Tarjeta</th><th>Qué es</th><th style="width:40%">Cómo leerla</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Generation</span></td><td>Generaciones transcurridas (de 0 a 120).</td><td>El tiempo: compáralo con N<sub>e</sub> para saber si ya pasó “mucho” tiempo.</td></tr>
+      <tr><td><span class="ui">Mean p</span></td><td>Frecuencia promedio del alelo A en todas las poblaciones.</td><td>Casi no cambia con la deriva sola; sube o baja de forma sostenida con la selección.</td></tr>
+      <tr><td><span class="ui">H<sub>S</sub></span></td><td>Diversidad génica promedio dentro de las poblaciones.</td><td>Empieza en 0.5, el máximo con dos alelos; baja por deriva.</td></tr>
+      <tr><td><span class="ui">F<sub>ST</sub></span></td><td>Diferenciación entre poblaciones.</td><td>0 si todas son iguales; 1 si cada una fijó un alelo distinto (regla de decisión de la sección 2.2).</td></tr>
+      <tr><td><span class="ui">Fixed demes</span></td><td>Poblaciones que ya perdieron uno de los dos alelos.</td><td>Una población fijada no puede volver a variar sin migración ni mutación.</td></tr>
+      <tr><td><span class="ui">N<sub>e</sub> used</span></td><td>Tamaño efectivo con el que se sortea la deriva.</td><td>Igual a N sin autofecundación; menor con ella.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Las fórmulas que verás en pantalla</h3>
+  <div class="dos">
+    <div class="caja teoria" style="margin:0">
+      <div class="caja-t"><span class="ico">1</span>Pérdida de diversidad por deriva</div>
+      <p style="text-align:center;font-size:12.5pt;margin:0.06in 0">H<sub>t</sub> = H<sub>0</sub> (1 − 1/2N<sub>e</sub>)<sup>t</sup></p>
+      <p>Cada generación se pierde una fracción 1/2N<sub>e</sub> de la heterocigosis. La mitad se pierde en unas <b>1.39 · N<sub>e</sub> generaciones</b>. Es la línea punteada del panel de diversidad.</p>
+    </div>
+    <div class="caja teoria" style="margin:0">
+      <div class="caja-t"><span class="ico">2</span>Equilibrio entre deriva y migración</div>
+      <p style="text-align:center;font-size:12.5pt;margin:0.06in 0">F<sub>ST</sub> ≈ 1 / (1 + 4 N<sub>e</sub> m)</p>
+      <p>Wright demostró que la diferenciación se estabiliza en este valor en el modelo de islas. El producto N<sub>e</sub>m es el número de <b>migrantes por generación</b>. Es la línea punteada del panel de F<sub>ST</sub>.</p>
+    </div>
+  </div>
+
+  <figure style="margin-top:0.2in">
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Curva de F_ST de equilibrio contra el número de migrantes por generación">
+      <!-- zonas de Wright (1978): y = 200 - F*170 -->
+      <rect x="60" y="191.5" width="520" height="8.5" fill="#3f7d20" opacity="0.12"/>
+      <rect x="60" y="174.5" width="520" height="17" fill="#b7791f" opacity="0.14"/>
+      <rect x="60" y="157.5" width="520" height="17" fill="#c2410c" opacity="0.13"/>
+      <rect x="60" y="30" width="520" height="127.5" fill="#b4234a" opacity="0.08"/>
+      <g font-size="9" fill="#22252c">
+        <text x="588" y="199">poca (&lt; 0.05)</text>
+        <text x="588" y="186">moderada</text>
+        <text x="588" y="169">grande</text>
+        <text x="588" y="98">muy grande</text><text x="588" y="110">(&gt; 0.25)</text>
+      </g>
+      <text x="588" y="22" font-size="8.5" fill="#5d6472" letter-spacing="0.8">DIFERENCIACIÓN</text>
+      <!-- ejes -->
+      <line x1="60" y1="200" x2="580" y2="200" stroke="#111"/>
+      <line x1="60" y1="30" x2="60" y2="200" stroke="#111"/>
+      <g font-size="9" fill="#5d6472" text-anchor="end">
+        <text x="54" y="203">0</text><text x="54" y="160.5">0.25</text><text x="54" y="118">0.5</text><text x="54" y="75.5">0.75</text><text x="54" y="33">1</text>
+      </g>
+      <g stroke="#e3e7ee"><line x1="60" y1="157.5" x2="580" y2="157.5"/><line x1="60" y1="115" x2="580" y2="115"/><line x1="60" y1="72.5" x2="580" y2="72.5"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle">
+        <text x="60" y="214">0.01</text><text x="190" y="214">0.1</text><text x="320" y="214">1</text><text x="450" y="214">10</text><text x="580" y="214">100</text>
+      </g>
+      <g stroke="#111"><line x1="190" y1="200" x2="190" y2="204"/><line x1="320" y1="200" x2="320" y2="204"/><line x1="450" y1="200" x2="450" y2="204"/><line x1="580" y1="200" x2="580" y2="204"/></g>
+      <text x="320" y="236" font-size="10" fill="#111" text-anchor="middle">N<tspan baseline-shift="sub" font-size="7">e</tspan>m · migrantes por generación (escala logarítmica)</text>
+      <text x="16" y="115" font-size="10" fill="#111" text-anchor="middle" transform="rotate(-90 16 115)">F<tspan baseline-shift="sub" font-size="7">ST</tspan> de equilibrio</text>
+      <!-- curva 1/(1+4Nm) -->
+      <path d="M60 36.5 L92.5 41.3 L125 49.1 L157.5 61.2 L190 78.6 L222.5 100.7 L255 124.9 L287.5 147.7 L320 166 L352.5 179 L385 187.5 L417.5 192.8 L450 195.9 L482.5 197.6 L515 198.7 L547.5 199.2 L580 199.6" fill="none" stroke="#14213d" stroke-width="2.6" stroke-linejoin="round"/>
+      <!-- Nm = 1 -->
+      <line x1="320" y1="30" x2="320" y2="200" stroke="#3b5b92" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <circle cx="320" cy="166" r="4.5" fill="#3b5b92"/>
+      <text x="327" y="158" font-size="9.5" fill="#3b5b92" font-weight="600">Nₑm = 1 → F<tspan baseline-shift="sub" font-size="7">ST</tspan> = 0.20</text>
+      <circle cx="385" cy="187.5" r="4" fill="#fff" stroke="#14213d" stroke-width="1.6"/>
+      <text x="392" y="182" font-size="9" fill="#14213d">simulador: Nₑm = 2 → 0.111</text>
+      <text x="200" y="58" font-size="9.5" fill="#22252c">pocos migrantes:</text><text x="200" y="71" font-size="9.5" fill="#22252c">la deriva separa a las poblaciones</text>
+      <text x="410" y="118" font-size="9.5" fill="#22252c">muchos migrantes:</text><text x="410" y="131" font-size="9.5" fill="#22252c">las poblaciones se mantienen juntas</text>
+    </svg>
+    <figcaption><b>Figura 2.4.</b> F<sub>ST</sub> de equilibrio en el modelo de islas en función del número de migrantes por generación. Con apenas un migrante por generación, la diferenciación se queda en 0.20. Las franjas de color son las categorías de diferenciación de Wright (1978).</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿cuánta diferenciación es mucha?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:22%">F<sub>ST</sub></th><th style="width:24%">Diferenciación</th><th>Lectura biológica habitual</th></tr></thead>
+      <tbody>
+        <tr><td><b>0 a 0.05</b></td><td>Poca</td><td>Las poblaciones intercambian genes con frecuencia; funcionan casi como una sola.</td></tr>
+        <tr><td><b>0.05 a 0.15</b></td><td>Moderada</td><td>Hay estructura, pero el flujo génico sigue siendo importante. Es común en plantas alógamas.</td></tr>
+        <tr><td><b>0.15 a 0.25</b></td><td>Grande</td><td>Poblaciones bastante aisladas o con poca dispersión de polen y semilla.</td></tr>
+        <tr><td><b>Más de 0.25</b></td><td>Muy grande</td><td>Aislamiento fuerte, autofecundación, o linajes que divergieron hace mucho.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Categorías de Wright (1978). Con marcadores muy polimórficos, como los microsatélites, F<sub>ST</sub> tiene un techo por debajo de 1; complétalo con G′<sub>ST</sub> o la D de Jost (capítulo del Bloque 5).</p>
+  </div>
+
+  <div class="caja dato">
+    <div class="dato-cifra">Nₑm = 1</div>
+    <div class="dato-txt"><div class="caja-t">La regla de un migrante</div>Un solo migrante efectivo por generación basta para impedir que la deriva diferencie por completo a las poblaciones, <b>sin importar su tamaño</b>. Por eso, en conservación, conectar fragmentos con unos pocos individuos tiene un efecto genético enorme.</div>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · el número de migrantes es indicativo</div>
+    <p>Convertir un F<sub>ST</sub> observado en N<sub>e</sub>m supone un modelo de islas en equilibrio, sin selección ni mutación, con poblaciones del mismo tamaño que intercambian migrantes con todas las demás por igual. Las poblaciones reales casi nunca cumplen esas condiciones. Reporta N<sub>e</sub>m como un valor orientativo, nunca como un conteo real de migrantes.</p>
+  </div>
+
+  <!-- 2.3 -->
+  <h2 id="s2-3"><span class="num">2.3</span>Cinco prácticas con el simulador</h2>
+  <p>Cada práctica usa uno de los escenarios preparados. Los valores que se citan como <b>esperados</b> vienen de la teoría. Los <b>simulados</b> son el promedio de 500 repeticiones del mismo modelo que usa la app, calculados para este manual. Como la deriva es azar, tu corrida individual será distinta; compárala con los promedios, no con un número exacto.</p>
+
+  <!-- práctica 1 -->
+  <h3>Práctica 1 · La deriva sola</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En la portada pulsa <span class="ui">Play with the simulator</span>.</li>
+      <li>En <span class="ui">Scenario</span> elige <span class="ui">Small isolated populations (pure drift)</span>: seis poblaciones de 25 plantas, sin migración, selección ni mutación.</li>
+      <li>Pulsa <span class="ui">Run</span> y observa las líneas durante las 120 generaciones.</li>
+      <li>Al terminar, anota H<sub>S</sub>, F<sub>ST</sub> y <span class="ui">Fixed demes</span>. Pulsa <span class="ui">New random seed</span> y <span class="ui">Run</span> otra vez para ver otra historia posible.</li>
+    </ol>
+  </div>
+  <figure class="media">
+    <div class="marco"><img src="../img/b1-deriva.png" alt="Simulación de deriva pura"></div>
+    <figcaption><b>Figura 2.5.</b> Una corrida del escenario de deriva pura. Cuatro de las seis poblaciones fijaron un alelo, dos con A y dos con a; H<sub>S</sub> cayó de 0.5 a 0.13 y F<sub>ST</sub> subió a 0.74. El promedio del conjunto (línea punteada) apenas se movió.</figcaption>
+  </figure>
+  <table class="compacta">
+    <caption><b>Tabla 2.7.</b> Deriva pura con N<sub>e</sub> = 25: teoría contra simulación.</caption>
+    <thead><tr><th>Medida</th><th class="c">Esperado</th><th class="c">Simulado (500 repeticiones)</th></tr></thead>
+    <tbody>
+      <tr><td>H<sub>S</sub> en la generación 50</td><td class="c">0.182</td><td class="c">0.181</td></tr>
+      <tr><td>H<sub>S</sub> en la generación 120</td><td class="c">0.044</td><td class="c">0.042</td></tr>
+      <tr><td>Generaciones para perder la mitad de la heterocigosis</td><td class="c">34</td><td class="c">—</td></tr>
+      <tr><td>Tiempo medio hasta fijar o perder el alelo, desde p = 0.5</td><td class="c">69</td><td class="c">—</td></tr>
+      <tr><td>Poblaciones fijadas en la generación 120 (de 6)</td><td class="c">casi todas</td><td class="c">5.3</td></tr>
+      <tr><td>Corridas con las seis poblaciones fijadas antes de la generación 120</td><td class="c">—</td><td class="c">44 %</td></tr>
+    </tbody>
+  </table>
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Lo que aprendiste</div>
+    <p>La deriva <b>no cambia el promedio</b> de las frecuencias, pero dispersa a las poblaciones: cada una se aleja del 0.5 en una dirección al azar hasta fijar un alelo. Por eso la diversidad <b>dentro</b> de las poblaciones se pierde (H<sub>S</sub> sigue la curva punteada), mientras que la diversidad del conjunto se conserva, repartida entre poblaciones distintas (H<sub>T</sub> se mantiene cerca de 0.5). La diferencia entre ambas es precisamente F<sub>ST</sub>. Esto explica por qué las poblaciones pequeñas y aisladas de especies raras o fragmentadas suelen tener poca diversidad interna y mucha diferenciación entre sí.</p>
+  </div>
+  <p><b>Pruébalo tú:</b> sube <span class="ui">N per deme</span> a 250 y repite. Con diez veces más plantas, la heterocigosis se pierde diez veces más despacio: en 120 generaciones H<sub>S</sub> apenas baja a 0.39 y es raro que alguna población llegue a fijarse.</p>
+
+  <!-- práctica 2 -->
+  <h3>Práctica 2 · El modelo de islas</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Elige <span class="ui">Island model with gene flow</span>: 100 plantas por población y <i>m</i> = 0.02, es decir, dos migrantes por generación.</li>
+      <li>Antes de correr, fíjate en la línea punteada del panel de F<sub>ST</sub>: marca <i>expected 1/(1+4Nₑm) = 0.111</i>.</li>
+      <li>Pulsa <span class="ui">Run</span>. Las líneas de frecuencia se mueven, pero no se separan: se persiguen unas a otras.</li>
+      <li>Mueve <span class="ui">Migration m</span> a 0.005 y pulsa <span class="ui">Reset</span> y <span class="ui">Run</span>. La línea esperada sube a 0.333 y las poblaciones se separan más.</li>
+    </ol>
+  </div>
+  <figure class="media">
+    <div class="marco"><img src="../img/b1-islas.png" alt="Simulación del modelo de islas"></div>
+    <figcaption><b>Figura 2.6.</b> Modelo de islas con N = 100 y <i>m</i> = 0.02. H<sub>S</sub> y H<sub>T</sub> bajan juntas y F<sub>ST</sub> oscila por debajo de la línea esperada de 0.111, sin fijarse ninguna población.</figcaption>
+  </figure>
+  <table class="compacta">
+    <caption><b>Tabla 2.8.</b> F<sub>ST</sub> esperado con 100 plantas por población según la tasa de migración.</caption>
+    <thead><tr><th>Migración <i>m</i></th><th class="c">0.001</th><th class="c">0.005</th><th class="c">0.01</th><th class="c">0.02</th><th class="c">0.05</th><th class="c">0.10</th></tr></thead>
+    <tbody>
+      <tr><td>Migrantes por generación (N<sub>e</sub>m)</td><td class="c">0.1</td><td class="c">0.5</td><td class="c">1</td><td class="c">2</td><td class="c">5</td><td class="c">10</td></tr>
+      <tr><td>F<sub>ST</sub> de equilibrio</td><td class="c">0.714</td><td class="c">0.333</td><td class="c">0.200</td><td class="c">0.111</td><td class="c">0.048</td><td class="c">0.024</td></tr>
+      <tr><td>Diferenciación (Wright)</td><td class="c">muy grande</td><td class="c">muy grande</td><td class="c">grande</td><td class="c">moderada</td><td class="c">poca</td><td class="c">poca</td></tr>
+    </tbody>
+  </table>
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · por qué el valor simulado queda algo por debajo</div>
+    <p>En 500 repeticiones con <i>m</i> = 0.02, el F<sub>ST</sub> promedio entre las generaciones 60 y 120 fue <b>0.094</b>, un poco menor que el 0.111 esperado. La fórmula de Wright supone un número infinito de islas; con solo seis poblaciones, cada una recibe una parte de sus propios genes de regreso y la diferenciación resulta menor. Con tasas de migración bajas hay además otra razón: el equilibrio tarda cerca de 1/(2m) generaciones en alcanzarse, así que con <i>m</i> = 0.005 las 120 generaciones del simulador no alcanzan (el promedio simulado fue 0.21, frente a 0.333 esperado).</p>
+  </div>
+
+  <!-- práctica 3 -->
+  <h3>Práctica 3 · Una planta autógama</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Elige <span class="ui">A selfing plant (90% selfing)</span>: 100 plantas, <i>m</i> = 0.005 y 90 % de autofecundación.</li>
+      <li>Mira la tarjeta <span class="ui">N<sub>e</sub> used</span>: aunque hay 100 plantas, la deriva actúa como si fueran <b>55</b>.</li>
+      <li>Pulsa <span class="ui">Run</span> y observa el F<sub>ST</sub>. Después baja <span class="ui">Selfing rate</span> a 0 %, pulsa <span class="ui">Reset</span> y <span class="ui">Run</span>, y compara.</li>
+    </ol>
+  </div>
+  <figure class="media">
+    <div class="marco"><img src="../img/b1-autogamia.png" alt="Simulación de una planta con 90 por ciento de autofecundación"></div>
+    <figcaption><b>Figura 2.7.</b> Planta con 90 % de autofecundación. El tamaño efectivo baja a 55 y la línea esperada de F<sub>ST</sub> sube a 0.476, frente a 0.333 de la misma población sin autofecundación.</figcaption>
+  </figure>
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Lo que aprendiste</div>
+    <p>La autofecundación produce endogamia: con una tasa S, el coeficiente de endogamia de equilibrio es <b>F = S/(2 − S)</b>, que con S = 0.9 vale 0.82. Esa endogamia reduce el tamaño efectivo a <b>N<sub>e</sub> = N/(1 + F)</b>, porque los gametos de una planta autógama no son muestras independientes de la población. Con menos N<sub>e</sub>, la deriva es más fuerte y la diferenciación mayor. En 500 repeticiones, el F<sub>ST</sub> promedio de las generaciones 60 a 120 fue <b>0.35 con autofecundación</b> frente a <b>0.21 sin ella</b>. Ninguno llega todavía a su equilibrio, pero la diferencia es clara. Por eso las especies autógamas suelen tener más variación entre poblaciones que dentro de ellas.</p>
+  </div>
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · lo que el simulador no muestra</div>
+    <p>El simulador sigue frecuencias alélicas, así que la autofecundación actúa solo a través de N<sub>e</sub>. El déficit de heterocigotos que produce, visible como un F<sub>IS</sub> alto y parecido en todos los loci, se estudia con datos reales en el Bloque 4.</p>
+  </div>
+
+  <!-- práctica 4 -->
+  <h3>Práctica 4 · Selección a favor de un alelo</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Elige <span class="ui">Selection on a favourable allele</span>: <i>s</i> = +0.10, es decir, el homocigoto AA deja 10 % más descendencia.</li>
+      <li>Pulsa <span class="ui">Run</span>. Todas las líneas suben juntas hacia 1.</li>
+      <li>Cambia <span class="ui">Selection s</span> a −0.10 y repite: ahora el alelo A desaparece.</li>
+      <li>Para ver cuándo gana el azar, pon <span class="ui">N per deme</span> en 10 y <span class="ui">Selection s</span> en +0.01, y repite varias veces con <span class="ui">New random seed</span>.</li>
+    </ol>
+  </div>
+  <figure class="media">
+    <div class="marco"><img src="../img/b1-seleccion.png" alt="Simulación de selección a favor de un alelo"></div>
+    <figcaption><b>Figura 2.8.</b> Selección direccional con <i>s</i> = +0.10. En 120 generaciones las seis poblaciones fijaron el alelo favorable. F<sub>ST</sub> se mantuvo bajo y al final la app lo muestra como 0, porque ya no queda variación que repartir.</figcaption>
+  </figure>
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Lo que aprendiste</div>
+    <p>Cuando la selección empuja en la <b>misma dirección</b> en todas las poblaciones, las mueve juntas y no las diferencia: en 500 repeticiones, la frecuencia promedio de A llegó a <b>0.93 en la generación 60 y a 0.99 en la 120</b>, mientras F<sub>ST</sub> promedió apenas 0.047. La selección que sí diferencia es la <b>divergente</b>, la que favorece alelos distintos en ambientes distintos. Deja una huella típica en datos reales: un locus o un carácter mucho más diferenciado que el resto, que se busca comparando P<sub>ST</sub> con F<sub>ST</sub> en el Bloque 9.</p>
+  </div>
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿gana la selección o la deriva?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:22%">4 N<sub>e</sub> |s|</th><th style="width:26%">Quién domina</th><th>Qué esperar</th></tr></thead>
+      <tbody>
+        <tr><td><b>Menos de 1</b></td><td>La deriva</td><td>El alelo se comporta casi como neutral; puede perderse aunque sea ventajoso. Ejemplo: N<sub>e</sub> = 10 y <i>s</i> = 0.01 dan 0.4.</td></tr>
+        <tr><td><b>1 a 10</b></td><td>Ambas</td><td>La selección orienta el cambio, pero el azar produce resultados variables entre poblaciones.</td></tr>
+        <tr><td><b>Más de 10</b></td><td>La selección</td><td>El cambio es casi determinista. Ejemplo: N<sub>e</sub> = 100 y <i>s</i> = 0.1 dan 40.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Consecuencia práctica: en poblaciones pequeñas, incluso las variantes adaptativas pueden perderse por azar. Conservar tamaños efectivos grandes también conserva la capacidad de adaptación.</p>
+  </div>
+
+  <!-- práctica 5 -->
+  <h3>Práctica 5 · Equilibrio entre mutación y deriva</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Elige <span class="ui">Mutation–drift balance</span>: 40 plantas por población, sin migración y <i>u</i> = 0.001.</li>
+      <li>Pulsa <span class="ui">Run</span> y observa las poblaciones que llegan a 0 o a 1: de vez en cuando se despegan, porque la mutación reintroduce el alelo perdido.</li>
+      <li>Sube <span class="ui">Mutation u</span> a 0.005 y repite. La diversidad dentro de las poblaciones se mantiene claramente más alta.</li>
+    </ol>
+  </div>
+  <figure class="media">
+    <div class="marco"><img src="../img/b1-mutacion.png" alt="Simulación del equilibrio mutación-deriva"></div>
+    <figcaption><b>Figura 2.9.</b> Mutación y deriva con N = 40 y <i>u</i> = 0.001. H<sub>S</sub> baja más despacio que la curva de deriva pura y las poblaciones fijadas no se quedan así para siempre.</figcaption>
+  </figure>
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Lo que aprendiste</div>
+    <p>La deriva elimina variación y la mutación la crea; con el tiempo ambas se equilibran. Para un locus con dos alelos y mutación simétrica, la diversidad de equilibrio es <b>H = 4N<sub>e</sub>u / (1 + 8N<sub>e</sub>u)</b>. Con N<sub>e</sub> = 40 y <i>u</i> = 0.001 vale 0.12, y con <i>u</i> = 0.005 sube a 0.31. En el simulador, H<sub>S</sub> en la generación 120 promedió 0.175, todavía en camino hacia ese equilibrio, cuando la deriva sola la habría dejado en 0.11. La lección para los marcadores reales es que los loci con tasas de mutación altas, como los microsatélites (10⁻⁵ a 10⁻³ por generación), conservan mucha más diversidad que las secuencias, cuyas tasas son miles de veces menores.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · uso en clase</div>
+    <p>Las cinco prácticas funcionan bien como taller de una sesión. Una dinámica útil es pedir a cada equipo que prediga, antes de pulsar <span class="ui">Run</span>, si F<sub>ST</sub> terminará arriba o abajo de la línea esperada. Después se comparan los resultados de todos los equipos, que usaron semillas distintas, para discutir por qué la deriva es un proceso aleatorio y por qué se necesitan varias poblaciones y varios loci para estimarla.</p>
+  </div>
+
+  <!-- 2.4 -->
+  <h2 id="s2-4"><span class="num">2.4</span>Teoría esencial en la app</h2>
+  <p>La sección <span class="ui">The theory, in plain language</span> reúne ocho temas desplegables. Cada uno trae la idea central, sus fórmulas, un recuadro con la regla práctica más importante y las referencias de donde salen. Se abre con el botón <span class="ui">Read the theory</span> de la presentación, que despliega automáticamente el primer tema.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b1-teoria.png" alt="Los ocho temas de teoría y la cita del programa"></div>
+    <figcaption><b>Figura 2.10.</b> Los ocho temas de teoría. Cada etiqueta de la derecha indica a qué bloque o tipo de dato se aplica. Debajo aparece la cita del programa.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 2.9.</b> Los ocho temas de teoría y dónde se amplían en este manual.</caption>
+    <thead><tr><th style="width:34%">Tema en la app</th><th style="width:12%">Etiqueta</th><th>Lo que aprendes</th><th style="width:11%">Manual</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">What population genetics actually asks</span></td><td>start here</td><td>Las cuatro preguntas de la disciplina, en orden: cuánta variación, si se organiza como predice el apareamiento aleatorio, cómo se reparte y qué historia la produjo.</td><td><span class="chip k0">1</span></td></tr>
+      <tr><td><span class="ui">Hardy–Weinberg: the null model everything is measured against</span></td><td>Block 4</td><td><i>p</i>², 2<i>pq</i>, <i>q</i>²; H<sub>e</sub>, H<sub>o</sub> y F; las tres causas de un F positivo y cómo distinguirlas.</td><td><span class="chip k4">B4</span></td></tr>
+      <tr><td><span class="ui">The four forces: drift, migration, mutation, selection</span></td><td>simulator</td><td>Pérdida de heterocigosis por deriva, equilibrio de islas, tasas de mutación y por qué los marcadores neutrales informan sobre la demografía.</td><td><span class="chip k1">B1</span></td></tr>
+      <tr><td><span class="ui">F-statistics and AMOVA: where the variation sits</span></td><td>Block 5</td><td>F<sub>IS</sub>, F<sub>ST</sub> y F<sub>IT</sub>; G<sub>ST</sub>, θ, G′<sub>ST</sub> y D de Jost; cuándo usar AMOVA.</td><td><span class="chip k5">B5</span></td></tr>
+      <tr><td><span class="ui">Dominant markers: what AFLP and ISSR can and cannot tell you</span></td><td>binary data</td><td>Cómo se estiman frecuencias a partir de bandas, qué análisis siguen siendo válidos y cuáles no.</td><td><span class="chip k3">B3</span> <span class="chip k5">B5</span></td></tr>
+      <tr><td><span class="ui">Plants are different: selfing, clones, pollen and seed</span></td><td>plant-specific</td><td>Sistema de apareamiento mixto, clonalidad, dispersión por polen y por semilla, estructura espacial fina.</td><td><span class="chip k2">B2</span> <span class="chip k9">B9</span></td></tr>
+      <tr><td><span class="ui">Sampling design: how many individuals, how many loci</span></td><td>before the lab</td><td>Tamaños mínimos de muestra y número de loci según el objetivo (tabla 2.10).</td><td><span class="chip k0">1</span></td></tr>
+      <tr><td><span class="ui">Which analysis answers which question</span></td><td>decision guide</td><td>Guía rápida de la pregunta al análisis y al bloque.</td><td><span class="chip k0">1</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja dato">
+    <div class="dato-cifra">80–95 %</div>
+    <div class="dato-txt"><div class="caja-t">El número que conviene recordar</div>En la mayoría de las plantas <b>alógamas</b>, entre el 80 y el 95 % de la variación genética está <b>dentro</b> de las poblaciones y solo del 5 al 20 % entre ellas. En las <b>autógamas</b> la proporción suele invertirse. Saber qué tipo de especie estudias cambia la lectura de todos los resultados.</div>
+  </div>
+
+  <table>
+    <caption><b>Tabla 2.10.</b> Diseño de muestreo sugerido en la app según el objetivo del estudio.</caption>
+    <thead><tr><th style="width:34%">Objetivo</th><th>Individuos por población</th><th>Loci</th></tr></thead>
+    <tbody>
+      <tr><td>Índices de diversidad (H<sub>e</sub>, N<sub>a</sub>)</td><td>20 a 30</td><td>8 a 10 microsatélites</td></tr>
+      <tr><td>Riqueza alélica y alelos raros</td><td>30 a 50</td><td>10 a 15 microsatélites</td></tr>
+      <tr><td>F<sub>ST</sub> y AMOVA</td><td>20 a 25, en al menos 5 poblaciones</td><td>10 o más microsatélites, o más de 100 bandas AFLP</td></tr>
+      <tr><td>Agrupamiento bayesiano</td><td>25 a 30</td><td>15 o más microsatélites</td></tr>
+      <tr><td>Pruebas de cuello de botella</td><td>30 o más</td><td>15 a 20 microsatélites</td></tr>
+      <tr><td>Estructura espacial fina</td><td>100 o más individuos con coordenadas</td><td>8 o más microsatélites</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿más loci o más individuos?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:36%">Si tu objetivo es…</th><th>… invierte en</th></tr></thead>
+      <tbody>
+        <tr><td><b>Estimar la diferenciación</b> (F<sub>ST</sub>, AMOVA, distancias)</td><td><b>Más loci.</b> Cada locus es una réplica independiente de la historia de las poblaciones, y la varianza de F<sub>ST</sub> baja más rápido al sumar loci que al sumar individuos.</td></tr>
+        <tr><td><b>Encontrar alelos raros o privados</b></td><td><b>Más individuos.</b> Un alelo con frecuencia de 2 % tiene apenas un 64 % de probabilidad de aparecer en 25 plantas diploides.</td></tr>
+        <tr><td><b>Detectar parentesco o estructura espacial</b></td><td><b>Ambos</b>, con individuos mapeados y marcadores muy polimórficos.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.5 -->
+  <h2 id="s2-5"><span class="num">2.5</span>Cómo citar y referencias</h2>
+  <p>Si PopGeneticsPro te ayudó en una tesis o un artículo, cita dos cosas: <b>el programa</b>, para que se sepa con qué herramienta y versión se hicieron los cálculos, y <b>los artículos originales de los métodos</b>, que son quienes merecen el crédito científico de cada índice o prueba.</p>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b1-cita.png" alt="Recuadro de cita y lista de referencias"></div>
+    <figcaption><b>Figura 2.11.</b> La sección <span class="ui">How to cite</span> con la cita lista para copiar y el inicio de <span class="ui">References behind the calculations</span>.</figcaption>
+  </figure>
+
+  <ol class="pasos">
+    <li>En la portada pulsa <span class="ui">How to cite</span>; la página baja hasta el recuadro de la cita.</li>
+    <li>Pulsa <span class="ui">Copy the citation</span>. El botón cambia a <i>✓ Copied</i> durante un par de segundos.</li>
+    <li>Pega la cita en tu gestor de referencias o en tu documento y ajústala al estilo de la revista.</li>
+    <li>Cita además los métodos que usaste (tabla 2.11). Cada resultado de la app nombra su método y el informe del Bloque 10 los reúne en el párrafo de métodos.</li>
+  </ol>
+
+  <div class="cita">Barrera-Guzmán, L. Á. (2026). PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data. Version 1.0.0.</div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · el DOI</div>
+    <p>Cuando la primera versión se archive en un repositorio con identificador de objeto digital (DOI), este aparecerá junto a la cita en la app y en el informe. Si tu programa ya lo muestra, inclúyelo: permite que cualquiera recupere exactamente la versión que usaste.</p>
+  </div>
+
+  <table>
+    <caption><b>Tabla 2.11.</b> Qué método citar según el análisis que reportes. La lista completa, con los datos de publicación, está en <span class="ui">References behind the calculations</span> y en el apéndice E.</caption>
+    <thead><tr><th style="width:32%">Si reportas…</th><th>Cita</th><th style="width:14%">Bloque</th></tr></thead>
+    <tbody>
+      <tr><td>Diversidad génica H<sub>e</sub> y distancia de Nei</td><td>Nei (1973, 1978)</td><td><span class="chip k3">3</span> <span class="chip k6">6</span></td></tr>
+      <tr><td>Tamaño de muestra por población</td><td>Hale, Burg y Steeves (2012)</td><td><span class="chip k2">2</span></td></tr>
+      <tr><td>Frecuencias con marcadores dominantes</td><td>Lynch y Milligan (1994)</td><td><span class="chip k3">3</span> <span class="chip k5">5</span></td></tr>
+      <tr><td>θ de Weir y Cockerham</td><td>Weir y Cockerham (1984)</td><td><span class="chip k5">5</span></td></tr>
+      <tr><td>G′<sub>ST</sub> y D de Jost</td><td>Hedrick (2005); Jost (2008)</td><td><span class="chip k5">5</span></td></tr>
+      <tr><td>AMOVA y Φ<sub>PT</sub></td><td>Excoffier, Smouse y Quattro (1992); Peakall, Smouse y Huff (1995)</td><td><span class="chip k5">5</span></td></tr>
+      <tr><td>Agrupamiento bayesiano y ΔK</td><td>Pritchard, Stephens y Donnelly (2000); Evanno, Regnaut y Goudet (2005)</td><td><span class="chip k7">7</span></td></tr>
+      <tr><td>D de Tajima y redes de haplotipos</td><td>Tajima (1989); Bandelt, Forster y Röhl (1999)</td><td><span class="chip k8">8</span></td></tr>
+      <tr><td>Verosimilitud de secuencias y variación entre sitios</td><td>Felsenstein (1981); Yang (1994)</td><td><span class="chip k8">8</span></td></tr>
+      <tr><td>Fechado molecular</td><td>To y colaboradores (2016); Drummond y colaboradores (2006); Gernhard (2008); Parham y colaboradores (2012)</td><td><span class="chip k8">8</span></td></tr>
+      <tr><td>Tasas de sustitución de referencia</td><td>Wolfe, Li y Sharp (1987); Kay, Whittall y Hodges (2006)</td><td><span class="chip k8">8</span></td></tr>
+      <tr><td>Escala del tiempo geológico</td><td>Cohen y colaboradores (2013, actualizada)</td><td><span class="chip k8">8</span></td></tr>
+      <tr><td>Cuellos de botella</td><td>Cornuet y Luikart (1996)</td><td><span class="chip k9">9</span></td></tr>
+      <tr><td>Estructura espacial y estadístico Sp</td><td>Vekemans y Hardy (2004)</td><td><span class="chip k9">9</span></td></tr>
+      <tr><td>Sistema de apareamiento</td><td>Ritland (2002)</td><td><span class="chip k9">9</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · reporta también los ajustes</div>
+    <p>Una cita del programa no basta para que otro investigador repita tu análisis. Indica en los métodos la versión de PopGeneticsPro, los ajustes que cambiaste (número de permutaciones, remuestreos, corrección por pruebas múltiples, modelo de sustitución) y la <b>semilla aleatoria</b>. El informe automático del Bloque 10 redacta ese párrafo con los valores que realmente usaste.</p>
+  </div>
+
+  <p style="margin-top:0.25in">Con la portada, el simulador y la teoría a la mano, el siguiente paso es cargar tus propios datos. El capítulo del Bloque 2 explica los formatos que acepta la app, la hoja de datos integrada, el diseñador de plantillas y el control de calidad, con los seis ejemplos paso a paso.</p>
+</section>
+
+</body>
+</html>

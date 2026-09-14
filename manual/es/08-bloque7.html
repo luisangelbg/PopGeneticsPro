@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Bloque 7: agrupamiento bayesiano y asignación</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  figure.mini .marco { width: 50%; margin: 0 auto; }
+  figure.mini figcaption { margin-left: 12%; margin-right: 12%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b7" data-pestana="B7" data-orden="8" style="--acento: var(--b7)">
+  <div class="cap-apertura">
+    <div class="cap-num">B7</div>
+    <div class="cap-etiqueta">Capítulo ocho · Bloque 7 · Clustering</div>
+    <h1 data-corto="Bloque 7 · Agrupamiento y asignación">Agrupamiento bayesiano y asignación</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">Hasta aquí las poblaciones eran las que tú declaraste. El Bloque 7 le pregunta a los datos cuántos grupos genéticos sostienen y a cuál pertenece cada individuo, con dos métodos complementarios: un modelo bayesiano de mezcla y el análisis discriminante de componentes principales (DAPC). Después asigna cada genotipo a la población donde es más probable y señala a los posibles migrantes.</p>
+    <div class="cap-franja"><span class="k7"></span><span class="k7" style="opacity:.75"></span><span class="k7" style="opacity:.5"></span><span class="k7" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>8.1</b>El modelo de mezcla</li>
+      <li><b>8.2</b>¿Cuántos grupos? ΔK, Ln P(D) y Puechmaille</li>
+      <li><b>8.3</b>DAPC</li>
+      <li><b>8.4</b>Asignación y migrantes</li>
+      <li><b>8.5</b>Ajustes, tablas y figuras del bloque</li>
+      <li><b>8.6</b>Paso a paso: agave con AFLP</li>
+    </ul>
+  </div>
+
+  <!-- 8.1 -->
+  <h2 id="s8-1"><span class="num">8.1</span>El modelo de mezcla</h2>
+  <p class="lead">Si las plantas que muestreaste vienen de varios acervos genéticos, cada acervo tiene sus propias frecuencias alélicas. El modelo de Pritchard, Stephens y Donnelly (2000) busca esos acervos sin saber de antemano de dónde vino cada planta.</p>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>La idea en una frase</div>
+    <p>Se suponen <b>K grupos</b>, cada uno con sus frecuencias alélicas <b>P</b>, y para cada individuo la fracción de su genoma que proviene de cada grupo, <b>Q</b>. El algoritmo reparte las copias de los alelos entre los grupos de modo que, dentro de cada grupo, los genotipos se ajusten lo mejor posible al equilibrio de Hardy–Weinberg y los loci sean independientes. Un individuo con Q = (1, 0, 0) viene por completo del grupo 1; uno con Q = (0.6, 0.4, 0) es una mezcla de los grupos 1 y 2.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Tres acervos genéticos y la pertenencia Q de cinco individuos">
+      <defs><marker id="f81" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#9aa3b2"/></marker></defs>
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#7e3fb0"><text x="20" y="16">K = 3 GRUPOS Y SUS FRECUENCIAS (P)</text><text x="400" y="16">PERTENENCIA DE CADA INDIVIDUO (Q)</text></g>
+      <g transform="translate(20 34)" font-size="10">
+        <g><rect x="0" y="0" width="100" height="120" rx="8" fill="#f1eaf7"/><text x="50" y="18" text-anchor="middle" font-weight="600" fill="#5b2d82">Grupo 1</text>
+          <rect x="20" y="36" width="16" height="70" fill="#5b2d82"/><rect x="42" y="86" width="16" height="20" fill="#5b2d82"/><rect x="64" y="96" width="16" height="10" fill="#5b2d82"/></g>
+        <g transform="translate(118 0)"><rect x="0" y="0" width="100" height="120" rx="8" fill="#fbeee4"/><text x="50" y="18" text-anchor="middle" font-weight="600" fill="#c2410c">Grupo 2</text>
+          <rect x="20" y="96" width="16" height="10" fill="#c2410c"/><rect x="42" y="46" width="16" height="60" fill="#c2410c"/><rect x="64" y="76" width="16" height="30" fill="#c2410c"/></g>
+        <g transform="translate(236 0)"><rect x="0" y="0" width="100" height="120" rx="8" fill="#e5f3f1"/><text x="50" y="18" text-anchor="middle" font-weight="600" fill="#0f766e">Grupo 3</text>
+          <rect x="20" y="86" width="16" height="20" fill="#0f766e"/><rect x="42" y="96" width="16" height="10" fill="#0f766e"/><rect x="64" y="36" width="16" height="70" fill="#0f766e"/></g>
+        <g fill="#5d6472" font-size="9" text-anchor="middle"><text x="48" y="136">alelos a · b · c de un locus</text><text x="166" y="136">el mismo locus</text><text x="284" y="136">el mismo locus</text></g>
+      </g>
+      <path d="M362 94 H392" stroke="#9aa3b2" stroke-width="1.6" marker-end="url(#f81)"/>
+      <g transform="translate(410 34)">
+        <line x1="0" y1="0" x2="0" y2="150" stroke="#9aa3b2"/>
+        <g font-size="9" fill="#5d6472" text-anchor="end"><text x="-4" y="4">1</text><text x="-4" y="79">0.5</text><text x="-4" y="154">0</text></g>
+        <!-- individuo 1: puro grupo 1 -->
+        <rect x="10" y="0" width="40" height="150" fill="#5b2d82"/>
+        <!-- individuo 2: 0.6 grupo 1, 0.4 grupo 2 -->
+        <rect x="62" y="60" width="40" height="90" fill="#5b2d82"/><rect x="62" y="0" width="40" height="60" fill="#c2410c"/>
+        <!-- individuo 3: puro grupo 2 -->
+        <rect x="114" y="0" width="40" height="150" fill="#c2410c"/>
+        <!-- individuo 4: 0.2 / 0.1 / 0.7 -->
+        <rect x="166" y="120" width="40" height="30" fill="#5b2d82"/><rect x="166" y="105" width="40" height="15" fill="#c2410c"/><rect x="166" y="0" width="40" height="105" fill="#0f766e"/>
+        <!-- individuo 5: puro grupo 3 -->
+        <rect x="218" y="0" width="40" height="150" fill="#0f766e"/>
+        <g font-size="9.5" fill="#111" text-anchor="middle"><text x="30" y="168">puro</text><text x="82" y="168">mezcla</text><text x="134" y="168">puro</text><text x="186" y="168">mezcla</text><text x="238" y="168">puro</text></g>
+        <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="30" y="182">(1, 0, 0)</text><text x="82" y="182">(0.6, 0.4, 0)</text><text x="134" y="182">(0, 1, 0)</text><text x="186" y="182">(0.2, 0.1, 0.7)</text><text x="238" y="182">(0, 0, 1)</text></g>
+      </g>
+    </svg>
+    <figcaption><b>Figura 8.1.</b> A la izquierda, tres grupos con frecuencias distintas para los alelos de un locus. A la derecha, cada barra es un individuo y sus colores suman 1: la fracción de su genoma que viene de cada grupo. Así se lee la gráfica de barras de pertenencia (<i>barplot</i>) de la app.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 8.1.</b> Los elementos del modelo y lo que la app reporta de cada uno.</caption>
+    <thead><tr><th style="width:24%">Elemento</th><th>Qué es</th><th style="width:30%">Dónde aparece</th></tr></thead>
+    <tbody>
+      <tr><td><b>K</b></td><td>Número de grupos que se prueba. La app corre varios valores, de <span class="ui">K from</span> a <span class="ui">K to</span>.</td><td>Tabla de K y gráficas de la tarjeta 2.</td></tr>
+      <tr><td><b>Q</b> (pertenencia)</td><td>Fracción del genoma de cada individuo que viene de cada grupo; promedio de todas las iteraciones muestreadas.</td><td>Gráfica de barras, tabla por población y <span class="ui">Q matrix (CSV)</span>.</td></tr>
+      <tr><td><b>P</b> (frecuencias)</td><td>Frecuencias alélicas de cada grupo, con una distribución previa de Dirichlet con λ = 1 (frecuencias independientes entre grupos).</td><td>Se usan en el cálculo; no se muestran.</td></tr>
+      <tr><td><b>α</b> (mezcla)</td><td>Qué tan mezclados están los individuos: pequeño (&lt; 0.2), casi todos puros; cercano a 1 o mayor, mezcla generalizada o K excesivo. Se estima en cada iteración.</td><td>Interpretación de la tarjeta 2.</td></tr>
+      <tr><td><b>Ln P(D)</b></td><td>Estimación de la verosimilitud del modelo con K grupos: media de ln L menos la mitad de su varianza durante el muestreo.</td><td>Tabla de K y gráfica <span class="ui">Ln P(D) against K</span>.</td></tr>
+      <tr><td><b>Burn-in</b> e <b>iteraciones</b></td><td>Iteraciones que se descartan mientras la cadena se estabiliza, y las que se promedian después.</td><td><span class="ui">Burn-in iterations</span> · <span class="ui">Sampled iterations</span>.</td></tr>
+      <tr><td><b>Réplicas</b></td><td>Corridas independientes con cada K, con semillas distintas; permiten medir la variación de Ln P(D) y el acuerdo entre soluciones.</td><td><span class="ui">Replicates per K</span>; columna H′.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · detalles de esta implementación</div>
+    <p>La app ofrece el modelo con mezcla (predeterminado) y el modelo sin mezcla, en el que cada individuo pertenece a un solo grupo; en ambos las frecuencias alélicas son independientes entre grupos. Las bandas dominantes se tratan como loci haploides, una copia por individuo. Los datos faltantes simplemente no aportan. Las corridas se hacen en un hilo de fondo, así que puedes seguir usando la página; al abrir la app con doble clic algunos navegadores no permiten ese hilo y las corridas se hacen en la página misma, con los mismos resultados.</p>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · lo que el modelo supone</div>
+    <p>El modelo espera equilibrio de Hardy–Weinberg y loci independientes dentro de cada grupo. En plantas eso falla con frecuencia: la <b>autofecundación</b> y la <b>propagación clonal</b> crean déficit de heterocigotos y ligamiento; las <b>familias</b> muestreadas juntas forman grupos que no son poblaciones; el <b>aislamiento por distancia</b> convierte un gradiente continuo en grupos artificiales; y un <b>muestreo desigual</b> hace que ΔK subestime K. Antes de interpretar, revisa F<sub>IS</sub> y el ligamiento del Bloque 4 y el aislamiento por distancia del Bloque 6.</p>
+  </div>
+
+  <!-- 8.2 -->
+  <h2 id="s8-2"><span class="num">8.2</span>¿Cuántos grupos? ΔK, Ln P(D) y Puechmaille</h2>
+  <p>Ningún número decide K por sí solo. La app corre el modelo con varios K y varias réplicas, y reúne cuatro evidencias: la verosimilitud Ln P(D), el ΔK de Evanno, los estimadores de Puechmaille y el acuerdo entre réplicas. La decisión final se toma mirando también las gráficas de barras.</p>
+
+  <table class="compacta">
+    <caption><b>Tabla 8.2.</b> Los criterios para elegir K. L(K) es el Ln P(D) medio de las réplicas con K grupos y s su desviación estándar.</caption>
+    <thead><tr><th style="width:22%">Criterio</th><th style="width:34%">Cálculo</th><th>Cómo se lee</th></tr></thead>
+    <tbody>
+      <tr><td><b>Ln P(D)</b><br><span class="small">Pritchard y colaboradores (2000)</span></td><td class="f">media(ln L) − varianza(ln L)/2</td><td>Suele subir hasta el K mejor sostenido y luego estabilizarse o bajar, mientras las réplicas se dispersan (s crece).</td></tr>
+      <tr><td><b>ΔK</b><br><span class="small">Evanno y colaboradores (2005)</span></td><td class="f">L′(K) = L(K) − L(K−1)<br>|L″(K)| = |L′(K+1) − L′(K)|<br>ΔK = |L″(K)| / s</td><td>Mide qué tan brusco es el cambio de Ln P(D). Encuentra el nivel superior de estructura; no puede elegir K = 1 ni el último K, y necesita dos réplicas o más.</td></tr>
+      <tr><td><b>MedMeaK · MaxMeaK · MedMedK · MaxMedK</b><br><span class="small">Puechmaille (2016)</span></td><td class="f">grupos a los que al menos una población pertenece con media (Mea) o mediana (Med) de Q ≥ 0.5; mediana (Med) o máximo (Max) entre réplicas</td><td>Pensados para muestreos desiguales. Su valor más alto estima K. Necesitan poblaciones declaradas.</td></tr>
+      <tr><td><b>H′</b><br><span class="small">Jakobsson y Rosenberg (2007)</span></td><td class="f">1 − ‖Q<sub>1</sub> − Q<sub>2</sub>‖ / √(2N), promedio entre pares de réplicas alineadas</td><td>1 = réplicas idénticas. Por debajo de 0.90, las corridas llegan a soluciones distintas.</td></tr>
+      <tr><td><b>Individuos con Q ≥ 0.8</b></td><td class="f">individuos con al menos 80&nbsp;% de su genoma en un grupo (Q de consenso)</td><td>Si ninguno pasa de 0.8, los grupos no separan individuos: la señal es débil.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico · ΔK del agave en K = 3</div>
+    <p>Las medias de Ln P(D) de las tres réplicas son −2768.9 con K = 2, −2699.7 con K = 3 y −2671.5 con K = 4, y la desviación estándar con K = 3 es 4.04.</p>
+    <ol class="pasos" style="margin-bottom:0.04in">
+      <li>L′(3) = −2699.7 − (−2768.9) = 69.2 y L′(4) = −2671.5 − (−2699.7) = 28.2.</li>
+      <li>|L″(3)| = |28.2 − 69.2| = 41.0.</li>
+      <li>ΔK(3) = 41.0 / 4.04 = 10.1. La app muestra 10.18 porque trabaja con los valores sin redondear.</li>
+    </ol>
+    <p style="margin:0">Con K = 4, Ln P(D) es mayor, pero su desviación estándar (10.94) casi triplica y ΔK(4) baja a 5.43: ΔK prefiere K = 3 aunque el mejor ajuste esté en K = 4.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · elegir K</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>ΔK, Ln P(D) y Puechmaille coinciden</b></td><td>Ese K está bien sostenido. Confírmalo en la gráfica de barras.</td></tr>
+        <tr><td><b>ΔK da un K menor que Ln P(D)</b></td><td>ΔK marca el nivel superior de estructura; el K de Ln P(D) puede ser la subdivisión dentro de él. Elige el mayor K en el que cada grupo tiene individuos con Q alto y las réplicas concuerdan.</td></tr>
+        <tr><td><b>Ln P(D) es máximo en K = 1</b></td><td>El pico de ΔK no es evidencia de grupos por sí solo, porque ΔK nunca elige K = 1. Acepta K = 2 solo si hay individuos con Q ≥ 0.8 en ambos grupos.</td></tr>
+        <tr><td><b>H′ baja de 0.90</b></td><td>Réplicas en soluciones distintas: alarga las cadenas, aumenta las réplicas y no interpretes la gráfica de consenso de ese K.</td></tr>
+        <tr><td><b>Un estimador de Puechmaille cuenta un grupo cuyo Q medio no llega a 0.6</b> en ninguna población</td><td>El conteo es frágil y la app lo advierte: confírmalo con la gráfica de barras y con los individuos con Q ≥ 0.8.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>El agave: cuatro grupos</h3>
+  <p>Las 80 plantas de agave con 60 bandas AFLP, con los ajustes predeterminados (K de 1 a 6, 3 réplicas, 5000 + 10&nbsp;000 iteraciones), dan un caso típico en el que ΔK y Ln P(D) no coinciden.</p>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b7-agave-k.png" alt="Tabla de K del agave"></div>
+    <figcaption><b>Figura 8.2.</b> <span class="ui">How many clusters?</span> con el agave. Ln P(D) sube hasta K = 4 (−2671.5) y luego baja mientras la desviación estándar crece (17.47 y 55.68). ΔK tiene su pico en K = 3 (10.18). Los estimadores de Puechmaille llegan a 4 en K = 4 y bajan después; la app advierte que el grupo menos usado, el de Guerrero, apenas llega a 0.52 de pertenencia media. H′ se mantiene arriba de 0.97 hasta K = 4 y de 14 a 15 plantas tienen Q ≥ 0.8 con K de 2 a 4.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-graficas-k.png" alt="Ln P(D) y ΔK contra K"></div>
+    <figcaption><b>Figura 8.3.</b> Ln P(D) medio ± desviación estándar (izquierda; el punto naranja es el máximo) y ΔK (derecha). La barra de K = 6 muestra cómo se dispersan las réplicas cuando K es excesivo.</figcaption>
+  </figure>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-agave-puechmaille.png" alt="Estimadores de Puechmaille"></div>
+    <figcaption><b>Figura 8.4.</b> Estimadores de Puechmaille contra el K probado. La línea punteada es K = K: mientras los estimadores la siguen, cada grupo nuevo lo usa alguna población. Se separan de ella después de K = 4.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-barras.png" alt="Gráfica de barras de pertenencia con K = 4"></div>
+    <figcaption><b>Figura 8.5.</b> <span class="ui">Membership of every individual</span> con K = 4 (consenso de 3 réplicas). Cada población tiene su propio grupo, con pertenencia media de 0.61 (Oaxaca norte), 0.65 (Oaxaca sur), 0.68 (Puebla) y 0.52 (Guerrero), la más mezclada. Las cuatro poblaciones muestreadas son los cuatro grupos genéticos.</figcaption>
+  </figure>
+
+  <h3>Cuando no hay grupos claros: el maíz con microsatélites</h3>
+  <p>Las tres razas de maíz difieren, pero poco: θ = 0.049 en el capítulo 6. Con 8 microsatélites y los ajustes predeterminados, el modelo de mezcla no las separa, y el ejemplo muestra por qué no basta con leer ΔK.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-ssr-k.png" alt="Tabla de K del maíz con microsatélites"></div>
+    <figcaption><b>Figura 8.6.</b> El maíz con microsatélites. ΔK tiene un pico claro en K = 2 (13.04), pero Ln P(D) es máximo en K = 1 (−1783.4) y ningún individuo llega a Q ≥ 0.8 con K de 2 a 5. Los estimadores de Puechmaille cuentan 2 grupos en K = 2, pero la app advierte que la pertenencia media apenas pasa de 0.5.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-ssr-barras.png" alt="Gráfica de barras del maíz con K = 2"></div>
+    <figcaption><b>Figura 8.7.</b> La gráfica de barras con K = 2: todas las plantas quedan entre 0.45 y 0.56 en cada grupo, y las tres razas tienen pertenencia media de 0.49 a 0.52. No hay grupos. Compárala con la figura 8.5.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>No detectar grupos no es lo mismo que no haber diferenciación</div>
+    <p>El AMOVA del capítulo 6 encontró diferencias significativas entre estas razas, y el DAPC de la sección 8.3 las distingue en 72&nbsp;% de los casos. El modelo bayesiano necesita diferenciación moderada, o muchos loci, para formar grupos de individuos; con diferencias pequeñas y pocos loci, la respuesta honesta es “un grupo”. Además, los datos simulados de este ejemplo tienen un déficit de heterocigotos dentro de las razas (F = 0.16), que el modelo no espera.</p>
+  </div>
+
+  <!-- 8.3 -->
+  <h2 id="s8-3"><span class="num">8.3</span>DAPC</h2>
+  <p>El análisis discriminante de componentes principales (Jombart, Devillard y Balloux, 2010) no usa un modelo genético: no supone Hardy–Weinberg ni loci independientes. Primero resume los genotipos con un análisis de componentes principales (PCA) y después busca los ejes que mejor separan a los grupos, ya sean las poblaciones que declaraste o grupos que el propio método encuentra.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 176" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Pasos del DAPC">
+      <defs><marker id="f82" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7e3fb0"/></marker></defs>
+      <g font-size="10.5" text-anchor="middle">
+        <g><rect x="10" y="30" width="150" height="96" rx="10" fill="#f1eaf7" stroke="#d9c7ea"/>
+          <text x="85" y="54" font-weight="600" fill="#5b2d82">1 · Frecuencias</text>
+          <text x="85" y="74" fill="#111" font-size="9.5">individuos × alelos</text>
+          <text x="85" y="90" fill="#111" font-size="9.5">(0, 0.5 o 1 por alelo;</text>
+          <text x="85" y="106" fill="#111" font-size="9.5">presencia de cada banda)</text></g>
+        <g><rect x="190" y="30" width="150" height="96" rx="10" fill="#f1eaf7" stroke="#d9c7ea"/>
+          <text x="265" y="54" font-weight="600" fill="#5b2d82">2 · PCA</text>
+          <text x="265" y="74" fill="#111" font-size="9.5">se conservan los primeros</text>
+          <text x="265" y="90" fill="#111" font-size="9.5">componentes: el menor de</text>
+          <text x="265" y="106" fill="#111" font-size="9.5">90 % de varianza y N/3</text></g>
+        <g><rect x="370" y="30" width="150" height="96" rx="10" fill="#f1eaf7" stroke="#d9c7ea"/>
+          <text x="445" y="54" font-weight="600" fill="#5b2d82">3 · Grupos</text>
+          <text x="445" y="74" fill="#111" font-size="9.5">poblaciones declaradas,</text>
+          <text x="445" y="90" fill="#111" font-size="9.5">o k-means sobre los</text>
+          <text x="445" y="106" fill="#111" font-size="9.5">componentes con K por BIC</text></g>
+        <g><rect x="550" y="30" width="140" height="96" rx="10" fill="#7e3fb0"/>
+          <text x="620" y="54" font-weight="600" fill="#fff">4 · Discriminante</text>
+          <text x="620" y="74" fill="#fff" font-size="9.5">ejes que maximizan la</text>
+          <text x="620" y="90" fill="#fff" font-size="9.5">varianza entre grupos</text>
+          <text x="620" y="106" fill="#fff" font-size="9.5">frente a la de dentro</text></g>
+        <path d="M162 78 H186" stroke="#7e3fb0" stroke-width="1.6" marker-end="url(#f82)"/>
+        <path d="M342 78 H366" stroke="#7e3fb0" stroke-width="1.6" marker-end="url(#f82)"/>
+        <path d="M522 78 H546" stroke="#7e3fb0" stroke-width="1.6" marker-end="url(#f82)"/>
+      </g>
+      <text x="350" y="152" font-size="9.5" fill="#5d6472" text-anchor="middle">Resultado: coordenadas discriminantes, probabilidad de pertenencia a cada grupo y porcentaje de reasignación</text>
+    </svg>
+    <figcaption><b>Figura 8.8.</b> Los cuatro pasos del DAPC. Conservar pocos componentes pierde información; conservar demasiados hace que los ejes discriminantes se ajusten a los individuos concretos de la muestra.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Reasignación y validación dejando uno fuera</div>
+    <p>El DAPC calcula, para cada individuo, la probabilidad de pertenecer a cada grupo, y lo <b>reasigna</b> al más probable. Ese porcentaje de éxito es optimista, porque los mismos individuos definieron los ejes. La app calcula también el éxito <b>dejando uno fuera</b>: cada individuo se clasifica con un análisis discriminante construido sin él. Esa es la cifra que conviene reportar y comparar con el azar (1/número de grupos).</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Tabla 8.3.</b> Éxito del DAPC con el maíz según los componentes conservados. La reasignación crece sin límite; el éxito dejando uno fuera se estabiliza.</caption>
+    <thead><tr><th>Componentes conservados</th><th class="c">2</th><th class="c">6</th><th class="c">10</th><th class="c">12</th><th class="c">15</th><th class="c">18</th><th class="c">22 (automático)</th><th class="c">25</th></tr></thead>
+    <tbody>
+      <tr><td>Varianza retenida (%)</td><td class="c">17.4</td><td class="c">42.7</td><td class="c">60.9</td><td class="c">68.1</td><td class="c">77.2</td><td class="c">84.5</td><td class="c">91.0</td><td class="c">94.4</td></tr>
+      <tr><td>Reasignación (%)</td><td class="c">56.0</td><td class="c">68.0</td><td class="c">77.3</td><td class="c">80.0</td><td class="c">88.0</td><td class="c">92.0</td><td class="c">94.7</td><td class="c">92.0</td></tr>
+      <tr><td><b>Dejando uno fuera (%)</b></td><td class="c">54.7</td><td class="c">64.0</td><td class="c">68.0</td><td class="c">70.7</td><td class="c">70.7</td><td class="c">72.0</td><td class="c">72.0</td><td class="c">76.0</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-dapc.png" alt="Resultados del DAPC con el agave"></div>
+    <figcaption><b>Figura 8.9.</b> <span class="ui">DAPC results</span> con el agave: 26 componentes (81.2&nbsp;% de la varianza) y 3 ejes discriminantes. La reasignación es 98.8&nbsp;% y el éxito dejando uno fuera 82.5&nbsp;%, frente a 25&nbsp;% esperado por azar. Oaxaca norte (70&nbsp;%) y Guerrero (75&nbsp;%) son los grupos menos distintos.</figcaption>
+  </figure>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-agave-dapc-dispersion.png" alt="Dispersión del DAPC"></div>
+    <figcaption><b>Figura 8.10.</b> Los dos primeros ejes discriminantes (45.3&nbsp;% y 30&nbsp;% de la varianza entre grupos), con elipses al 95&nbsp;% y centroides. Puebla queda a la izquierda, Oaxaca norte a la derecha y Oaxaca sur abajo; Guerrero, en el centro, se traslapa con Puebla y con Oaxaca norte, y es también la población que más plantas recibe en la asignación de la sección 8.4.</figcaption>
+  </figure>
+
+  <figure class="mini">
+    <div class="marco"><img src="../img/b7-agave-compoplot.png" alt="Probabilidades de pertenencia del DAPC"></div>
+    <figcaption><b>Figura 8.11.</b> Probabilidades de pertenencia del DAPC (<i>compoplot</i>). Casi todas las plantas tienen probabilidad cercana a 1 de pertenecer a su población: es la reasignación optimista de la figura 8.9. No son proporciones de ancestría como las Q de la figura 8.5, sino la certeza de la clasificación.</figcaption>
+  </figure>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-issr-dapc.png" alt="DAPC con grupos de k-means en las razas ISSR"></div>
+    <figcaption><b>Figura 8.12.</b> DAPC con grupos de k-means en las 15 razas con ISSR. La app advierte que el BIC sigue bajando en el mayor K probado (7): es el borde de la búsqueda, no una estimación. Los grupos tienen de 1 a 3 razas; la que queda sola no se evalúa dejándola fuera.</figcaption>
+  </figure>
+
+  <figure class="mini">
+    <div class="marco"><img src="../img/b7-issr-bic.png" alt="Curva de BIC con las razas ISSR"></div>
+    <figcaption><b>Figura 8.13.</b> El BIC de las razas baja de 18.3 (K = 1) a 7.0 (K = 7) sin mínimo ni codo. Mejor usar la PCoA y el árbol del Bloque 6.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · leer un DAPC</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>El éxito dejando uno fuera supera con claridad al azar</b></td><td>Los grupos son distinguibles genéticamente. Reporta esa cifra, no la reasignación.</td></tr>
+        <tr><td><b>La reasignación supera por mucho al éxito dejando uno fuera</b></td><td>Parte del éxito es ajuste a la muestra. Prueba varios números de componentes y quédate con aquel a partir del cual el éxito dejando uno fuera deja de mejorar (tabla 8.3).</td></tr>
+        <tr><td><b>Un grupo tiene éxito bajo</b> (menos de 70&nbsp;%)</td><td>Sus individuos se confunden con otros grupos; mira con cuáles en la gráfica de dispersión.</td></tr>
+        <tr><td><b>Grupos encontrados por k-means</b></td><td>El éxito es alto por construcción. Busca en la curva de BIC un mínimo o un codo; si sigue bajando en el mayor K probado, no hay óptimo y los grupos son solo una partición cómoda.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 8.4 -->
+  <h2 id="s8-4"><span class="num">8.4</span>Asignación y migrantes</h2>
+  <p>La prueba de asignación responde otra pregunta: ¿cada individuo se parece más a la población donde lo colectaste o a otra? Calcula la probabilidad de su genotipo multilocus en cada población, suponiendo Hardy–Weinberg (p² para un homocigoto, 2pq para un heterocigoto, multiplicando entre loci), y lo asigna a la población donde esa probabilidad es mayor (Paetkau y colaboradores, 1995; Rannala y Mountain, 1997).</p>
+
+  <table class="compacta">
+    <caption><b>Tabla 8.4.</b> Las dos formas de estimar las frecuencias alélicas de cada población. n<sub>a</sub> es el número de copias del alelo, n el total de copias en la población y k el número de alelos del locus en todos los datos.</caption>
+    <thead><tr><th style="width:30%">Método</th><th style="width:30%">Frecuencia</th><th>Comentario</th></tr></thead>
+    <tbody>
+      <tr><td><b>Rannala y Mountain (1997)</b><br><span class="small">bayesiano, predeterminado</span></td><td class="f">(n<sub>a</sub> + 1/k) / (n + 1)</td><td>Un alelo ausente en la población recibe una frecuencia pequeña pero razonable. Es el método recomendado.</td></tr>
+      <tr><td><b>Paetkau y colaboradores (1995)</b></td><td class="f">n<sub>a</sub> / n, o 0.01 si el alelo falta</td><td>El valor 0.01 es una convención arbitraria; se incluye para comparar con estudios antiguos.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico · una planta AA de la población 1</div>
+    <p>Un locus con dos alelos. En la población 1 hay 30 copias de A y 10 de B (20 plantas); en la población 2, 12 de A y 28 de B. La planta es AA y se colectó en la población 1, así que antes de calcular se quitan sus dos copias de A de esa población (<b>dejando uno fuera</b>): quedan 28 de 38.</p>
+    <table class="compacta" style="margin:0.04in 0 0.06in">
+      <thead><tr><th style="width:22%">Población</th><th>Frecuencia de A (Rannala y Mountain)</th><th class="c" style="width:16%">L = p²</th><th class="c" style="width:12%">ln L</th></tr></thead>
+      <tbody>
+        <tr><td>1 (su población)</td><td>(28 + 1/2) / (38 + 1) = 0.731</td><td class="c">0.534</td><td class="c">−0.63</td></tr>
+        <tr><td>2</td><td>(12 + 1/2) / (40 + 1) = 0.305</td><td class="c">0.093</td><td class="c">−2.38</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:0">El genotipo es 5.7 veces más probable en la población 1: se asigna a su propia población. Con varios loci se suman los ln L de cada locus. Sin dejarla fuera, la frecuencia de A en su población sería 0.744 y la asignación correcta parecería un poco más fácil de lo que es.</p>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>La prueba de migrantes de primera generación</div>
+    <p>Un individuo mal asignado no es necesariamente un migrante: si las poblaciones se parecen, muchos residentes encajan casi igual de bien en otra. Para separar ambos casos, la app calcula λ = ln(L<sub>home</sub>/L<sub>max</sub>), donde L<sub>home</sub> es la verosimilitud en la población donde se colectó y L<sub>max</sub> la mayor entre todas (Paetkau y colaboradores, 2004). λ vale 0 si el individuo encaja mejor en su población y es negativo si encaja mejor en otra. Luego simula genotipos de residentes de esa población (500 por omisión) y calcula λ para cada uno; cada genotipo simulado se evalúa contra un remuestreo con reemplazo de la población, para que tenga el mismo error de muestreo que un residente real evaluado dejándolo fuera. El valor P es la fracción de residentes simulados con un λ tan bajo o más. Con P &lt; α (0.01 por omisión) el individuo se marca como posible migrante.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 198" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Distribución de λ en residentes simulados y el valor observado">
+      <g transform="translate(70 4)">
+        <line x1="0" y1="150" x2="560" y2="150" stroke="#111"/>
+        <g font-size="9.5" fill="#5d6472" text-anchor="middle">
+          <text x="0" y="166">−8</text><text x="70" y="166">−7</text><text x="140" y="166">−6</text><text x="210" y="166">−5</text><text x="280" y="166">−4</text><text x="350" y="166">−3</text><text x="420" y="166">−2</text><text x="490" y="166">−1</text><text x="560" y="166">0</text>
+        </g>
+        <text x="280" y="186" font-size="10.5" fill="#111" text-anchor="middle">λ = ln(L<tspan dy="3" font-size="8">home</tspan><tspan dy="-3">/L</tspan><tspan dy="3" font-size="8">max</tspan><tspan dy="-3">) de 500 residentes simulados</tspan></text>
+        <g fill="#d9c7ea">
+          <rect x="316" y="146" width="30" height="4"/><rect x="351" y="140" width="30" height="10"/><rect x="386" y="130" width="30" height="20"/><rect x="421" y="112" width="30" height="38"/><rect x="456" y="92" width="30" height="58"/><rect x="491" y="64" width="30" height="86"/>
+        </g>
+        <rect x="532" y="10" width="26" height="140" fill="#7e3fb0"/>
+        <text x="524" y="22" font-size="9.5" fill="#5b2d82" text-anchor="end">la mayoría encaja mejor en su población (λ = 0)</text>
+        <line x1="163" y1="36" x2="163" y2="150" stroke="#b4234a" stroke-width="2" stroke-dasharray="4 3"/>
+        <circle cx="163" cy="150" r="5" fill="#b4234a"/>
+        <text x="171" y="50" font-size="10.5" fill="#b4234a" font-weight="600">observado: λ = −5.67</text>
+        <text x="171" y="66" font-size="9.5" fill="#b4234a">ninguno de los 500 simulados llega tan bajo</text>
+        <text x="171" y="81" font-size="9.5" fill="#b4234a">P = (0 + 1)/(500 + 1) = 0.002 &lt; 0.01 → posible migrante</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 8.14.</b> La idea de la prueba de migrantes, con los valores de la planta Oaxaca_south_12 del agave. La distribución es esquemática: la de la app sale de los genotipos simulados de la población donde se colectó la planta.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · asignación y migrantes</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>La autoasignación es alta</b></td><td>Las poblaciones son distinguibles. Compárala con el azar (1/número de poblaciones) y con el F<sub>ST</sub> del capítulo 6: sube con la diferenciación y con el número y la variabilidad de los loci (Cornuet y colaboradores, 1999).</td></tr>
+        <tr><td><b>Dos poblaciones intercambian muchos individuos</b> en la matriz</td><td>Son el par menos diferenciado. No es prueba de flujo génico actual.</td></tr>
+        <tr><td><b>Pocos individuos marcados como migrantes</b></td><td>Con N individuos y α = 0.01 se esperan unos N × 0.01 por azar. Si el número marcado no pasa mucho de ese valor, trátalos como candidatos a revisar, no como migrantes probados.</td></tr>
+        <tr><td><b>Un individuo mal asignado con P alto</b></td><td>Es un residente que se parece a otra población, no un migrante.</td></tr>
+        <tr><td><b>Poblaciones con menos de 5 individuos</b></td><td>No entran a la prueba: sus frecuencias no son confiables.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">La prueba supone que todas las poblaciones de origen posibles están en los datos. Un migrante de una población no muestreada aparece como un individuo raro en todas.</p>
+  </div>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-agave-asignacion.png" alt="Resultados de la asignación con el agave"></div>
+    <figcaption><b>Figura 8.15.</b> <span class="ui">Assignment results</span> con el agave: 87.5&nbsp;% de las plantas se asignan a su población (70 de 80). Una planta, Oaxaca_south_12, se marca como posible migrante hacia Guerrero (P = 0.002), pero con 80 plantas se espera 0.8 por azar, y la app lo dice.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-asignacion-graficas.png" alt="Matriz de asignación y verosimilitudes"></div>
+    <figcaption><b>Figura 8.16.</b> A la izquierda, la matriz de asignación en porcentajes: la diagonal va de 85 a 90&nbsp;%. A la derecha, la verosimilitud de cada genotipo en su población (eje horizontal) contra la mejor de las demás (eje vertical). Las plantas sobre la diagonal encajan mejor en otra población y llevan nombre; el círculo con borde grueso es el posible migrante.</figcaption>
+  </figure>
+
+  <!-- 8.5 -->
+  <h2 id="s8-5"><span class="num">8.5</span>Ajustes, tablas y figuras del bloque</h2>
+  <p>El Bloque 7 se abre con seis individuos o más y tres marcadores polimórficos; no se aplica a caracteres morfológicos ni a un solo alineamiento de secuencias. Las tres partes (agrupamiento bayesiano, DAPC y asignación) se corren por separado con su propio botón.</p>
+
+  <table>
+    <caption><b>Tabla 8.5.</b> Ajustes del Bloque 7.</caption>
+    <thead><tr><th style="width:32%">Ajuste</th><th>Opciones</th><th style="width:30%">Recomendación</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Model</span></td><td><i>Admixture</i> (con mezcla) o <i>No admixture</i> (cada individuo de un solo grupo).</td><td>Con mezcla, salvo que sepas que no hay híbridos.</td></tr>
+      <tr><td><span class="ui">K from</span> · <span class="ui">K to</span></td><td>1 a 20. Al entrar, K va de 1 al número de poblaciones más 2.</td><td>Incluye K = 1 y al menos dos valores por encima del esperado.</td></tr>
+      <tr><td><span class="ui">Replicates per K</span></td><td>1 a 20 (predeterminado 3). ΔK necesita 2 o más.</td><td>10 a 20 para publicar.</td></tr>
+      <tr><td><span class="ui">Burn-in iterations</span> · <span class="ui">Sampled iterations</span></td><td>Predeterminado 5000 + 10&nbsp;000.</td><td>1000 + 2000 para explorar; 50&nbsp;000 + 100&nbsp;000 para publicar.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Número entero; también lo usan el DAPC y la asignación.</td><td>Repórtala en los métodos.</td></tr>
+      <tr><td><span class="ui">Groups</span> (DAPC)</td><td>Las poblaciones del Bloque 2, o grupos encontrados por k-means con K elegido por BIC (<span class="ui">Largest K to try</span>, predeterminado 10).</td><td>Poblaciones si las hay; k-means para explorar.</td></tr>
+      <tr><td><span class="ui">Principal components retained</span></td><td>Vacío: el menor entre 90&nbsp;% de la varianza y N/3.</td><td>Compara varios valores con el éxito dejando uno fuera.</td></tr>
+      <tr><td><span class="ui">Allele frequencies</span> (asignación)</td><td>Rannala y Mountain (1997) o Paetkau y colaboradores (1995).</td><td>Rannala y Mountain.</td></tr>
+      <tr><td><span class="ui">Simulated genotypes per population</span></td><td>0 a 10&nbsp;000 (predeterminado 500); 0 omite la prueba de migrantes.</td><td>500; 1000 o más para publicar.</td></tr>
+      <tr><td><span class="ui">Migrant threshold α</span></td><td>0.001 a 0.1 (predeterminado 0.01).</td><td>0.01.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Tabla 8.6.</b> Tarjetas de resultados del Bloque 7.</caption>
+    <thead><tr><th style="width:28%">Tarjeta</th><th>Contenido</th><th class="c" style="width:24%">Se descarga</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · How many clusters?</span></td><td>Interpretación, tabla de K (Ln P(D), ΔK, H′, individuos con Q ≥ 0.8 y estimadores de Puechmaille), gráficas de Ln P(D), ΔK y Puechmaille.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Membership of every individual</span></td><td>Gráfica de barras del K y la corrida elegidos (consenso o cada réplica) y pertenencia media por población.</td><td class="c"><span class="ui">Q matrix (CSV)</span></td></tr>
+      <tr><td><span class="ui">5 · DAPC results</span></td><td>Interpretación, éxito por grupo (reasignación y dejando uno fuera), curva de BIC si hubo k-means, dispersión y probabilidades de pertenencia.</td><td class="c"><span class="ui">Coordinates and memberships (CSV)</span></td></tr>
+      <tr><td><span class="ui">7 · Assignment results</span></td><td>Interpretación, matriz de asignación, mapa de calor, gráfica de verosimilitudes y tabla de cada individuo ordenada por el valor P.</td><td class="c"><span class="ui">Assignment of every individual (CSV)</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- 8.6 -->
+  <h2 id="s8-6"><span class="num">8.6</span>Paso a paso: agave con AFLP</h2>
+  <p>Las cuatro poblaciones de agave, con 20 plantas y 60 bandas cada una, recorren todo el bloque. Los valores de este capítulo son los que produce la app con los ajustes predeterminados y la semilla 1.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En el Bloque 2 carga <span class="ui">Agave · AFLP</span>, construye el conjunto y abre el Bloque 7 (figura 8.17).</li>
+      <li>Pulsa <span class="ui">Run the MCMC</span>. Las 18 corridas tardan unos 3 minutos; la barra de progreso muestra el Ln P(D) de cada una.</li>
+      <li>En <span class="ui">How many clusters?</span> compara Ln P(D), ΔK, los estimadores de Puechmaille y H′ (figuras 8.2 a 8.4).</li>
+      <li>En <span class="ui">Membership of every individual</span> cambia <span class="ui">K</span> a 3, 4 y 5 y observa en cuál cada grupo tiene plantas propias (figura 8.5).</li>
+      <li>Pulsa <span class="ui">Run DAPC</span> con las poblaciones como grupos (figuras 8.9 a 8.11).</li>
+      <li>Pulsa <span class="ui">Run the assignment</span> y revisa la matriz, las verosimilitudes y la tabla de individuos (figuras 8.15 y 8.16).</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-ajustes.png" alt="Ajustes del agrupamiento bayesiano"></div>
+    <figcaption><b>Figura 8.17.</b> Ajustes del agrupamiento bayesiano con el agave: 80 individuos y 60 bandas tratadas como loci haploides, K de 1 a 6 y 3 réplicas.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer estos resultados</div>
+    <ul style="margin:0">
+      <li><b>Cuatro grupos, no tres.</b> ΔK prefiere K = 3, pero Ln P(D) y los cuatro estimadores de Puechmaille señalan K = 4, las réplicas concuerdan (H′ = 0.974) y la gráfica de barras da a cada población su propio grupo. El grupo de Guerrero es el más débil (0.52), así que conviene confirmarlo con cadenas largas y más réplicas antes de publicar.</li>
+      <li><b>Poblaciones diferenciadas, con mezcla.</b> La pertenencia media a su grupo va de 0.52 a 0.68 y α ronda 0.5 con K = 3: muchas plantas llevan ancestría de otros grupos, coherente con el θ<sub>B</sub> de 0.125 del capítulo 6.</li>
+      <li><b>Los tres métodos coinciden en el orden.</b> Guerrero y Oaxaca norte son los menos distintos en el DAPC (75 y 70&nbsp;% dejando uno fuera), Guerrero es el más mezclado en la gráfica de barras y recibe cinco de las diez plantas mal asignadas.</li>
+      <li><b>Sin evidencia de migrantes.</b> Una planta marcada entre 80, cuando se espera 0.8 por azar.</li>
+    </ul>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · qué reportar en un artículo</div>
+    <p>Del agrupamiento bayesiano: el modelo, los valores de K probados, el número de réplicas, las iteraciones de <i>burn-in</i> y de muestreo, la semilla, y todos los criterios para elegir K con la gráfica de barras del K elegido (y, si difieren, la del K de ΔK). Del DAPC: el número de componentes, cómo se definieron los grupos y el éxito dejando uno fuera. De la asignación: el método de frecuencias, la autoasignación y, para los migrantes, el número de simulaciones, α y cuántos se esperan por azar. La sección de métodos del informe del Bloque 10 redacta todo esto.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · verificación de los cálculos</div>
+    <p>Para este manual, el Ln P(D) de la app con K = 1 se comparó con su valor analítico bajo la distribución de Dirichlet (−1783.4 contra −1783.3 con el maíz), y el generador de números gamma reprodujo la media y la varianza teóricas. Con datos simulados de tres grupos (90 individuos, 10 loci), Ln P(D) y ΔK señalaron K = 3, H′ fue 0.97 y la Q estimada difirió de la verdadera en 0.05 en promedio. ΔK, H′ y los estimadores de Puechmaille se recalcularon por separado. El PCA, los ejes discriminantes, las probabilidades de pertenencia y el éxito dejando uno fuera del DAPC coincidieron con un análisis discriminante independiente (diferencias menores que 10<sup>−12</sup>). Las verosimilitudes de la asignación coincidieron con un cálculo independiente (10<sup>−15</sup>). Sin migrantes, la prueba marcó 2 de 270 residentes con P &lt; 0.01, lo esperado por azar, y detectó 9 de 12 migrantes plantados.</p>
+  </div>
+
+  <p style="margin-top:0.25in">El siguiente capítulo cambia de marcadores a secuencias: el Bloque 8 analiza la diversidad de haplotipos, las pruebas de neutralidad, la historia demográfica y la red de haplotipos de un alineamiento.</p>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Preliminares e introducción</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados, números de página e índice -->
+<script src="../paginar.js"></script>
+</head>
+<body>
+
+<!-- ====================================================================== CRÉDITOS -->
+<section class="preliminares creditos" id="creditos">
+  <div class="cred-titulo">PopGeneticsPro</div>
+  <div class="cred-sub">Manual de usuario · Genética de poblaciones</div>
+
+  <dl>
+    <dt>Autor</dt><dd><b>Luis Ángel Barrera-Guzmán</b><br><span class="small">ORCID 0000-0001-8057-2583 · lbarrerag@chapingo.mx</span></dd>
+    <dt>Programa</dt><dd>PopGeneticsPro, versión 1.0.0 (septiembre de 2026)</dd>
+    <dt>Manual</dt><dd>Primera edición en español, 2026. Describe la versión 1.0.0 del programa.</dd>
+    <dt>Licencia del programa</dt><dd>Licencia Pública General de GNU, versión 3 o posterior (GPL-3.0-or-later).</dd>
+    <dt>Derechos del manual</dt><dd>© 2026 Luis Ángel Barrera-Guzmán. Todos los derechos reservados.</dd>
+    <dt>Idioma de la interfaz</dt><dd>Inglés. En este manual los nombres de botones y menús se escriben tal como aparecen en pantalla, por ejemplo <span class="ui">Compute diversity</span>, seguidos de su traducción cuando hace falta.</dd>
+  </dl>
+
+  <h4>Cómo citar el programa</h4>
+  <div class="cita">Barrera-Guzmán, L. Á. (2026). <i>PopGeneticsPro: a browser-based platform for plant population genetics</i> (versión 1.0.0) [Programa de cómputo].</div>
+  <h4>Cómo citar este manual</h4>
+  <div class="cita">Barrera-Guzmán, L. Á. (2026). <i>PopGeneticsPro. Manual de usuario</i> (1.ª ed.).</div>
+  <p class="small">Cuando el programa tenga identificador de objeto digital (DOI), aparecerá en la sección <span class="ui">How to cite</span> de la portada de la app y en el informe automático del Bloque 10; úsalo en tus citas.</p>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Privacidad</div>
+    <p>PopGeneticsPro funciona por completo dentro de tu navegador. Los archivos que abres se leen en tu computadora y <b>nunca se envían a ningún servidor</b>. Puedes analizar datos inéditos o sujetos a acuerdos de confidencialidad sin riesgo de que salgan de tu equipo.</p>
+  </div>
+
+  <p class="small" style="margin-top:0.4in;color:#5d6472">Las ilustraciones, diagramas y capturas de pantalla de este manual son originales y se generaron con el propio programa o con código escrito para el manual. Los conjuntos de datos de ejemplo se describen en la sección 1.7; el de los cinco géneros es sintético y sus nombres de taxones y fósiles son inventados.</p>
+</section>
+
+<!-- ====================================================================== ÍNDICE -->
+<section class="preliminares indice" id="indice" data-nueva-hoja>
+  <h1>Índice</h1>
+  <div class="indice-sub">Contenido general del manual</div>
+
+  <ol class="toc">
+    <li>
+      <div class="toc-cap"><span class="chip k0">P</span><a href="#como-leer">Cómo leer este manual</a><a class="pag" href="#como-leer"></a></div>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k0">1</span><a href="#cap-intro">Introducción a PopGeneticsPro</a><a class="pag" href="#cap-intro"></a></div>
+      <ul>
+        <li><span class="n">1.1</span><a href="#s1-1"><span class="t">¿Qué es PopGeneticsPro?</span></a></li>
+        <li><span class="n">1.2</span><a href="#s1-2"><span class="t">Preguntas que responde</span></a></li>
+        <li><span class="n">1.3</span><a href="#s1-3"><span class="t">Cinco ideas clave</span></a></li>
+        <li><span class="n">1.4</span><a href="#s1-4"><span class="t">Tipos de datos que acepta</span></a></li>
+        <li><span class="n">1.5</span><a href="#s1-5"><span class="t">Qué necesitas y cómo abrirlo</span></a></li>
+        <li><span class="n">1.6</span><a href="#s1-6"><span class="t">Recorrido por la interfaz</span></a></li>
+        <li><span class="n">1.7</span><a href="#s1-7"><span class="t">Los seis ejemplos incluidos</span></a></li>
+        <li><span class="n">1.8</span><a href="#s1-8"><span class="t">Flujo de trabajo recomendado</span></a></li>
+        <li><span class="n">1.9</span><a href="#s1-9"><span class="t">Cómo leer valores P e intervalos</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k1">B1</span><a href="#cap-b1">Inicio, teoría y simulador</a><a class="pag" href="#cap-b1"></a></div>
+      <ul>
+        <li><span class="n">2.1</span><a href="#s2-1"><span class="t">La portada de la app</span></a></li>
+        <li><span class="n">2.2</span><a href="#s2-2"><span class="t">El simulador de Wright–Fisher</span></a></li>
+        <li><span class="n">2.3</span><a href="#s2-3"><span class="t">Cinco prácticas con el simulador</span></a></li>
+        <li><span class="n">2.4</span><a href="#s2-4"><span class="t">Teoría esencial en la app</span></a></li>
+        <li><span class="n">2.5</span><a href="#s2-5"><span class="t">Cómo citar y referencias</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k2">B2</span><a href="#cap-b2">Datos y control de calidad</a><a class="pag" href="#cap-b2"></a></div>
+      <ul>
+        <li><span class="n">3.1</span><a href="#s3-1"><span class="t">Formatos de entrada</span></a></li>
+        <li><span class="n">3.2</span><a href="#s3-2"><span class="t">La hoja de datos integrada</span></a></li>
+        <li><span class="n">3.3</span><a href="#s3-3"><span class="t">El diseñador de plantillas</span></a></li>
+        <li><span class="n">3.4</span><a href="#s3-4"><span class="t">Interpretación y papel de cada columna</span></a></li>
+        <li><span class="n">3.5</span><a href="#s3-5"><span class="t">Control de calidad</span></a></li>
+        <li><span class="n">3.6</span><a href="#s3-6"><span class="t">Qué análisis permiten tus datos</span></a></li>
+        <li><span class="n">3.7</span><a href="#s3-7"><span class="t">Paso a paso con los seis ejemplos</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k3">B3</span><a href="#cap-b3">Frecuencias alélicas y diversidad</a><a class="pag" href="#cap-b3"></a></div>
+      <ul>
+        <li><span class="n">4.1</span><a href="#s4-1"><span class="t">Teoría en breve</span></a></li>
+        <li><span class="n">4.2</span><a href="#s4-2"><span class="t">Los índices y qué significan</span></a></li>
+        <li><span class="n">4.3</span><a href="#s4-3"><span class="t">Reglas de decisión</span></a></li>
+        <li><span class="n">4.4</span><a href="#s4-4"><span class="t">Ajustes, tablas y figuras del bloque</span></a></li>
+        <li><span class="n">4.5</span><a href="#s4-5"><span class="t">Paso a paso: maíz con microsatélites</span></a></li>
+        <li><span class="n">4.6</span><a href="#s4-6"><span class="t">Datos dominantes, haplotipos y morfología</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k4">B4</span><a href="#cap-b4">Hardy–Weinberg y desequilibrio de ligamiento</a><a class="pag" href="#cap-b4"></a></div>
+      <ul>
+        <li><span class="n">5.1</span><a href="#s5-1"><span class="t">Equilibrio de Hardy–Weinberg</span></a></li>
+        <li><span class="n">5.2</span><a href="#s5-2"><span class="t">F<sub>IS</sub>, endogamia y alelos nulos</span></a></li>
+        <li><span class="n">5.3</span><a href="#s5-3"><span class="t">Desequilibrio de ligamiento</span></a></li>
+        <li><span class="n">5.4</span><a href="#s5-4"><span class="t">Corrección por pruebas múltiples</span></a></li>
+        <li><span class="n">5.5</span><a href="#s5-5"><span class="t">Ajustes, tablas y figuras del bloque</span></a></li>
+        <li><span class="n">5.6</span><a href="#s5-6"><span class="t">Paso a paso: maíz y agave</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k5">B5</span><a href="#cap-b5">Diferenciación y AMOVA</a><a class="pag" href="#cap-b5"></a></div>
+      <ul>
+        <li><span class="n">6.1</span><a href="#s6-1"><span class="t">Medir la diferenciación</span></a></li>
+        <li><span class="n">6.2</span><a href="#s6-2"><span class="t">AMOVA jerárquico</span></a></li>
+        <li><span class="n">6.3</span><a href="#s6-3"><span class="t">Matrices por pares y flujo génico</span></a></li>
+        <li><span class="n">6.4</span><a href="#s6-4"><span class="t">Reglas de decisión</span></a></li>
+        <li><span class="n">6.5</span><a href="#s6-5"><span class="t">Ajustes, tablas y figuras del bloque</span></a></li>
+        <li><span class="n">6.6</span><a href="#s6-6"><span class="t">Paso a paso: maíz, agave y pino</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k6">B6</span><a href="#cap-b6">Distancias, ordenación y árboles</a><a class="pag" href="#cap-b6"></a></div>
+      <ul>
+        <li><span class="n">7.1</span><a href="#s7-1"><span class="t">Distancias genéticas</span></a></li>
+        <li><span class="n">7.2</span><a href="#s7-2"><span class="t">Coordenadas principales (PCoA)</span></a></li>
+        <li><span class="n">7.3</span><a href="#s7-3"><span class="t">Árboles NJ y UPGMA con bootstrap</span></a></li>
+        <li><span class="n">7.4</span><a href="#s7-4"><span class="t">Árboles con imágenes de las OTU</span></a></li>
+        <li><span class="n">7.5</span><a href="#s7-5"><span class="t">Mantel y aislamiento por distancia</span></a></li>
+        <li><span class="n">7.6</span><a href="#s7-6"><span class="t">Ajustes, tablas y figuras del bloque</span></a></li>
+        <li><span class="n">7.7</span><a href="#s7-7"><span class="t">Paso a paso: razas de maíz con ISSR</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k7">B7</span><a href="#cap-b7">Agrupamiento bayesiano y asignación</a><a class="pag" href="#cap-b7"></a></div>
+      <ul>
+        <li><span class="n">8.1</span><a href="#s8-1"><span class="t">El modelo de mezcla</span></a></li>
+        <li><span class="n">8.2</span><a href="#s8-2"><span class="t">¿Cuántos grupos? ΔK, Ln P(D) y Puechmaille</span></a></li>
+        <li><span class="n">8.3</span><a href="#s8-3"><span class="t">DAPC</span></a></li>
+        <li><span class="n">8.4</span><a href="#s8-4"><span class="t">Asignación y migrantes</span></a></li>
+        <li><span class="n">8.5</span><a href="#s8-5"><span class="t">Ajustes, tablas y figuras del bloque</span></a></li>
+        <li><span class="n">8.6</span><a href="#s8-6"><span class="t">Paso a paso: agave con AFLP</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k8">B8</span><a href="#cap-b8">Secuencias de ADN y fechado molecular</a><a class="pag" href="#cap-b8"></a></div>
+      <ul>
+        <li><span class="n">9.1</span><a href="#s9-1"><span class="t">Diversidad haplotípica y nucleotídica</span></a></li>
+        <li><span class="n">9.2</span><a href="#s9-2"><span class="t">Pruebas de neutralidad y mismatch</span></a></li>
+        <li><span class="n">9.3</span><a href="#s9-3"><span class="t">N<sub>ST</sub> frente a G<sub>ST</sub></span></a></li>
+        <li><span class="n">9.4</span><a href="#s9-4"><span class="t">Redes de haplotipos</span></a></li>
+        <li><span class="n">9.5</span><a href="#s9-5"><span class="t">Tiempos de divergencia: fósiles y tasas</span></a></li>
+        <li><span class="n">9.6</span><a href="#s9-6"><span class="t">Ajustes, tablas y figuras del bloque</span></a></li>
+        <li><span class="n">9.7</span><a href="#s9-7"><span class="t">Paso a paso: pino y cinco géneros</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k9">B9</span><a href="#cap-b9">Demografía y estructura espacial</a><a class="pag" href="#cap-b9"></a></div>
+      <ul>
+        <li><span class="n">10.1</span><a href="#s10-1"><span class="t">Cuellos de botella recientes</span></a></li>
+        <li><span class="n">10.2</span><a href="#s10-2"><span class="t">Tamaño efectivo de población</span></a></li>
+        <li><span class="n">10.3</span><a href="#s10-3"><span class="t">Estructura genética espacial</span></a></li>
+        <li><span class="n">10.4</span><a href="#s10-4"><span class="t">Sistema de apareamiento</span></a></li>
+        <li><span class="n">10.5</span><a href="#s10-5"><span class="t">P<sub>ST</sub> frente a F<sub>ST</sub></span></a></li>
+        <li><span class="n">10.6</span><a href="#s10-6"><span class="t">Ajustes, tablas y figuras del bloque</span></a></li>
+        <li><span class="n">10.7</span><a href="#s10-7"><span class="t">Paso a paso</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip k10">B10</span><a href="#cap-b10">Figuras e informe</a><a class="pag" href="#cap-b10"></a></div>
+      <ul>
+        <li><span class="n">11.1</span><a href="#s11-1"><span class="t">El editor de figuras</span></a></li>
+        <li><span class="n">11.2</span><a href="#s11-2"><span class="t">Exportar para publicar</span></a></li>
+        <li><span class="n">11.3</span><a href="#s11-3"><span class="t">El informe automático y el paquete ZIP</span></a></li>
+        <li><span class="n">11.4</span><a href="#s11-4"><span class="t">Paso a paso</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="toc-cap"><span class="chip kx">A</span><a href="#apendices">Apéndices</a><a class="pag" href="#apendices"></a></div>
+      <ul>
+        <li><span class="n">A</span><a href="#ap-a"><span class="t">Formatos de archivo</span></a></li>
+        <li><span class="n">B</span><a href="#ap-b"><span class="t">Resumen de reglas de decisión</span></a></li>
+        <li><span class="n">C</span><a href="#ap-c"><span class="t">Glosario</span></a></li>
+        <li><span class="n">D</span><a href="#ap-d"><span class="t">Solución de problemas</span></a></li>
+        <li><span class="n">E</span><a href="#ap-e"><span class="t">Referencias</span></a></li>
+        <li><span class="n">F</span><a href="#ap-f"><span class="t">Componentes de terceros</span></a></li>
+      </ul>
+    </li>
+  </ol>
+</section>
+
+<!-- ====================================================================== CÓMO LEER ESTE MANUAL -->
+<section class="preliminares" id="como-leer" data-nueva-hoja style="--acento: var(--b0)">
+  <h2 style="margin-top:0.2in">Cómo leer este manual</h2>
+  <p class="lead">El manual sigue el mismo orden que la app: diez bloques numerados que se recorren de izquierda a derecha en la barra superior. Cada capítulo explica un bloque, empieza con un poco de teoría fácil de digerir, describe los índices que calcula y termina con un ejemplo paso a paso usando los datos que ya vienen dentro del programa.</p>
+
+  <h3>Un color para cada bloque</h3>
+  <p>El color del bloque aparece en la apertura de su capítulo, en los números de sección, en los recuadros de teoría y en el índice. Así sabes de un vistazo en qué parte de la app estás.</p>
+  <table class="compacta">
+    <thead><tr><th style="width:0.6in">Bloque</th><th>Nombre en la app</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip k1">1</span></td><td><span class="ui">Home</span></td><td>Portada, teoría esencial, simulador y cómo citar</td></tr>
+      <tr><td><span class="chip k2">2</span></td><td><span class="ui">Data</span></td><td>Carga de archivos, hoja de datos, plantillas y control de calidad</td></tr>
+      <tr><td><span class="chip k3">3</span></td><td><span class="ui">Diversity</span></td><td>Frecuencias alélicas e índices de diversidad</td></tr>
+      <tr><td><span class="chip k4">4</span></td><td><span class="ui">HWE &amp; LD</span></td><td>Equilibrio de Hardy–Weinberg, endogamia, alelos nulos y ligamiento</td></tr>
+      <tr><td><span class="chip k5">5</span></td><td><span class="ui">AMOVA</span></td><td>Diferenciación entre poblaciones y análisis de varianza molecular</td></tr>
+      <tr><td><span class="chip k6">6</span></td><td><span class="ui">Distance</span></td><td>Distancias genéticas, PCoA, árboles y aislamiento por distancia</td></tr>
+      <tr><td><span class="chip k7">7</span></td><td><span class="ui">Clustering</span></td><td>Agrupamiento bayesiano, DAPC y asignación de individuos</td></tr>
+      <tr><td><span class="chip k8">8</span></td><td><span class="ui">Sequences</span></td><td>Secuencias de ADN, redes de haplotipos y fechado molecular</td></tr>
+      <tr><td><span class="chip k9">9</span></td><td><span class="ui">Demography</span></td><td>Cuellos de botella, tamaño efectivo, estructura espacial y P<sub>ST</sub></td></tr>
+      <tr><td><span class="chip k10">10</span></td><td><span class="ui">Report</span></td><td>Figuras para publicar e informe automático</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tipos de recuadros</h3>
+  <div class="dos">
+    <div class="caja nota" style="margin:0"><div class="caja-t"><span class="ico">i</span>Nota</div><p>Aclaraciones y consejos prácticos que ahorran tiempo.</p></div>
+    <div class="caja importante" style="margin:0"><div class="caja-t"><span class="ico">!</span>Importante</div><p>Lo que puede cambiar tus conclusiones si se pasa por alto.</p></div>
+    <div class="caja teoria" style="margin:0"><div class="caja-t"><span class="ico">θ</span>Teoría en breve</div><p>La idea detrás de un análisis, sin fórmulas innecesarias.</p></div>
+    <div class="caja ejemplo" style="margin:0"><div class="caja-t"><span class="ico">▸</span>Ejemplo</div><p>Un caso real con los datos incluidos en el programa.</p></div>
+  </div>
+  <div class="caja regla" style="margin-top:0.18in">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión</div>
+    <table class="compacta"><tbody>
+      <tr><td style="width:40%"><b>Si</b> el valor cae en este intervalo…</td><td><b>entonces</b> esta es la lectura recomendada.</td></tr>
+    </tbody></table>
+    <p class="regla-pie">Son guías para interpretar, no leyes: el contexto biológico de tu especie siempre manda.</p>
+  </div>
+  <div class="caja dato">
+    <div class="dato-cifra">900 dpi</div>
+    <div class="dato-txt"><div class="caja-t">Dato clave</div>Una cifra o hecho que conviene recordar; por ejemplo, la resolución máxima a la que exporta las figuras.</div>
+  </div>
+
+  <h3>Convenciones de escritura</h3>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">Así se escribe</th><th>Significa</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Compute diversity</span></td><td>Un botón, casilla o menú de la app, con su texto en inglés tal como aparece en pantalla.</td></tr>
+      <tr><td><span class="ruta">Edit figure<span class="sep">›</span>Style &amp; typography</span></td><td>Una ruta: abre el primer elemento y luego el segundo.</td></tr>
+      <tr><td><code>maize_ssr_populations.csv</code></td><td>Un nombre de archivo, columna o valor que se escribe tal cual.</td></tr>
+      <tr><td>H<sub>e</sub>, F<sub>ST</sub>, Φ<sub>PT</sub></td><td>Índices y parámetros; su significado se explica la primera vez que aparecen.</td></tr>
+      <tr><td><span class="si">●</span> <span class="parcial">◐</span> <span class="no">—</span></td><td>Disponible · disponible en parte o con condiciones · no aplica.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ====================================================================== CAPÍTULO 1 -->
+<section class="capitulo" id="cap-intro" data-pestana="1" data-orden="1" style="--acento: var(--b0)">
+  <div class="cap-apertura">
+    <div class="cap-num">1</div>
+    <div class="cap-etiqueta">Capítulo uno</div>
+    <h1>Introducción a PopGeneticsPro</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">Qué es el programa, qué preguntas responde, qué datos acepta y cómo se recorre de principio a fin. Incluye las ideas básicas de genética de poblaciones que necesitas para aprovechar el resto del manual.</p>
+    <div class="cap-franja"><span class="k1"></span><span class="k2"></span><span class="k3"></span><span class="k4"></span><span class="k5"></span><span class="k6"></span><span class="k7"></span><span class="k8"></span><span class="k9"></span><span class="k10"></span></div>
+    <ul class="cap-contenido">
+      <li><b>1.1</b>¿Qué es PopGeneticsPro?</li>
+      <li><b>1.2</b>Preguntas que responde</li>
+      <li><b>1.3</b>Cinco ideas clave</li>
+      <li><b>1.4</b>Tipos de datos que acepta</li>
+      <li><b>1.5</b>Qué necesitas y cómo abrirlo</li>
+      <li><b>1.6</b>Recorrido por la interfaz</li>
+      <li><b>1.7</b>Los seis ejemplos incluidos</li>
+      <li><b>1.8</b>Flujo de trabajo recomendado</li>
+      <li><b>1.9</b>Valores P e intervalos</li>
+    </ul>
+  </div>
+
+  <!-- 1.1 -->
+  <h2 id="s1-1"><span class="num">1.1</span>¿Qué es PopGeneticsPro?</h2>
+  <p class="lead">PopGeneticsPro es una plataforma para analizar la variación genética de poblaciones de plantas <b>del campo al artículo</b>: recibe la tabla que sale del laboratorio, la revisa, calcula los análisis clásicos y modernos de la genética de poblaciones y entrega figuras e informes listos para publicar.</p>
+  <p>Todo ocurre dentro del navegador de internet. No hay que instalar nada, no se necesita saber programar y los datos no salen de la computadora. Los mismos pasos sirven para microsatélites, bandas AFLP o ISSR, secuencias de cloroplasto y caracteres morfológicos, de modo que puedes comparar marcadores distintos del mismo material con un solo flujo de trabajo.</p>
+
+  <figure>
+    <div class="marco" style="position:relative">
+      <img src="../img/app-inicio.png" alt="Portada de la aplicación PopGeneticsPro">
+      <span class="marca" style="left:17.6%;top:9.2%">1</span>
+      <span class="marca" style="left:35.5%;top:4.4%">2</span>
+      <span class="marca" style="left:11.6%;top:70%">3</span>
+      <span class="marca" style="left:46.4%;top:70%">4</span>
+      <span class="marca" style="left:12.4%;top:77.6%">5</span>
+      <span class="marca" style="left:11.7%;top:84.8%">6</span>
+    </div>
+    <figcaption><b>Figura 1.1.</b> Portada de la app (Bloque 1).</figcaption>
+  </figure>
+  <ul class="leyenda-marcas">
+    <li><span class="n">1</span>Barra de los diez bloques. El bloque activo aparece resaltado.</li>
+    <li><span class="n">2</span>Los bloques en gris se activan cuando cargas datos que los permiten.</li>
+    <li><span class="n">3</span><span class="ui">Start with my data</span> lleva al Bloque 2 para cargar tus datos.</li>
+    <li><span class="n">4</span><span class="ui">Play with the simulator</span> abre el simulador de deriva y flujo génico.</li>
+    <li><span class="n">5</span>Teoría esencial y forma de citar el programa.</li>
+    <li><span class="n">6</span>Garantías: todo corre en tu equipo y admite cinco tipos de datos.</li>
+  </ul>
+
+  <div class="dos">
+    <div class="caja dato" style="margin:0">
+      <div class="dato-cifra">0</div>
+      <div class="dato-txt"><div class="caja-t">Instalaciones</div>Se abre con doble clic en <code style="background:#24365f;color:#fff">index.html</code>. No requiere permisos de administrador ni conexión a internet.</div>
+    </div>
+    <div class="caja dato" style="margin:0">
+      <div class="dato-cifra">10</div>
+      <div class="dato-txt"><div class="caja-t">Bloques</div>Del archivo de datos al informe final, en el orden en que se hace un estudio.</div>
+    </div>
+  </div>
+
+  <h3>Qué hace, en una tabla</h3>
+  <table>
+    <thead><tr><th style="width:24%">Etapa</th><th>Lo que obtienes</th><th class="c" style="width:12%">Bloque</th></tr></thead>
+    <tbody>
+      <tr><td><b>Entrada de datos</b></td><td>Lectura de hojas de cálculo (.xlsx, .csv), archivos de genotipos (.str, .gen, .arp), FASTA y VCF; hoja de datos para pegar; plantillas listas para llenar.</td><td class="c"><span class="chip k2">2</span></td></tr>
+      <tr><td><b>Control de calidad</b></td><td>Datos faltantes, loci monomórficos, clones, errores de codificación y tamaño de muestra por población.</td><td class="c"><span class="chip k2">2</span></td></tr>
+      <tr><td><b>Diversidad</b></td><td>N<sub>a</sub>, N<sub>e</sub>, H<sub>o</sub>, H<sub>e</sub>, uH<sub>e</sub>, índice de Shannon, PIC, alelos privados, riqueza alélica y F.</td><td class="c"><span class="chip k3">3</span></td></tr>
+      <tr><td><b>Equilibrio</b></td><td>Pruebas de Hardy–Weinberg, F<sub>IS</sub> con intervalos, alelos nulos y desequilibrio de ligamiento.</td><td class="c"><span class="chip k4">4</span></td></tr>
+      <tr><td><b>Estructura</b></td><td>G<sub>ST</sub>, θ, G′<sub>ST</sub>, D de Jost, Φ<sub>PT</sub>, AMOVA jerárquico, matrices por pares y flujo génico.</td><td class="c"><span class="chip k5">5</span></td></tr>
+      <tr><td><b>Relaciones</b></td><td>Distancias genéticas, PCoA, árboles NJ y UPGMA con bootstrap, pruebas de Mantel y aislamiento por distancia.</td><td class="c"><span class="chip k6">6</span></td></tr>
+      <tr><td><b>Agrupamiento</b></td><td>Modelo bayesiano de mezcla, ΔK, DAPC, asignación de individuos y detección de migrantes.</td><td class="c"><span class="chip k7">7</span></td></tr>
+      <tr><td><b>Secuencias</b></td><td>Hd, π, θ<sub>W</sub>, D de Tajima, Fs de Fu, mismatch, redes de haplotipos y fechado con fósiles o tasas.</td><td class="c"><span class="chip k8">8</span></td></tr>
+      <tr><td><b>Historia</b></td><td>Cuellos de botella, tamaño efectivo, autocorrelación espacial, estadístico Sp, apareamiento y P<sub>ST</sub>.</td><td class="c"><span class="chip k9">9</span></td></tr>
+      <tr><td><b>Publicación</b></td><td>Figuras editables hasta 900 dpi (PNG, TIFF, SVG, JPG, WEBP), informe completo y paquete ZIP con tablas y métodos.</td><td class="c"><span class="chip k10">10</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>¿Para quién es?</h3>
+  <p>Para quien estudia la diversidad genética de plantas silvestres o cultivadas y quiere resultados sólidos sin pelear con formatos ni líneas de comando: estudiantes de licenciatura y posgrado que se inician en la genética de poblaciones, investigadores en recursos fitogenéticos y conservación, mejoradores que caracterizan germoplasma, y docentes que necesitan mostrar en clase cómo actúan la deriva, el flujo génico o la selección. Cada resultado viene acompañado de un párrafo que lo interpreta en lenguaje llano, lo que convierte a la app también en una herramienta de enseñanza.</p>
+
+  <!-- 1.2 -->
+  <h2 id="s1-2"><span class="num">1.2</span>Preguntas que responde</h2>
+  <p>Un buen análisis empieza con una pregunta biológica. La tabla siguiente traduce las preguntas más frecuentes de un estudio de genética de poblaciones al análisis que las responde y al bloque donde se encuentra.</p>
+  <table>
+    <caption><b>Tabla 1.1.</b> De la pregunta al análisis.</caption>
+    <thead><tr><th style="width:36%">Pregunta</th><th>Análisis que la responde</th><th class="c" style="width:11%">Bloque</th></tr></thead>
+    <tbody>
+      <tr><td>¿Mis datos están limpios y bien codificados?</td><td>Resumen de faltantes, loci monomórficos, clones y códigos inconsistentes</td><td class="c"><span class="chip k2">2</span></td></tr>
+      <tr><td>¿Cuánta variación genética tiene cada población?</td><td>H<sub>e</sub>, riqueza alélica rarefaccionada, alelos privados</td><td class="c"><span class="chip k3">3</span></td></tr>
+      <tr><td>¿Hay endogamia o autofecundación?</td><td>F<sub>IS</sub> por locus y población; comparación H<sub>o</sub> contra H<sub>e</sub></td><td class="c"><span class="chip k4">4</span></td></tr>
+      <tr><td>¿Algún locus tiene alelos nulos?</td><td>Estimación de frecuencia de alelos nulos; F<sub>IS</sub> alto en un solo locus</td><td class="c"><span class="chip k4">4</span></td></tr>
+      <tr><td>¿Las poblaciones son genéticamente distintas?</td><td>F<sub>ST</sub>, G′<sub>ST</sub>, D de Jost, Φ<sub>PT</sub> con pruebas de permutación</td><td class="c"><span class="chip k5">5</span></td></tr>
+      <tr><td>¿Qué parte de la variación está entre regiones, entre poblaciones y dentro de ellas?</td><td>AMOVA jerárquico</td><td class="c"><span class="chip k5">5</span></td></tr>
+      <tr><td>¿Qué materiales se parecen más entre sí?</td><td>Distancias genéticas, PCoA, árboles con bootstrap</td><td class="c"><span class="chip k6">6</span></td></tr>
+      <tr><td>¿Las poblaciones más lejanas son más distintas?</td><td>Prueba de Mantel y aislamiento por distancia</td><td class="c"><span class="chip k6">6</span></td></tr>
+      <tr><td>¿Cuántos grupos genéticos hay, sin suponerlos de antemano?</td><td>Agrupamiento bayesiano con ΔK; DAPC</td><td class="c"><span class="chip k7">7</span></td></tr>
+      <tr><td>¿Hay individuos que vienen de otra población?</td><td>Pruebas de asignación y detección de migrantes</td><td class="c"><span class="chip k7">7</span></td></tr>
+      <tr><td>¿Cómo se relacionan los haplotipos y dónde están?</td><td>Red de haplotipos por median-joining; N<sub>ST</sub> contra G<sub>ST</sub></td><td class="c"><span class="chip k8">8</span></td></tr>
+      <tr><td>¿Cuándo divergieron los linajes?</td><td>Fechado molecular con fósiles o tasa de sustitución</td><td class="c"><span class="chip k8">8</span></td></tr>
+      <tr><td>¿La población pasó por un cuello de botella o se expandió?</td><td>Exceso de heterocigosis, razón M, cambio de moda; D de Tajima, mismatch</td><td class="c"><span class="chip k9">9</span> <span class="chip k8">8</span></td></tr>
+      <tr><td>¿Cuántos reproductores contribuyen realmente a la siguiente generación?</td><td>Tamaño efectivo de población (N<sub>e</sub>)</td><td class="c"><span class="chip k9">9</span></td></tr>
+      <tr><td>¿Los vecinos cercanos están emparentados?</td><td>Autocorrelación espacial, coeficientes de parentesco y estadístico Sp</td><td class="c"><span class="chip k9">9</span></td></tr>
+      <tr><td>¿Los caracteres morfológicos divergen más de lo esperado por deriva?</td><td>P<sub>ST</sub> comparado con F<sub>ST</sub> neutral</td><td class="c"><span class="chip k9">9</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- 1.3 -->
+  <h2 id="s1-3"><span class="num">1.3</span>Cinco ideas clave de genética de poblaciones</h2>
+  <p>No necesitas un curso previo para usar la app, pero estas cinco ideas aparecen en todos los capítulos. Léelas una vez y regresa a ellas cuando lo necesites.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 215" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Jerarquía: región, población, individuo, locus y alelos">
+      <defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#14213d"/></marker></defs>
+      <!-- región -->
+      <rect x="6" y="18" width="212" height="182" rx="12" fill="#f1f4fa" stroke="#14213d" stroke-width="1.2"/>
+      <text x="18" y="38" font-size="10" letter-spacing="1.5" fill="#14213d">REGIÓN</text>
+      <g fill="#fff" stroke="#14213d" stroke-width="1">
+        <ellipse cx="72" cy="95" rx="50" ry="38"/><ellipse cx="158" cy="92" rx="46" ry="34"/><ellipse cx="112" cy="162" rx="52" ry="30"/>
+      </g>
+      <g fill="#14213d" font-size="8.5"><text x="52" y="66">Población A</text><text x="138" y="67">Población B</text><text x="92" y="140">Población C</text></g>
+      <g fill="#3f7d20"><circle cx="52" cy="92" r="5"/><circle cx="70" cy="104" r="5"/><circle cx="88" cy="86" r="5"/><circle cx="62" cy="118" r="5" fill="#111"/><circle cx="92" cy="110" r="5"/></g>
+      <g fill="#c2410c"><circle cx="142" cy="90" r="5"/><circle cx="160" cy="104" r="5"/><circle cx="176" cy="86" r="5"/><circle cx="170" cy="112" r="5"/></g>
+      <g fill="#7e3fb0"><circle cx="92" cy="162" r="5"/><circle cx="110" cy="172" r="5"/><circle cx="128" cy="158" r="5"/><circle cx="140" cy="176" r="5"/></g>
+      <path d="M68 121 C 120 150 190 190 262 108" fill="none" stroke="#14213d" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#fl)"/>
+      <!-- individuo -->
+      <rect x="268" y="40" width="160" height="136" rx="12" fill="#fff" stroke="#111" stroke-width="1.2"/>
+      <text x="280" y="60" font-size="10" letter-spacing="1.5" fill="#111">INDIVIDUO · diploide</text>
+      <g stroke-linecap="round">
+        <line x1="300" y1="80" x2="300" y2="160" stroke="#14213d" stroke-width="7"/><line x1="318" y1="80" x2="318" y2="160" stroke="#14213d" stroke-width="7" opacity="0.55"/>
+        <line x1="356" y1="80" x2="356" y2="148" stroke="#14213d" stroke-width="7"/><line x1="374" y1="80" x2="374" y2="148" stroke="#14213d" stroke-width="7" opacity="0.55"/>
+        <line x1="400" y1="80" x2="400" y2="136" stroke="#14213d" stroke-width="7"/><line x1="412" y1="80" x2="412" y2="136" stroke="#14213d" stroke-width="7" opacity="0.55"/>
+      </g>
+      <rect x="292" y="104" width="34" height="9" fill="#b7791f"/>
+      <text x="283" y="171" font-size="8.5" fill="#5d6472">cromosomas homólogos</text>
+      <path d="M328 108 C 380 108 420 100 470 96" fill="none" stroke="#14213d" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#fl)"/>
+      <!-- locus -->
+      <rect x="476" y="40" width="218" height="136" rx="12" fill="#fff" stroke="#b7791f" stroke-width="1.4"/>
+      <text x="488" y="60" font-size="10" letter-spacing="1.5" fill="#b7791f">LOCUS · lugar en el genoma</text>
+      <rect x="500" y="80" width="170" height="16" rx="3" fill="#14213d"/><text x="585" y="92" font-size="9" fill="#fff" text-anchor="middle">alelo 152 (materno)</text>
+      <rect x="500" y="104" width="170" height="16" rx="3" fill="#14213d" opacity="0.55"/><text x="585" y="116" font-size="9" fill="#fff" text-anchor="middle">alelo 158 (paterno)</text>
+      <text x="488" y="142" font-size="10" fill="#111"><tspan font-weight="600">Genotipo:</tspan> 152/158</text>
+      <text x="488" y="160" font-size="9" fill="#5d6472">dos alelos distintos → heterocigoto</text>
+    </svg>
+    <figcaption><b>Figura 1.2.</b> Los niveles de organización de un estudio. Una región contiene poblaciones y cada población contiene individuos. Cada individuo diploide lleva en cada <i>locus</i> dos copias del gen, los <b>alelos</b>, que juntos forman su <b>genotipo</b>.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">1</span>Alelo, locus y genotipo</div>
+    <p>Un <b>locus</b> (plural <i>loci</i>) es un lugar concreto del genoma: un microsatélite, una banda AFLP o un fragmento de ADN de cloroplasto. Las variantes que existen en ese lugar son los <b>alelos</b>. En una planta diploide cada locus tiene dos alelos; si son iguales el individuo es <b>homocigoto</b> (152/152) y si son distintos, <b>heterocigoto</b> (152/158).</p>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">2</span>Frecuencias alélicas</div>
+    <p>La unidad de la genética de poblaciones no es el individuo, sino la <b>frecuencia</b> de cada alelo en la población. Si en 25 plantas diploides (50 copias del gen) el alelo 152 aparece 35 veces, su frecuencia es <i>p</i> = 35/50 = 0.70. Casi todos los índices del programa se calculan a partir de estas frecuencias.</p>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">3</span>El equilibrio de Hardy–Weinberg: la línea base</div>
+    <p>Si una población es grande, se aparea al azar y no recibe migrantes, ni mutación, ni selección, las frecuencias de los genotipos se pueden predecir de las frecuencias alélicas: con dos alelos de frecuencias <i>p</i> y <i>q</i>, se esperan <i>p</i>² homocigotos de un tipo, 2<i>pq</i> heterocigotos y <i>q</i>² homocigotos del otro. Las desviaciones de esa línea base son información: señalan endogamia, estructura oculta o problemas técnicos.</p>
+  </div>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico</div>
+    <div class="dos" style="gap:0.18in;align-items:center">
+      <div>
+        <p>Con <i>p</i> = 0.70 y <i>q</i> = 0.30 se esperan 49 % de homocigotos 152/152, <b>42 % de heterocigotos</b> y 9 % de homocigotos 158/158. Si en el campo solo encuentras <b>30 % de heterocigotos</b>, falta heterocigosis. El índice de fijación la mide:</p>
+        <p style="text-align:center;font-size:12pt">F = 1 − H<sub>o</sub>/H<sub>e</sub> = 1 − 0.30/0.42 = <b>0.29</b></p>
+        <p>Un valor positivo indica déficit de heterocigotos (endogamia o autofecundación); un valor negativo, exceso.</p>
+      </div>
+      <svg viewBox="0 0 250 150" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Barras de genotipos esperados y observados">
+        <line x1="30" y1="122" x2="240" y2="122" stroke="#111" stroke-width="1"/>
+        <g font-size="8.5" fill="#5d6472" text-anchor="end"><text x="26" y="125">0</text><text x="26" y="80">25 %</text><text x="26" y="36">50 %</text></g>
+        <g stroke="#d5dae4"><line x1="30" y1="78" x2="240" y2="78"/><line x1="30" y1="34" x2="240" y2="34"/></g>
+        <!-- escala: 1% = 1.76 px -->
+        <rect x="42" y="35.8" width="26" height="86.2" fill="#14213d"/><rect x="70" y="35.8" width="26" height="86.2" fill="#b9c3d6"/>
+        <rect x="112" y="48.1" width="26" height="73.9" fill="#14213d"/><rect x="140" y="69.2" width="26" height="52.8" fill="#b9c3d6"/>
+        <rect x="182" y="106.2" width="26" height="15.8" fill="#14213d"/><rect x="210" y="84.2" width="26" height="37.8" fill="#b9c3d6"/>
+        <g font-size="8.5" fill="#111" text-anchor="middle"><text x="69" y="136">152/152</text><text x="139" y="136">152/158</text><text x="209" y="136">158/158</text></g>
+        <g font-size="8" fill="#111" text-anchor="middle"><text x="55" y="31">49</text><text x="83" y="31">49</text><text x="125" y="44">42</text><text x="153" y="65">30</text><text x="195" y="102">9</text><text x="223" y="80">21</text></g>
+        <rect x="120" y="4" width="10" height="8" fill="#14213d"/><text x="134" y="11" font-size="8.5" fill="#111">esperado</text>
+        <rect x="184" y="4" width="10" height="8" fill="#b9c3d6"/><text x="198" y="11" font-size="8.5" fill="#111">observado</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">4</span>Las fuerzas que cambian las frecuencias</div>
+    <p>Cinco procesos alejan a las poblaciones del equilibrio. Cada uno deja una huella distinta en la diversidad dentro de las poblaciones y en la diferenciación entre ellas, y reconocer esas huellas es el corazón de la interpretación.</p>
+  </div>
+  <table>
+    <caption><b>Tabla 1.2.</b> Huella de cada fuerza evolutiva. ↑ aumenta · ↓ disminuye · ≈ efecto pequeño o variable.</caption>
+    <thead><tr><th style="width:24%">Fuerza</th><th class="c" style="width:17%">Diversidad dentro</th><th class="c" style="width:17%">Diferenciación entre</th><th>Cómo reconocerla en tus resultados</th></tr></thead>
+    <tbody>
+      <tr><td><b>Deriva génica</b><br><span class="small">azar en poblaciones pequeñas</span></td><td class="c">↓</td><td class="c">↑</td><td>Poblaciones pequeñas con pocos alelos, pérdida de alelos raros, F<sub>ST</sub> alto sin relación con la distancia.</td></tr>
+      <tr><td><b>Flujo génico</b><br><span class="small">migración de polen o semilla</span></td><td class="c">↑</td><td class="c">↓</td><td>F<sub>ST</sub> bajo, individuos mezclados en el agrupamiento bayesiano, migrantes detectados.</td></tr>
+      <tr><td><b>Mutación</b></td><td class="c">↑</td><td class="c">≈</td><td>Alelos privados en poblaciones antiguas y estables; muy lenta a escala ecológica.</td></tr>
+      <tr><td><b>Selección divergente</b></td><td class="c">↓ en loci bajo selección</td><td class="c">↑</td><td>Un locus o carácter con diferenciación mucho mayor que el resto; P<sub>ST</sub> &gt; F<sub>ST</sub>.</td></tr>
+      <tr><td><b>Autofecundación y endogamia</b></td><td class="c">↓ heterocigosis</td><td class="c">↑</td><td>F<sub>IS</sub> positivo y similar en todos los loci; H<sub>o</sub> muy por debajo de H<sub>e</sub>.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">5</span>Estructura genética: el todo y las partes</div>
+    <p>Cuando una especie está dividida en poblaciones que intercambian pocos migrantes, la variación total se reparte en dos componentes: la que existe <b>dentro</b> de cada población y la que las <b>separa</b>. Los estadísticos F de Wright y el AMOVA miden ese reparto. Un F<sub>ST</sub> de 0.15, por ejemplo, significa que el 15 % de la variación genética está entre poblaciones y el 85 % dentro de ellas.</p>
+  </div>
+
+  <!-- 1.4 -->
+  <h2 id="s1-4"><span class="num">1.4</span>Tipos de datos que acepta</h2>
+  <p>La primera decisión de cualquier análisis es saber qué clase de marcador tienes, porque determina qué se puede calcular. PopGeneticsPro reconoce cinco tipos y adapta cada bloque a ellos.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Cuatro formas de ver la variación genética">
+      <g font-size="9.5" letter-spacing="1.4" fill="#14213d">
+        <text x="12" y="16">CODOMINANTE</text><text x="187" y="16">DOMINANTE</text><text x="362" y="16">SECUENCIAS</text><text x="537" y="16">MORFOLOGÍA</text>
+      </g>
+      <g stroke="#d5dae4"><line x1="176" y1="8" x2="176" y2="242"/><line x1="351" y1="8" x2="351" y2="242"/><line x1="526" y1="8" x2="526" y2="242"/></g>
+      <!-- codominante: electroferogramas -->
+      <g transform="translate(12 28)">
+        <text y="12" font-size="8.5" fill="#5d6472">planta 1 · heterocigoto</text>
+        <line x1="0" y1="72" x2="150" y2="72" stroke="#111"/>
+        <path d="M0 71 C 30 71 38 70 44 66 C 48 30 52 22 56 66 C 60 70 64 71 70 70 C 74 69 78 62 80 58 C 84 20 88 18 92 58 C 96 69 110 71 150 71" fill="none" stroke="#14213d" stroke-width="1.6"/>
+        <text x="50" y="32" font-size="8.5" text-anchor="middle" fill="#111">152</text><text x="86" y="25" font-size="8.5" text-anchor="middle" fill="#111">158</text>
+        <text y="100" font-size="8.5" fill="#5d6472">planta 2 · homocigoto</text>
+        <line x1="0" y1="160" x2="150" y2="160" stroke="#111"/>
+        <path d="M0 159 C 30 159 40 158 44 150 C 48 110 52 100 56 150 C 60 158 80 159 150 159" fill="none" stroke="#3f7d20" stroke-width="1.6"/>
+        <text x="50" y="112" font-size="8.5" text-anchor="middle" fill="#111">152</text>
+        <text y="182" font-size="8.5" fill="#111">Se ven <tspan font-weight="600">los dos alelos</tspan>:</text>
+        <text y="194" font-size="8.5" fill="#111">se cuentan heterocigotos.</text>
+        <text y="212" font-size="8" fill="#5d6472">microsatélites · SNP · isoenzimas</text>
+      </g>
+      <!-- dominante: gel -->
+      <g transform="translate(187 28)">
+        <rect x="0" y="4" width="150" height="130" rx="4" fill="#1f2a44"/>
+        <g font-size="7.5" fill="#b9c3d6" text-anchor="middle"><text x="25" y="16">P1</text><text x="58" y="16">P2</text><text x="91" y="16">P3</text><text x="124" y="16">P4</text></g>
+        <g fill="#e9edf5">
+          <rect x="12" y="32" width="26" height="4" rx="2"/><rect x="45" y="32" width="26" height="4" rx="2"/><rect x="111" y="32" width="26" height="4" rx="2"/>
+          <rect x="12" y="58" width="26" height="4" rx="2"/><rect x="78" y="58" width="26" height="4" rx="2"/><rect x="111" y="58" width="26" height="4" rx="2"/>
+          <rect x="45" y="86" width="26" height="4" rx="2"/><rect x="78" y="86" width="26" height="4" rx="2"/>
+          <rect x="12" y="112" width="26" height="4" rx="2"/><rect x="45" y="112" width="26" height="4" rx="2"/><rect x="78" y="112" width="26" height="4" rx="2"/><rect x="111" y="112" width="26" height="4" rx="2"/>
+        </g>
+        <g font-family="ui-monospace, Consolas, monospace" font-size="9" fill="#111" text-anchor="middle">
+          <text x="25" y="150">1011</text><text x="58" y="150">1011</text><text x="91" y="150">0111</text><text x="124" y="150">1101</text>
+        </g>
+        <text y="172" font-size="8.5" fill="#111">Banda <tspan font-weight="600">presente (1) o ausente (0)</tspan>:</text>
+        <text y="184" font-size="8.5" fill="#111">el heterocigoto no se distingue.</text>
+        <text y="212" font-size="8" fill="#5d6472">AFLP · ISSR · RAPD</text>
+      </g>
+      <!-- secuencias -->
+      <g transform="translate(362 28)" font-family="ui-monospace, Consolas, monospace" font-size="10.5">
+        <!-- one glyph per fixed position, so the highlighted columns line up with any monospace font -->
+        <rect x="75.5" y="3" width="11" height="104" rx="2" fill="#1d74b5" opacity="0.16"/>
+        <rect x="119.5" y="3" width="11" height="104" rx="2" fill="#1d74b5" opacity="0.16"/>
+        <g fill="#5d6472" font-family="Jost, sans-serif" font-size="9"><text y="16">H1</text><text y="37">H1</text><text y="58">H2</text><text y="79">H3</text><text y="100">H3</text></g>
+        <g fill="#111" text-anchor="middle">
+          <text x="26 37 48 59 70 81 92 103 114 125 136" y="16">ACGTTAGCATC</text>
+          <text x="26 37 48 59 70 81 92 103 114 125 136" y="37">ACGTTAGCATC</text>
+          <text x="26 37 48 59 70 92 103 114 125 136" y="58">ACGTTGCATC</text>
+          <text x="26 37 48 59 70 92 103 114 136" y="79">ACGTTGCAC</text>
+          <text x="26 37 48 59 70 92 103 114 136" y="100">ACGTTGCAC</text>
+        </g>
+        <g fill="#1d74b5" font-weight="700" text-anchor="middle"><text x="81" y="58">C</text><text x="81" y="79">C</text><text x="81" y="100">C</text><text x="125" y="79">G</text><text x="125" y="100">G</text></g>
+        <g font-family="Jost, sans-serif" font-size="8.5" fill="#111">
+          <text y="150">Sitios variables forman</text><text y="162"><tspan font-weight="600">haplotipos</tspan> (H1, H2, H3):</text><text y="174">un alelo por individuo.</text>
+        </g>
+        <text y="212" font-family="Jost, sans-serif" font-size="8" fill="#5d6472">ADN de cloroplasto · mitocondria · nuclear</text>
+      </g>
+      <!-- morfología -->
+      <g transform="translate(537 28)">
+        <line x1="10" y1="10" x2="10" y2="130" stroke="#111"/>
+        <g font-size="7.5" fill="#5d6472" text-anchor="end"><text x="7" y="132">10</text><text x="7" y="72">20</text><text x="7" y="14">30</text></g>
+        <g stroke="#14213d" stroke-width="1.2">
+          <line x1="40" y1="30" x2="40" y2="110"/><rect x="28" y="52" width="24" height="36" fill="#e9edf5"/><line x1="28" y1="70" x2="52" y2="70" stroke-width="2.2"/>
+          <line x1="85" y1="16" x2="85" y2="80"/><rect x="73" y="30" width="24" height="30" fill="#e9edf5"/><line x1="73" y1="44" x2="97" y2="44" stroke-width="2.2"/>
+          <line x1="130" y1="56" x2="130" y2="124"/><rect x="118" y="76" width="24" height="30" fill="#e9edf5"/><line x1="118" y1="92" x2="142" y2="92" stroke-width="2.2"/>
+        </g>
+        <g font-size="8" fill="#111" text-anchor="middle"><text x="40" y="146">Pob. A</text><text x="85" y="146">Pob. B</text><text x="130" y="146">Pob. C</text></g>
+        <text y="172" font-size="8.5" fill="#111">Caracteres <tspan font-weight="600">medidos o contados</tspan>:</text>
+        <text y="184" font-size="8.5" fill="#111">longitud de mazorca, días a flor.</text>
+        <text y="212" font-size="8" fill="#5d6472">cuantitativos · ordinales · binarios</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 1.3.</b> Cuatro maneras de observar la variación. En los marcadores <b>codominantes</b> se leen los dos alelos de cada individuo; en los <b>dominantes</b> solo la presencia o ausencia de una banda; en las <b>secuencias</b> los sitios variables definen haplotipos; en la <b>morfología</b> se miden caracteres del fenotipo.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 1.3.</b> Los cinco tipos de datos y lo que implica cada uno.</caption>
+    <thead><tr><th style="width:17%">Tipo</th><th style="width:22%">Ejemplos</th><th>Ventaja</th><th>Limitación</th></tr></thead>
+    <tbody>
+      <tr><td><b>Codominante</b></td><td>Microsatélites (SSR), SNP, isoenzimas</td><td>Se observan heterocigotos; permite todas las pruebas de equilibrio, endogamia, alelos nulos, N<sub>e</sub> y cuellos de botella.</td><td>Posibles alelos nulos y errores de lectura del tamaño.</td></tr>
+      <tr><td><b>Dominante</b></td><td>AFLP, ISSR, RAPD</td><td>Muchos loci con poco costo y sin conocer el genoma.</td><td>No distingue heterocigotos: las frecuencias se estiman suponiendo equilibrio y no hay pruebas de Hardy–Weinberg.</td></tr>
+      <tr><td><b>Haploide</b></td><td>Códigos de haplotipos de cloroplasto o mitocondria</td><td>Herencia por un solo progenitor; ideal para rastrear la dispersión de semillas.</td><td>Un solo linaje por individuo; menos variación que los marcadores nucleares.</td></tr>
+      <tr><td><b>Secuencias</b></td><td>Alineamientos FASTA de cpDNA, ITS, genes nucleares</td><td>Informan sobre la genealogía de los haplotipos, la historia demográfica y los tiempos de divergencia.</td><td>Un alineamiento es un solo locus; requiere secuencias alineadas de igual longitud.</td></tr>
+      <tr><td><b>Morfológico</b></td><td>Caracteres de planta, flor, fruto y semilla</td><td>Refleja el fenotipo que interesa al mejorador y a la conservación; permite P<sub>ST</sub>.</td><td>Está influido por el ambiente; no mide directamente la variación genética.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante</div>
+    <p>Declarar mal el tipo de dato cambia los resultados. Una matriz de 0 y 1 de ISSR leída como codominante daría heterocigosis absurdas. El Bloque 2 detecta el tipo automáticamente, pero <b>siempre te muestra lo que supuso</b> y te permite corregirlo antes de calcular nada.</p>
+  </div>
+
+  <!-- 1.5 -->
+  <h2 id="s1-5"><span class="num">1.5</span>Qué necesitas y cómo abrir el programa</h2>
+  <div class="dos">
+    <div>
+      <h4>Requisitos</h4>
+      <ul>
+        <li>Una computadora de escritorio o portátil con un <b>navegador de internet moderno y actualizado</b>.</li>
+        <li>Pantalla de al menos 1280 píxeles de ancho; la app se adapta a pantallas menores, pero las tablas y figuras se aprovechan mejor en una grande.</li>
+        <li>4 GB de memoria bastan para la mayoría de los estudios; el agrupamiento bayesiano y el fechado con miles de iteraciones agradecen 8 GB.</li>
+        <li><b>No</b> se necesita conexión a internet, instalación ni permisos de administrador.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contenido de la carpeta</h4>
+      <table class="compacta" style="margin-top:0.04in">
+        <tbody>
+          <tr><td><code>index.html</code></td><td>La app. Ábrela con doble clic.</td></tr>
+          <tr><td><code>Open PopGeneticsPro.bat</code></td><td>Arranque opcional con servidor local.</td></tr>
+          <tr><td><code>js/</code>, <code>css/</code></td><td>El código del programa.</td></tr>
+          <tr><td><code>data/</code></td><td>Los archivos de ejemplo.</td></tr>
+          <tr><td><code>vendor/</code></td><td>Componentes de terceros y sus licencias.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Abrir PopGeneticsPro en tres pasos</h3>
+  <ol class="pasos">
+    <li><b>Copia la carpeta</b> <code>PopGeneticsPro</code> completa a tu computadora, por ejemplo a Documentos. No separes <code>index.html</code> del resto de las carpetas.</li>
+    <li><b>Haz doble clic en</b> <code>index.html</code>. Se abrirá en tu navegador predeterminado con la portada del Bloque 1.</li>
+    <li><b>Pulsa</b> <span class="ui">Start with my data</span> para cargar un archivo, o ve directamente al Bloque 2 y elige uno de los ejemplos.</li>
+  </ol>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · abrir con servidor local</div>
+    <p>Con doble clic todo funciona, pero algunos navegadores limitan los procesos en segundo plano cuando la página se abre como archivo local. En ese caso el agrupamiento bayesiano y el fechado corren igualmente, aunque la ventana puede quedar ocupada mientras calculan. Si trabajas con estudios grandes, usa <code>Open PopGeneticsPro.bat</code>: inicia un pequeño servidor en tu propia computadora (dirección <code>http://localhost:9000</code>) y abre la app desde ahí. Sigue sin enviarse nada a internet.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · tu trabajo se recuerda</div>
+    <p>La app guarda en tu navegador las preferencias de estilo de las figuras y el contenido de la hoja de datos integrada. Si cambias de navegador o borras los datos de navegación, esas preferencias se pierden, pero tus archivos originales no se modifican nunca.</p>
+  </div>
+
+  <!-- 1.6 -->
+  <h2 id="s1-6"><span class="num">1.6</span>Recorrido por la interfaz</h2>
+  <p>Todos los bloques de análisis comparten la misma organización, así que basta aprenderla una vez. De arriba abajo, cada bloque tiene tres partes:</p>
+  <table>
+    <thead><tr><th style="width:26%">Parte</th><th>Qué contiene</th><th style="width:28%">Cómo aparece en pantalla</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Ajustes</b></td><td>Opciones del análisis con valores predeterminados que siguen las convenciones más comunes de la literatura, y un botón para calcular.</td><td><span class="ui">1 · Settings</span> · <span class="ui">Compute …</span></td></tr>
+      <tr><td><b>2 · Lo que dicen los números</b></td><td>Tarjetas con los valores principales y párrafos que interpretan los resultados en lenguaje llano.</td><td><span class="ui">2 · What the numbers say</span></td></tr>
+      <tr><td><b>3 · Tablas y figuras</b></td><td>Tablas descargables y figuras editables con controles de estilo y exportación.</td><td><span class="ui">Edit figure</span> · <span class="ui">Download figure</span></td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/app-datos.png" alt="Tarjeta de análisis disponibles del Bloque 2"></div>
+    <figcaption><b>Figura 1.4.</b> Al terminar de cargar los datos, el Bloque 2 muestra <span class="ui">What you can run with these data</span>: qué familias de análisis admiten tus datos (marca verde) y por qué no están disponibles las demás. Aquí, con el ejemplo de maíz con microsatélites, 9 de 11 análisis están disponibles; faltan las secuencias y la estructura espacial porque no hay alineamientos ni coordenadas.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco" style="position:relative">
+      <img src="../img/app-figura.png" alt="Figura editable del Bloque 3 con su panel de edición abierto">
+      <span class="marca" style="left:38.6%;top:10.4%">1</span>
+      <span class="marca" style="left:10.9%;top:68.6%">2</span>
+      <span class="marca" style="left:32.4%;top:72.8%">3</span>
+      <span class="marca" style="left:10.9%;top:77.2%">4</span>
+      <span class="marca" style="left:71.9%;top:89.8%">5</span>
+      <span class="marca" style="left:57.3%;top:96.2%">6</span>
+    </div>
+    <figcaption><b>Figura 1.5.</b> Una figura del Bloque 3 (diversidad génica por población, maíz con microsatélites) con su panel de edición abierto.</figcaption>
+  </figure>
+  <ul class="leyenda-marcas">
+    <li><span class="n">1</span>La figura se redibuja al instante con cada cambio.</li>
+    <li><span class="n">2</span><span class="ui">Edit figure</span> abre y cierra el panel de edición.</li>
+    <li><span class="n">3</span>Dos pestañas: contenido y colores, estilo y tipografía.</li>
+    <li><span class="n">4</span><span class="ui">Flip axes</span> gira la gráfica: barras horizontales con nombres legibles.</li>
+    <li><span class="n">5</span>Paleta de colores; también títulos, índice, barras de error y orden.</li>
+    <li><span class="n">6</span>Formato, resolución, fondo y descarga, con el tamaño resultante en píxeles y centímetros.</li>
+  </ul>
+
+  <h3>Términos de la interfaz</h3>
+  <p>La app está en inglés, el idioma de las revistas científicas. Esta tabla reúne los términos que verás en todos los bloques.</p>
+  <table class="compacta">
+    <caption><b>Tabla 1.4.</b> Vocabulario básico de la interfaz.</caption>
+    <thead><tr><th>En la app</th><th>En español</th><th>En la app</th><th>En español</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Settings</span></td><td>Ajustes</td><td><span class="ui">Download</span></td><td>Descargar</td></tr>
+      <tr><td><span class="ui">Compute</span> · <span class="ui">Run</span></td><td>Calcular · ejecutar</td><td><span class="ui">Edit figure</span></td><td>Editar figura</td></tr>
+      <tr><td><span class="ui">What the numbers say</span></td><td>Lo que dicen los números</td><td><span class="ui">Content &amp; colours</span></td><td>Contenido y colores</td></tr>
+      <tr><td><span class="ui">Population</span> · <span class="ui">Region</span></td><td>Población · región</td><td><span class="ui">Style &amp; typography</span></td><td>Estilo y tipografía</td></tr>
+      <tr><td><span class="ui">Locus</span> · <span class="ui">Loci</span></td><td>Locus · loci</td><td><span class="ui">Palette</span></td><td>Paleta de colores</td></tr>
+      <tr><td><span class="ui">Missing data</span></td><td>Datos faltantes</td><td><span class="ui">Flip axes</span></td><td>Girar los ejes</td></tr>
+      <tr><td><span class="ui">Replicates</span></td><td>Réplicas</td><td><span class="ui">Resolution</span></td><td>Resolución</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Semilla aleatoria</td><td><span class="ui">Report</span></td><td>Informe</td></tr>
+      <tr><td><span class="ui">Continue to …</span></td><td>Continuar a…</td><td><span class="ui">How to cite</span></td><td>Cómo citar</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · la semilla aleatoria</div>
+    <p>Los análisis que usan remuestreos, permutaciones o cadenas de Markov dependen del azar. La <span class="ui">Random seed</span> fija ese azar: con la misma semilla y los mismos datos obtendrás exactamente los mismos intervalos y valores P. Anota la semilla en la sección de métodos de tu artículo para que otros puedan reproducir tus resultados; el informe del Bloque 10 lo hace por ti.</p>
+  </div>
+
+  <!-- 1.7 -->
+  <h2 id="s1-7"><span class="num">1.7</span>Los seis conjuntos de datos de ejemplo</h2>
+  <p>El programa incluye seis conjuntos de datos listos para usar. Están incrustados en la app, así que cargan aunque no haya conexión, y cada uno está pensado para practicar un tipo de dato distinto. Los capítulos de cada bloque los usan en sus ejemplos paso a paso.</p>
+
+  <table>
+    <caption><b>Tabla 1.5.</b> Ejemplos incluidos. Se cargan en el Bloque 2, bajo <span class="ui">Or try an example</span>.</caption>
+    <thead><tr><th style="width:23%">Botón en la app</th><th style="width:15%">Tipo</th><th>Contenido</th><th style="width:22%">Bloques para practicar</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Maize landraces · ISSR</span></td><td>Dominante</td><td>31 bandas ISSR en 15 razas mexicanas de maíz, una muestra compuesta por raza. Los loci están en filas: la app tiene que darse cuenta y transponer la tabla.</td><td><span class="chip k2">2</span> <span class="chip k6">6</span> <span class="chip k10">10</span></td></tr>
+      <tr><td><span class="ui">Maize populations · SSR</span></td><td>Codominante</td><td>8 microsatélites en 3 poblaciones de maíz (Cónico, Chalqueño y Palomero) con 25 plantas cada una; dos columnas por locus.</td><td><span class="chip k2">2</span> <span class="chip k3">3</span> <span class="chip k4">4</span> <span class="chip k5">5</span> <span class="chip k6">6</span> <span class="chip k7">7</span> <span class="chip k9">9</span></td></tr>
+      <tr><td><span class="ui">Agave · AFLP</span></td><td>Dominante</td><td>60 bandas AFLP en 4 poblaciones de agave con 20 plantas cada una y coordenadas geográficas.</td><td><span class="chip k2">2</span> <span class="chip k3">3</span> <span class="chip k4">4</span> <span class="chip k5">5</span> <span class="chip k6">6</span> <span class="chip k7">7</span> <span class="chip k9">9</span></td></tr>
+      <tr><td><span class="ui">Pine · chloroplast DNA</span></td><td>Secuencias</td><td>48 secuencias alineadas de ADN de cloroplasto (480 pb) de pino en 4 poblaciones.</td><td><span class="chip k2">2</span> <span class="chip k5">5</span> <span class="chip k6">6</span> <span class="chip k8">8</span></td></tr>
+      <tr><td><span class="ui">Maize · morphology</span></td><td>Morfológico</td><td>9 caracteres medidos en las mismas plantas del ejemplo de microsatélites.</td><td><span class="chip k2">2</span> <span class="chip k3">3</span> <span class="chip k6">6</span> <span class="chip k9">9</span></td></tr>
+      <tr><td><span class="ui">Five genera · dating with fossils</span></td><td>Secuencias</td><td>Sintético: 16 especies de cinco géneros inventados y un grupo externo, 1600 sitios simulados sobre un árbol con edades conocidas y fósiles ficticios.</td><td><span class="chip k2">2</span> <span class="chip k6">6</span> <span class="chip k8">8</span></td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/app-bloques.png" alt="Tarjetas de los bloques de análisis en la portada de la app"></div>
+    <figcaption><b>Figura 1.6.</b> La sección <span class="ui">What's inside</span> de la portada resume los bloques de análisis. Un clic en cualquier tarjeta lleva a su bloque; si todavía no hay datos cargados, la app te lleva al Bloque 2.</figcaption>
+  </figure>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Tu primer análisis en dos minutos</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Abre la app y pulsa <span class="ui">Start with my data</span>.</li>
+      <li>Bajo <span class="ui">Or try an example</span>, pulsa <span class="ui">Maize populations · SSR</span>. La app lee el archivo y muestra cómo lo interpretó: 75 individuos, 3 poblaciones, 8 loci codominantes.</li>
+      <li>Revisa el resumen y pulsa el botón para construir el conjunto de datos. Aparecen el control de calidad y la tarjeta de análisis disponibles de la figura 1.4.</li>
+      <li>Pulsa <span class="ui">Continue to diversity</span> y luego <span class="ui">Compute diversity</span>. En un instante verás H<sub>e</sub> = 0.747 para el conjunto de las tres poblaciones, junto con la interpretación y la figura 1.5.</li>
+    </ol>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · ejemplos y datos reales</div>
+    <p>La matriz ISSR de razas de maíz proviene de un estudio real y se publica con autorización de su autor. Los conjuntos de microsatélites, AFLP, cloroplasto y morfología son simulaciones realistas creadas para enseñar, y el de los cinco géneros es completamente sintético, con edades verdaderas conocidas para comprobar el fechado.</p>
+  </div>
+
+  <!-- 1.8 -->
+  <h2 id="s1-8"><span class="num">1.8</span>Flujo de trabajo recomendado</h2>
+  <p>Los bloques están ordenados como se hace un estudio: primero se asegura la calidad de los datos, luego se describe la diversidad, se revisan los supuestos, se mide la estructura y, al final, se interpreta la historia. Cada tipo de dato recorre un camino distinto por esa secuencia, como líneas de metro que se detienen solo en algunas estaciones.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Mapa de rutas de análisis por tipo de dato">
+      <!-- columnas: bloques 2..10 -->
+      <g font-size="9" text-anchor="middle" fill="#fff" font-weight="500">
+        <rect x="133" y="8" width="44" height="18" rx="3" fill="#0f766e"/><text x="155" y="21">2</text>
+        <rect x="191" y="8" width="44" height="18" rx="3" fill="#3f7d20"/><text x="213" y="21">3</text>
+        <rect x="249" y="8" width="44" height="18" rx="3" fill="#b7791f"/><text x="271" y="21">4</text>
+        <rect x="307" y="8" width="44" height="18" rx="3" fill="#c2410c"/><text x="329" y="21">5</text>
+        <rect x="365" y="8" width="44" height="18" rx="3" fill="#b4234a"/><text x="387" y="21">6</text>
+        <rect x="423" y="8" width="44" height="18" rx="3" fill="#7e3fb0"/><text x="445" y="21">7</text>
+        <rect x="481" y="8" width="44" height="18" rx="3" fill="#1d74b5"/><text x="503" y="21">8</text>
+        <rect x="539" y="8" width="44" height="18" rx="3" fill="#8a5a2b"/><text x="561" y="21">9</text>
+        <rect x="597" y="8" width="44" height="18" rx="3" fill="#334155"/><text x="619" y="21">10</text>
+      </g>
+      <g font-size="7.5" text-anchor="middle" fill="#5d6472">
+        <text x="155" y="38">datos</text><text x="213" y="38">diversidad</text><text x="271" y="38">HW y LD</text><text x="329" y="38">AMOVA</text><text x="387" y="38">distancias</text><text x="445" y="38">agrupam.</text><text x="503" y="38">secuencias</text><text x="561" y="38">demografía</text><text x="619" y="38">informe</text>
+      </g>
+      <g stroke="#e3e7ee" stroke-dasharray="2 3"><line x1="155" y1="44" x2="155" y2="286"/><line x1="213" y1="44" x2="213" y2="286"/><line x1="271" y1="44" x2="271" y2="286"/><line x1="329" y1="44" x2="329" y2="286"/><line x1="387" y1="44" x2="387" y2="286"/><line x1="445" y1="44" x2="445" y2="286"/><line x1="503" y1="44" x2="503" y2="286"/><line x1="561" y1="44" x2="561" y2="286"/><line x1="619" y1="44" x2="619" y2="286"/></g>
+
+      <!-- filas -->
+      <g font-size="10" fill="#111" font-weight="500">
+        <text x="6" y="72">Codominante</text><text x="6" y="120">Dominante</text><text x="6" y="168">Haploide</text><text x="6" y="216">Secuencias</text><text x="6" y="264">Morfológico</text>
+      </g>
+      <g font-size="7.5" fill="#5d6472">
+        <text x="6" y="84">SSR · SNP</text><text x="6" y="132">AFLP · ISSR</text><text x="6" y="180">códigos cp/mt</text><text x="6" y="228">FASTA</text><text x="6" y="276">caracteres</text>
+      </g>
+
+      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M155 72 H619" stroke="#14213d" stroke-width="5"/>
+        <path d="M155 120 H619" stroke="#111" stroke-width="5"/>
+        <path d="M155 168 H619" stroke="#24365f" stroke-width="5"/>
+        <path d="M155 216 H619" stroke="#14213d" stroke-width="5"/>
+        <path d="M155 264 H619" stroke="#111" stroke-width="5"/>
+      </g>
+      <!-- estaciones: llena = disponible, media = con condiciones, vacía = se pasa de largo -->
+      <g stroke-width="2.4">
+        <!-- codominante -->
+        <circle cx="155" cy="72" r="8" fill="#0f766e" stroke="#fff"/><circle cx="213" cy="72" r="8" fill="#3f7d20" stroke="#fff"/><circle cx="271" cy="72" r="8" fill="#b7791f" stroke="#fff"/><circle cx="329" cy="72" r="8" fill="#c2410c" stroke="#fff"/><circle cx="387" cy="72" r="8" fill="#b4234a" stroke="#fff"/><circle cx="445" cy="72" r="8" fill="#7e3fb0" stroke="#fff"/><circle cx="503" cy="72" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="561" cy="72" r="8" fill="#8a5a2b" stroke="#fff"/><circle cx="619" cy="72" r="8" fill="#334155" stroke="#fff"/>
+        <!-- dominante -->
+        <circle cx="155" cy="120" r="8" fill="#0f766e" stroke="#fff"/><circle cx="213" cy="120" r="8" fill="#3f7d20" stroke="#fff"/><circle cx="271" cy="120" r="8" fill="#fff" stroke="#b7791f"/><circle cx="329" cy="120" r="8" fill="#c2410c" stroke="#fff"/><circle cx="387" cy="120" r="8" fill="#b4234a" stroke="#fff"/><circle cx="445" cy="120" r="8" fill="#7e3fb0" stroke="#fff"/><circle cx="503" cy="120" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="561" cy="120" r="8" fill="#fff" stroke="#8a5a2b"/><circle cx="619" cy="120" r="8" fill="#334155" stroke="#fff"/>
+        <!-- haploide -->
+        <circle cx="155" cy="168" r="8" fill="#0f766e" stroke="#fff"/><circle cx="213" cy="168" r="8" fill="#3f7d20" stroke="#fff"/><circle cx="271" cy="168" r="8" fill="#fff" stroke="#b7791f"/><circle cx="329" cy="168" r="8" fill="#c2410c" stroke="#fff"/><circle cx="387" cy="168" r="8" fill="#b4234a" stroke="#fff"/><circle cx="445" cy="168" r="8" fill="#7e3fb0" stroke="#fff"/><circle cx="503" cy="168" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="561" cy="168" r="8" fill="#fff" stroke="#8a5a2b"/><circle cx="619" cy="168" r="8" fill="#334155" stroke="#fff"/>
+        <!-- secuencias -->
+        <circle cx="155" cy="216" r="8" fill="#0f766e" stroke="#fff"/><circle cx="213" cy="216" r="8" fill="#fff" stroke="#3f7d20"/><circle cx="271" cy="216" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="329" cy="216" r="8" fill="#c2410c" stroke="#fff"/><circle cx="387" cy="216" r="8" fill="#b4234a" stroke="#fff"/><circle cx="445" cy="216" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="503" cy="216" r="8" fill="#1d74b5" stroke="#fff"/><circle cx="561" cy="216" r="8" fill="#fff" stroke="#8a5a2b"/><circle cx="619" cy="216" r="8" fill="#334155" stroke="#fff"/>
+        <!-- morfológico -->
+        <circle cx="155" cy="264" r="8" fill="#0f766e" stroke="#fff"/><circle cx="213" cy="264" r="8" fill="#3f7d20" stroke="#fff"/><circle cx="271" cy="264" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="329" cy="264" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="387" cy="264" r="8" fill="#b4234a" stroke="#fff"/><circle cx="445" cy="264" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="503" cy="264" r="4" fill="#fff" stroke="#b9c3d6"/><circle cx="561" cy="264" r="8" fill="#fff" stroke="#8a5a2b"/><circle cx="619" cy="264" r="8" fill="#334155" stroke="#fff"/>
+      </g>
+      <!-- leyenda -->
+      <g font-size="8.5" fill="#111" transform="translate(655 70)">
+        <circle cx="6" cy="0" r="6.5" fill="#14213d"/><text x="16" y="3">sí</text>
+        <circle cx="6" cy="24" r="6.5" fill="#fff" stroke="#14213d" stroke-width="2.2"/><text x="16" y="27">en</text><text x="16" y="37">parte</text>
+        <circle cx="6" cy="58" r="3.5" fill="#fff" stroke="#b9c3d6" stroke-width="2.2"/><text x="16" y="61">no</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 1.7.</b> Rutas de análisis por tipo de dato. Una estación llena indica que el bloque está disponible; un aro, que lo está en parte o con condiciones (tabla 1.6); un punto pequeño, que el tipo de dato pasa de largo. Todas las rutas empiezan en el Bloque 2 y terminan en el informe.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Tabla 1.6.</b> Qué bloques se activan con cada tipo de dato y en qué condiciones.</caption>
+    <thead><tr><th style="width:15%">Tipo</th><th class="c">3</th><th class="c">4</th><th class="c">5</th><th class="c">6</th><th class="c">7</th><th class="c">8</th><th class="c">9</th><th style="width:36%">Condiciones</th></tr></thead>
+    <tbody>
+      <tr><td><b>Codominante</b></td><td class="c si">●</td><td class="c si">●</td><td class="c si">●</td><td class="c si">●</td><td class="c si">●</td><td class="c no">—</td><td class="c si">●</td><td>Bloques 4 y 5 requieren individuos repetidos dentro de las poblaciones; el 9, al menos 10 individuos por población o coordenadas.</td></tr>
+      <tr><td><b>Dominante</b></td><td class="c si">●</td><td class="c parcial">◐</td><td class="c si">●</td><td class="c si">●</td><td class="c si">●</td><td class="c no">—</td><td class="c parcial">◐</td><td>Sin pruebas de Hardy–Weinberg (solo ligamiento); en el 9 solo estructura espacial, si hay coordenadas.</td></tr>
+      <tr><td><b>Haploide</b></td><td class="c si">●</td><td class="c parcial">◐</td><td class="c si">●</td><td class="c si">●</td><td class="c si">●</td><td class="c no">—</td><td class="c parcial">◐</td><td>Igual que los dominantes; el agrupamiento pide al menos tres loci polimórficos.</td></tr>
+      <tr><td><b>Secuencias</b></td><td class="c parcial">◐</td><td class="c no">—</td><td class="c si">●</td><td class="c si">●</td><td class="c no">—</td><td class="c si">●</td><td class="c parcial">◐</td><td>Un alineamiento es un solo locus: sin ligamiento ni agrupamiento bayesiano. El fechado requiere al menos tres secuencias.</td></tr>
+      <tr><td><b>Morfológico</b></td><td class="c si">●</td><td class="c no">—</td><td class="c no">—</td><td class="c si">●</td><td class="c no">—</td><td class="c no">—</td><td class="c parcial">◐</td><td>Diversidad fenotípica por carácter; en el 9, P<sub>ST</sub> para cada carácter cuantitativo.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿cuántas plantas por población?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:26%">Tamaño por población</th><th style="width:20%">Lectura</th><th>Qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td><b>25 a 30 o más</b></td><td>Adecuado</td><td>Suficiente para estimar bien las frecuencias alélicas con microsatélites (Hale y colaboradores, 2012). Todos los análisis son confiables.</td></tr>
+        <tr><td><b>10 a 24</b></td><td>Aceptable con cautela</td><td>Compara la diversidad con la <b>riqueza alélica rarefaccionada</b>, no con el número bruto de alelos, y reporta intervalos de confianza.</td></tr>
+        <tr><td><b>5 a 9</b></td><td>Limitado</td><td>Los alelos raros se pierden y los F<sub>IS</sub> son inestables. Úsalo para describir, no para comparar poblaciones con precisión.</td></tr>
+        <tr><td><b>Menos de 5</b></td><td>Insuficiente</td><td>La app lo marca en el control de calidad. Considera unir poblaciones vecinas o limitarte a distancias y ordenación.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Con marcadores dominantes conviene un número mayor de plantas y de bandas polimórficas, porque cada banda aporta menos información que un microsatélite.</p>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · el orden sí importa</div>
+    <p>Aunque puedes saltar entre bloques, revisa el <b>Bloque 4 antes de interpretar el 5 y el 7</b>. Un locus con alelos nulos o una población con fuerte endogamia distorsiona F<sub>ST</sub> y el agrupamiento bayesiano. El Bloque 5 permite excluir los loci sospechosos que el Bloque 4 detecta.</p>
+  </div>
+
+  <!-- 1.9 -->
+  <h2 id="s1-9"><span class="num">1.9</span>Cómo leer valores P e intervalos</h2>
+  <p>Casi todos los bloques reportan valores P e intervalos de confianza. Entenderlos bien evita las dos equivocaciones más comunes: creer que un resultado no significativo prueba que no hay efecto y creer que uno significativo es necesariamente importante.</p>
+
+  <div class="dos">
+    <div class="caja teoria" style="margin:0">
+      <div class="caja-t"><span class="ico">P</span>El valor P</div>
+      <p>Es la probabilidad de observar un resultado tan extremo como el tuyo <b>si en realidad no hubiera efecto</b>. Un P = 0.003 en una prueba de Hardy–Weinberg dice que, si la población estuviera en equilibrio, un déficit de heterocigotos así ocurriría 3 veces de cada 1000 por azar.</p>
+    </div>
+    <div class="caja teoria" style="margin:0">
+      <div class="caja-t"><span class="ico">IC</span>El intervalo de confianza</div>
+      <p>Es el rango de valores compatibles con tus datos. Si el intervalo al 95 % de F<sub>IS</sub> va de 0.08 a 0.21, la endogamia es real y moderada. Si va de −0.05 a 0.30, los datos no distinguen entre ausencia de endogamia y endogamia fuerte.</p>
+    </div>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · lectura de un valor P</div>
+    <table class="compacta">
+      <thead><tr><th style="width:24%">Valor P</th><th style="width:28%">Evidencia contra la hipótesis nula</th><th>Cómo redactarlo</th></tr></thead>
+      <tbody>
+        <tr><td><b>P &lt; 0.001</b></td><td>Muy fuerte</td><td>“La desviación es altamente significativa”.</td></tr>
+        <tr><td><b>0.001 ≤ P &lt; 0.01</b></td><td>Fuerte</td><td>“La desviación es significativa”.</td></tr>
+        <tr><td><b>0.01 ≤ P &lt; 0.05</b></td><td>Moderada</td><td>“Hay evidencia de desviación”; confirma con otros loci o poblaciones.</td></tr>
+        <tr><td><b>P ≥ 0.05</b></td><td>Insuficiente</td><td>“No se detectó desviación”. No afirmes que la población <i>está</i> en equilibrio: quizá faltó poder estadístico.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Reporta siempre el valor exacto de P y el tamaño del efecto (por ejemplo, F<sub>IS</sub> con su intervalo), no solo si es significativo.</p>
+  </div>
+
+  <div class="caja dato">
+    <div class="dato-cifra">1 de 20</div>
+    <div class="dato-txt"><div class="caja-t">El problema de las pruebas múltiples</div>Con un nivel de 0.05, <b>una de cada veinte pruebas sale significativa por puro azar</b>. Si pruebas 8 loci en 3 poblaciones (24 pruebas), espera más o menos un falso positivo aunque todo esté en equilibrio. Por eso el Bloque 4 corrige los valores P con el método secuencial de Holm, predeterminado, o con Bonferroni, Benjamini–Hochberg o Benjamini–Yekutieli.</div>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · significancia biológica</div>
+    <p>Con muchos datos, diferencias diminutas resultan significativas. Un F<sub>ST</sub> de 0.01 puede tener P &lt; 0.001 con cientos de plantas y, sin embargo, indicar poblaciones que intercambian migrantes con frecuencia. Pregúntate siempre si la magnitud importa para tu especie y tu objetivo, no solo si el valor P es pequeño.</p>
+  </div>
+
+  <p style="margin-top:0.3in">Con estas bases estás listo para recorrer los bloques. El siguiente capítulo presenta la portada de la app, su teoría integrada y el simulador, una forma rápida de ver en movimiento las fuerzas descritas en la sección 1.3.</p>
+</section>
+
+</body>
+</html>

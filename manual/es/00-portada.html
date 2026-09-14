@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../manual.css">
+<style>
+  .cover { background: #ffffff; }
+  .cover text { font-kerning: normal; }
+</style>
+</head>
+<body>
+
+<section class="page cover" aria-label="Portada">
+  <svg id="cover" viewBox="0 0 850 1100" xmlns="http://www.w3.org/2000/svg" role="img"
+       aria-label="Portada del manual de PopGeneticsPro: una doble hélice de ADN a colores se abre en un árbol filogenético que lleva a maíz, jitomate, uva, chayote, mariposa monarca, catarina y abeja; a los lados, una hoja con sus puntos de referencia morfológicos, un diagrama floral y un árbol circular."></svg>
+</section>
+
+<script>
+/* The cover is drawn once, deterministically (fixed seed), as vector graphics:
+   it prints sharp at any size and every illustration is original. */
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('cover');
+  const el = (tag, attrs, parent, text) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) if (attrs[k] != null) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    (parent || svg).appendChild(n);
+    return n;
+  };
+  const rng = (seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; })(20260913);
+
+  const W = 850, H = 1100;
+  const INK = '#14213d', GRIS = '#5b6474', BLANCO = '#ffffff';
+  const rad = d => d * Math.PI / 180;
+  const pol = (cx, cy, r, a) => [cx + r * Math.cos(rad(a)), cy + r * Math.sin(rad(a))];
+  const f1 = v => (+v).toFixed(2);
+  const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+  const mix = (a, b, t) => { const A = hex(a), B = hex(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
+  const poly = pts => 'M' + pts.map(([x, y]) => f1(x) + ' ' + f1(y)).join('L');
+
+  /* gradients are used only as fills of shapes with area (a gradient on a tspan or on the
+     stroke of a straight line prints as a huge rectangle) */
+  const defs = el('defs');
+  function grad(kind, id, stops, attrs) {
+    const g = el(kind, Object.assign({ id }, attrs), defs);
+    stops.forEach(([off, c, op]) => el('stop', { offset: off, 'stop-color': c, 'stop-opacity': op }, g));
+    return `url(#${id})`;
+  }
+  const radial = (id, stops, a) => grad('radialGradient', id, stops, Object.assign({ cx: '50%', cy: '50%', r: '55%', fx: '34%', fy: '30%' }, a));
+  const linear = (id, stops, a) => grad('linearGradient', id, stops, Object.assign({ x1: 0, y1: 0, x2: 1, y2: 1 }, a));
+  const esfera = {};
+  const sphere = c => esfera[c] || (esfera[c] = radial('sp' + c.slice(1), [['0%', mix(c, BLANCO, 0.8)], ['30%', mix(c, BLANCO, 0.25)], ['70%', c], ['100%', mix(c, INK, 0.45)]]));
+  const cilindro = {};
+  const cylinder = c => cilindro[c] || (cilindro[c] = linear('cy' + c.slice(1), [['0%', mix(c, BLANCO, 0.6)], ['40%', c], ['100%', mix(c, INK, 0.4)]], { x1: 0, y1: 0, x2: 0, y2: 1 }));
+
+  const G = {
+    grano: radial('gGrano', [['0%', '#fff4b8'], ['40%', '#f7c63d'], ['100%', '#cf8a06']]),
+    hojaMaiz: linear('gHojaMaiz', [['0%', '#c3e79a'], ['100%', '#5aa846']]),
+    hojaMaizO: linear('gHojaMaizO', [['0%', '#7cc262'], ['100%', '#2f7a38']]),
+    jitomate: radial('gJitomate', [['0%', '#ff9d85'], ['35%', '#ec3b2c'], ['80%', '#b3161b'], ['100%', '#7d0d12']], { r: '58%' }),
+    uva: radial('gUva', [['0%', '#d7b8f0'], ['35%', '#8a52b8'], ['80%', '#4a1f6e'], ['100%', '#2a0f40']]),
+    chayote: radial('gChayote', [['0%', '#f1fbd9'], ['35%', '#bfe08a'], ['80%', '#7cb043'], ['100%', '#557f2a']], { r: '60%', fx: '38%', fy: '34%' }),
+    hoja: linear('gHoja', [['0%', '#9fd776'], ['55%', '#4f9d3f'], ['100%', '#2f7433']]),
+    hojaM: linear('gHojaM', [['0%', '#b4e38b'], ['50%', '#62ad4a'], ['100%', '#347a35']]),
+    monarca: radial('gMonarca', [['0%', '#ffc266'], ['60%', '#f7850f'], ['100%', '#d95a00']], { r: '70%', fx: '20%', fy: '60%' }),
+    catarina: radial('gCatarina', [['0%', '#ff9a8a'], ['30%', '#ec2f22'], ['80%', '#b3100f'], ['100%', '#7a0808']]),
+    abeja: linear('gAbeja', [['0%', '#ffe07a'], ['100%', '#e39b10']], { x1: 0, y1: 0, x2: 1, y2: 0 }),
+    tallo: linear('gTallo', [['0%', '#6aa84f'], ['100%', '#3c7a33']]),
+    sombra: radial('gSombra', [['0%', '#14213d', 0.22], ['100%', '#14213d', 0]], { r: '50%', fx: '50%', fy: '50%' })
+  };
+
+  el('rect', { x: 0, y: 0, width: W, height: H, fill: BLANCO });
+
+  /* ---------------------------------------------------------------- the colours of the ten blocks */
+  const BLOQUES = ['#14213d', '#3b5b92', '#0f766e', '#3f7d20', '#b7791f', '#c2410c', '#b4234a', '#7e3fb0', '#1d74b5', '#8a5a2b', '#334155', '#111111'];
+  BLOQUES.forEach((c, i) => {
+    el('rect', { x: f1(i * W / 12), y: 0, width: f1(W / 12 + 0.5), height: 9, fill: c });
+    el('rect', { x: f1(i * W / 12), y: H - 5, width: f1(W / 12 + 0.5), height: 5, fill: c });
+  });
+
+  /* ---------------------------------------------------------------- title */
+  const BASES = { A: '#2bb673', T: '#ef476f', G: '#ffb703', C: '#219ebc' };
+  const tb = el('g', { 'text-anchor': 'middle' });
+  const t1 = el('text', { x: W / 2, y: 128, fill: INK, 'font-family': 'Cormorant, serif', 'font-size': 96, 'font-weight': 700, 'letter-spacing': 0.4 }, tb);
+  el('tspan', {}, t1, 'PopGenetics');
+  el('tspan', { fill: '#1d74b5', 'font-style': 'italic', 'font-weight': 600 }, t1, 'Pro');
+  el('text', { x: W / 2, y: 208, fill: INK, 'font-family': 'Cormorant, serif', 'font-size': 50, 'font-weight': 600, 'letter-spacing': 0.8 }, tb, 'Manual de usuario');
+  el('text', { x: W / 2, y: 252, fill: '#1d74b5', 'font-family': 'Cormorant, serif', 'font-size': 46, 'font-style': 'italic', 'font-weight': 500, 'letter-spacing': 0.6 }, tb, 'User Manual');
+  const oy = 275;
+  el('rect', { x: W / 2 - 170, y: oy - 0.5, width: 132, height: 1, fill: INK });
+  el('rect', { x: W / 2 + 38, y: oy - 0.5, width: 132, height: 1, fill: INK });
+  ['A', 'T', 'G', 'C'].forEach((b, i) => el('circle', { cx: W / 2 - 22.5 + i * 15, cy: oy, r: 4, fill: sphere(BASES[b]) }));
+  el('text', { x: W / 2, y: 301, fill: GRIS, 'font-family': 'Jost, sans-serif', 'font-size': 12, 'font-weight': 400, 'letter-spacing': 4.2 }, tb, 'GENÉTICA DE POBLACIONES · POPULATION GENETICS');
+
+  /* ---------------------------------------------------------------- layout of the tree of life */
+  const O = [425, 712];                         /* root: the top of the double helix */
+  const R_ORG = 330, R_TIP = 222;
+  const ORG = [
+    { draw: maize, ang: -162, name: 'Zea mays', dot: '#f2b705', dy: 80, rt: 250 },
+    { draw: tomato, ang: -138, name: 'Solanum lycopersicum', dot: '#e03131' },
+    { draw: grape, ang: -114, name: 'Vitis vinifera', dot: '#6741d9' },
+    { draw: chayote, ang: -90, name: 'Sechium edule', dot: '#74b816' },
+    { draw: monarch, ang: -66, name: 'Danaus plexippus', dot: '#f76707' },
+    { draw: ladybird, ang: -42, name: 'Coccinella septempunctata', dot: '#c92a2a' },
+    { draw: bee, ang: -18, name: 'Apis mellifera', dot: '#f59f00', rt: 250 }
+  ];
+  const PLANTA = '#2f9e44', INSECTO = '#e8590c';
+
+  /* ---------------------------------------------------------------- DNA double helix */
+  const HX = { cx: 425, yTop: O[1], yBot: 982, R: 47, pitch: 108, off: rad(148) };
+  const theta = y => Math.PI + 2 * Math.PI * (y - HX.yTop) / HX.pitch;
+  const tubeW = z => 7.5 + 4.5 * (z + 1) / 2;
+  (function helix() {
+    const { cx, yTop, yBot, R, pitch, off } = HX;
+    const colsA = ['#2f9e44', '#0ca678', '#1c7ed6', '#4263eb', '#5f3dc4'];
+    const colsB = ['#e8590c', '#f03e3e', '#d6336c', '#ae3ec9', '#7048e8'];
+    const colAt = (cols, t) => { const x = Math.max(0, Math.min(1, t)) * (cols.length - 1); const i = Math.min(cols.length - 2, Math.floor(x)); return mix(cols[i], cols[i + 1], x - i); };
+    const vgrad = (id, cols) => grad('linearGradient', id, cols.map((c, i) => [f1(i / (cols.length - 1)), c]), { gradientUnits: 'userSpaceOnUse', x1: 0, y1: yTop, x2: 0, y2: yBot });
+    const strands = [{ ph: 0, cols: colsA }, { ph: off, cols: colsB }];
+    strands.forEach((s, k) => {
+      s.front = vgrad('hf' + k, s.cols);
+      s.back = vgrad('hb' + k, s.cols.map(c => mix(c, INK, 0.32)));
+      s.rim = vgrad('hr' + k, s.cols.map(c => mix(c, INK, 0.6)));
+      s.hi = vgrad('hh' + k, s.cols.map(c => mix(c, BLANCO, 0.62)));
+    });
+
+    /* a faint halo behind the molecule and a soft shadow under it */
+    el('ellipse', { cx, cy: (yTop + yBot) / 2 + 6, rx: 112, ry: 176, fill: radial('gHalo', [['0%', '#dfe9fb', 0.9], ['60%', '#eef3fc', 0.5], ['100%', '#ffffff', 0]], { r: '50%', fx: '50%', fy: '50%' }) });
+    el('ellipse', { cx, cy: yBot + 12, rx: 92, ry: 10, fill: G.sombra });
+
+    /* sample both strands and split them where they pass behind the axis */
+    const layers = { back: [], front: [] };
+    strands.forEach(s => {
+      let run = null, prev = null;
+      for (let y = yTop; y <= yBot + 1e-9; y += 1.2) {
+        const th = theta(y) + s.ph;
+        const p = { x: cx + R * Math.cos(th), y, z: Math.sin(th) };
+        const front = p.z > 0;
+        if (front !== prev) {
+          if (run) run.pts.push(p);
+          run = { s, front, pts: run ? [run.pts[run.pts.length - 2], p] : [p] };
+          layers[front ? 'front' : 'back'].push(run);
+          prev = front;
+        } else run.pts.push(p);
+      }
+    });
+    function tube(pts, wf, fill, g) {
+      const L = [], Rr = [];
+      pts.forEach((p, i) => {
+        const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)];
+        let tx = b.x - a.x, ty = b.y - a.y; const n = Math.hypot(tx, ty) || 1; tx /= n; ty /= n;
+        const w = wf(p) / 2;
+        L.push([p.x - ty * w, p.y + tx * w]); Rr.push([p.x + ty * w, p.y - tx * w]);
+      });
+      el('path', { d: poly(L.concat(Rr.reverse())) + 'Z', fill }, g);
+    }
+    function shine(run, g, op) {
+      const pts = run.pts.map((p, i) => {
+        const a = run.pts[Math.max(0, i - 1)], b = run.pts[Math.min(run.pts.length - 1, i + 1)];
+        let tx = b.x - a.x, ty = b.y - a.y; const n = Math.hypot(tx, ty) || 1; tx /= n; ty /= n;
+        let nx = -ty, ny = tx; if (nx + ny > 0) { nx = -nx; ny = -ny; }
+        const w = tubeW(p.z);
+        return [p.x + nx * w * 0.24, p.y + ny * w * 0.24];
+      });
+      el('path', { d: poly(pts), fill: 'none', stroke: run.s.hi, 'stroke-width': run.front ? 3 : 2, 'stroke-linecap': 'round', opacity: op }, g);
+    }
+
+    const gBack = el('g'), gRods = el('g'), gFront = el('g');
+    const drawRun = (run, g) => {
+      tube(run.pts, p => tubeW(p.z) + 1.8, run.s.rim, g);
+      tube(run.pts, p => tubeW(p.z), run.front ? run.s.front : run.s.back, g);
+      shine(run, g, run.front ? 0.9 : 0.35);
+    };
+    layers.back.forEach(run => drawRun(run, gBack));
+
+    /* base pairs, back to front */
+    const PAR = { A: 'T', T: 'A', G: 'C', C: 'G' };
+    const rods = [];
+    for (let y = yTop + 8; y <= yBot - 6; y += pitch / 10.5) {
+      const tA = theta(y), tB = tA + off;
+      const b = 'ATGC'[Math.floor(rng() * 4)];
+      rods.push({ y, A: { x: cx + R * Math.cos(tA), z: Math.sin(tA) }, B: { x: cx + R * Math.cos(tB), z: Math.sin(tB) }, b1: b, b2: PAR[b] });
+    }
+    rods.forEach(r => { r.z = (r.A.z + r.B.z) / 2; });
+    rods.slice().sort((p, q) => p.z - q.z).forEach(r => {
+      const mid = (r.A.x + r.B.x) / 2, gap = 1.6, h = 4.4 + 2 * (r.z + 1) / 2;
+      const half = (x1, x2, c) => {
+        const xa = Math.min(x1, x2), xb = Math.max(x1, x2);
+        if (xb - xa < 2) return;
+        el('rect', { x: f1(xa), y: f1(r.y - h / 2), width: f1(xb - xa), height: f1(h), rx: f1(h / 2), fill: cylinder(c) }, gRods);
+        const dark = (1 - (r.z + 1) / 2) * 0.42;
+        if (dark > 0.02) el('rect', { x: f1(xa), y: f1(r.y - h / 2), width: f1(xb - xa), height: f1(h), rx: f1(h / 2), fill: INK, opacity: f1(dark) }, gRods);
+      };
+      const s = Math.sign(r.B.x - r.A.x) || 1;
+      half(r.A.x, mid - s * gap, BASES[r.b1]);
+      half(mid + s * gap, r.B.x, BASES[r.b2]);
+    });
+    layers.front.forEach(run => drawRun(run, gFront));
+
+    /* backbone beads where each base pair joins its strand */
+    rods.forEach(r => {
+      const t = (r.y - yTop) / (yBot - yTop);
+      [[r.A, colsA], [r.B, colsB]].forEach(([p, cols]) => {
+        const c = colAt(cols, t);
+        const g = p.z > 0 ? gFront : gBack;
+        const rr = 3.6 + 2.2 * (p.z + 1) / 2;
+        el('circle', { cx: f1(p.x), cy: f1(r.y), r: f1(rr), fill: p.z > 0 ? sphere(c) : sphere(mix(c, INK, 0.3)) }, g);
+      });
+    });
+    /* rounded ends at the bottom */
+    strands.forEach(s => {
+      const th = theta(yBot) + s.ph, z = Math.sin(th);
+      el('circle', { cx: f1(cx + R * Math.cos(th)), cy: yBot, r: f1(tubeW(z) / 2 + 0.9), fill: sphere(s.cols[s.cols.length - 1]) }, z > 0 ? gFront : gBack);
+    });
+  })();
+
+  /* ---------------------------------------------------------------- phylogenetic tree growing out of the helix */
+  (function treeOfLife() {
+    const tree = { kids: [
+      { r: 62, color: PLANTA, kids: [{ tip: 0 }, { r: 128, kids: [{ tip: 1 }, { r: 180, kids: [{ tip: 2 }, { tip: 3 }] }] }] },
+      { r: 62, color: INSECTO, kids: [{ r: 158, kids: [{ tip: 4 }, { tip: 5 }] }, { tip: 6 }] }
+    ] };
+    (function layout(nd) {
+      if (nd.tip != null) { nd.ang = ORG[nd.tip].ang; nd.r = ORG[nd.tip].rt || R_TIP; return; }
+      nd.kids.forEach(k => { k.color = k.color || nd.color; layout(k); });
+      nd.ang = nd.kids.reduce((s, k) => s + k.ang, 0) / nd.kids.length;
+    })(tree);
+    const g = el('g', { fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+
+    /* each strand of the helix tapers into the stem of one clade */
+    const taper = (x1, y1, w1, x2, y2, w2, color) => {
+      const dx = x2 - x1, dy = y2 - y1, n = Math.hypot(dx, dy), nx = -dy / n, ny = dx / n;
+      const c1 = [x1, y1 - n * 0.55], c2 = [x2, y2 + n * 0.35];
+      const d = `M${f1(x1 + nx * w1 / 2)} ${f1(y1 + ny * w1 / 2)} C ${f1(c1[0] + nx * w1 / 2)} ${f1(c1[1])} ${f1(c2[0] + nx * w2 / 2)} ${f1(c2[1])} ${f1(x2 + nx * w2 / 2)} ${f1(y2 + ny * w2 / 2)}`
+        + ` L${f1(x2 - nx * w2 / 2)} ${f1(y2 - ny * w2 / 2)} C ${f1(c2[0] - nx * w2 / 2)} ${f1(c2[1])} ${f1(c1[0] - nx * w1 / 2)} ${f1(c1[1])} ${f1(x1 - nx * w1 / 2)} ${f1(y1 - ny * w1 / 2)} Z`;
+      el('path', { d, fill: color, stroke: 'none' }, g);
+    };
+    tree.kids.forEach((k, i) => {
+      const th = theta(HX.yTop) + (i ? HX.off : 0), z = Math.sin(th);
+      const [nx, ny] = pol(O[0], O[1], k.r, k.ang);
+      taper(HX.cx + HX.R * Math.cos(th), HX.yTop + 2, tubeW(z), nx, ny, 3.6, k.color);
+    });
+
+    /* curved branches: each one leaves its node and reaches its child radially */
+    const nodes = [];
+    (function draw(nd) {
+      if (nd.tip != null) return;
+      if (nd.r) nodes.push(nd);
+      nd.kids.forEach(k => {
+        if (nd.r) {
+          const [x1, y1] = pol(O[0], O[1], nd.r, nd.ang), [x2, y2] = pol(O[0], O[1], k.r, k.ang);
+          const [c1x, c1y] = pol(O[0], O[1], nd.r + (k.r - nd.r) * 0.5, nd.ang), [c2x, c2y] = pol(O[0], O[1], nd.r + (k.r - nd.r) * 0.45, k.ang);
+          el('path', { d: `M${f1(x1)} ${f1(y1)} C ${f1(c1x)} ${f1(c1y)} ${f1(c2x)} ${f1(c2y)} ${f1(x2)} ${f1(y2)}`, stroke: k.color, 'stroke-width': k.tip != null ? 2.4 : 3.4 }, g);
+        }
+        draw(k);
+      });
+    })(tree);
+    nodes.forEach(nd => { const [x, y] = pol(O[0], O[1], nd.r, nd.ang); el('circle', { cx: f1(x), cy: f1(y), r: 4.6, fill: BLANCO, stroke: nd.color, 'stroke-width': 2.2 }, g); });
+    ORG.forEach(o => { const [x, y] = pol(O[0], O[1], o.rt || R_TIP, o.ang); el('circle', { cx: f1(x), cy: f1(y), r: 5.4, fill: sphere(o.dot), stroke: BLANCO, 'stroke-width': 1.5 }, g); });
+
+    /* the organisms at the tips, with their scientific names */
+    ORG.forEach(o => {
+      const [x, y] = pol(O[0], O[1], R_ORG, o.ang);
+      o.draw(el('g', { transform: `translate(${f1(x)} ${f1(y)})` }));
+      el('text', { x: f1(x), y: f1(y + (o.dy || 66)), 'text-anchor': 'middle', fill: '#3d4658', 'font-family': 'Cormorant, serif', 'font-style': 'italic', 'font-size': 14.5, 'font-weight': 500 }, null, o.name);
+    });
+  })();
+
+  /* ================================================================= illustrations */
+  function tendril(g, x, y, r0, turns, dir, color, w) {
+    const pts = [];
+    for (let t = 0; t <= turns * 2 * Math.PI; t += 0.15) {
+      const r = r0 * (1 - t / (turns * 2 * Math.PI * 1.08));
+      pts.push([x + dir * r * Math.cos(t), y + r * Math.sin(t)]);
+    }
+    el('path', { d: poly(pts), fill: 'none', stroke: color, 'stroke-width': w, 'stroke-linecap': 'round' }, g);
+  }
+  function palmate(g, x, y, S, rot, lobes, depth, fill, stroke, sharp) {
+    /* palmate leaf: petiole sinus at the bottom, main lobe at the top, toothed margin;
+       a larger `sharp` gives pointed lobes */
+    const a = el('g', { transform: `translate(${x} ${y}) rotate(${rot})` }, g);
+    const pts = [];
+    for (let i = 0; i <= 360; i += 1.5) {
+      const d = rad(i);
+      const lobe = Math.pow(Math.abs(Math.sin(lobes / 2 * d)), sharp || 0.85);
+      const basal = 0.72 + 0.28 * (1 - Math.cos(d)) / 2;
+      const tooth = 1 + 0.045 * Math.pow((i / 360 * 38) % 1, 1.4);
+      const r = S * (1 - depth + depth * lobe) * basal * tooth;
+      pts.push([r * Math.sin(d), r * Math.cos(d) - S * 0.1]);
+    }
+    el('path', { d: poly(pts) + 'Z', fill, stroke, 'stroke-width': 0.8, 'stroke-linejoin': 'round' }, a);
+    const n = lobes;
+    for (let k = 0; k < n; k++) {
+      const d = rad(180 / n * (2 * k + 1) * 1);
+      const r = S * 0.82 * (0.72 + 0.28 * (1 - Math.cos(d)) / 2);
+      el('path', { d: `M0 ${f1(-S * 0.1 + 3)} Q ${f1(r * 0.45 * Math.sin(d))} ${f1(r * 0.45 * Math.cos(d))} ${f1(r * Math.sin(d))} ${f1(r * Math.cos(d) - S * 0.1)}`, fill: 'none', stroke: 'rgba(255,255,255,0.55)', 'stroke-width': 0.9, 'stroke-linecap': 'round' }, a);
+    }
+    return a;
+  }
+
+  /* maize: an ear with golden kernels, opening husks and silk */
+  function maize(g) {
+    const a = el('g', { transform: 'rotate(-16) scale(1.02)' }, g);
+    [['M0 -46 C -4 -54 -12 -56 -16 -64', '#e3b25c'], ['M0 -46 C 0 -56 -4 -62 -4 -69', '#c97b3a'], ['M1 -46 C 5 -55 11 -57 15 -63', '#e3b25c'], ['M-1 -46 C -8 -51 -17 -51 -22 -56', '#c97b3a'], ['M1 -46 C 8 -52 16 -53 21 -57', '#d99a4a'], ['M0 -46 C -2 -55 -7 -59 -9 -66', '#f0c77a']]
+      .forEach(([d, c]) => el('path', { d, fill: 'none', stroke: c, 'stroke-width': 1.1, 'stroke-linecap': 'round' }, a));
+    el('path', { d: 'M-3 54 C -36 36 -42 -8 -28 -50 C -22 -20 -15 14 -3 54 Z', fill: G.hojaMaizO }, a);
+    el('path', { d: 'M3 54 C 35 38 42 -4 31 -44 C 24 -16 16 18 3 54 Z', fill: G.hojaMaizO }, a);
+    const hw = y => { const t = (y + 47) / 94; return 17 * Math.pow(Math.sin(Math.PI * Math.min(1, Math.max(0, t))), 0.5) * (0.8 + 0.2 * t); };
+    const right = [], left = [];
+    for (let y = -47; y <= 47; y += 1) { right.push([hw(y), y]); left.push([-hw(y), y]); }
+    el('path', { d: poly(right.concat(left.reverse())) + 'Z', fill: '#b97a05' }, a);
+    for (let row = 0, y = -42; y <= 43; y += 5.3, row++) {
+      const w = hw(y) * 0.92, n = 8;
+      for (let k = 0; k < n; k++) {
+        const u = -Math.PI / 2 + (k + 0.5 + (row % 2) * 0.5) * Math.PI / n;
+        if (u >= Math.PI / 2) continue;
+        el('ellipse', { cx: f1(w * Math.sin(u)), cy: f1(y), rx: f1(Math.max(0.7, 3.1 * Math.cos(u))), ry: 2.45, fill: G.grano }, a);
+      }
+    }
+    el('path', { d: 'M-2 56 C -23 46 -28 22 -22 -4 C -15 18 -10 36 -2 56 Z', fill: G.hojaMaiz, stroke: '#4c8f3c', 'stroke-width': 0.6 }, a);
+    el('path', { d: 'M2 56 C 22 47 27 26 23 2 C 16 22 11 40 2 56 Z', fill: G.hojaMaiz, stroke: '#4c8f3c', 'stroke-width': 0.6 }, a);
+    el('path', { d: 'M-19 4 C -15 22 -9 40 -3 52 M 20 10 C 16 28 10 42 3 52 M-13 12 C -10 28 -6 42 -2 52', fill: 'none', stroke: '#4c8f3c', 'stroke-width': 0.6, opacity: 0.7 }, a);
+    el('path', { d: 'M0 56 L0 64', stroke: '#6f8f3a', 'stroke-width': 4.5, 'stroke-linecap': 'round' }, a);
+  }
+
+  /* a serrated leaflet pointing up from its base */
+  function leaflet(g, x, y, len, wid, rot) {
+    const a = el('g', { transform: `translate(${x} ${y}) rotate(${rot})` }, g);
+    const right = [], left = [];
+    for (let i = 0; i <= 48; i++) {
+      const t = i / 48, saw = t > 0.12 && t < 0.9 ? 0.14 * Math.pow((t * 8) % 1, 1.6) : 0;
+      const w = wid * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.8)), 0.9) * (1 + saw);
+      right.push([w, -len * t]); left.push([-w, -len * t]);
+    }
+    el('path', { d: poly(right.concat(left.reverse())) + 'Z', fill: G.hoja, stroke: '#2f6b32', 'stroke-width': 0.6, 'stroke-linejoin': 'round' }, a);
+    el('path', { d: `M0 -1 L0 ${f1(-len * 0.88)}`, stroke: '#e1f1cb', 'stroke-width': 0.7, opacity: 0.8 }, a);
+  }
+
+  /* tomato: two fruits on the truss, with star-shaped calyxes and a compound leaf */
+  function tomato(g) {
+    const a = el('g', { transform: 'translate(0 6)' }, g);
+    el('path', { d: 'M-44 -50 C -22 -58 12 -58 42 -48', fill: 'none', stroke: '#3f8f3a', 'stroke-width': 3, 'stroke-linecap': 'round' }, a);
+    leaflet(a, -44, -50, 24, 6.5, -62); leaflet(a, -36, -54, 17, 5, -12); leaflet(a, -46, -48, 15, 4.6, -118);
+    leaflet(a, 42, -48, 19, 5.5, 70); leaflet(a, 34, -53, 14, 4.4, 18);
+    el('path', { d: 'M-4 -56 C -6 -42 -8 -30 -8 -16', fill: 'none', stroke: '#3f8f3a', 'stroke-width': 2.4, 'stroke-linecap': 'round' }, a);
+    el('path', { d: 'M18 -54 C 22 -42 25 -32 25 -21', fill: 'none', stroke: '#3f8f3a', 'stroke-width': 2.2, 'stroke-linecap': 'round' }, a);
+    fruit(a, 25, -2, 21);
+    fruit(a, -8, 12, 32);
+    function fruit(g, cx, cy, R) {
+      const pts = [];
+      for (let i = 0; i <= 120; i++) { const t = i / 120 * 2 * Math.PI, k = 1 + 0.012 * Math.cos(6 * t); pts.push([cx + R * 1.08 * k * Math.cos(t), cy + R * 0.9 * k * Math.sin(t) * (Math.sin(t) < 0 ? 0.92 : 1)]); }
+      el('path', { d: poly(pts) + 'Z', fill: G.jitomate, stroke: '#7d0d12', 'stroke-width': 0.6 }, g);
+      el('path', { d: `M${f1(cx - R * 0.3)} ${f1(cy - R * 0.78)} Q ${f1(cx - R * 0.42)} ${f1(cy)} ${f1(cx - R * 0.2)} ${f1(cy + R * 0.8)} M${f1(cx + R * 0.34)} ${f1(cy - R * 0.76)} Q ${f1(cx + R * 0.5)} ${f1(cy)} ${f1(cx + R * 0.26)} ${f1(cy + R * 0.8)}`, fill: 'none', stroke: '#9e1216', 'stroke-width': 0.8, opacity: 0.35 }, g);
+      el('ellipse', { cx: f1(cx - R * 0.42), cy: f1(cy - R * 0.3), rx: f1(R * 0.26), ry: f1(R * 0.11), fill: BLANCO, opacity: 0.6, transform: `rotate(-32 ${f1(cx - R * 0.42)} ${f1(cy - R * 0.3)})` }, g);
+      el('circle', { cx: f1(cx - R * 0.12), cy: f1(cy - R * 0.5), r: f1(R * 0.05), fill: BLANCO, opacity: 0.7 }, g);
+      const c = el('g', { transform: `translate(${f1(cx)} ${f1(cy - R * 0.84)})` }, g);
+      for (let k = 0; k < 6; k++) {
+        const ang = rad(-90 + k * 60 + 15), L = R * 0.55;
+        const tip = [L * Math.cos(ang), 0.42 * L * Math.sin(ang) + L * 0.12];
+        const n = Math.hypot(tip[0], tip[1]) || 1, px = -tip[1] / n * 2.6, py = tip[0] / n * 2.6;
+        el('path', { d: `M0 0 Q ${f1(tip[0] / 2 + px)} ${f1(tip[1] / 2 + py)} ${f1(tip[0])} ${f1(tip[1])} Q ${f1(tip[0] / 2 - px)} ${f1(tip[1] / 2 - py)} 0 0 Z`, fill: '#3a9a3f', stroke: '#1f6b2a', 'stroke-width': 0.6, 'stroke-linejoin': 'round' }, c);
+      }
+      el('circle', { cx: 0, cy: 0, r: 2.6, fill: '#2f8a38' }, c);
+    }
+  }
+
+  /* grape: a bunch of berries with a lobed leaf and a tendril */
+  function grape(g) {
+    const a = el('g', { transform: 'translate(2 2)' }, g);
+    palmate(a, -24, -30, 27, 28, 5, 0.42, G.hoja, '#2f6b32');
+    el('path', { d: 'M10 -56 C 7 -46 3 -40 1 -32', fill: 'none', stroke: '#7a5230', 'stroke-width': 3, 'stroke-linecap': 'round' }, a);
+    el('path', { d: 'M8 -48 C 14 -48 18 -46 21 -42', fill: 'none', stroke: '#7a5230', 'stroke-width': 1.5, 'stroke-linecap': 'round' }, a);
+    tendril(a, 27, -42, 7, 1.6, 1, '#6aa84f', 1.2);
+    el('path', { d: 'M1 -34 C -1 -20 0 -4 2 10', fill: 'none', stroke: '#7a5230', 'stroke-width': 1.6 }, a);
+    const rows = [[-27, [-16, -4, 8, 20]], [-16, [-22, -10, 2, 14, 25]], [-5, [-18, -6, 6, 18]], [6, [-14, -2, 10, 21]], [17, [-9, 3, 15]], [28, [-4, 8]], [38, [3]]];
+    rows.forEach(([y, xs]) => xs.forEach((x, i) => {
+      const r = 7.4 - Math.abs(y) * 0.01, jx = (rng() - 0.5) * 1.6, jy = (rng() - 0.5) * 1.6;
+      const cx = x + jx, cy = y + jy;
+      el('circle', { cx: f1(cx), cy: f1(cy), r: f1(r), fill: G.uva, stroke: '#2a0f40', 'stroke-width': 0.5 }, a);
+      el('ellipse', { cx: f1(cx - 2.4), cy: f1(cy - 2.8), rx: 2.1, ry: 1.2, fill: BLANCO, opacity: 0.6, transform: `rotate(-35 ${f1(cx - 2.4)} ${f1(cy - 2.8)})` }, a);
+    }));
+  }
+
+  /* chayote: a furrowed pear-shaped fruit with a leaf and tendril */
+  function chayote(g) {
+    const a = el('g', { transform: 'rotate(8) translate(-2 4)' }, g);
+    palmate(a, 25, -30, 27, -34, 5, 0.3, G.hoja, '#2f6b32', 2.2);
+    tendril(a, -24, -40, 8, 1.8, -1, '#6aa84f', 1.3);
+    el('path', { d: 'M-16 -40 C -10 -44 -4 -46 2 -44', fill: 'none', stroke: '#6aa84f', 'stroke-width': 1.3, 'stroke-linecap': 'round' }, a);
+    el('path', { d: 'M0 -40 C 1 -46 4 -50 8 -54', fill: 'none', stroke: '#5c7f2a', 'stroke-width': 3.4, 'stroke-linecap': 'round' }, a);
+    const body = 'M0 -41 C 11 -41 17 -31 20 -16 C 25 3 31 20 27 33 C 23 45 11 48 3 43 C 1.5 41 -1.5 41 -3 43 C -11 48 -23 45 -27 33 C -31 20 -25 3 -20 -16 C -17 -31 -11 -41 0 -41 Z';
+    el('path', { d: body, fill: G.chayote, stroke: '#4c7a26', 'stroke-width': 0.9 }, a);
+    ['M-2 -39 C -13 -24 -21 4 -18 36', 'M-1 -40 C -5 -20 -8 12 -5 42', 'M1 -40 C 5 -20 8 12 5 42', 'M2 -39 C 13 -24 21 4 18 36'].forEach((d, i) => {
+      el('path', { d, fill: 'none', stroke: '#5e9632', 'stroke-width': 1.5, opacity: 0.8 }, a);
+      el('path', { d, fill: 'none', stroke: '#f4fbe4', 'stroke-width': 0.9, opacity: 0.55, transform: `translate(${i < 2 ? 1.8 : -1.8} 0)` }, a);
+    });
+    el('path', { d: 'M-4 42 Q 0 46.5 4 42', fill: 'none', stroke: '#3d6b1f', 'stroke-width': 1.3, 'stroke-linecap': 'round' }, a);
+    el('ellipse', { cx: -12, cy: -2, rx: 4.5, ry: 13, fill: BLANCO, opacity: 0.35, transform: 'rotate(12 -12 -2)' }, a);
+    [[-20, 14], [-15, 26], [19, 18], [12, 30], [-8, -20], [9, -24]].forEach(([x, y]) => el('path', { d: `M${x} ${y} l${x < 0 ? -1.6 : 1.6} -0.8`, stroke: '#e9f6cf', 'stroke-width': 1, 'stroke-linecap': 'round' }, a));
+  }
+
+  /* monarch butterfly: orange wings, black veins and a white-spotted border */
+  function monarch(g) {
+    const a = el('g', { transform: 'rotate(-10)' }, g);
+    const bz = (p, t) => { const u = 1 - t; return [0, 1].map(k => u * u * u * p[0][k] + 3 * u * u * t * p[1][k] + 3 * u * t * t * p[2][k] + t * t * t * p[3][k]); };
+    const FW = [[[2, -6], [12, -27], [34, -42], [53, -40]], [[53, -40], [58, -35], [56, -24], [49, -13]], [[49, -13], [41, -3], [24, 1], [3, 2]]];
+    const HW = [[[3, 2], [20, -1], [39, 5], [43, 20]], [[43, 20], [45, 33], [35, 44], [22, 44]], [[22, 44], [11, 44], [4, 31], [2, 12]]];
+    const dOf = segs => `M${segs[0][0][0]} ${segs[0][0][1]}` + segs.map(s => ` C ${s[1].join(' ')} ${s[2].join(' ')} ${s[3].join(' ')}`).join('') + ' Z';
+    for (const s of [1, -1]) {
+      const w = el('g', { transform: `scale(${s} 1)` }, a);
+      const wing = (segs, base, veins, spots) => {
+        el('path', { d: dOf(segs), fill: G.monarca, stroke: '#161616', 'stroke-width': 4.2, 'stroke-linejoin': 'round' }, w);
+        veins.forEach(([k, t, bend]) => {
+          const [x, y] = bz(segs[k], t), mx = (base[0] + x) / 2 + bend, my = (base[1] + y) / 2 - bend * 0.5;
+          el('path', { d: `M${base[0]} ${base[1]} Q ${f1(mx)} ${f1(my)} ${f1(x)} ${f1(y)}`, fill: 'none', stroke: '#161616', 'stroke-width': 1.3, 'stroke-linecap': 'round' }, w);
+        });
+        spots.forEach(([k, t, r]) => { const [x, y] = bz(segs[k], t); el('circle', { cx: f1(x), cy: f1(y), r: r || 0.95, fill: BLANCO }, w); });
+      };
+      wing(HW, [5, 5], [[0, 0.85, 2], [1, 0.12, 1], [1, 0.38, 0], [1, 0.62, -1], [1, 0.86, -2], [2, 0.25, -2]],
+        [[1, 0.08], [1, 0.24], [1, 0.4], [1, 0.56], [1, 0.72], [1, 0.88], [0, 0.93], [2, 0.08]]);
+      wing(FW, [5, -2], [[0, 0.5, -3], [0, 0.72, -2], [0, 0.9, -1], [1, 0.3, 0], [1, 0.6, 1], [1, 0.9, 2], [2, 0.22, 2], [2, 0.42, 2]],
+        [[1, 0.12], [1, 0.3], [1, 0.48], [1, 0.66], [1, 0.84], [2, 0.08], [0, 0.94]]);
+      el('path', { d: 'M40 -38.5 C 47 -41.5 54 -41 55.5 -37 C 57.5 -30 54 -21 49 -13 C 47 -20 44 -30 40 -38.5 Z', fill: '#161616' }, w);
+      [[47, -35, 1.4, '#ffb347'], [51, -29, 1.3, '#ffb347'], [47, -27, 1.1, '#ffd08a'], [52.5, -35.5, 0.9, BLANCO], [53, -23, 0.9, BLANCO], [44, -33, 0.8, BLANCO]]
+        .forEach(([x, y, r, c]) => el('circle', { cx: x, cy: y, r, fill: c }, w));
+      el('path', { d: 'M-1 -15 C -3 -24 -6 -32 -9 -39', fill: 'none', stroke: '#161616', 'stroke-width': 1, transform: 'scale(-1 1)' }, w);
+      el('ellipse', { cx: 9.2, cy: -39.5, rx: 1.4, ry: 2, fill: '#161616' }, w);
+    }
+    el('ellipse', { cx: 0, cy: 17, rx: 2.8, ry: 13, fill: '#1a1a1a' }, a);
+    el('ellipse', { cx: 0, cy: -3, rx: 3.8, ry: 7.6, fill: '#1a1a1a' }, a);
+    el('circle', { cx: 0, cy: -12.6, r: 3.3, fill: '#1a1a1a' }, a);
+    [[-1.4, -5, 0.75], [1.4, -5, 0.75], [0, -1, 0.65], [-1.2, -13.2, 0.6], [1.2, -13.2, 0.6]].forEach(([x, y, r]) => el('circle', { cx: x, cy: y, r, fill: BLANCO }, a));
+  }
+
+  /* seven-spot ladybird */
+  function ladybird(g) {
+    const a = el('g', { transform: 'rotate(24) scale(1.05)' }, g);
+    const leg = pts => el('path', { d: poly(pts), fill: 'none', stroke: '#141414', 'stroke-width': 1.6, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, a);
+    for (const s of [1, -1]) {
+      leg([[s * 14, -10], [s * 26, -18], [s * 31, -28]]);
+      leg([[s * 18, 4], [s * 32, 4], [s * 38, 12]]);
+      leg([[s * 14, 18], [s * 27, 28], [s * 30, 40]]);
+      el('path', { d: `M${s * 3} -36 C ${s * 5} -42 ${s * 9} -45 ${s * 14} -46`, fill: 'none', stroke: '#141414', 'stroke-width': 1.1, 'stroke-linecap': 'round' }, a);
+    }
+    el('ellipse', { cx: 0, cy: -30, rx: 9, ry: 7, fill: '#141414' }, a);
+    [-1, 1].forEach(s => el('ellipse', { cx: s * 4.6, cy: -31, rx: 2, ry: 1.4, fill: '#f5f5f5' }, a));
+    el('path', { d: 'M-19.5 -19 C -18.5 -30 -8 -34.5 0 -34.5 C 8 -34.5 18.5 -30 19.5 -19 C 12 -16.5 -12 -16.5 -19.5 -19 Z', fill: '#141414' }, a);
+    [-1, 1].forEach(s => el('path', { d: `M${s * 17.5} -20.5 C ${s * 16.5} -27 ${s * 12.5} -30.5 ${s * 9} -30.5 C ${s * 10} -26 ${s * 11} -22 ${s * 12} -19.2 Z`, fill: '#f5f5f5' }, a));
+    el('path', { d: 'M0 -19 C 20 -21 31 -6 30 10 C 29 30 14 42 0 42 C -14 42 -29 30 -30 10 C -31 -6 -20 -21 0 -19 Z', fill: G.catarina, stroke: '#6b0b0b', 'stroke-width': 0.8 }, a);
+    el('path', { d: 'M-6 -19 C -6 -12 -3 -9 0 -9 C 3 -9 6 -12 6 -19 Z', fill: '#141414' }, a);
+    [[13, -3, 6.2], [21, 14, 4.6], [10, 27, 5]].forEach(([x, y, r]) => [-1, 1].forEach(s => el('circle', { cx: s * x, cy: y, r, fill: '#141414' }, a)));
+    el('path', { d: 'M0 -9 L0 42', stroke: '#4a0707', 'stroke-width': 1.2 }, a);
+    el('ellipse', { cx: -14, cy: -8, rx: 7.5, ry: 3.2, fill: BLANCO, opacity: 0.55, transform: 'rotate(-40 -14 -8)' }, a);
+    el('ellipse', { cx: 15, cy: -9, rx: 4, ry: 1.8, fill: BLANCO, opacity: 0.35, transform: 'rotate(38 15 -9)' }, a);
+  }
+
+  /* honey bee in flight, seen from above */
+  function bee(g) {
+    const a = el('g', { transform: 'rotate(16) scale(1.12)' }, g);
+    for (const s of [1, -1]) {
+      el('path', { d: `M${s * 8} 2 L${s * 17} 12 L${s * 19} 24 M${s * 8} 8 L${s * 14} 22 L${s * 13} 34 M${s * 7} -6 L${s * 16} -2 L${s * 22} 6`, fill: 'none', stroke: '#3a2a12', 'stroke-width': 1.3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, a);
+    }
+    const clip = el('clipPath', { id: 'abdAbeja' }, defs);
+    el('ellipse', { cx: 0, cy: 20, rx: 12.5, ry: 20 }, clip);
+    el('ellipse', { cx: 0, cy: 20, rx: 12.5, ry: 20, fill: G.abeja }, a);
+    const st = el('g', { 'clip-path': 'url(#abdAbeja)' }, a);
+    [10, 19, 28, 37].forEach(y => el('path', { d: `M-15 ${y} Q 0 ${y + 4} 15 ${y} L15 ${y + 4.4} Q 0 ${y + 8.4} -15 ${y + 4.4} Z`, fill: '#2b1d0e' }, st));
+    el('ellipse', { cx: -5, cy: 14, rx: 2.4, ry: 8, fill: BLANCO, opacity: 0.3 }, a);
+    el('path', { d: 'M0 39.5 L0 44', stroke: '#2b1d0e', 'stroke-width': 1.2, 'stroke-linecap': 'round' }, a);
+    el('circle', { cx: 0, cy: -4, r: 10.5, fill: '#8a5a1c' }, a);
+    for (let i = 0; i < 44; i++) {
+      const ang = i / 44 * 2 * Math.PI, r1 = 7 + rng() * 2, r2 = 10.5 + rng() * 1.8;
+      el('path', { d: `M${f1(r1 * Math.cos(ang))} ${f1(-4 + r1 * Math.sin(ang))} L${f1(r2 * Math.cos(ang))} ${f1(-4 + r2 * Math.sin(ang))}`, stroke: i % 3 ? '#e0ab4a' : '#b9822e', 'stroke-width': 1, 'stroke-linecap': 'round' }, a);
+    }
+    el('circle', { cx: -2.5, cy: -6.5, r: 3.5, fill: '#b98134', opacity: 0.7 }, a);
+    el('ellipse', { cx: 0, cy: -18, rx: 7.5, ry: 6.5, fill: '#2b1d0e' }, a);
+    [-1, 1].forEach(s => {
+      el('ellipse', { cx: s * 5.2, cy: -18.5, rx: 2.8, ry: 4.2, fill: '#120c05' }, a);
+      el('circle', { cx: s * 5.2 - 0.8, cy: -20, r: 0.8, fill: BLANCO, opacity: 0.7 }, a);
+      el('path', { d: `M${s * 2} -23.5 L${s * 4} -30 L${s * 11} -36`, fill: 'none', stroke: '#2b1d0e', 'stroke-width': 1.1, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, a);
+    });
+    for (const s of [1, -1]) {
+      const w = el('g', { transform: `scale(${s} 1)` }, a);
+      el('path', { d: 'M7 -3 C 22 -4 38 2 37 11 C 35 18 18 14 7 3 Z', fill: '#e3eef8', 'fill-opacity': 0.72, stroke: '#6d7f95', 'stroke-width': 0.7 }, w);
+      el('path', { d: 'M6 -8 C 18 -29 45 -35 53 -24 C 58 -16 40 -6 7 -3 Z', fill: '#eef5fb', 'fill-opacity': 0.78, stroke: '#6d7f95', 'stroke-width': 0.7 }, w);
+      el('path', { d: 'M8 -6 C 20 -18 34 -22 46 -22 M12 -7 C 22 -12 32 -14 40 -13 L 46 -22 M24 -12 L 30 -24 M10 4 C 20 4 28 7 34 10', fill: 'none', stroke: '#6d7f95', 'stroke-width': 0.6, opacity: 0.8 }, w);
+    }
+  }
+
+  /* ================================================================= side panels */
+  /* plant morphology: a leaf with landmarks and measurements */
+  (function leafMorph(cx, cy, rot) {
+    const g = el('g');
+    const cr = Math.cos(rad(rot)), sr = Math.sin(rad(rot));
+    const T = (x, y) => [cx + x * cr - y * sr, cy + x * sr + y * cr];
+    const P = pts => pts.map(([x, y]) => T(x, y));
+    const L = 150, B = 70;
+    const hw = t => 38 * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.75)), 0.9) * (1 - 0.08 * t);
+    const tooth = t => t < 0.1 || t > 0.96 ? 1 : 1 + 0.05 * Math.pow((t * 26) % 1, 1.5);
+    const right = [], left = [];
+    for (let i = 0; i <= 260; i++) { const t = i / 260, w = hw(t) * tooth(t), y = B - L * t; right.push([w, y]); left.push([-w, y]); }
+    el('path', { d: poly(P([[0, B - 2], [0.4, B + 14], [1.4, B + 28]])), fill: 'none', stroke: '#4f8a3a', 'stroke-width': 3.4, 'stroke-linecap': 'round' }, g);
+    el('path', { d: poly(P(right.concat(left.reverse()))) + 'Z', fill: G.hojaM, stroke: '#2b6a2e', 'stroke-width': 0.9, 'stroke-linejoin': 'round' }, g);
+    const q = (p0, c, p1) => { const out = []; for (let i = 0; i <= 16; i++) { const t = i / 16, u = 1 - t; out.push([u * u * p0[0] + 2 * u * t * c[0] + t * t * p1[0], u * u * p0[1] + 2 * u * t * c[1] + t * t * p1[1]]); } return out; };
+    el('path', { d: poly(P([[0, B], [0, B - L * 0.97]])), fill: 'none', stroke: '#e6f4d2', 'stroke-width': 1.8, 'stroke-linecap': 'round' }, g);
+    const veinEnd = {};
+    [0.12, 0.23, 0.34, 0.45, 0.56, 0.67, 0.78, 0.88].forEach(t => {
+      const t2 = t + 0.09, y0 = B - L * t, y1 = B - L * t2, x1 = hw(t2) * 0.86;
+      [1, -1].forEach(s => el('path', { d: poly(P(q([0, y0], [s * x1 * 0.4, y0 - 6], [s * x1, y1]))), fill: 'none', stroke: '#e1f1cb', 'stroke-width': 1, 'stroke-linecap': 'round', opacity: 0.85 }, g));
+      veinEnd[t] = [x1, y1];
+    });
+    let ts = 0, wmax = 0;
+    for (let t = 0; t <= 1; t += 0.002) if (hw(t) > wmax) { wmax = hw(t); ts = t; }
+    const ys = B - L * ts;
+
+    /* measurements */
+    const ink = { stroke: INK, 'stroke-width': 1, fill: 'none' };
+    const arrow = (p, u) => { const n = [-u[1], u[0]]; el('path', { d: poly([p, [p[0] - 6 * u[0] + 2.4 * n[0], p[1] - 6 * u[1] + 2.4 * n[1]], [p[0] - 6 * u[0] - 2.4 * n[0], p[1] - 6 * u[1] - 2.4 * n[1]]]) + 'Z', fill: INK }, g); };
+    const dimension = (a, b, ext) => {
+      const A = T(...a), Bp = T(...b), dx = Bp[0] - A[0], dy = Bp[1] - A[1], n = Math.hypot(dx, dy), u = [dx / n, dy / n];
+      el('path', Object.assign({ d: poly([A, Bp]) }, ink), g);
+      arrow(Bp, u); arrow(A, [-u[0], -u[1]]);
+      (ext || []).forEach(([p0, p1]) => el('path', { d: poly(P([p0, p1])), stroke: INK, 'stroke-width': 0.6, fill: 'none', 'stroke-dasharray': '2 2', opacity: 0.7 }, g));
+    };
+    const dx = -(wmax + 20);
+    dimension([dx, B - L], [dx, B], [[[-4, B - L], [dx - 5, B - L]], [[-5, B], [dx - 5, B]]]);
+    dimension([-wmax + 7, ys], [wmax - 7, ys]);
+    const label = (x, y, s) => {
+      const [X, Y] = T(x, y);
+      el('text', { x: f1(X), y: f1(Y), 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: INK, stroke: BLANCO, 'stroke-width': 3.5, 'paint-order': 'stroke', 'stroke-linejoin': 'round', 'font-family': 'Cormorant, serif', 'font-style': 'italic', 'font-weight': 600, 'font-size': 18 }, g, s);
+    };
+    label(dx - 12, B - L / 2, 'L');
+    label(wmax * 0.42, ys - 10, 'W');
+
+    /* landmarks, clockwise from the tip */
+    const marks = [[0, B - L], [wmax, ys], veinEnd[0.12], [0, B], [-wmax, ys], [-veinEnd[0.67][0], veinEnd[0.67][1]]];
+    marks.forEach(([x, y], i) => {
+      const [X, Y] = T(x, y);
+      el('circle', { cx: f1(X), cy: f1(Y), r: 6, fill: INK, stroke: BLANCO, 'stroke-width': 1.4 }, g);
+      el('text', { x: f1(X), y: f1(Y + 2.6), 'text-anchor': 'middle', fill: BLANCO, 'font-family': 'Jost, sans-serif', 'font-size': 7.5, 'font-weight': 600 }, g, String(i + 1));
+    });
+  })(196, 850, -14);
+
+  /* floral diagram: a five-parted flower seen in cross-section */
+  (function floral(cx, cy, s) {
+    const g = el('g', { transform: `translate(${cx} ${cy}) scale(${s})` });
+    el('circle', { cx: 0, cy: -52, r: 3.4, fill: INK }, g);
+    const crescent = (r, a, w, t) => {
+      const [x1, y1] = pol(0, 0, r, a - w / 2), [x2, y2] = pol(0, 0, r, a + w / 2), [xo, yo] = pol(0, 0, r + t * 1.9, a), [xi, yi] = pol(0, 0, r + t * 0.25, a);
+      return `M${f1(x1)} ${f1(y1)} Q ${f1(xo)} ${f1(yo)} ${f1(x2)} ${f1(y2)} Q ${f1(xi)} ${f1(yi)} ${f1(x1)} ${f1(y1)} Z`;
+    };
+    for (let k = 0; k < 5; k++) {
+      const a = 90 + k * 72;
+      el('path', { d: crescent(36, a, 58, 8), fill: '#74b85a', stroke: '#2f6b32', 'stroke-width': 0.9, 'stroke-linejoin': 'round' }, g);
+      const [x1, y1] = pol(0, 0, 38, a), [x2, y2] = pol(0, 0, 45, a);
+      el('path', { d: `M${f1(x1)} ${f1(y1)} L${f1(x2)} ${f1(y2)}`, stroke: '#2f6b32', 'stroke-width': 0.8 }, g);
+    }
+    el('circle', { cx: 0, cy: 0, r: 27.5, fill: 'none', stroke: '#c99700', 'stroke-width': 1 }, g);
+    for (let k = 0; k < 5; k++) el('path', { d: crescent(25, 90 + 36 + k * 72, 66, 7.5), fill: '#ffd43b', stroke: '#b38600', 'stroke-width': 0.9, 'stroke-linejoin': 'round' }, g);
+    for (let k = 0; k < 5; k++) {
+      const a = 90 + k * 72, [x, y] = pol(0, 0, 16, a);
+      const an = el('g', { transform: `translate(${f1(x)} ${f1(y)}) rotate(${a + 90})` }, g);
+      [-1, 1].forEach(s => el('ellipse', { cx: s * 3.3, cy: 0, rx: 3, ry: 4, fill: '#f08c00', stroke: '#a85d00', 'stroke-width': 0.7 }, an));
+      el('circle', { cx: 0, cy: 0, r: 1.1, fill: '#a85d00' }, an);
+    }
+    el('circle', { cx: 0, cy: 0, r: 9.5, fill: '#d8f5a2', stroke: '#4f8a3a', 'stroke-width': 1.1 }, g);
+    el('path', { d: 'M-9.5 0 L9.5 0', stroke: '#4f8a3a', 'stroke-width': 1 }, g);
+    [-1, 1].forEach(s => [-4.2, 0, 4.2].forEach(x => el('circle', { cx: x, cy: s * 3.4, r: 1.35, fill: '#4f8a3a' }, g)));
+  })(308, 790, 1.02);
+
+  /* phylogenetic analysis: a circular tree with a ring of traits */
+  (function circTree(cx, cy) {
+    const g = el('g', { transform: `translate(${cx} ${cy})` });
+    const sizes = [7, 5, 6, 6], cols = ['#2f9e44', '#1c7ed6', '#ae3ec9', '#e8590c'];
+    let tc = 0;
+    const grow = (n, age, c) => {
+      if (n === 1) return { tip: tc++, age: 0, c, kids: [] };
+      const k = 1 + Math.floor(rng() * (n - 1));
+      return { age, c, kids: [grow(k, age * (0.3 + 0.5 * rng()), c), grow(n - k, age * (0.3 + 0.5 * rng()), c)] };
+    };
+    const bb = (list, age) => list.length === 1 ? grow(sizes[list[0]], age * (0.55 + 0.25 * rng()), list[0])
+      : { age, c: null, kids: [bb(list.slice(0, Math.ceil(list.length / 2)), age * (0.72 + 0.15 * rng())), bb(list.slice(Math.ceil(list.length / 2)), age * (0.72 + 0.15 * rng()))] };
+    const tree = bb([0, 1, 2, 3], 1);
+    const NT = sizes.reduce((s, v) => s + v, 0), GAP = 1.4, slots = NT + GAP * sizes.length;
+    const R0 = 15, R1 = 66;
+    const tipA = [], tipC = [];
+    { let pos = 0, t = 0; sizes.forEach((n, c) => { for (let i = 0; i < n; i++) { tipA[t] = -90 + (pos + 0.5) / slots * 360; tipC[t++] = c; pos++; } pos += GAP; }); }
+    const rOf = age => R0 + (1 - age) * (R1 - R0);
+    (function place(nd) { if (!nd.kids.length) { nd.a = tipA[nd.tip]; return; } nd.kids.forEach(place); nd.a = (nd.kids[0].a + nd.kids[1].a) / 2; })(tree);
+    [22, 40, 58].forEach(r => el('circle', { cx: 0, cy: 0, r, fill: 'none', stroke: '#dfe3ea', 'stroke-width': 0.8 }, g));
+    const arcD = (r, a1, a2) => { const [x1, y1] = pol(0, 0, r, a1), [x2, y2] = pol(0, 0, r, a2); return `M${f1(x1)} ${f1(y1)} A${r} ${r} 0 ${a2 - a1 > 180 ? 1 : 0} 1 ${f1(x2)} ${f1(y2)}`; };
+    const half = 360 / slots / 2;
+    const sector = (r1, r2, a1, a2) => { const [x1, y1] = pol(0, 0, r2, a1), [x2, y2] = pol(0, 0, r2, a2), [x3, y3] = pol(0, 0, r1, a2), [x4, y4] = pol(0, 0, r1, a1); return `M${f1(x1)} ${f1(y1)} A${r2} ${r2} 0 0 1 ${f1(x2)} ${f1(y2)} L${f1(x3)} ${f1(y3)} A${r1} ${r1} 0 0 0 ${f1(x4)} ${f1(y4)} Z`; };
+    const gb = el('g', { fill: 'none', 'stroke-linecap': 'round' }, g);
+    const marks = [];
+    (function draw(nd) {
+      if (!nd.kids.length) return;
+      const r = rOf(nd.age), col = nd.c == null ? INK : cols[nd.c], w = nd.c == null ? 1.6 : 1.3;
+      el('path', { d: arcD(r, nd.kids[0].a, nd.kids[1].a), stroke: col, 'stroke-width': w }, gb);
+      nd.kids.forEach(k => {
+        const [x1, y1] = pol(0, 0, r, k.a), [x2, y2] = pol(0, 0, k.kids.length ? rOf(k.age) : R1, k.a);
+        el('path', { d: `M${f1(x1)} ${f1(y1)} L${f1(x2)} ${f1(y2)}`, stroke: k.c == null ? INK : cols[k.c], 'stroke-width': k.c == null ? 1.6 : 1.3 }, gb);
+        draw(k);
+      });
+      if (nd.c == null) marks.push([r, nd.a, INK]);
+    })(tree);
+    marks.forEach(([r, a, c]) => { const [x, y] = pol(0, 0, r, a); el('circle', { cx: f1(x), cy: f1(y), r: 2.6, fill: BLANCO, stroke: c, 'stroke-width': 1.3 }, g); });
+    tipA.forEach((a, t) => {
+      const [x, y] = pol(0, 0, R1 + 1, a);
+      el('circle', { cx: f1(x), cy: f1(y), r: 2, fill: cols[tipC[t]] }, g);
+      el('path', { d: sector(R1 + 6, R1 + 12 + 16 * rng(), a - half * 0.78, a + half * 0.78), fill: cols[tipC[t]], opacity: 0.85 }, g);
+    });
+    const span = sizes.map(() => [Infinity, -Infinity]);
+    tipA.forEach((a, t) => { span[tipC[t]][0] = Math.min(span[tipC[t]][0], a); span[tipC[t]][1] = Math.max(span[tipC[t]][1], a); });
+    span.forEach(([a1, a2], c) => el('path', { d: arcD(R1 + 33, a1 - half, a2 + half), fill: 'none', stroke: cols[c], 'stroke-width': 2.6, 'stroke-linecap': 'round' }, g));
+  })(636, 850);
+
+  /* ---------------------------------------------------------------- author */
+  const au = el('g', { 'text-anchor': 'middle' });
+  el('text', { x: W / 2, y: 1040, fill: INK, 'font-family': 'Cormorant, serif', 'font-size': 33, 'font-weight': 600, 'letter-spacing': 1.4 }, au, 'Luis Ángel Barrera-Guzmán');
+  el('text', { x: W / 2, y: 1068, fill: GRIS, 'font-family': 'Jost, sans-serif', 'font-size': 10.5, 'font-weight': 400, 'letter-spacing': 4 }, au, 'VERSIÓN 1.0 · VERSION 1.0 · 2026');
+})();
+</script>
+</body>
+</html>

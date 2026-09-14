@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "PopGeneticsPro: a browser-based platform for plant population genetics with codominant, dominant, sequence and morphological data"
+abstract: >-
+  PopGeneticsPro is a self-contained web application for the analysis of plant population
+  genetic data entirely in the browser, with no installation and no server-side computation.
+  It handles codominant markers (microsatellites, SNPs, isozymes), dominant binary markers
+  (AFLP, ISSR, RAPD), haploid and sequence data (chloroplast and mitochondrial alignments)
+  and morphological characters within one workflow: data import from the formats of the
+  classical programs, quality control, allele frequencies and diversity indices,
+  Hardy-Weinberg and linkage disequilibrium tests, F-statistics and hierarchical AMOVA,
+  genetic distances with ordination and trees, Bayesian clustering and assignment,
+  haplotype networks and neutrality tests, demographic inference, fine-scale spatial
+  genetic structure and the mating system, ending in editable publication-quality figures
+  and an automatic report.
+type: software
+authors:
+  - given-names: "Luis Ángel"
+    family-names: "Barrera-Guzmán"
+    email: lbarrerag@chapingo.mx
+    orcid: "https://orcid.org/0000-0001-8057-2583"
+version: "1.0.0"
+date-released: "2026-09-13"
+repository-code: "https://github.com/luisangelbg/PopGeneticsPro"
+url: "https://luisangelbg.github.io/PopGeneticsPro/"
+license: GPL-3.0-or-later
+keywords:
+  - population genetics
+  - plant genetic resources
+  - molecular markers
+  - AMOVA
+  - genetic diversity
+  - Bayesian clustering
+  - haplotype networks

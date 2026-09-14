@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PopGeneticsPro — Population genetics for plants, from the field to the paper</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="on-home">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand" id="brand" title="Home"><span id="brandLogo"></span>PopGeneticsPro <span class="brand-sub">· plant population genetics lab</span></div>
+    <nav class="stepper" id="stepper">
+      <button class="step-btn active" data-step="1"><span class="step-num">1</span> Home</button>
+      <button class="step-btn" data-step="2"><span class="step-num">2</span> Data</button>
+      <button class="step-btn" data-step="3" disabled><span class="step-num">3</span> Diversity</button>
+      <button class="step-btn" data-step="4" disabled><span class="step-num">4</span> HWE &amp; LD</button>
+      <button class="step-btn" data-step="5" disabled><span class="step-num">5</span> AMOVA</button>
+      <button class="step-btn" data-step="6" disabled><span class="step-num">6</span> Distance</button>
+      <button class="step-btn" data-step="7" disabled><span class="step-num">7</span> Clustering</button>
+      <button class="step-btn" data-step="8" disabled><span class="step-num">8</span> Sequences</button>
+      <button class="step-btn" data-step="9" disabled><span class="step-num">9</span> Demography</button>
+      <button class="step-btn" data-step="10" disabled><span class="step-num">10</span> Report</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ==================== BLOCK 1 · HOME ==================== -->
+<section class="step-panel active" id="panel-1">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">Population genetics for plants · molecular and morphological data</div>
+        <h1>Read the <span class="accent">genetic history</span> written in your populations</h1>
+        <p class="lead">Microsatellites, AFLP bands, chloroplast sequences or morphological traits — the same guided
+          workflow takes you from the raw genotype table to <b>diversity indices</b>, <b>Hardy–Weinberg</b> tests,
+          <b>AMOVA</b>, <b>genetic distances</b>, <b>Bayesian clustering</b> and <b>haplotype networks</b>,
+          and ends in editable, journal-ready figures. No programming, no installation.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg" id="startBtn">Start with my data →</button>
+          <button class="btn btn-secondary btn-lg" id="simBtn">Play with the simulator</button>
+          <button class="btn btn-ghost btn-lg" id="theoryBtn">Read the theory</button>
+          <button class="btn btn-ghost btn-lg" id="citeBtn">How to cite</button>
+        </div>
+        <div class="badge-row">
+          <span class="badge ok">Runs entirely in your browser</span>
+          <span class="badge ok">Your data never leave your computer</span>
+          <span class="badge ok">Codominant, dominant, haploid, sequence and morphological data</span>
+          <span class="badge ok">Figures up to 900 dpi · PNG, TIFF, SVG</span>
+          <span class="badge ok">Free for teaching and research</span>
+        </div>
+      </div>
+      <div class="hero-art" id="heroArt"></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">How it works</h2>
+  <p class="section-sub">A guided route, in the order a population genetics paper is actually written. Each step
+    explains the idea in plain language, checks whether your data can support it, and recommends what to do next.</p>
+  <div class="workflow">
+    <div class="wf-step"><div class="wf-n">STEP 1</div><div class="wf-t">Load &amp; check</div><div class="wf-d">any format, then quality control</div></div>
+    <div class="wf-step"><div class="wf-n">STEP 2</div><div class="wf-t">Describe diversity</div><div class="wf-d">how much variation, and where</div></div>
+    <div class="wf-step"><div class="wf-n">STEP 3</div><div class="wf-t">Test equilibrium</div><div class="wf-d">HWE, inbreeding, linkage</div></div>
+    <div class="wf-step"><div class="wf-n">STEP 4</div><div class="wf-t">Partition it</div><div class="wf-d">AMOVA and F-statistics</div></div>
+    <div class="wf-step"><div class="wf-n">STEP 5</div><div class="wf-t">Find the groups</div><div class="wf-d">distance, ordination, clustering</div></div>
+    <div class="wf-step"><div class="wf-n">STEP 6</div><div class="wf-t">Infer the history</div><div class="wf-d">gene flow, bottlenecks, expansion</div></div>
+    <div class="wf-step"><div class="wf-n">STEP 7</div><div class="wf-t">Publish</div><div class="wf-d">editable figures and the report</div></div>
+  </div>
+
+  <!-- ---------- Live simulator ---------- -->
+  <h2 class="section-title" id="simulator">Try it: watch drift, migration and selection at work</h2>
+  <p class="section-sub">Six populations start with the same allele at <i>p</i> = 0.5. Every generation the model
+    applies selection, migration, mutation and then draws 2N<sub>e</sub> gene copies at random — the Wright–Fisher
+    recursion, exactly as written in the textbooks. The right-hand panels are computed from the simulated
+    frequencies: gene diversity within demes (H<sub>S</sub>), in the whole metapopulation (H<sub>T</sub>) and the
+    F<sub>ST</sub> that grows between them. Turn migration down and watch the populations drift apart.</p>
+
+  <div class="playground">
+    <div class="pg-controls">
+      <label class="inline-label">Scenario
+        <select id="simPreset">
+          <option value="drift">Small isolated populations (pure drift)</option>
+          <option value="island" selected>Island model with gene flow</option>
+          <option value="selfer">A selfing plant (90% selfing)</option>
+          <option value="select">Selection on a favourable allele</option>
+          <option value="mutdrift">Mutation–drift balance</option>
+        </select>
+      </label>
+      <button class="btn btn-primary btn-sm" id="simRun">▶ Run</button>
+      <button class="btn btn-secondary btn-sm" id="simStep">Step</button>
+      <button class="btn btn-secondary btn-sm" id="simReset">Reset</button>
+      <button class="btn btn-ghost btn-sm" id="simNew">New random seed</button>
+    </div>
+
+    <div class="sim-grid">
+      <div class="pg-pane pg-canvas-wrap">
+        <div class="pg-title">Allele frequency in each population · dashed line = metapopulation mean</div>
+        <svg id="simTraj" viewBox="0 0 440 290" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="sim-side">
+        <div class="pg-pane">
+          <div class="pg-title">Gene diversity and differentiation</div>
+          <svg id="simDiv" viewBox="0 0 340 290" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-grid" style="margin-top:14px">
+      <div class="slider-row"><label>N per deme</label><input type="range" id="simN" min="10" max="500" step="5" value="100"><span class="range-val" id="simNVal">100</span></div>
+      <div class="slider-row"><label>Populations</label><input type="range" id="simD" min="2" max="10" step="1" value="6"><span class="range-val" id="simDVal">6</span></div>
+      <div class="slider-row"><label>Migration <i>m</i></label><input type="range" id="simM" min="0" max="0.2" step="0.001" value="0.02"><span class="range-val" id="simMVal">0.020</span></div>
+      <div class="slider-row"><label>Selection <i>s</i></label><input type="range" id="simS" min="-0.2" max="0.2" step="0.01" value="0"><span class="range-val" id="simSVal">0.00</span></div>
+      <div class="slider-row"><label>Mutation <i>u</i></label><input type="range" id="simU" min="0" max="0.01" step="0.0005" value="0"><span class="range-val" id="simUVal">0</span></div>
+      <div class="slider-row"><label>Selfing rate</label><input type="range" id="simSelf" min="0" max="0.98" step="0.02" value="0"><span class="range-val" id="simSelfVal">0%</span></div>
+    </div>
+
+    <div class="sim-readout" style="margin-top:12px">
+      <div class="rd"><div class="rd-l">Generation</div><div class="rd-v" id="rdGen">0</div></div>
+      <div class="rd"><div class="rd-l">Mean p</div><div class="rd-v" id="rdP">0.500</div></div>
+      <div class="rd"><div class="rd-l">H<sub>S</sub></div><div class="rd-v" id="rdHs">0.500</div></div>
+      <div class="rd"><div class="rd-l">F<sub>ST</sub></div><div class="rd-v" id="rdFst">0.000</div></div>
+      <div class="rd"><div class="rd-l">Fixed demes</div><div class="rd-v" id="rdFixed">0 / 6</div></div>
+      <div class="rd"><div class="rd-l">N<sub>e</sub> used</div><div class="rd-v" id="rdNe">50</div></div>
+    </div>
+    <div class="pg-status" id="simStatus"></div>
+  </div>
+
+  <h2 class="section-title">What's inside</h2>
+  <p class="section-sub">Nine analysis blocks, built in order and released one at a time. Click a card to jump to it.</p>
+  <div class="feature-grid" id="featureGrid"></div>
+
+  <h2 class="section-title">Every kind of data a plant study produces</h2>
+  <p class="section-sub">The marker decides which statistics are even defined. PopGeneticsPro types your loci on
+    import and then offers only the analyses that make sense for them — no silently wrong heterozygosities from an
+    AFLP gel, no χ² test on haplotypes.</p>
+  <div class="marker-strip" id="markerStrip"></div>
+
+  <h2 class="section-title">Methods covered</h2>
+  <p class="section-sub">The classical toolkit of population genetics — diversity, equilibrium, differentiation and
+    Bayesian clustering — plus the plant-specific analyses rarely found together: mating system, fine-scale spatial
+    genetic structure and P<sub>ST</sub> (or Q<sub>ST</sub>) versus F<sub>ST</sub>.</p>
+  <div class="method-gallery" id="methodGallery"></div>
+
+  <h2 class="section-title">What it brings together</h2>
+  <p class="section-sub">One guided path from the data sheet to the figure. The formulas come from the published
+    methods, and every one is cited where it is used.</p>
+  <div class="compare-wrap" id="compareBody"></div>
+
+  <!-- ---------- Theory ---------- -->
+  <h2 class="section-title" id="theory">The theory, in plain language</h2>
+  <p class="section-sub">Enough to run the analyses and defend them in a seminar. Every section names the papers the
+    formulas come from; the full list is at the bottom of this page.</p>
+  <div class="card theory-card">
+
+    <details class="acc"><summary>What population genetics actually asks <span class="acc-tag">start here</span></summary>
+      <div class="acc-body">
+        <p>A species is rarely one big interbreeding unit. It is a set of populations that exchange genes at some
+          rate, lose variation at some rate, and accumulate differences at some rate. Population genetics measures
+          those three rates from a sample of individuals, and asks four questions in this order:</p>
+        <ol>
+          <li><b>How much genetic variation is there</b>, and is it the same in every population? (Block 3)</li>
+          <li><b>Is that variation organised the way random mating predicts</b>, or is there inbreeding, selfing,
+            clonality or a scoring problem? (Block 4)</li>
+          <li><b>How is the variation distributed</b> — mostly within populations, or between them? (Blocks 5–7)</li>
+          <li><b>What history produced that pattern</b> — gene flow, isolation, a bottleneck, an expansion? (Block 9)</li>
+        </ol>
+        <div class="callout"><b>The one number to remember</b>
+          In most outcrossing plants, 80–95% of the genetic variation sits <i>within</i> populations and only 5–20%
+          between them. In selfers the proportions often reverse. Knowing which kind of species you have changes how
+          you read every result that follows.</div>
+      </div>
+    </details>
+
+    <details class="acc"><summary>Hardy–Weinberg: the null model everything is measured against <span class="acc-tag">Block 4</span></summary>
+      <div class="acc-body clearfix">
+        <div class="theory-fig" id="theoryHwe"><div class="cap">Genotype frequencies under random mating</div></div>
+        <p>With two alleles at frequencies <i>p</i> and <i>q</i>, random mating in a large population with no
+          selection, mutation or migration gives genotype frequencies <i>p</i>², 2<i>pq</i> and <i>q</i>² — and they
+          stay there, generation after generation. That is the Hardy–Weinberg principle, and it is useful precisely
+          because real populations <i>depart</i> from it.</p>
+        <div class="formula">expected heterozygosity   He = 1 − Σ pᵢ²
+observed heterozygosity   Ho = (number of heterozygotes) / N
+fixation index            F  = (He − Ho) / He</div>
+        <p>A positive <i>F</i> (fewer heterozygotes than expected) is the everyday result in plants, and it has
+          several possible causes that the analysis must separate:</p>
+        <ul>
+          <li><b>Selfing or biparental inbreeding</b> — the biological explanation, consistent across all loci.</li>
+          <li><b>The Wahlund effect</b> — you pooled two genetically distinct groups into one "population".</li>
+          <li><b>Null alleles</b> — a primer site mutation hides one allele, so true heterozygotes are scored as
+            homozygotes. Affects one locus, not all of them.</li>
+        </ul>
+        <div class="callout tip"><b>How to tell them apart</b>
+          Inbreeding raises <i>F</i> at every locus by a similar amount; a null allele raises it at one locus only.
+          Block 4 reports <i>F</i><sub>IS</sub> per locus and per population side by side for exactly this reason.</div>
+      </div>
+    </details>
+
+    <details class="acc"><summary>The four forces: drift, migration, mutation, selection <span class="acc-tag">simulator</span></summary>
+      <div class="acc-body clearfix">
+        <div class="theory-fig" id="theoryDrift"><div class="cap">Independent populations drifting apart</div></div>
+        <p><b>Drift</b> is the random sampling of gametes between generations. It is not a small correction: in a
+          population of effective size N<sub>e</sub>, heterozygosity decays as H<sub>t</sub> =
+          H<sub>0</sub>(1 − 1/2N<sub>e</sub>)<sup>t</sup>, and alleles are eventually lost or fixed by chance alone.
+          Small and fragmented populations lose variation fast.</p>
+        <p><b>Migration</b> pushes the other way. In Wright's island model the equilibrium differentiation is
+          F<sub>ST</sub> ≈ 1/(1 + 4N<sub>e</sub><i>m</i>), which is why one successful migrant per generation
+          (N<sub>e</sub><i>m</i> = 1) is enough to keep populations from diverging by drift.</p>
+        <p><b>Mutation</b> creates new variation, slowly (10⁻⁵–10⁻³ per locus per generation for microsatellites,
+          much lower for sequences). <b>Selection</b> changes frequencies systematically, but only at the loci it
+          acts on — which is what makes neutral markers useful for reading demography.</p>
+        <div class="callout warn"><b>Read N<sub>e</sub><i>m</i> with care</b>
+          The conversion of F<sub>ST</sub> into a number of migrants assumes an island model at equilibrium, with no
+          selection and no mutation. Report it as an <i>indicative</i> value, never as a migration count.</div>
+      </div>
+    </details>
+
+    <details class="acc"><summary>F-statistics and AMOVA: where the variation sits <span class="acc-tag">Block 5</span></summary>
+      <div class="acc-body clearfix">
+        <div class="theory-fig" id="theoryFst"><div class="cap">Pairwise differentiation between populations</div></div>
+        <p>Wright's three F-statistics describe the same sample at three levels: <i>F</i><sub>IS</sub> compares an
+          individual with its own population (inbreeding), <i>F</i><sub>ST</sub> compares populations with the total
+          (differentiation), and <i>F</i><sub>IT</sub> compares an individual with the total.</p>
+        <div class="formula">G_ST = (H_T − H_S) / H_T          Nei (1973)
+θ (theta)                        Weir &amp; Cockerham (1984), the estimator to report
+G'_ST = G_ST / G_ST(max)         Hedrick (2005), corrected for high diversity
+D = (H_T − H_S)/(1 − H_S) · k/(k−1)   Jost (2008), "true" differentiation</div>
+        <p>With highly polymorphic markers such as microsatellites, H<sub>S</sub> can be so high that
+          G<sub>ST</sub> is mathematically capped far below 1 — two populations sharing no alleles at all may still
+          give G<sub>ST</sub> = 0.1. That is the reason to report G′<sub>ST</sub> or Jost's <i>D</i> alongside it,
+          not instead of it.</p>
+        <p><b>AMOVA</b> (Excoffier <i>et al.</i> 1992) does the same job as an analysis of variance on a distance
+          matrix, and it is the right tool when your design is hierarchical: individuals within populations, within
+          regions. It gives a percentage of variation at each level and tests each one by permutation — and because
+          it works from distances, it handles dominant markers and haplotypes as easily as microsatellites.</p>
+      </div>
+    </details>
+
+    <details class="acc"><summary>Dominant markers: what AFLP and ISSR can and cannot tell you <span class="acc-tag">binary data</span></summary>
+      <div class="acc-body">
+        <p>A dominant band is present or absent. The heterozygote looks exactly like the dominant homozygote, so
+          <b>H<sub>o</sub> cannot be observed</b> and <i>F</i><sub>IS</sub> cannot be estimated from the data alone.
+          Allele frequencies must be inferred from the frequency of the <i>null</i> phenotype:</p>
+        <div class="formula">q = √(freq of band-absent)      assuming Hardy-Weinberg
+Lynch &amp; Milligan (1994)       small-sample correction
+Bayesian estimate with a prior on F   when HWE cannot be assumed</div>
+        <ul>
+          <li>Analyses that still work: Φ<sub>PT</sub> and AMOVA, Nei's gene diversity, Jaccard/Dice distances,
+            PCoA, Bayesian clustering, Mantel tests, spatial autocorrelation.</li>
+          <li>Analyses that do not: observed heterozygosity, HWE tests, <i>F</i><sub>IS</sub>, assignment based on
+            genotype likelihoods, most bottleneck tests.</li>
+        </ul>
+        <div class="callout crit"><b>Two things to do before analysing bands</b>
+          Score the same gel twice and report the error rate, and drop bands present in fewer than ~5% or more than
+          ~95% of individuals. Block 2 does both checks for you.</div>
+      </div>
+    </details>
+
+    <details class="acc"><summary>Plants are different: selfing, clones, pollen and seed <span class="acc-tag">plant-specific</span></summary>
+      <div class="acc-body clearfix">
+        <div class="theory-fig" id="theoryMating"><div class="cap">Mating system: outcrossing, selfing and pollen flow</div></div>
+        <p>Most population genetics theory was written for animals that mate at random and move as adults. Plants do
+          neither, and four consequences show up in every dataset:</p>
+        <ul>
+          <li><b>Mixed mating.</b> Outcrossing rates (<i>t</i><sub>m</sub>) range from near 0 to near 1, often within
+            the same species. Selfing reduces N<sub>e</sub>, inflates <i>F</i><sub>IS</sub> and speeds up
+            differentiation between populations.</li>
+          <li><b>Clonality.</b> Repeated multilocus genotypes must be detected before anything else — a clone counted
+            as 40 individuals will distort every index. Block 2 flags them.</li>
+          <li><b>Two dispersal vehicles.</b> Pollen carries nuclear genes, seed carries everything. Comparing nuclear
+            with maternally inherited chloroplast markers separates the two, and their differentiation ratio
+            estimates the pollen-to-seed flow ratio.</li>
+          <li><b>Fine-scale spatial structure.</b> Limited seed dispersal makes neighbours relatives. That is what
+            spatial autocorrelation and the S<sub>p</sub> statistic quantify (Block 9) — and it is why a "population"
+            sampled along a transect may not be one population at all.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="acc"><summary>Sampling design: how many individuals, how many loci <span class="acc-tag">before the lab</span></summary>
+      <div class="acc-body">
+        <p>The honest answer is that it depends on the question, but the literature converges on useful minima:</p>
+        <table class="mini-table">
+          <tr><th>Goal</th><th>Individuals per population</th><th>Loci</th></tr>
+          <tr><td>Diversity indices (He, Na)</td><td>20–30</td><td>8–10 SSR</td></tr>
+          <tr><td>Allelic richness, rare alleles</td><td>30–50</td><td>10–15 SSR</td></tr>
+          <tr><td>F<sub>ST</sub> / AMOVA</td><td>20–25, ≥5 populations</td><td>10+ SSR or 100+ AFLP bands</td></tr>
+          <tr><td>Bayesian clustering</td><td>25–30</td><td>15+ SSR</td></tr>
+          <tr><td>Bottleneck tests</td><td>30+</td><td>15–20 SSR</td></tr>
+          <tr><td>Fine-scale spatial structure</td><td>100+ mapped individuals</td><td>8+ SSR</td></tr>
+        </table>
+        <div class="callout tip"><b>More loci beat more individuals</b>
+          For estimating differentiation, adding loci reduces the variance of F<sub>ST</sub> faster than adding
+          individuals. For finding rare alleles, the opposite is true.</div>
+      </div>
+    </details>
+
+    <details class="acc"><summary>Which analysis answers which question <span class="acc-tag">decision guide</span></summary>
+      <div class="acc-body">
+        <table class="mini-table">
+          <tr><th>Your question</th><th>The analysis</th><th>Block</th></tr>
+          <tr><td>Which population is most diverse?</td><td>He, uHe, allelic richness by rarefaction</td><td>3</td></tr>
+          <tr><td>Is this population inbred?</td><td>F<sub>IS</sub> with bootstrap CI, HWE tests</td><td>4</td></tr>
+          <tr><td>Are my populations differentiated?</td><td>F<sub>ST</sub>/θ, G′<sub>ST</sub>, Jost's D, AMOVA</td><td>5</td></tr>
+          <tr><td>Does my hierarchical design matter?</td><td>Three-level AMOVA with permutations</td><td>5</td></tr>
+          <tr><td>How do populations relate to each other?</td><td>Nei's D, NJ/UPGMA tree, PCoA</td><td>6</td></tr>
+          <tr><td>Is differentiation just distance?</td><td>Mantel test, isolation by distance</td><td>6</td></tr>
+          <tr><td>How many genetic groups are there really?</td><td>Bayesian clustering, ΔK, DAPC</td><td>7</td></tr>
+          <tr><td>Where does this individual come from?</td><td>Assignment test, migrant detection</td><td>7</td></tr>
+          <tr><td>What is the history of my haplotypes?</td><td>Network, π, Tajima's D, mismatch</td><td>8</td></tr>
+          <tr><td>Did the population crash recently?</td><td>Heterozygosity excess, M-ratio, mode shift</td><td>9</td></tr>
+          <tr><td>Are neighbours relatives?</td><td>Spatial autocorrelation, kinship, S<sub>p</sub></td><td>9</td></tr>
+        </table>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ---------- Cite ---------- -->
+  <h2 class="section-title" id="cite">How to cite</h2>
+  <p class="section-sub">If PopGeneticsPro helped with an analysis in a thesis or a paper, please cite the software and
+    the original method papers it implements — every result and the methods paragraph of Block 10 name them by author and year.</p>
+  <div class="cite-box">
+    <div class="cite-ref" id="citeText">Barrera-Guzmán, L.Á. (2026). PopGeneticsPro: a browser-based platform for
+      plant population genetics with codominant, dominant, sequence and morphological data. Version 1.0.0.
+      https://github.com/luisangelbg/PopGeneticsPro</div>
+    <button class="btn btn-secondary btn-sm" id="copyCite">Copy the citation</button>
+    <span class="hint" style="margin-left:8px">A version DOI will be added when the first release is archived.</span>
+  </div>
+
+  <h2 class="section-title">References behind the calculations</h2>
+  <p class="section-sub">Every statistic in this app comes from a published method, and each one is named again at
+    the point where it is used.</p>
+  <ol class="ref-list" id="refList"></ol>
+
+</section>
+
+<!-- ==================== BLOCK 2 · DATA & QUALITY CONTROL ==================== -->
+<section class="step-panel" id="panel-2">
+  <div class="panel-title"><div class="pt-num">2</div>
+    <div><h2>Data &amp; quality control</h2><p>Load the file, agree on what it contains, and screen it before a single statistic is computed.</p></div>
+  </div>
+
+  <!-- ---------- 1 · load ---------- -->
+  <div class="card">
+    <h2>1 · Load your data</h2>
+    <p class="hint">Everything stays on your computer: the file is read by the browser and never uploaded.</p>
+    <div class="drop-zone" id="dzData">
+      <div class="dz-icon">
+        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="4" width="32" height="42" rx="4" fill="none" stroke="var(--border-strong)" stroke-width="2"/>
+          <path d="M14 16h18M14 24h18M14 32h12" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="39" cy="38" r="10" fill="var(--card-bg)" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M39 33v10M34 38h10" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p><b>Drop your file here</b> or click to choose one</p>
+      <div class="format-chips">
+        <span>.xlsx</span><span>.csv</span><span>.txt</span><span>.str</span><span>.gen</span>
+        <span>.arp</span><span>.fasta</span><span>.vcf</span>
+      </div>
+    </div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.ods,.csv,.txt,.tsv,.str,.stru,.gen,.arp,.fas,.fasta,.fa,.vcf" style="display:none">
+
+    <div class="btn-row" id="exampleWrap">
+      <span class="hint" style="margin:0">Or try an example:</span>
+      <span id="exampleRow" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+    </div>
+    <div class="btn-row" id="sheetRow" style="display:none">
+      <label class="inline-label">Sheet <select id="sheetPicker"></select></label>
+    </div>
+    <p class="hint" style="margin-top:10px">File loaded: <b id="fileNameLabel">none yet</b></p>
+    <div class="messages" id="dataMessages"></div>
+
+    <div class="tpl-banner">
+      <div class="tpl-banner-art">
+        <svg viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="3" y="4" width="44" height="44" rx="5" fill="var(--card-bg)" stroke="var(--border-strong)" stroke-width="1.6"/>
+          <rect x="3" y="4" width="44" height="8" rx="3" fill="var(--primary)" opacity=".85"/>
+          <path d="M3 21h44M3 30h44M3 39h44M17 12v36M29 12v36" stroke="var(--border-strong)" stroke-width="1.1"/>
+          <rect x="18" y="22" width="10" height="7" fill="var(--accent)" opacity=".35"/>
+          <circle cx="50" cy="38" r="11" fill="var(--card-bg)" stroke="var(--accent)" stroke-width="1.8"/>
+          <path d="M45 38.5l3.4 3.4 6.6-7" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="tpl-banner-text">
+        <b>Not sure how to lay out your data?</b>
+        <span>Describe what you sampled — marker type, populations, plants per population, loci or traits — and download a ready-made sheet to fill in. When you load it back, the app reads the layout from the sheet and checks it against your design.</span>
+      </div>
+      <button class="btn btn-accent" id="btnOpenDesigner">Design a data template →</button>
+    </div>
+
+    <div class="tpl-banner sheet-banner">
+      <div class="tpl-banner-art">
+        <svg viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="3" y="6" width="52" height="40" rx="4" fill="var(--card-bg)" stroke="var(--border-strong)" stroke-width="1.6"/>
+          <path d="M3 15h52M3 24h52M3 33h52M16 6v40M29 6v40M42 6v40" stroke="var(--border-strong)" stroke-width="1"/>
+          <rect x="16.5" y="24.5" width="25" height="8" fill="var(--primary)" opacity=".28" stroke="var(--primary)" stroke-width="1.4"/>
+          <rect x="40" y="31" width="4" height="4" fill="var(--primary)"/>
+          <path d="M50 3v9M45.5 7.5h9" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="tpl-banner-text">
+        <b>Trouble uploading a file?</b>
+        <span>Paste your data straight into the built-in sheet — copied from any spreadsheet, a text file or an e-mail — or type them. The sheet is saved in this browser as you work, can be downloaded as .xlsx, .ods, .csv or .tsv, and goes through the same checks as a file.</span>
+      </div>
+      <button class="btn btn-primary" id="btnOpenSheet">Open the data sheet →</button>
+    </div>
+  </div>
+
+  <!-- ---------- built-in data sheet ---------- -->
+  <div class="card sheet-card" id="cardSheet" style="display:none">
+    <div class="card-head">
+      <div>
+        <h2>Data sheet</h2>
+        <p class="hint" style="max-width:860px">Click a cell and paste (<span class="kbd">Ctrl</span>+<span class="kbd">V</span>) a block copied from a spreadsheet, or type. One row per individual (or per band, for gel reading sheets); the first row holds the column names. Arrows, <span class="kbd">Tab</span> and <span class="kbd">Enter</span> move; <span class="kbd">F2</span> or a double click edits; <span class="kbd">Delete</span> clears; <span class="kbd">Ctrl</span>+<span class="kbd">Z</span> undoes.</p>
+      </div>
+      <div class="btn-row" style="margin:0">
+        <button class="btn btn-ghost" id="sheetClose">✕ Close</button>
+      </div>
+    </div>
+    <div class="messages" id="sheetMessages"></div>
+
+    <div class="sheet-toolbar">
+      <div class="sh-group">
+        <button class="btn btn-secondary btn-sm" id="sheetUndo" title="Undo (Ctrl+Z)">↶ Undo</button>
+        <button class="btn btn-secondary btn-sm" id="sheetRedo" title="Redo (Ctrl+Y)">↷ Redo</button>
+      </div>
+      <div class="sh-group">
+        <span class="sh-label">Rows</span>
+        <button class="btn btn-secondary btn-sm" id="sheetRowAbove" title="Insert rows above the selection">+ above</button>
+        <button class="btn btn-secondary btn-sm" id="sheetRowBelow" title="Insert rows below the selection">+ below</button>
+        <button class="btn btn-secondary btn-sm" id="sheetRowDel" title="Delete the selected rows">− delete</button>
+        <button class="btn btn-secondary btn-sm" id="sheetAddRows" title="Add 100 empty rows at the end">+100</button>
+      </div>
+      <div class="sh-group">
+        <span class="sh-label">Columns</span>
+        <button class="btn btn-secondary btn-sm" id="sheetColLeft" title="Insert columns to the left">+ left</button>
+        <button class="btn btn-secondary btn-sm" id="sheetColRight" title="Insert columns to the right">+ right</button>
+        <button class="btn btn-secondary btn-sm" id="sheetColDel" title="Delete the selected columns">− delete</button>
+        <label class="inline-label" title="Width of the columns">width <input type="range" id="sheetColW" min="60" max="240" step="4" value="104" style="width:90px"></label>
+      </div>
+      <div class="sh-group">
+        <label class="checkbox-label" style="margin:0"><input type="checkbox" id="sheetHeaderRow" checked> First row = column names</label>
+        <button class="btn btn-ghost btn-sm" id="sheetClear">Clear the sheet</button>
+      </div>
+    </div>
+
+    <div id="sheetGrid" class="sheet-grid"></div>
+    <div class="sheet-status"><span id="sheetStatus"></span><span id="sheetSaved" class="sh-saved"></span></div>
+
+    <details class="acc sheet-paste">
+      <summary>Pasting does not work in this browser? Paste into this box instead</summary>
+      <div class="acc-body">
+        <textarea id="sheetPasteBox" class="dz-names" placeholder="Paste here: columns separated by tabs, commas or semicolons, one row per line"></textarea>
+        <div class="btn-row"><button class="btn btn-secondary btn-sm" id="sheetPasteGo">Put it in the sheet at the selected cell</button></div>
+      </div>
+    </details>
+
+    <div class="sheet-actions">
+      <div class="sh-start">
+        <span class="sh-label">Start from</span>
+        <button class="btn btn-ghost btn-sm" id="sheetTemplate" title="Build a ready-made layout with the template designer">a template…</button>
+        <button class="btn btn-ghost btn-sm" id="sheetFromFile" title="Open the loaded spreadsheet or CSV file here to correct it">the file loaded</button>
+      </div>
+      <div class="sh-save">
+        <label class="inline-label">File name <input type="text" id="sheetName" value="data_sheet" style="width:160px"></label>
+        <span class="sh-label">Save as</span>
+        <button class="btn btn-secondary btn-sm" data-sheet-dl="xlsx">.xlsx</button>
+        <button class="btn btn-secondary btn-sm" data-sheet-dl="ods">.ods</button>
+        <button class="btn btn-secondary btn-sm" data-sheet-dl="csv">.csv (comma)</button>
+        <button class="btn btn-secondary btn-sm" data-sheet-dl="csv-semicolon">.csv (semicolon)</button>
+        <button class="btn btn-secondary btn-sm" data-sheet-dl="tsv">.tsv (tab)</button>
+      </div>
+      <button class="btn btn-primary" id="sheetAnalyse">Use these data →</button>
+    </div>
+  </div>
+
+  <!-- ---------- template designer ---------- -->
+  <div class="card designer" id="cardDesigner" style="display:none">
+    <div class="card-head">
+      <div>
+        <h2>Data template designer</h2>
+        <p class="hint" style="max-width:820px">Tell the app what your data will contain. It writes the sheet for you: IDs and populations already in place, one column per locus or trait, and a first row that declares the layout so nothing has to be guessed on import.</p>
+      </div>
+      <div class="btn-row" style="margin:0">
+        <button class="btn btn-secondary btn-sm" id="dzFromData" style="display:none" title="Write the dataset loaded now in another layout">Convert the loaded dataset</button>
+        <button class="btn btn-ghost" id="dzClose">✕ Close</button>
+      </div>
+    </div>
+    <div class="messages" id="dzMessages"></div>
+
+    <section class="dz-sec">
+      <div class="dz-num">1</div>
+      <div class="dz-body">
+        <h3>What did you score?</h3>
+        <div class="kind-grid" id="dzKinds"></div>
+      </div>
+    </section>
+
+    <section class="dz-sec" id="dzSecSampling">
+      <div class="dz-num">2</div>
+      <div class="dz-body">
+        <h3>Sampling design</h3>
+        <div class="field-grid">
+          <div class="field">
+            <label>Each row of the sheet is</label>
+            <select id="dzUnit">
+              <option value="individuals">An individual plant</option>
+              <option value="landraces">A landrace</option>
+              <option value="accessions">An accession</option>
+              <option value="varieties">A variety / cultivar</option>
+              <option value="clones">A clone / genet</option>
+              <option value="genotypes">A genotype</option>
+              <option value="samples">A sample</option>
+              <option value="populations">A population (bulk)</option>
+              <option value="OTUs">An OTU</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>How the material was sampled</label>
+            <select id="dzSampling">
+              <option value="pops">Several plants per population</option>
+              <option value="bulk">One sample per unit (bulk)</option>
+            </select>
+            <span class="field-help" id="dzSamplingHelp"></span>
+          </div>
+          <div class="field" id="dzIdField">
+            <label>IDs</label>
+            <select id="dzIdStyle">
+              <option value="pop">Pop1_01, Pop1_02…</option>
+              <option value="number">001, 002, 003…</option>
+              <option value="blank">Empty: I will type them</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Geographic coordinates</label>
+            <select id="dzCoords">
+              <option value="none">None</option>
+              <option value="pop">One point per population</option>
+              <option value="ind">One point per plant</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row dz-inline">
+          <label class="inline-label" id="dzNPopsLabel">Populations <input type="number" id="dzNPops" min="1" max="500" value="3" style="width:78px"></label>
+          <span id="dzAllNWrap" class="inline-label">Plants in every population <input type="number" id="dzAllN" min="1" max="5000" value="20" style="width:78px">
+            <button class="btn btn-secondary btn-sm" id="dzApplyN">Apply to all</button></span>
+          <label class="checkbox-label"><input type="checkbox" id="dzUseRegion"> Region column (for a hierarchical AMOVA)</label>
+          <label class="checkbox-label" id="dzUseGroupWrap"><input type="checkbox" id="dzUseGroup"> Group column (e.g. racial complex)</label>
+        </div>
+        <p class="hint" style="margin:6px 0">Type the names and sizes below, or paste a column of names copied from a spreadsheet into the first cell.</p>
+        <div class="table-scroll dz-table" id="dzPops"></div>
+      </div>
+    </section>
+
+    <section class="dz-sec">
+      <div class="dz-num">3</div>
+      <div class="dz-body">
+        <h3 id="dzMarkersTitle">Loci</h3>
+        <div id="dzMarkers"></div>
+      </div>
+    </section>
+
+    <section class="dz-sec">
+      <div class="dz-num">4</div>
+      <div class="dz-body">
+        <h3>Your template</h3>
+        <div class="results-summary" id="dzTiles"></div>
+        <h4 style="margin-top:14px">Checks on this design</h4>
+        <ul class="advice" id="dzAdvice"></ul>
+        <h4 style="margin-top:14px">What you will be able to run</h4>
+        <div class="dz-caps" id="dzCaps"></div>
+        <h4 style="margin-top:16px">Preview of the sheet</h4>
+        <p class="hint" id="dzPreviewNote"></p>
+        <div class="table-scroll tpl-preview" id="dzPreview"></div>
+        <div class="dz-downloads" id="dzDownloads"></div>
+        <p class="hint" style="margin-top:10px">When the sheet is filled in, save it and drop it into <b>1 · Load your data</b> above.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ---------- sample sheet for formats without population columns ---------- -->
+  <div class="card" id="cardSampleSheet" style="display:none">
+    <h2>Add sample information</h2>
+    <p class="hint" id="sampleSheetHint">FASTA, VCF, .str and .gen files cannot always carry populations, regions or coordinates. Load a sheet with an <b>ID</b> column (the same names as in the file) and any of <b>Population</b>, <b>Region</b>, <b>Latitude</b>, <b>Longitude</b>.</p>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnSampleSheet">Choose a sample sheet (.xlsx, .csv)</button>
+      <button class="btn btn-ghost" id="btnSampleSheetTpl">Download an empty sample sheet with these IDs</button>
+      <input type="file" id="sampleSheetInput" accept=".xlsx,.xls,.ods,.csv,.txt,.tsv" style="display:none">
+    </div>
+    <div class="messages" id="sampleSheetMessages"></div>
+  </div>
+
+  <!-- ---------- 2 · interpretation ---------- -->
+  <div class="card" id="cardInterpret" style="display:none">
+    <h2>2 · What this file contains</h2>
+    <p class="hint" id="detectionText"></p>
+    <div class="field-grid">
+      <div class="field">
+        <label>The rows of the file are</label>
+        <select id="optOrientation">
+          <option value="rows-are-individuals">Individuals (one row per plant)</option>
+          <option value="rows-are-loci">Loci or bands (one row per marker)</option>
+        </select>
+        <span class="field-help">Band matrices are often written the other way round; the app transposes them for you.</span>
+      </div>
+      <div class="field">
+        <label>Marker type</label>
+        <select id="optKind">
+          <option value="codominant">Codominant — SSR, SNP, isozyme (2 columns per locus)</option>
+          <option value="dominant">Dominant / binary — AFLP, ISSR, RAPD (0/1)</option>
+          <option value="haploid">Haploid — cpDNA/mtDNA haplotype codes</option>
+          <option value="sequence">Aligned DNA sequences — one column per gene region</option>
+          <option value="morph">Morphological traits</option>
+        </select>
+        <span class="field-help">This decides which statistics are even defined later on.</span>
+      </div>
+      <div class="field">
+        <label>Ploidy (codominant only)</label>
+        <select id="optPloidy"><option value="2">Diploid (2)</option><option value="1">Haploid (1)</option><option value="3">Triploid (3)</option><option value="4">Tetraploid (4)</option><option value="6">Hexaploid (6)</option></select>
+      </div>
+      <div class="field" id="optGenoCellsField">
+        <label>How genotypes are written</label>
+        <select id="optGenoCells">
+          <option value="columns">One allele per column (182 | 186)</option>
+          <option value="combined">Whole genotype in one cell (182/186, A/G)</option>
+        </select>
+        <span class="field-help">Codominant only. Most genotype files use one column per allele.</span>
+      </div>
+      <div class="field">
+        <label>What the rows are called</label>
+        <select id="optUnitName">
+          <option value="individuals">Individuals (plants)</option>
+          <option value="landraces">Landraces</option>
+          <option value="accessions">Accessions</option>
+          <option value="varieties">Varieties / cultivars</option>
+          <option value="populations">Populations (bulk samples)</option>
+          <option value="clones">Clones / genets</option>
+          <option value="genotypes">Genotypes</option>
+          <option value="samples">Samples</option>
+          <option value="OTUs">OTUs</option>
+        </select>
+        <span class="field-help">Used in every table and text. A transposed band matrix with one column per race is proposed as landraces.</span>
+      </div>
+      <div class="field">
+        <label>Code used for missing data</label>
+        <input type="text" id="optMissing" placeholder="e.g. 0, -9, NA" value="0">
+        <span class="field-help">Empty cells, NA, ?, ., x, −9, −99 and −999 are always treated as missing.</span>
+      </div>
+      <div class="field">
+        <label><input type="checkbox" id="optHeader" checked> The first row holds column names</label>
+        <span class="field-help">Untick it if your file starts straight with data.</span>
+      </div>
+    </div>
+    <h4 style="margin-top:16px">Preview</h4>
+    <p class="hint" id="previewNote"></p>
+    <div class="table-scroll" id="previewTable"></div>
+  </div>
+
+  <!-- ---------- 3 · roles ---------- -->
+  <div class="card" id="cardRoles" style="display:none">
+    <h2>3 · What each column is</h2>
+    <p class="hint">The app has guessed the roles below. Change any of them — above all, make sure the
+      <b>population</b> column is the one you mean, because almost every later analysis is computed within and
+      between those groups.</p>
+    <label class="checkbox-label"><input type="checkbox" id="btnShowAllCols"> Show every column (not just the first ten)</label>
+    <div class="table-scroll" id="roleTable"></div>
+    <p class="hint" id="roleSummary" style="margin-top:10px"></p>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnBuild">Build the dataset and run the checks →</button>
+    </div>
+  </div>
+
+  <!-- ---------- 4 · quality control ---------- -->
+  <div class="card" id="cardQC" style="display:none">
+    <h2>4 · Quality control</h2>
+    <p class="hint">What the matrix looks like, and what would distort the results if left alone.</p>
+    <div id="tplCheckWrap" style="display:none">
+      <h3 id="tplCheckTitle">Checked against the layout declared in the file</h3>
+      <p class="hint" id="tplCheckNote"></p>
+      <div class="table-scroll" id="tplCheck"></div>
+      <div class="table-scroll" id="tplCheckPops" style="margin-top:10px"></div>
+    </div>
+    <div class="results-summary" id="qcTiles"></div>
+    <div class="messages" id="qcMessages"></div>
+    <div id="issueWrap" style="display:none">
+      <div class="btn-row" style="float:right;margin:14px 0 0"><button class="btn btn-secondary btn-sm" id="btnFixInSheet" title="Open the data in the built-in sheet with these cells highlighted">Correct them in the data sheet</button></div>
+      <h3>Values to fix in the sheet</h3>
+      <p class="hint">Each problem was handled safely (the value was set to missing or kept as written), but the sheet should be corrected. Row numbers are those of your spreadsheet.</p>
+      <div class="table-scroll" id="issueBox"></div>
+    </div>
+
+    <div id="fig2Matrix"></div>
+
+    <h3 id="locusTableTitle">Locus by locus</h3>
+    <div class="table-scroll" id="locusTable"></div>
+    <div id="fig2Locus"></div>
+
+    <div id="dupWrap" style="display:none">
+      <h3>Repeated and near-identical genotypes</h3>
+      <p class="hint">In a clonal species these are ramets of the same genet. Keeping them inflates sample size and
+        deflates diversity — the usual practice is to keep one representative per multilocus genotype.</p>
+      <div class="table-scroll" id="dupBox"></div>
+    </div>
+
+    <h3>Sampling and frequencies</h3>
+    <div class="fig-grid">
+      <div id="fig2Pops"></div>
+      <div id="fig2Spec"></div>
+    </div>
+  </div>
+
+  <!-- ---------- 5 · capabilities ---------- -->
+  <div class="card" id="cardCapabilities" style="display:none">
+    <h2>5 · What you can run with these data</h2>
+    <p class="hint" id="capSummary"></p>
+    <div class="cap-grid" id="capGrid"></div>
+    <div class="next-bar">
+      <button class="btn btn-secondary" onclick="goStep(1)">← Home</button>
+      <button class="btn btn-secondary" id="btnConvert" title="Write this dataset as a PopGeneticsPro sheet, a parameter-row sheet, FASTA…">Export in another layout</button>
+      <button class="btn btn-primary" id="btnContinue">Continue to diversity →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 3 · DIVERSITY ==================== -->
+<section class="step-panel" id="panel-3">
+  <div class="panel-title"><div class="pt-num">3</div>
+    <div><h2>Allele frequencies &amp; diversity</h2><p>How much genetic variation there is, and how it is spread among your populations.</p></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · Settings</h2>
+    <p class="hint">The defaults follow the most common conventions of the literature. Change them and the whole block recomputes.</p>
+    <div class="field-grid">
+      <div class="field">
+        <label>A locus counts as polymorphic when</label>
+        <select id="divPoly">
+          <option value="95" selected>the commonest allele is ≤ 95% (the 95% criterion)</option>
+          <option value="99">the commonest allele is ≤ 99% (the 99% criterion)</option>
+          <option value="strict">more than one allele is present (no threshold)</option>
+        </select>
+      </div>
+      <div class="field" id="divRarefyRow">
+        <label>Rarefy allelic richness to (gene copies)</label>
+        <input type="number" id="divRarefy" min="2" step="2" placeholder="smallest population">
+        <span class="field-help">Leave it empty to use the smallest sample available, the usual choice.</span>
+      </div>
+      <div class="field" id="divDomRow" style="display:none">
+        <label>Allele frequencies from dominant bands</label>
+        <select id="divDomMethod">
+          <option value="lynch" selected>Lynch &amp; Milligan (1994) — square root with small-sample correction</option>
+          <option value="sqrt">Square root, assuming Hardy–Weinberg</option>
+          <option value="bayes">Bayesian posterior mean (uniform prior)</option>
+        </select>
+      </div>
+      <div class="field" id="divDomFRow" style="display:none">
+        <label>Inbreeding F assumed by the Bayesian estimator</label>
+        <input type="number" id="divDomF" min="0" max="1" step="0.05" value="0">
+        <span class="field-help">Use 0 for an outcrosser; a selfing species is closer to 0.8–0.95.</span>
+      </div>
+      <div class="field" id="divMorphRow" style="display:none">
+        <label>Classes per trait (phenotypic diversity)</label>
+        <input type="number" id="divClasses" min="4" max="20" step="1" value="10">
+        <span class="field-help">Ten classes of half a standard deviation is the usual convention.</span>
+      </div>
+      <div class="field">
+        <label>Bootstrap replicates over loci</label>
+        <input type="number" id="divBoot" min="0" max="10000" step="100" value="1000">
+        <span class="field-help">Gives the 95% intervals. Set 0 to skip it.</span>
+      </div>
+      <div class="field">
+        <label>Random seed</label>
+        <input type="number" id="divSeed" min="1" step="1" value="1">
+        <span class="field-help">Report it in the methods and anyone can reproduce your intervals.</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnRunDiversity">Compute diversity</button>
+      <span class="hint" id="divTiming" style="margin:0"></span>
+    </div>
+    <div class="messages" id="divMessages"></div>
+  </div>
+
+  <div id="divResults" style="display:none">
+
+    <div class="card">
+      <h2>2 · What the numbers say</h2>
+      <div class="results-summary" id="divTiles"></div>
+      <div id="divInterpret"></div>
+    </div>
+
+    <div class="card">
+      <h2>3 · Diversity of every population</h2>
+      <p class="hint" id="divPopHint">Averages over loci. <b>Na</b> number of alleles · <b>Ne</b> effective alleles (1/Σp²) ·
+        <b>I</b> Shannon's index · <b>Ho</b> observed and <b>He</b> expected heterozygosity ·
+        <b>uHe</b> unbiased He · <b>F</b> fixation index (He−Ho)/He · <b>PIC</b> polymorphic information content ·
+        <b>Ar</b> allelic richness rarefied to a common sample size · <b>%P</b> polymorphic loci.</p>
+      <div class="table-scroll" id="divPopTable"></div>
+      <h4 style="margin-top:16px" id="divSeTitle">Standard errors over loci</h4>
+      <div class="table-scroll" id="divSeTable"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnDivCSV">⬇ Summary (CSV)</button></div>
+      <div id="fig3Div"></div>
+      <div id="fig3Rare"></div>
+    </div>
+
+    <div class="card">
+      <h2>4 · Locus by locus</h2>
+      <p class="hint" id="divLocusNote"></p>
+      <label class="inline-label" style="margin-bottom:8px">Show
+        <select id="divLocusIndex">
+          <option value="Na">Na · number of alleles</option>
+          <option value="Ne">Ne · effective alleles</option>
+          <option value="I">I · Shannon's index</option>
+          <option value="Ho">Ho · observed heterozygosity</option>
+          <option value="He" selected>He · expected heterozygosity</option>
+          <option value="uHe">uHe · unbiased He</option>
+          <option value="F">F · fixation index</option>
+          <option value="PIC">PIC</option>
+          <option value="Ar">Ar · rarefied richness</option>
+          <option value="N">N · individuals scored</option>
+        </select>
+      </label>
+      <div class="table-scroll" id="divLocusTable"></div>
+      <div id="fig3HoHe"></div>
+    </div>
+
+    <div class="card">
+      <h2>5 · Allele frequencies</h2>
+      <p class="hint" id="divFreqNote"></p>
+      <div class="table-scroll" id="divFreqTable"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnFreqCSV">⬇ All frequencies (CSV)</button></div>
+      <div id="fig3Freq"></div>
+      <div id="fig3Heat"></div>
+    </div>
+
+    <div class="card" id="divPrivateWrap" style="display:none">
+      <h2>6 · Private alleles</h2>
+      <p class="hint">Alleles found in one population and nowhere else. A private allele at appreciable frequency is
+        evidence of an isolated gene pool; a private allele seen once may be nothing but the luck of sampling.</p>
+      <div class="table-scroll" id="divPrivateTable"></div>
+      <div id="fig3Priv"></div>
+      <div id="divLocalWrap" style="display:none">
+        <h3>Locally common alleles</h3>
+        <p class="hint">Alleles that reach 5% in frequency but are confined to few populations — they are reported
+          at two thresholds, a quarter of the populations or fewer and half or fewer, as evidence of restricted
+          gene flow.</p>
+        <div class="table-scroll" id="divLocalTable"></div>
+      </div>
+    </div>
+
+    <div class="next-bar">
+      <button class="btn btn-secondary" onclick="goStep(2)">← Data</button>
+      <button class="btn btn-primary" id="btnContinue3">Continue to Hardy–Weinberg →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 4 · HWE, F_IS, NULL ALLELES, LD ==================== -->
+<section class="step-panel" id="panel-4">
+  <div class="panel-title"><div class="pt-num">4</div>
+    <div><h2>Hardy–Weinberg, inbreeding &amp; linkage</h2><p>Are the genotypes what random mating predicts — and if not, is it inbreeding, a null allele, or a mixture of populations?</p></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · Settings</h2>
+    <div class="field-grid">
+      <div class="field" id="hwePermsRow">
+        <label>Permutations per exact HWE test</label>
+        <input type="number" id="hwePerms" min="0" max="100000" step="500" value="1000">
+        <span class="field-help">Alleles are shuffled among individuals; 1 000 gives P-values to ±0.01.</span>
+      </div>
+      <div class="field">
+        <label>Correction for multiple tests</label>
+        <select id="hweAdjust">
+          <option value="holm" selected>Holm's sequential Bonferroni</option>
+          <option value="bonferroni">Bonferroni</option>
+          <option value="bh">Benjamini–Hochberg (FDR)</option>
+          <option value="by">Benjamini–Yekutieli (FDR)</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Significance level <span class="nc">α</span></label>
+        <input type="number" id="hweAlpha" min="0.001" max="0.2" step="0.01" value="0.05">
+      </div>
+      <div class="field" id="hweMissingNullRow">
+        <label><input type="checkbox" id="hweMissingNull"> Treat missing genotypes as null homozygotes</label>
+        <span class="field-help">Only if blanks come from failed amplification, not from plants that were never run.</span>
+      </div>
+      <div class="field">
+        <label>Permutations for multilocus LD (<span class="nc">r̄<sub>d</sub></span>)</label>
+        <input type="number" id="ldPerms" min="0" max="9999" step="100" value="999">
+      </div>
+      <div class="field">
+        <label>Permutations per locus pair</label>
+        <input type="number" id="ldPairPerms" min="0" max="9999" step="100" value="199">
+        <span class="field-help">Capped at 99 automatically when there are more than 400 pairs.</span>
+      </div>
+      <div class="field">
+        <label>Random seed</label>
+        <input type="number" id="hweSeed" min="1" step="1" value="1">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnRunHWE">Run the tests</button>
+      <span class="hint" id="hweTiming" style="margin:0"></span>
+    </div>
+    <div class="messages" id="hweMessages"></div>
+    <div class="callout warn" id="hweOnlyLD" style="display:none"><b>Dominant or haploid data.</b> Heterozygotes cannot be seen, so
+      Hardy–Weinberg tests, F<sub>IS</sub> and null-allele estimates are not defined. Linkage disequilibrium between markers is
+      still measurable and is reported below.</div>
+  </div>
+
+  <div id="hweResults" style="display:none">
+
+    <div class="card">
+      <h2>2 · What the tests say</h2>
+      <div class="results-summary" id="hweTiles"></div>
+      <div id="hweInterpret"></div>
+    </div>
+
+    <div class="card" id="hweCardTests">
+      <h2>3 · Hardy–Weinberg tests, locus by population</h2>
+      <p class="hint">The exact test conditions on the allele counts and asks how unusual the observed genotype table is
+        (Guo &amp; Thompson 1992, by Monte Carlo). The chi-square test is shown for comparison with older papers; it is
+        unreliable whenever an expected count falls below five, which with microsatellites is almost always.</p>
+      <label class="inline-label" style="margin-bottom:8px">Show
+        <select id="hweTestShown">
+          <option value="pAdj" selected>exact test P, corrected</option>
+          <option value="pExact">exact test P, raw</option>
+          <option value="pDeficit">one-sided: heterozygote deficit</option>
+          <option value="pExcess">one-sided: heterozygote excess</option>
+          <option value="pChi">chi-square P</option>
+          <option value="FisNC">FIS per locus (Nei &amp; Chesser)</option>
+        </select>
+      </label>
+      <div class="table-scroll" id="hweTable"></div>
+      <p class="hint" id="hweTableNote" style="margin-top:8px"></p>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnHweCSV">⬇ <span>HWE, F<sub>IS</sub> and null alleles (CSV)</span></button></div>
+      <div id="fig4Hwe"></div>
+    </div>
+
+    <div class="card" id="hweCardFis">
+      <h2>4 · Inbreeding coefficient F<sub>IS</sub></h2>
+      <p class="hint"><b>f</b> is Weir &amp; Cockerham's (1984) estimator, multilocus as a ratio of summed variance
+        components, with a bootstrap interval and a jackknife error over loci; the mean of Nei &amp; Chesser's (1983)
+        single-locus values is given for comparison. The selfing rate is the equilibrium value implied by f,
+        s = 2F/(1+F) — a reference, not a measurement.</p>
+      <div class="table-scroll" id="fisTable"></div>
+      <div id="fig4Forest"></div>
+      <h3>Locus by locus: the diagnostic</h3>
+      <p class="hint">Inbreeding raises F<sub>IS</sub> at every locus by a similar amount. A null allele raises it at
+        one locus, in most populations. A locus is flagged when it shows a significant deficit in at least half the
+        populations and its estimated null frequency exceeds 5%.</p>
+      <div class="table-scroll" id="fisLocusTable"></div>
+      <div id="fig4ByLocus"></div>
+    </div>
+
+    <div class="card" id="hweCardNull">
+      <h2>5 · Null alleles</h2>
+      <p class="hint" id="nullNote"></p>
+      <label class="inline-label" style="margin-bottom:8px">Estimator
+        <select id="nullEstimator">
+          <option value="nullEM" selected>EM (Dempster et al. 1977)</option>
+          <option value="nullBrook">Brookfield (1996) 1</option>
+          <option value="nullChak">Chakraborty et al. (1992)</option>
+        </select>
+      </label>
+      <div class="table-scroll" id="nullTable"></div>
+      <div id="fig4Null"></div>
+    </div>
+
+    <div class="card" id="hweCardLD">
+      <h2>6 · Linkage disequilibrium</h2>
+      <p class="hint">The index of association measures whether individuals that differ at one locus tend to differ at
+        the others. <b>r̄<sub>d</sub></b> (Agapow &amp; Burt 2001) is its version corrected for the number of loci, so
+        it can be compared between studies. It works for codominant, dominant and haploid data alike, and is tested by
+        shuffling each locus independently among individuals. In an outcrossing plant with unlinked markers it is close
+        to zero; selfing, clonality and admixture push it up.</p>
+      <div class="table-scroll" id="ldTable"></div>
+      <h3>Locus pairs</h3>
+      <label class="inline-label" style="margin-bottom:8px">Sample <select id="ldScope"></select></label>
+      <p class="hint" id="ldPairNote"></p>
+      <div class="table-scroll" id="ldPairTable"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnLdCSV">⬇ All pairs (CSV)</button></div>
+      <div class="fig-grid">
+        <div id="fig4LD"></div>
+        <div id="fig4RdHist"></div>
+      </div>
+    </div>
+
+    <div class="next-bar">
+      <button class="btn btn-secondary" onclick="goStep(3)">← Diversity</button>
+      <button class="btn btn-primary" id="btnContinue4">Continue to F-statistics &amp; AMOVA →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 5 · DIFFERENTIATION & AMOVA ==================== -->
+<section class="step-panel" id="panel-5">
+  <div class="panel-title"><div class="pt-num">5</div>
+    <div><h2>Differentiation &amp; AMOVA</h2><p>How much of the variation separates your populations, which pairs differ, and whether the regional grouping is real.</p></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · Settings</h2>
+    <div class="field-grid">
+      <div class="field">
+        <label>Permutations (global <span class="nc">θ</span> and AMOVA)</label>
+        <input type="number" id="fstPerms" min="0" max="99999" step="100" value="999">
+      </div>
+      <div class="field">
+        <label>Permutations per population pair</label>
+        <input type="number" id="fstPairPerms" min="0" max="9999" step="100" value="199">
+      </div>
+      <div class="field">
+        <label>Bootstrap replicates over loci</label>
+        <input type="number" id="fstBoot" min="0" max="10000" step="100" value="1000">
+        <span class="field-help">Gives the 95% intervals of the multilocus estimates.</span>
+      </div>
+      <div class="field" id="fstHierRow" style="display:none">
+        <label><input type="checkbox" id="fstHier" checked> Hierarchical AMOVA (regions › populations)</label>
+        <span class="field-help" id="fstHierNote"></span>
+      </div>
+      <div class="field" id="fstExcludeRow" style="display:none">
+        <label><input type="checkbox" id="fstExclude"> Leave out the loci flagged for null alleles in Block 4</label>
+        <span class="field-help" id="fstExcludeNote"></span>
+      </div>
+      <div class="field">
+        <label>Random seed</label>
+        <input type="number" id="fstSeed" min="1" step="1" value="1">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnRunFst">Compute differentiation</button>
+      <span class="hint" id="fstTiming" style="margin:0"></span>
+    </div>
+    <div class="messages" id="fstMessages"></div>
+  </div>
+
+  <div id="fstResults" style="display:none">
+
+    <div class="card">
+      <h2>2 · What the numbers say</h2>
+      <div class="results-summary" id="fstTiles"></div>
+      <div id="fstInterpret"></div>
+    </div>
+
+    <div class="card">
+      <h2>3 · Analysis of molecular variance</h2>
+      <p class="hint">Excoffier, Smouse &amp; Quattro (1992). The table partitions the squared genetic distances among
+        the levels of your sampling design; each Φ is tested by permuting the units of the level below it.</p>
+      <div class="table-scroll" id="amovaTable"></div>
+      <p class="hint" id="amovaNote" style="margin-top:8px"></p>
+      <div id="fig5Amova"></div>
+    </div>
+
+    <div class="card">
+      <h2>4 · Global F-statistics, locus by locus</h2>
+      <p class="hint"><b>θ</b>, <b>f</b> and <b>F</b> are Weir &amp; Cockerham's (1984) estimators of F<sub>ST</sub>,
+        F<sub>IS</sub> and F<sub>IT</sub>. <b>G<sub>ST</sub></b> is Nei's (1973) with the Nei &amp; Chesser (1983)
+        sample-size corrections; <b>G′<sub>ST</sub></b> is Hedrick's (2005) standardisation; <b>D</b> is Jost's (2008).
+        A locus far above the shaded multilocus interval is a candidate for selection or a scoring artefact.</p>
+      <div class="table-scroll" id="fstLocusTable"></div>
+      <p class="hint" id="fstLocusNote" style="margin-top:8px"></p>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnFstCSV">⬇ Per-locus statistics (CSV)</button></div>
+      <div id="fig5Locus"></div>
+    </div>
+
+    <div class="card">
+      <h2>5 · Pairwise differentiation</h2>
+      <label class="inline-label" style="margin-bottom:8px">Statistic
+        <select id="pairStat">
+          <option value="theta" selected>θ (FST)</option>
+          <option value="phi">Φ (AMOVA)</option>
+          <option value="Gst">GST</option>
+          <option value="Gprime">G′ST</option>
+          <option value="D">Jost D</option>
+          <option value="Nm">Nm</option>
+        </select>
+      </label>
+      <div class="table-scroll" id="pairTable"></div>
+      <p class="hint" id="pairNote" style="margin-top:8px"></p>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnPairCSV">⬇ All pairs, all statistics (CSV)</button></div>
+      <div id="fig5Pair"></div>
+      <div id="fig5Ladder"></div>
+    </div>
+
+    <div class="next-bar">
+      <button class="btn btn-secondary" onclick="goStep(4)">← HWE &amp; LD</button>
+      <button class="btn btn-primary" id="btnContinue5">Continue to distances &amp; ordination →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 6 · DISTANCES, ORDINATION, TREES ==================== -->
+<section class="step-panel" id="panel-6">
+  <div class="panel-title"><div class="pt-num">6</div>
+    <div><h2>Genetic distances, ordination &amp; trees</h2><p>How far apart the populations and individuals are, drawn as a map (PCoA), as a tree, and against geography.</p></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · Settings</h2>
+    <div class="callout tip" id="distPopNote" style="display:none"></div>
+    <div class="field-grid">
+      <div class="field" id="popMethodRow">
+        <label>Distance between populations</label>
+        <select id="popMethod">
+          <option value="nei78" selected>Nei (1978) unbiased genetic distance</option>
+          <option value="nei72">Nei (1972) standard genetic distance</option>
+          <option value="cavalli">Cavalli-Sforza &amp; Edwards (1967) chord distance</option>
+          <option value="reynolds">Reynolds, Weir &amp; Cockerham (1983) coancestry distance</option>
+          <option value="rogers">Rogers (1972) distance</option>
+          <option value="prevosti">Prevosti (1975) distance</option>
+        </select>
+        <span class="field-help">Nei's D for phylogeny-like questions with many loci; Cavalli-Sforza or Reynolds when populations diverged by drift alone (they recover the right tree more often, Takezaki &amp; Nei 1996).</span>
+      </div>
+      <div class="field">
+        <label>Distance between individuals</label>
+        <select id="indMethod"></select>
+        <span class="field-help">Feeds the individual PCoA and the individual trees.</span>
+      </div>
+      <div class="field" id="bootRow">
+        <label>Bootstrap replicates over loci (tree support)</label>
+        <input type="number" id="distBoot" min="0" max="10000" step="100" value="1000">
+      </div>
+      <div class="field">
+        <label><input type="checkbox" id="distLingoes"> Lingoes correction for negative eigenvalues</label>
+        <span class="field-help">Makes the distance Euclidean before the PCoA, so the percentages of variation are exact.</span>
+      </div>
+      <div class="field">
+        <label>Mantel permutations</label>
+        <input type="number" id="mantelPerms" min="0" max="9999" step="100" value="999">
+      </div>
+      <div class="field">
+        <label>Random seed</label>
+        <input type="number" id="distSeed" min="1" step="1" value="1">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnRunDist">Compute distances, ordination and trees</button>
+      <span class="hint" id="distTiming" style="margin:0"></span>
+    </div>
+    <div class="messages" id="distMessages"></div>
+  </div>
+
+  <div id="distResults" style="display:none">
+
+    <div class="card">
+      <h2>2 · What the distances say</h2>
+      <div class="results-summary" id="distTiles"></div>
+      <div id="distInterpret"></div>
+    </div>
+
+    <div class="card" id="popMatrixCard">
+      <h2>3 · Distances between populations</h2>
+      <label class="inline-label" style="margin-bottom:8px">Show
+        <select id="popDistShown">
+          <option value="current" selected>the coefficient chosen above</option>
+          <option value="nei78">Nei 1978 unbiased</option>
+          <option value="nei72">Nei 1972</option>
+          <option value="cavalli">Cavalli-Sforza &amp; Edwards</option>
+          <option value="reynolds">Reynolds</option>
+          <option value="rogers">Rogers</option>
+          <option value="prevosti">Prevosti</option>
+        </select>
+      </label>
+      <div class="table-scroll" id="popDistTable"></div>
+      <p class="hint" id="popDistNote" style="margin-top:8px"></p>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnPopDistCSV">⬇ Population matrix (CSV)</button></div>
+      <h3>Every coefficient, pair by pair</h3>
+      <div class="table-scroll" id="popCompareTable"></div>
+      <div id="fig6PopHeat"></div>
+    </div>
+
+    <div class="card">
+      <h2>4 · Distances between individuals</h2>
+      <p class="hint" id="indDistNote"></p>
+      <div class="table-scroll" id="indDistTable"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnIndDistCSV">⬇ Individual matrix (CSV)</button></div>
+    </div>
+
+    <div class="card">
+      <h2>5 · Principal coordinates</h2>
+      <p class="hint">PCoA (Gower 1966) turns the distance matrix into a map in which the distances between points
+        reproduce the genetic distances as well as a plane can. Unlike a PCA of allele frequencies it works with
+        any coefficient, which is why it is the standard ordination in population genetics.</p>
+      <div class="table-scroll" id="pcoaTable"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnPcoaCSV">⬇ Scores of every unit (CSV)</button></div>
+      <div id="fig6PcoaInd"></div>
+      <div class="fig-grid">
+        <div id="fig6Scree"></div>
+        <div id="fig6PcoaPop"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>6 · Trees</h2>
+      <p class="hint"><b>Neighbour-joining</b> (Saitou &amp; Nei 1987) builds an unrooted tree without assuming equal
+        rates; <b>UPGMA</b> assumes them and gives a rooted, ultrametric tree. Support values are the percentage of
+        bootstrap resamplings of the loci (bands, or alignment sites for sequences) in which the same grouping
+        reappears (Felsenstein 1985) — groupings under 70% are not to be interpreted. Trees of individuals get
+        support when there are 60 or fewer.</p>
+      <label class="inline-label" style="margin-bottom:8px">Tree <select id="treeShown"></select></label>
+      <button class="btn btn-secondary btn-sm" id="btnNewick">⬇ Newick (for tree viewers)</button>
+      <button class="btn btn-accent btn-sm" id="btnTreeImages" title="Photographs or illustrations of each OTU, drawn around the tree">🖼 Images of the OTUs…</button>
+      <p class="hint" style="margin:6px 0 10px">Open <b>⚙ Edit figure</b> to switch between the circular and the rectangular tree, colour the clades, add rings and place the images; then choose <b>Images</b> → <i>one per tip</i> or <i>one per group</i>.</p>
+      <div id="fig6Tree"></div>
+      <div id="treeSupportWrap" style="display:none">
+        <h3>Bootstrap support of every grouping</h3>
+        <div class="table-scroll" id="treeSupportTable"></div>
+      </div>
+    </div>
+
+    <div class="card" id="ibdCard" style="display:none">
+      <h2>7 · Isolation by distance</h2>
+      <p class="hint" id="ibdNote"></p>
+      <div class="table-scroll" id="ibdTable"></div>
+      <div class="fig-grid">
+        <div id="fig6IbdPop"></div>
+        <div id="fig6IbdInd"></div>
+      </div>
+    </div>
+
+    <div class="next-bar">
+      <button class="btn btn-secondary" onclick="goStep(5)">← AMOVA</button>
+      <button class="btn btn-primary" id="btnContinue6">Continue to Bayesian clustering →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 7 · CLUSTERING & ASSIGNMENT ==================== -->
+<section class="step-panel" id="panel-7">
+  <div class="panel-title"><div class="pt-num">7</div>
+    <div><h2>Bayesian clustering, DAPC &amp; assignment</h2><p>How many genetic groups the data themselves support, who belongs where, and which individuals are not from where they were collected.</p></div>
+  </div>
+
+  <!-- ---------- Bayesian admixture clustering ---------- -->
+  <div class="card">
+    <h2>1 · Bayesian clustering (admixture model)</h2>
+    <p class="hint">The model of Pritchard, Stephens &amp; Donnelly (2000): K clusters with their own allele frequencies,
+      and for every individual the fraction of its genome drawn from each cluster (Q). It runs a Gibbs sampler in a
+      background thread, so the page stays usable. <span id="structNote"></span></p>
+    <div class="field-grid">
+      <div class="field"><label>Model</label>
+        <select id="structModel"><option value="admixture" selected>Admixture (individuals may be mixed)</option><option value="noadmix">No admixture (each individual from one cluster)</option></select>
+        <span class="field-help">Allele frequencies are independent between clusters (the F-model is not implemented).</span></div>
+      <div class="field"><label>K from</label><input type="number" id="structKmin" min="1" max="20" value="1"></div>
+      <div class="field"><label>K to</label><input type="number" id="structKmax" min="1" max="20" value="6"></div>
+      <div class="field"><label>Replicates per K</label><input type="number" id="structReps" min="1" max="20" value="3">
+        <span class="field-help">ΔK needs ≥ 2; publications usually run 10–20.</span></div>
+      <div class="field"><label>Burn-in iterations</label><input type="number" id="structBurnin" min="100" step="500" value="5000"></div>
+      <div class="field"><label>Sampled iterations</label><input type="number" id="structIters" min="100" step="500" value="10000">
+        <span class="field-help">For a quick look use 1 000 + 2 000; for the paper, 50 000 + 100 000.</span></div>
+      <div class="field"><label>Random seed</label><input type="number" id="structSeed" min="1" step="1" value="1"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnRunStruct">Run the MCMC</button>
+      <button class="btn btn-secondary" id="btnCancelStruct" style="display:none">Cancel</button>
+      <span class="hint" id="structTiming" style="margin:0"></span>
+    </div>
+    <div class="progress" id="structProgress" style="display:none"><div class="progress-bar" id="structProgressBar"></div><div class="progress-text" id="structProgressText"></div></div>
+    <div class="messages" id="structMessages"></div>
+  </div>
+
+  <div id="structResults" style="display:none">
+    <div class="card">
+      <h2>2 · How many clusters?</h2>
+      <div id="structInterpret"></div>
+      <div class="table-scroll" id="structKTable"></div>
+      <div class="fig-grid">
+        <div id="fig7LnPD"></div>
+        <div id="fig7DeltaK"></div>
+      </div>
+      <div id="fig7Puech"></div>
+    </div>
+    <div class="card">
+      <h2>3 · Membership of every individual</h2>
+      <div class="btn-row" style="margin:0 0 10px">
+        <label class="inline-label">K <select id="structKShown"></select></label>
+        <label class="inline-label">Run <select id="structRunShown"></select></label>
+        <button class="btn btn-secondary btn-sm" id="btnQCSV">⬇ Q matrix (CSV)</button>
+      </div>
+      <div id="fig7Bar"></div>
+      <div id="structPopWrap" style="display:none">
+        <h3>Mean membership by population</h3>
+        <div class="table-scroll" id="structPopTable"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- DAPC ---------- -->
+  <div class="card">
+    <h2>4 · Discriminant analysis of principal components (DAPC)</h2>
+    <p class="hint">Jombart, Devillard &amp; Balloux (2010). A model-free alternative: a PCA summarises the genotypes,
+      a discriminant analysis then finds the axes that best separate the groups — either your populations, or groups
+      found in the data by k-means clustering with the number chosen by BIC. No Hardy–Weinberg or linkage
+      assumptions, and fast.</p>
+    <div class="field-grid">
+      <div class="field"><label>Groups</label>
+        <select id="dapcMode"><option value="pops">the populations declared in Block 2</option><option value="find">found in the data (k-means, BIC)</option></select></div>
+      <div class="field" id="dapcKmaxRow" style="display:none"><label>Largest K to try</label><input type="number" id="dapcKmax" min="2" max="30" value="10"></div>
+      <div class="field"><label>Principal components retained</label><input type="number" id="dapcNpca" min="1" placeholder="automatic">
+        <span class="field-help">Empty = the smaller of "90% of the variance" and N/3.</span></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" id="btnRunDapc">Run DAPC</button></div>
+    <div class="messages" id="dapcMessages"></div>
+  </div>
+  <div id="dapcResults" style="display:none">
+    <div class="card">
+      <h2>5 · DAPC results</h2>
+      <div id="dapcInterpret"></div>
+      <div class="table-scroll" id="dapcGroupTable"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnDapcCSV">⬇ Coordinates and memberships (CSV)</button></div>
+      <div id="fig7Bic"></div>
+      <div id="fig7DapcScatter"></div>
+      <div id="fig7Compo"></div>
+    </div>
+  </div>
+
+  <!-- ---------- Assignment ---------- -->
+  <div class="card" id="assignCard">
+    <h2>6 · Assignment tests and migrant detection</h2>
+    <p class="hint">Each genotype is assigned to the population where it is most likely (Paetkau et al. 1995; Rannala
+      &amp; Mountain 1997), leaving the individual out of its own population. First-generation migrants are flagged by
+      comparing L<sub>home</sub>/L<sub>max</sub> with the distribution obtained from genotypes simulated in the home
+      population (Paetkau et al. 2004).</p>
+    <div class="field-grid">
+      <div class="field"><label>Allele frequencies</label>
+        <select id="assignMethod"><option value="rannala" selected>Rannala &amp; Mountain (1997), Bayesian</option><option value="paetkau">Paetkau et al. (1995), frequencies with 0.01 for absent alleles</option></select></div>
+      <div class="field"><label>Simulated genotypes per population</label><input type="number" id="assignSims" min="0" max="10000" step="100" value="500"><span class="field-help">0 skips the migrant test.</span></div>
+      <div class="field"><label>Migrant threshold <span class="nc">α</span></label><input type="number" id="assignAlpha" min="0.001" max="0.1" step="0.005" value="0.01"></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" id="btnRunAssign">Run the assignment</button></div>
+    <div class="messages" id="assignMessages"></div>
+  </div>
+  <div id="assignResults" style="display:none">
+    <div class="card">
+      <h2>7 · Assignment results</h2>
+      <div id="assignInterpret"></div>
+      <div class="table-scroll" id="assignMatrixTable"></div>
+      <div class="fig-grid">
+        <div id="fig7AssignHeat"></div>
+        <div id="fig7Lod"></div>
+      </div>
+      <h3>Every individual</h3>
+      <div class="table-scroll" id="assignIndTable"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnAssignCSV">⬇ Assignment of every individual (CSV)</button></div>
+    </div>
+  </div>
+
+  <div class="next-bar">
+    <button class="btn btn-secondary" onclick="goStep(6)">← Distances</button>
+    <button class="btn btn-primary" id="btnContinue7">Continue to DNA sequences →</button>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 8 · DNA SEQUENCES ==================== -->
+<section class="step-panel" id="panel-8">
+  <div class="panel-title"><div class="pt-num">8</div>
+    <div><h2>DNA sequences &amp; haplotypes</h2><p>What an alignment says about diversity, demographic history and the geography of lineages.</p></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · Settings</h2>
+    <div class="field-grid">
+      <div class="field"><label>Coalescent simulations (P-values of D, Fs, R₂ and raggedness)</label><input type="number" id="dnaSims" min="0" max="20000" step="500" value="1000"></div>
+      <div class="field"><label>Permutations (N_ST test and Φ_ST)</label><input type="number" id="dnaPerms" min="0" max="9999" step="100" value="999"></div>
+      <div class="field"><label>Mutation rate (per site per year, optional)</label><input type="number" id="dnaMu" min="0" step="1e-10" placeholder="e.g. 1.0e-9">
+        <span class="field-help">Turns τ into years since expansion. Chloroplast non-coding DNA in angiosperms is often quoted at 1–3 × 10⁻⁹.</span></div>
+      <div class="field"><label>Generation time (years)</label><input type="number" id="dnaGen" min="0.1" step="0.5" value="1"></div>
+      <div class="field"><label>Random seed</label><input type="number" id="dnaSeed" min="1" step="1" value="1"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnRunDna">Analyse the sequences</button>
+      <span class="hint" id="dnaTiming" style="margin:0"></span>
+    </div>
+    <div class="messages" id="dnaMessages"></div>
+  </div>
+
+  <div id="dnaResults" style="display:none">
+    <div class="card">
+      <h2>2 · What the sequences say</h2>
+      <div class="results-summary" id="dnaTiles"></div>
+      <div id="dnaInterpret"></div>
+    </div>
+
+    <div class="card">
+      <h2>3 · Sites</h2>
+      <div class="table-scroll" id="dnaSitesTable"></div>
+      <div id="fig8Sites"></div>
+    </div>
+
+    <div class="card">
+      <h2>4 · Haplotypes</h2>
+      <p class="hint" id="dnaHapNote"></p>
+      <div class="table-scroll" id="dnaHapTable"></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary btn-sm" id="btnHapFasta">⬇ Haplotype sequences (FASTA)</button>
+        <button class="btn btn-secondary btn-sm" id="btnHapCSV">⬇ Haplotype × population table (CSV)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>5 · Diversity and neutrality tests</h2>
+      <p class="hint">Tajima's D compares two estimates of θ — one from the number of segregating sites, one from
+        pairwise differences — that agree only under neutrality and constant size. Fu's Fs asks whether there are more
+        haplotypes than expected given π; it is the most sensitive to population growth. Fu &amp; Li's D* and F* weigh
+        the singletons; R₂ (Ramos-Onsins &amp; Rozas 2002) is the most powerful for small samples. All P-values come from
+        coalescent simulations of a neutral population of constant size, not from tables; they assume at most one
+        mutation per site.</p>
+      <div class="table-scroll" id="dnaDivTable"></div>
+      <p class="hint" id="dnaDivNote" style="margin-top:8px"></p>
+      <div id="fig8Pops"></div>
+      <h3>Mismatch distribution</h3>
+      <p class="hint">The distribution of pairwise differences is unimodal after a sudden expansion (Rogers &amp; Harpending
+        1992) and ragged in a population of stable size; the raggedness r (Harpending 1994) measures it. τ = 2ut dates
+        the expansion in mutational units.</p>
+      <label class="inline-label" style="margin-bottom:8px">Sample <select id="mismatchScope"></select></label>
+      <div id="fig8Mismatch"></div>
+    </div>
+
+    <div class="card" id="dnaStructCard">
+      <h2>6 · Structure among populations</h2>
+      <p class="hint">Pons &amp; Petit (1996): if N<sub>ST</sub>, which weights haplotypes by their divergence, is
+        significantly larger than G<sub>ST</sub>, which treats every haplotype as equally different, then related
+        haplotypes share populations — the lineages are geographically sorted.</p>
+      <div class="table-scroll" id="dnaStructTable"></div>
+      <p class="hint" id="dnaStructNote" style="margin-top:8px"></p>
+    </div>
+
+    <div class="card">
+      <h2>7 · Haplotype network</h2>
+      <p class="hint">Median-joining (Bandelt, Forster &amp; Röhl 1999) with ε = 0: the minimum spanning network of
+        the haplotypes, completed with the unsampled intermediates (median vectors) of the lowest connection cost. Node area is
+        proportional to frequency, slices show the populations, and each tick on a link is one mutation.</p>
+      <div id="fig8Network"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnNetCSV">⬇ Network links (CSV)</button></div>
+    </div>
+
+    <!-- ---------- 8 · divergence times ---------- -->
+    <div class="card dating-card" id="datingCard">
+      <div class="card-head">
+        <div>
+          <h2>8 · Divergence times — a dated tree</h2>
+          <p class="hint" style="max-width:900px">A molecular clock turns substitutions into time. Something external has to set the
+            clock: <b>fossils</b> or published ages for nodes of a tree of species or genera, or a known <b>substitution
+            rate</b> for haplotypes within one species, where fossils almost never apply. Two methods are offered: a fast
+            least-squares dating (LSD; To et al. 2016) to explore, and a Bayesian relaxed-clock MCMC (Drummond et
+            al. 2006) that gives a 95% credible interval for every node.</p>
+        </div>
+      </div>
+
+      <div class="callout tip" id="dtExampleBox" style="display:none"></div>
+
+      <div class="dt-steps">
+        <section class="dz-sec">
+          <div class="dz-num">1</div>
+          <div class="dz-body">
+            <h3>The tree to date</h3>
+            <div class="field-grid">
+              <div class="field"><label>Tips of the tree</label>
+                <select id="dtTips"><option value="haplotypes">One tip per haplotype (identical sequences merged)</option><option value="sequences">Every sequence</option></select>
+                <span class="field-help" id="dtTipsHelp"></span></div>
+              <div class="field"><label>Topology</label>
+                <select id="dtTopo"><option value="nj">Neighbour-joining on K2P distances</option><option value="newick">Import a tree (Newick or NEXUS from phylogenetic software)</option></select></div>
+              <div class="field"><label>Root</label>
+                <select id="dtRoot"><option value="outgroup">Outgroup (choose the tips below)</option><option value="midpoint">Midpoint</option></select>
+                <span class="field-help">An outgroup is the reliable way to root a tree for dating.</span></div>
+              <div class="field"><label>Substitution model</label>
+                <select id="dtModel"><option value="auto">Best by AICc (JC, K80, HKY, GTR ± Γ)</option><option value="JC">JC69</option><option value="K80">K80 (K2P)</option><option value="HKY">HKY85</option><option value="GTR">GTR</option></select>
+                <label class="checkbox-label" style="margin-top:4px"><input type="checkbox" id="dtGamma" checked> + Γ rate variation among sites</label></div>
+            </div>
+            <div id="dtNewickWrap" style="display:none">
+              <textarea id="dtNewick" class="dz-names" placeholder="((Quercus_rugosa:0.01,Quercus_crassipes:0.012):0.03,(Fagus_grandifolia:0.05,Castanea_sativa:0.04):0.02);"></textarea>
+              <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnDtNewickFile">Load a tree file</button><input type="file" id="dtNewickFile" accept=".nwk,.tre,.tree,.newick,.txt,.nex,.nexus" style="display:none">
+                <span class="hint" style="margin:0">Tip names must be the sequence names (or haplotype names H1, H2…). Branch lengths are re-estimated by maximum likelihood.</span></div>
+            </div>
+            <div id="dtOutgroupWrap">
+              <h4 style="margin:10px 0 4px">Outgroup tips</h4>
+              <input type="text" id="dtOutgroupFilter" placeholder="filter names…" style="width:220px;margin-bottom:6px">
+              <div class="dt-tiplist" id="dtOutgroup"></div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="btnDtFit">Build and fit the tree</button>
+              <span class="hint" id="dtFitInfo" style="margin:0"></span>
+            </div>
+            <div class="messages" id="dtFitMessages"></div>
+            <div id="dtModelWrap" style="display:none">
+              <h4 style="margin-top:12px">Substitution models on this topology</h4>
+              <div class="table-scroll" id="dtModelTable"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dz-sec" id="dtCalSec">
+          <div class="dz-num">2</div>
+          <div class="dz-body">
+            <h3>What sets the clock</h3>
+            <div class="tabs" id="dtModeTabs">
+              <button class="tab active" data-mode="calib" type="button">Fossils or published node ages</button>
+              <button class="tab" data-mode="rate" type="button">A known substitution rate</button>
+            </div>
+            <div id="dtCalibWrap">
+              <div class="callout tip" style="margin-top:4px">
+                <b>How a fossil calibrates a node.</b> A fossil that can be placed in a clade proves the clade existed by the
+                time the rock formed, so it gives a <b>minimum</b> age — for the <i>crown</i> node when it has features of a
+                living subgroup, for the <i>stem</i> node (the branch below the clade) when it only belongs to the lineage.
+                Use the <b>younger</b> boundary of the stratigraphic unit as the minimum. A maximum is rarely known: it comes
+                from the absence of the group in older, well-sampled rocks, and is expressed as a soft upper tail. A
+                <b>secondary</b> calibration takes a node age from a published dated tree, with its uncertainty.
+              </div>
+              <div class="table-scroll dz-table" id="dtCalibTable"></div>
+              <div class="btn-row">
+                <button class="btn btn-secondary btn-sm" id="btnDtAddCal" type="button">+ Add a calibration</button>
+                <span class="hint" style="margin:0">Geological ages: <span id="dtGeoChart"></span>.</span>
+              </div>
+            </div>
+            <div id="dtRateWrap" style="display:none">
+              <div class="field-grid">
+                <div class="field"><label>Typical rates</label>
+                  <select id="dtRatePreset">
+                    <option value="">— choose to fill in —</option>
+                    <option value="0.002|0.0006">Chloroplast DNA, non-coding (1.1–2.9 × 10⁻⁹ s/s/y; Wolfe et al. 1987)</option>
+                    <option value="0.0006|0.0002">Plant mitochondrial DNA (0.2–1.0 × 10⁻⁹; Wolfe et al. 1987)</option>
+                    <option value="0.006|0.0005">Nuclear genes, synonymous sites (5.1–7.1 × 10⁻⁹; Wolfe et al. 1987)</option>
+                    <option value="0.0024|0.0015">Nuclear ribosomal ITS (0.38–8.34 × 10⁻⁹; Kay et al. 2006)</option>
+                  </select>
+                  <span class="field-help">Rates vary among lineages and with generation time: use one estimated for your group when it exists.</span></div>
+                <div class="field"><label>Rate (substitutions per site per million years)</label><input type="number" id="dtRateMean" min="0" step="0.0001" placeholder="e.g. 0.002"></div>
+                <div class="field"><label>Standard deviation of the rate</label><input type="number" id="dtRateSd" min="0" step="0.0001" placeholder="e.g. 0.0006"></div>
+              </div>
+              <p class="hint">Per million years = per year × 10⁶: a rate of 2 × 10⁻⁹ per site per year is 0.002 per site per Myr. Ages then come out in millions of years (Ma); for recent intraspecific histories, read 0.01 Ma as 10 000 years.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="dz-sec" id="dtRunSec">
+          <div class="dz-num">3</div>
+          <div class="dz-body">
+            <h3>Date the tree</h3>
+            <div class="two-col">
+              <div class="dt-method">
+                <h4>Fast · least-squares dating (LSD)</h4>
+                <p class="hint">Seconds. Strict clock, weighted least squares with the calibrations as bounds; intervals from 100 resamplings of the branch lengths with rate variation among branches.</p>
+                <div class="field-grid" style="grid-template-columns:1fr 1fr">
+                  <div class="field"><label>Rate variation (σ, CI only)</label><input type="number" id="dtLsdSigma" min="0" max="2" step="0.05" value="0.2"></div>
+                  <div class="field"><label>Resamplings</label><input type="number" id="dtLsdReps" min="0" max="1000" step="50" value="100"></div>
+                </div>
+                <button class="btn btn-primary" id="btnDtLSD" disabled>Run LSD</button>
+              </div>
+              <div class="dt-method">
+                <h4>Bayesian · relaxed-clock MCMC</h4>
+                <div class="field-grid" style="grid-template-columns:1fr 1fr">
+                  <div class="field"><label>Clock</label><select id="dtClock"><option value="ucln">Relaxed, uncorrelated lognormal</option><option value="strict">Strict</option></select></div>
+                  <div class="field"><label>Tree prior</label><select id="dtTreePrior"><option value="yule">Yule (speciation)</option><option value="coalescent">Coalescent, constant size (within a species)</option></select></div>
+                  <div class="field"><label>Chain length</label><input type="number" id="dtIter" min="10000" max="20000000" step="50000" value="200000"></div>
+                  <div class="field"><label>Burn-in (%)</label><input type="number" id="dtBurn" min="0" max="80" step="5" value="25"></div>
+                  <div class="field"><label>Root age at most (Ma, if not calibrated)</label><input type="number" id="dtRootMax" min="0" step="1" placeholder="optional"></div>
+                  <div class="field"><label>Seed</label><input type="number" id="dtSeed" min="1" step="1" value="1"></div>
+                </div>
+                <label class="checkbox-label"><input type="checkbox" id="dtPriorOnly"> Sample from the prior only (no data) — to see the effective prior of each calibration</label>
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="btnDtMCMC" disabled>Run the MCMC</button>
+                  <button class="btn btn-secondary" id="btnDtCancel" style="display:none">Cancel</button>
+                </div>
+                <div class="progress" id="dtProgress" style="display:none"><div class="progress-bar" id="dtProgressBar"></div><div class="progress-text" id="dtProgressText"></div></div>
+              </div>
+            </div>
+            <div class="messages" id="dtRunMessages"></div>
+          </div>
+        </section>
+      </div>
+
+      <div id="dtResults" style="display:none">
+        <hr class="divider">
+        <h3 id="dtResultsTitle">The dated tree</h3>
+        <div class="results-summary" id="dtTiles"></div>
+        <div id="dtInterpret"></div>
+        <div class="btn-row">
+          <label class="inline-label">Show <select id="dtShown"></select></label>
+          <button class="btn btn-accent btn-sm" id="btnDtImages">🖼 Images of the OTUs…</button>
+          <button class="btn btn-secondary btn-sm" id="btnDtNexus">⬇ NEXUS (ages and intervals)</button>
+          <button class="btn btn-secondary btn-sm" id="btnDtNewickOut">⬇ Newick (ages)</button>
+          <button class="btn btn-secondary btn-sm" id="btnDtCSV">⬇ Node ages (CSV)</button>
+          <button class="btn btn-secondary btn-sm" id="btnDtLog" style="display:none">⬇ MCMC log (tab-delimited)</button>
+        </div>
+        <div id="fig8TimeTree"></div>
+        <h4 style="margin-top:14px">Age of every node</h4>
+        <div class="table-scroll" id="dtNodeTable"></div>
+        <div id="dtMcmcDiag" style="display:none">
+          <h4 style="margin-top:14px">Did the chain converge?</h4>
+          <div class="table-scroll" id="dtEssTable"></div>
+          <div class="fig-grid">
+            <div id="fig8Trace"></div>
+            <div id="fig8Calib"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-bar">
+      <button class="btn btn-secondary" onclick="goStep(7)">← Clustering</button>
+      <button class="btn btn-primary" id="btnContinue8">Continue to demography →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 9 · DEMOGRAPHY & SPATIAL STRUCTURE ==================== -->
+<section class="step-panel" id="panel-9">
+  <div class="panel-title"><div class="pt-num">9</div>
+    <div><h2>Demography &amp; spatial structure</h2><p>Has the population crashed, how large is it genetically, are neighbours relatives, how much does it self, and is trait divergence more than drift?</p></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · Settings</h2>
+    <p class="hint" id="demogAvail"></p>
+    <div class="field-grid">
+      <div class="field" id="demogBtlRow">
+        <label>Bottleneck: mutation models and simulations</label>
+        <div class="checkbox-label"><input type="checkbox" id="btl_iam"> IAM &nbsp; <input type="checkbox" id="btl_tpm" checked> TPM &nbsp; <input type="checkbox" id="btl_smm" checked> SMM</div>
+        <div class="btn-row" style="margin:6px 0 0;gap:12px">
+          <label class="inline-label">accepted simulations per locus <input type="number" id="btlAccept" min="50" max="2000" step="50" value="300" style="width:80px"></label>
+          <label class="inline-label">TPM single-step fraction <input type="number" id="btlPSingle" min="0.5" max="1" step="0.05" value="0.95" style="width:70px"></label>
+          <label class="inline-label">TPM variance <input type="number" id="btlSigma" min="1" max="50" step="1" value="12" style="width:60px"></label>
+          <label class="inline-label">repeat motif (bp) for M-ratio <input type="number" id="btlMotif" min="1" max="6" step="1" value="2" style="width:60px"></label>
+        </div>
+        <span class="field-help">Piry et al. (1999) recommend the TPM with 95% single-step mutations and variance 12 for microsatellites. Needs ≥ 10 plants per population.</span>
+      </div>
+      <div class="field" id="demogNeRow">
+        <label><span class="nc">N<sub>e</sub></span> (LD method): exclude alleles rarer than</label>
+        <input type="number" id="nePcrit" min="0" max="0.1" step="0.01" value="0.02">
+        <span class="field-help">P<sub>crit</sub> = 0.02 is the usual choice (Waples &amp; Do 2010); rare alleles bias r² upward.</span>
+      </div>
+      <div class="field" id="demogSpRow">
+        <label>Spatial structure: distance classes and permutations</label>
+        <div class="btn-row" style="margin:0;gap:12px">
+          <label class="inline-label">classes <input type="number" id="spClasses" min="3" max="30" step="1" value="10" style="width:60px"></label>
+          <label class="inline-label">permutations <input type="number" id="spPerms" min="99" max="9999" step="100" value="999" style="width:80px"></label>
+          <label class="inline-label" id="spScopeLabel">pairs <select id="spScope"><option value="within" selected>within populations (fine scale)</option><option value="all">all pairs</option></select></label>
+        </div>
+        <span class="field-help">Classes hold equal numbers of pairs, so each estimate has similar precision. Pairs within populations measure fine-scale structure; all pairs mix in the differentiation among populations.</span>
+      </div>
+      <div class="field" id="demogPstRow">
+        <label><span class="nc">P<sub>ST</sub></span>: <span class="nc">c / h²</span> and the neutral <span class="nc">F<sub>ST</sub></span> to compare with</label>
+        <div class="btn-row" style="margin:0;gap:12px">
+          <label class="inline-label">c <input type="number" id="pstC" min="0.05" max="1" step="0.05" value="1" style="width:60px"></label>
+          <label class="inline-label">h² <input type="number" id="pstH2" min="0.05" max="1" step="0.05" value="1" style="width:60px"></label>
+          <label class="inline-label">F<sub>ST</sub> <input type="number" id="pstFst" min="0" max="1" step="0.005" placeholder="from markers" style="width:90px"></label>
+        </div>
+        <span class="field-help">c is the fraction of the between-population phenotypic variance that is genetic; h² the heritability within. c/h² = 1 is the most optimistic assumption.</span>
+      </div>
+      <div class="field"><label>Random seed</label><input type="number" id="demogSeed" min="1" step="1" value="1"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnRunDemog">Run the analyses</button>
+      <span class="hint" id="demogTiming" style="margin:0"></span>
+    </div>
+    <div class="messages" id="demogMessages"></div>
+  </div>
+
+  <div id="demogResults" style="display:none">
+    <div class="card">
+      <h2>2 · What the analyses say</h2>
+      <div class="results-summary" id="demogTiles"></div>
+      <div id="demogInterpret"></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnDemogCSV">⬇ Everything in this block (CSV)</button></div>
+    </div>
+
+    <div class="card" id="btlCard">
+      <h2>3 · Recent bottlenecks</h2>
+      <p class="hint">Cornuet &amp; Luikart (1996): after a bottleneck, rare alleles disappear faster than heterozygosity
+        declines, so for a while each locus shows <i>more</i> heterozygosity than its number of alleles predicts at
+        mutation–drift equilibrium. That expectation is obtained here by coalescent simulation conditioned on the
+        observed number of alleles (Piry, Luikart &amp; Cornuet 1999). The distribution of He given the number of alleles
+        is skewed, so the Wilcoxon test is applied to the position of each locus within its own equilibrium distribution
+        (as a normal score), and with inbreeding the equilibrium is simulated for the n(2 − F) independent gene copies
+        that n plants carry. Luikart's mode shift and the M-ratio of Garza &amp; Williamson look at the same history from
+        other angles.</p>
+      <div class="btn-row" style="margin:0 0 10px">
+        <label class="inline-label">Population <select id="btlPopShown"></select></label>
+        <label class="inline-label">Mutation model <select id="btlModelShown"></select></label>
+      </div>
+      <div class="table-scroll" id="btlTestTable"></div>
+      <h3>Locus by locus</h3>
+      <div class="table-scroll" id="btlLocusTable"></div>
+      <div id="fig9Het"></div>
+      <div id="fig9Mode"></div>
+    </div>
+
+    <div class="card" id="neCard">
+      <h2>4 · Effective population size</h2>
+      <p class="hint">The linkage-disequilibrium method (Hill 1981; Waples 2006; Waples &amp; Do 2008): in a small
+        population, drift creates associations between unlinked loci in proportion to 1/(3N<sub>e</sub>). The r²
+        expected from sampling alone is subtracted, and the remainder gives N<sub>e</sub> of the parental generation.
+        Jackknife over loci for the confidence limits.</p>
+      <div class="table-scroll" id="neTable"></div>
+      <div id="fig9Ne"></div>
+    </div>
+
+    <div class="card" id="spCard">
+      <h2>5 · Fine-scale spatial genetic structure</h2>
+      <p class="hint" id="spNote"></p>
+      <div class="table-scroll" id="spTable"></div>
+      <div id="fig9Corr"></div>
+    </div>
+
+    <div class="card" id="selfCard">
+      <h2>6 · Mating system</h2>
+      <p class="hint">At inbreeding equilibrium, a selfing rate s produces F = s/(2 − s), so s = 2F/(1 + F). The
+        confidence limits come from a bootstrap over loci of Weir &amp; Cockerham's f.</p>
+      <div class="table-scroll" id="selfTable"></div>
+    </div>
+
+    <div class="card" id="pstCard">
+      <h2>7 · P<sub>ST</sub> versus F<sub>ST</sub></h2>
+      <p class="hint">Q<sub>ST</sub> is the F<sub>ST</sub> of a quantitative trait; if it exceeds the neutral
+        F<sub>ST</sub>, populations have diverged more than drift allows — divergent selection. Without a common-garden
+        or crossing design, its phenotypic proxy P<sub>ST</sub> = cσ²<sub>B</sub>/(cσ²<sub>B</sub> + 2h²σ²<sub>W</sub>)
+        is what field measurements can give (Brommer 2011; Leinonen et al. 2013). The confidence limits are exact:
+        they come from the F distribution of the one-way ANOVA (Searle, Casella &amp; McCulloch 1992).</p>
+      <div class="table-scroll" id="pstTable"></div>
+      <div id="fig9Pst"></div>
+    </div>
+
+    <div class="next-bar">
+      <button class="btn btn-secondary" onclick="goStep(8)">← Sequences</button>
+      <button class="btn btn-primary" id="btnContinue9">Continue to the report →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BLOCK 10 · REPORT ==================== -->
+<section class="step-panel" id="panel-10">
+  <div class="panel-title"><div class="pt-num">10</div>
+    <div><h2>Figures &amp; report</h2><p>Everything you ran, as you left it: tables, interpretations, every figure as edited, the methods paragraph with its citations, and a ZIP for the paper.</p></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · What goes into the report</h2>
+    <p class="hint">Each figure is exported exactly as you edited it in its block (title, palette, fonts, size). Go back, change anything, and build the report again.</p>
+    <div class="results-summary" id="rpSummary"></div>
+    <div class="callout warn" id="rpEmpty" style="display:none">Nothing to report yet: load data in Block 2 and run at least one analysis block.</div>
+    <div class="field-grid">
+      <div class="field"><label>Report title</label><input type="text" id="rpTitle" placeholder="Population genetic analysis of …"></div>
+      <div class="field"><label>Author(s)</label><input type="text" id="rpAuthor" placeholder="Name, institution"></div>
+    </div>
+    <div class="field"><label>Notes for the header (optional)</label><textarea id="rpNotes" rows="2" style="width:100%" placeholder="Sampling season, marker set, anything the reader should know first"></textarea></div>
+    <h4 style="margin-top:14px">Sections</h4>
+    <div id="rpSections"></div>
+    <h4 style="margin-top:14px">Front and back matter</h4>
+    <label class="checkbox-label"><input type="checkbox" id="rpExec" checked> Executive summary (key numbers)</label>
+    <label class="checkbox-label"><input type="checkbox" id="rpDraft" checked> Drafted results section (the interpretations of every block)</label>
+    <label class="checkbox-label"><input type="checkbox" id="rpMethods" checked> Methods paragraph with the settings used and the methods cited (author, year)</label>
+    <label class="checkbox-label"><input type="checkbox" id="rpCite" checked> How to cite the software (BibTeX)</label>
+    <label class="checkbox-label"><input type="checkbox" id="rpRaw"> Appendix: data as analysed</label>
+    <div class="field-grid" style="margin-top:14px">
+      <div class="field"><label>ZIP figures: raster format</label><select id="rpZipFmt"><option value="png">PNG</option><option value="tiff">TIFF (journal submission)</option><option value="jpg">JPG</option><option value="webp">WEBP</option><option value="svg">SVG only</option></select></div>
+      <div class="field"><label>ZIP figures: resolution</label><select id="rpZipRes"><option value="2">150 dpi (2×)</option><option value="4" selected>300 dpi (4×)</option><option value="6">450 dpi (6×)</option><option value="8">600 dpi (8×)</option><option value="12">900 dpi (12×)</option></select></div>
+    </div>
+    <div class="messages" id="rpMessages"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="rpPreview">Build and preview the report</button>
+      <button class="btn btn-secondary" id="rpHtml">⬇ Report (HTML)</button>
+      <button class="btn btn-secondary" id="rpPrint">🖨 Print / save as PDF</button>
+      <button class="btn btn-secondary" id="rpZip">⬇ Full package (ZIP)</button>
+      <button class="btn btn-ghost" id="rpMethodsBtn">Copy the methods paragraph</button>
+      <span class="hint" id="rpInfo" style="margin:0"></span>
+    </div>
+    <textarea id="rpMethodsText" rows="8" style="width:100%;display:none;margin-top:10px" readonly></textarea>
+  </div>
+
+  <div class="card" id="rpPreviewWrap" style="display:none">
+    <h2>2 · Preview</h2>
+    <p class="hint">This is the report as it will be saved. Go back to any block, edit a figure or change a setting, and build it again.</p>
+    <iframe id="rpFrame" class="rp-frame" title="Report preview"></iframe>
+  </div>
+</section>
+
+</main>
+
+<div class="footer-note">PopGeneticsPro · population genetics for plants · runs locally in your browser</div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/figure.js"></script>
+<script src="js/art.js"></script>
+<script src="js/playground.js"></script>
+<script src="js/examples.js"></script>
+<script src="js/data.js"></script>
+<script src="js/plots2.js"></script>
+<script src="js/template.js"></script>
+<script src="js/block2.js"></script>
+<script src="js/designer.js"></script>
+<script src="js/datasheet.js"></script>
+<script src="js/diversity.js"></script>
+<script src="js/plots3.js"></script>
+<script src="js/block3.js"></script>
+<script src="js/hwe.js"></script>
+<script src="js/plots4.js"></script>
+<script src="js/block4.js"></script>
+<script src="js/fstat.js"></script>
+<script src="js/plots5.js"></script>
+<script src="js/block5.js"></script>
+<script src="js/treeops.js"></script>
+<script src="js/geotime.js"></script>
+<script src="js/imagelib.js"></script>
+<script src="js/treeviz.js"></script>
+<script src="js/hclust.js"></script>
+<script src="js/gdist.js"></script>
+<script src="js/plots6.js"></script>
+<script src="js/block6.js"></script>
+<script src="js/admixture.js"></script>
+<script src="js/dapc.js"></script>
+<script src="js/plots7.js"></script>
+<script src="js/block7.js"></script>
+<script src="js/dating.js"></script>
+<script src="js/dna.js"></script>
+<script src="js/plots8.js"></script>
+<script src="js/block8.js"></script>
+<script src="js/blockdating.js"></script>
+<script src="js/demog.js"></script>
+<script src="js/plots9.js"></script>
+<script src="js/block9.js"></script>
+<script src="js/zip.js"></script>
+<script src="js/report.js"></script>
+<script src="js/block10.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

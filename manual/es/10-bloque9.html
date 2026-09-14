@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · Manual de usuario · Bloque 9: demografía y estructura espacial</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  figure.mini .marco { width: 50%; margin: 0 auto; }
+  figure.mini figcaption { margin-left: 12%; margin-right: 12%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b9" data-pestana="B9" data-orden="10" style="--acento: var(--b9)">
+  <div class="cap-apertura">
+    <div class="cap-num">B9</div>
+    <div class="cap-etiqueta">Capítulo diez · Bloque 9 · Demography</div>
+    <h1 data-corto="Bloque 9 · Demografía y espacio">Demografía y estructura espacial</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">Las frecuencias alélicas guardan la memoria de lo que le pasó a una población: si se redujo hace poco, cuántas plantas contribuyen de verdad a la siguiente generación, qué tan lejos viajan el polen y la semilla, cuánto se autofecunda y si sus caracteres se diferenciaron más de lo que permite la deriva. El Bloque 9 reúne cinco análisis que aparecen según los datos que cargues.</p>
+    <div class="cap-franja"><span class="k9"></span><span class="k9" style="opacity:.75"></span><span class="k9" style="opacity:.5"></span><span class="k9" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>10.1</b>Cuellos de botella recientes</li>
+      <li><b>10.2</b>Tamaño efectivo de población</li>
+      <li><b>10.3</b>Estructura genética espacial</li>
+      <li><b>10.4</b>Sistema de apareamiento</li>
+      <li><b>10.5</b>P<sub>ST</sub> frente a F<sub>ST</sub></li>
+      <li><b>10.6</b>Ajustes, tablas y figuras del bloque</li>
+      <li><b>10.7</b>Paso a paso: tres poblaciones, un rodal y la morfología del maíz</li>
+    </ul>
+  </div>
+
+  <p class="lead">No todos los análisis sirven para todos los datos. Los cuellos de botella y el tamaño efectivo necesitan genotipos codominantes de plantas diploides; la estructura espacial, una coordenada para cada planta; P<sub>ST</sub>, caracteres medidos. La tarjeta <span class="ui">1 · Settings</span> dice cuáles aplican a tus datos y el bloque corre solo al abrirlo.</p>
+
+  <table class="compacta">
+    <caption><b>Tabla 10.1.</b> Qué análisis aparece con qué datos.</caption>
+    <thead><tr><th style="width:30%">Análisis</th><th style="width:40%">Datos que necesita</th><th>Ejemplo del capítulo</th></tr></thead>
+    <tbody>
+      <tr><td>Cuellos de botella</td><td>Codominantes diploides, poblaciones declaradas con 10 plantas o más.</td><td>Tres poblaciones simuladas</td></tr>
+      <tr><td>Tamaño efectivo (N<sub>e</sub>)</td><td>Los mismos.</td><td>Tres poblaciones simuladas</td></tr>
+      <tr><td>Estructura espacial</td><td>Al menos 10 plantas con su propia latitud y longitud; cualquier marcador.</td><td>Rodal simulado · agave</td></tr>
+      <tr><td>Sistema de apareamiento</td><td>Codominantes diploides con poblaciones declaradas.</td><td>Tres poblaciones simuladas</td></tr>
+      <tr><td>P<sub>ST</sub> frente a F<sub>ST</sub></td><td>Caracteres cuantitativos en dos o más poblaciones.</td><td>Morfología del maíz</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 10.1 -->
+  <h2 id="s10-1"><span class="num">10.1</span>Cuellos de botella recientes</h2>
+  <p>Cuando una población se reduce, pierde primero sus alelos raros: un alelo presente en unas pocas plantas desaparece con facilidad si esas plantas no dejan descendencia. La heterocigosis esperada, en cambio, casi no cambia, porque depende sobre todo de los alelos frecuentes. Durante un tiempo la población queda con <b>más heterocigosis de la que corresponde a su número de alelos</b>. Cornuet y Luikart (1996) llamaron a esto exceso de heterocigosis y lo convirtieron en una prueba.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Qué deja un cuello de botella: pérdida de alelos raros y exceso de heterocigosis">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b"><text x="20" y="16">ALELOS POR CLASE DE FRECUENCIA (20 LOCI)</text><text x="380" y="16">EXCESO DE HETEROCIGOSIDAD</text></g>
+      <!-- left: allele frequency classes -->
+      <line x1="30" y1="196" x2="350" y2="196" stroke="#9aa3b2" stroke-width="1"/>
+      <g fill="#3b5b92"><rect x="40" y="66" width="24" height="130"/><rect x="70" y="133.6" width="24" height="62.4"/><rect x="100" y="150.9" width="24" height="45.1"/><rect x="130" y="180.4" width="24" height="15.6"/><rect x="160" y="183.9" width="24" height="12.1"/></g>
+      <g fill="#8a5a2b"><rect x="200" y="135.3" width="24" height="60.7"/><rect x="230" y="150.9" width="24" height="45.1"/><rect x="260" y="157.9" width="24" height="38.1"/><rect x="290" y="180.4" width="24" height="15.6"/><rect x="320" y="187.3" width="24" height="8.7"/></g>
+      <g font-size="9.5" fill="#111" text-anchor="middle"><text x="52" y="62">75</text><text x="82" y="129.6">36</text><text x="112" y="146.9">26</text><text x="142" y="176.4">9</text><text x="172" y="179.9">7</text><text x="212" y="131.3">35</text><text x="242" y="146.9">26</text><text x="272" y="153.9">22</text><text x="302" y="176.4">9</text><text x="332" y="183.3">5</text></g>
+      <g font-size="8" fill="#5d6472" text-anchor="middle"><text x="52" y="207">0–.1</text><text x="82" y="207">.1–.2</text><text x="112" y="207">.2–.3</text><text x="142" y="207">.3–.4</text><text x="172" y="207">.4–.5</text><text x="212" y="207">0–.1</text><text x="242" y="207">.1–.2</text><text x="272" y="207">.2–.3</text><text x="302" y="207">.3–.4</text><text x="332" y="207">.4–.5</text></g>
+      <g font-size="10.5" fill="#111" text-anchor="middle"><text x="112" y="226">Estable · 153 alelos</text><text x="272" y="226">Cuello de botella · 104</text></g>
+      <g font-size="10" fill="#8a5a2b"><text x="200" y="74">40 alelos raros menos;</text><text x="200" y="88">los intermedios casi igual</text></g>
+      <line x1="362" y1="30" x2="362" y2="232" stroke="#dfe3ea" stroke-width="1"/>
+      <!-- right: He against the number of alleles -->
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="400" y1="210" x2="670" y2="210"/><line x1="400" y1="40" x2="400" y2="210"/></g>
+      <g stroke="#eceef2" stroke-width="1"><line x1="400" y1="161.4" x2="670" y2="161.4"/><line x1="400" y1="112.9" x2="670" y2="112.9"/><line x1="400" y1="64.3" x2="670" y2="64.3"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="400" y="223">2</text><text x="454" y="223">4</text><text x="508" y="223">6</text><text x="562" y="223">8</text><text x="616" y="223">10</text><text x="670" y="223">12</text></g>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="394" y="213">0.2</text><text x="394" y="164.4">0.4</text><text x="394" y="115.9">0.6</text><text x="394" y="67.3">0.8</text></g>
+      <text x="535" y="242" font-size="10" fill="#111" text-anchor="middle">número de alelos (k)</text>
+      <text x="406" y="36" font-size="10" fill="#111">H<tspan dy="3" font-size="8">e</tspan></text>
+      <polyline points="400,203.3 427,166.9 454,128.4 481,103.7 508,88.3 535,78.3 562,68.5 589,62.1 616,56.8 643,52.6 670,49.2" fill="none" stroke="#111" stroke-width="1.8"/>
+      <text x="588" y="98" font-size="9.5" fill="#5d6472">H<tspan dy="3" font-size="7.5">eq</tspan><tspan dy="-3"> en equilibrio</tspan></text>
+      <text x="588" y="111" font-size="9.5" fill="#5d6472">(TPM, 80 copias)</text>
+      <path d="M546 74 Q 520 72 494 87" fill="none" stroke="#8a5a2b" stroke-width="1.2" stroke-dasharray="3 2.5" marker-end="url(#f101)"/>
+      <defs><marker id="f101" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a2b"/></marker></defs>
+      <circle cx="552.6" cy="69.9" r="5.5" fill="#3b5b92" stroke="#fff" stroke-width="1.2"/>
+      <circle cx="486.4" cy="89.8" r="5.5" fill="#8a5a2b" stroke="#fff" stroke-width="1.2"/>
+      <line x1="486.4" y1="100.6" x2="486.4" y2="95.5" stroke="#8a5a2b" stroke-width="1.6"/>
+      <circle cx="486.4" cy="100.6" r="2" fill="#111"/>
+      <g font-size="10" fill="#111"><text x="560" y="84">Estable</text><text x="478" y="80" text-anchor="end">Cuello de botella</text></g>
+      <text x="494" y="130" font-size="10" fill="#8a5a2b">exceso: H<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> − H</tspan><tspan dy="3" font-size="8">eq</tspan><tspan dy="-3"> = +0.045</tspan></text>
+    </svg>
+    <figcaption><b>Figura 10.1.</b> Lo que deja un cuello de botella, con los datos de práctica de la sección 10.7. Izquierda: la población que pasó 8 generaciones con 40 plantas tiene 35 alelos con frecuencia menor que 0.1, contra 75 de la estable, y casi los mismos alelos intermedios. Derecha: la curva es la H<sub>eq</sub> que la app simula para 80 copias con el modelo TPM, y los puntos son los promedios de los 20 loci. Con 5.2 alelos, la población reducida conserva una H<sub>e</sub> de 0.695, más de la que corresponde a ese número de alelos.</figcaption>
+  </figure>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · dos excesos distintos</div>
+    <p>El <b>exceso de heterocigosis</b> de esta prueba compara la H<sub>e</sub> calculada con las frecuencias alélicas contra la que se espera para el número de alelos observado. No tiene que ver con el <b>exceso de heterocigotos</b> (H<sub>o</sub> &gt; H<sub>e</sub>) del Bloque 4, que compara genotipos observados contra Hardy–Weinberg.</p>
+  </div>
+
+  <p>Para saber cuánta H<sub>e</sub> “corresponde” a un número de alelos, hay que suponer cómo mutan. La app ofrece los tres modelos clásicos (tabla 10.2) y simula, locus por locus, muestras de una población estable con ese modelo.</p>
+
+  <table>
+    <caption><b>Tabla 10.2.</b> Modelos de mutación de la prueba.</caption>
+    <thead><tr><th style="width:24%">Modelo</th><th style="width:38%">Cómo cambia un alelo</th><th>Cuándo usarlo</th></tr></thead>
+    <tbody>
+      <tr><td><b>IAM</b> · alelos infinitos</td><td>Cada mutación crea un alelo que no existía.</td><td>Aloenzimas y marcadores sin orden de tamaños. Con microsatélites encuentra cuellos de botella con demasiada facilidad.</td></tr>
+      <tr><td><b>SMM</b> · paso a paso</td><td>Cada mutación suma o resta una repetición.</td><td>Microsatélites muy regulares. Es el más conservador: le cuesta detectar reducciones.</td></tr>
+      <tr><td><b>TPM</b> · dos fases<br><span class="small">Di Rienzo y colaboradores (1994)</span></td><td>La mayoría de las mutaciones son de un paso (95&nbsp;% por omisión) y el resto de varios pasos, con varianza 12.</td><td>Microsatélites en general; es el recomendado (Piry, Luikart y Cornuet, 1999). La app lo usa junto con el SMM.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo se obtiene la heterocigosis en equilibrio</div>
+    <p>Para cada locus con n plantas y k alelos, la app simula genealogías coalescentes de 2n copias con el modelo de mutación elegido. Ajusta θ = 4N<sub>e</sub>μ hasta que las muestras tengan en promedio unos k alelos y conserva solo las que tienen exactamente k (300 por omisión). La media de su H<sub>e</sub> es <b>H<sub>eq</sub></b>, y la fracción de simulaciones con H<sub>e</sub> igual o mayor que la observada es la probabilidad de exceso de ese locus.</p>
+    <p style="margin-bottom:0">Si las plantas se autofecundan, sus dos copias de un locus a menudo descienden de una sola copia ancestral: n plantas con endogamia F llevan en promedio n(2 − F) copias independientes, no 2n. Con menos copias independientes se ven menos alelos, y la población parecería tener exceso sin haberse reducido. Por eso la app estima F<sub>IS</sub> en cada población y, si es positivo, simula el equilibrio con n(2 − F) copias.</p>
+  </div>
+
+  <p>Cada locus da una comparación ruidosa; la conclusión sale de juntar los loci. La app aplica tres pruebas estadísticas y dos indicadores de forma (tabla 10.3).</p>
+
+  <table>
+    <caption><b>Tabla 10.3.</b> Pruebas e indicadores de un cuello de botella.</caption>
+    <thead><tr><th style="width:24%">Prueba</th><th style="width:40%">Qué hace</th><th>Cómo se lee</th></tr></thead>
+    <tbody>
+      <tr><td><b>Signos</b><br><span class="small">Cornuet y Luikart (1996)</span></td><td>Cuenta los loci con H<sub>e</sub> &gt; H<sub>eq</sub> y los compara con los esperados en equilibrio, que son un poco más de la mitad porque la distribución de H<sub>e</sub> es asimétrica.</td><td>P &lt; 0.05: sobran loci con exceso. Poca potencia.</td></tr>
+      <tr><td><b>Diferencias estandarizadas</b> (T<sub>2</sub>)</td><td>Suma (H<sub>e</sub> − H<sub>eq</sub>)/DE de todos los loci y la divide entre √L.</td><td>P &lt; 0.05: exceso promedio. Pide 20 loci o más.</td></tr>
+      <tr><td><b>Wilcoxon</b> de rangos con signo<br><span class="small">Luikart y colaboradores (1998)</span></td><td>Ordena los loci por la posición de su H<sub>e</sub> dentro de su propia distribución de equilibrio y prueba si predominan las posiciones altas.</td><td>La más potente con pocos loci (desde 4). Es la que usan la interpretación y las cifras.</td></tr>
+      <tr><td><b>Cambio de moda</b><br><span class="small">Luikart y colaboradores (1998)</span></td><td>Reparte los alelos de todos los loci en clases de frecuencia (0–0.1, 0.1–0.2…).</td><td>En forma de L: estable. Si la clase 0–0.1 ya no es la mayor, la distribución se desplazó. Cualitativo; pide muestras grandes.</td></tr>
+      <tr><td><b>Razón M</b><br><span class="small">Garza y Williamson (2001)</span></td><td>M = k / (rango de tamaños en repeticiones + 1): tras una reducción quedan huecos en la escalera de tamaños.</td><td>M &lt; 0.68 sugiere una reducción más antigua o prolongada que la que ve el exceso. Necesita tamaños en pb y el motivo.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · por qué Wilcoxon no usa las diferencias crudas</div>
+    <p>La prueba de Wilcoxon supone que, sin cuello de botella, las diferencias H<sub>e</sub> − H<sub>eq</sub> se reparten simétricamente alrededor de cero. No es así: dado k, la H<sub>e</sub> suele quedar un poco arriba de su media y a veces muy abajo. Con 200 poblaciones estables de 40 plantas y 20 microsatélites, simuladas para este manual, Wilcoxon sobre las diferencias crudas “encontró” un cuello de botella en 47 (23.5&nbsp;%), en lugar del 5&nbsp;% esperado. Aplicada a la posición de cada locus dentro de su distribución de equilibrio, convertida a puntuación normal, rechazó 17 (8.5&nbsp;%); la prueba de signos, 10 (5&nbsp;%). Por eso la app usa la segunda forma. Ese 8.5&nbsp;% todavía es algo mayor que el nominal, porque θ se estima de los mismos datos: es una razón más para exigir que TPM y SMM coincidan.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿hubo un cuello de botella?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Wilcoxon da P &lt; 0.05 para exceso con TPM y con SMM</b></td><td>Hay señal de una reducción reciente. Confírmala con otra muestra o con el historial de la población.</td></tr>
+        <tr><td><b>Solo el IAM da exceso</b></td><td>Con microsatélites no basta: el IAM exagera el exceso.</td></tr>
+        <tr><td><b>El exceso viene de uno o dos loci</b></td><td>Revisa esos loci: un alelo nulo o la selección afectan a un locus, la demografía a todos.</td></tr>
+        <tr><td><b>Hay déficit significativo</b></td><td>La población pudo crecer o recibir inmigrantes con alelos raros.</td></tr>
+        <tr><td><b>M &lt; 0.68 sin exceso</b></td><td>Una reducción más antigua o larga es compatible; el exceso ya se borró.</td></tr>
+        <tr><td><b>Hay menos de 10 loci polimórficos o menos de 20 plantas</b></td><td>La prueba tiene poca potencia: “sin señal” no demuestra estabilidad (Luikart y Cornuet, 1998).</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">La señal es pasajera: cuando la población alcanza un nuevo equilibrio entre mutación y deriva, el exceso desaparece aunque siga siendo pequeña.</p>
+  </div>
+
+  <!-- 10.2 -->
+  <h2 id="s10-2"><span class="num">10.2</span>Tamaño efectivo de población</h2>
+  <p>El tamaño efectivo, N<sub>e</sub>, es el número de plantas de una población ideal que perdería diversidad por deriva al mismo ritmo que la real. Casi siempre es menor que el censo: no todas las plantas se reproducen, unas dejan mucha más descendencia que otras y el tamaño cambia de un año a otro. En promedio, N<sub>e</sub> ronda la décima parte del número de adultos (Frankham, 1995). Es la cifra que importa para la conservación, porque fija la velocidad a la que se pierde la diversidad y aumenta la endogamia.</p>
+
+  <p>La app lo estima con el <b>método del desequilibrio de ligamiento</b> (Hill, 1981; Waples, 2006). En una población pequeña, la deriva crea asociaciones al azar entre alelos de loci no ligados. La asociación se mide con r², que tiene dos fuentes: el muestreo de S plantas (cerca de 1/S) y la deriva (cerca de 1/(3N<sub>e</sub>)). La app resta lo que se espera del muestreo y convierte el resto en N<sub>e</sub> con las correcciones de Waples (2006). Estima el N<sub>e</sub> de la generación de los padres de las plantas muestreadas.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 196" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Las dos fuentes de r²: muestreo y deriva">
+      <text x="20" y="16" font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b">r² MEDIO ENTRE PARES DE LOCI</text>
+      <g font-size="10"><rect x="300" y="7" width="12" height="11" fill="#c9ced6"/><text x="317" y="16" fill="#111">lo que da el muestreo de 40 plantas</text><rect x="520" y="7" width="12" height="11" fill="#8a5a2b"/><text x="537" y="16" fill="#111">deriva o endogamia</text></g>
+      <g font-size="11" fill="#111"><text x="20" y="59">Estable</text><text x="20" y="104">Cuello_botella</text><text x="20" y="149">Autogama</text></g>
+      <g fill="#c9ced6"><rect x="150" y="44" width="323.9" height="22"/><rect x="150" y="89" width="323.9" height="22"/><rect x="150" y="134" width="323.9" height="22"/></g>
+      <g fill="#8a5a2b"><rect x="473.9" y="89" width="56.6" height="22"/><rect x="473.9" y="134" width="16.8" height="22"/></g>
+      <g font-size="10.5" fill="#111"><text x="545" y="59">0.02698 → N<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = ∞</tspan></text><text x="545" y="104">0.03171 → N<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 68</tspan></text><text x="545" y="149">0.02839 → N<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 237</tspan></text></g>
+      <line x1="150" y1="170" x2="570" y2="170" stroke="#9aa3b2" stroke-width="1"/>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="150" y1="170" x2="150" y2="174"/><line x1="270" y1="170" x2="270" y2="174"/><line x1="390" y1="170" x2="390" y2="174"/><line x1="510" y1="170" x2="510" y2="174"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="150" y="186">0</text><text x="270" y="186">0.01</text><text x="390" y="186">0.02</text><text x="510" y="186">0.03</text></g>
+    </svg>
+    <figcaption><b>Figura 10.2.</b> El r² medio entre los 190 pares de loci de las tres poblaciones de práctica. Con 40 plantas, el muestreo solo da 0.02699 (gris). En la población estable no queda nada más y N<sub>e</sub> = ∞. En la que pasó por 40 plantas sobra 0.00472, que da N<sub>e</sub> = 68. En la autógama sobra 0.00140, que no viene de la deriva sino de la endogamia correlacionada entre loci.</figcaption>
+  </figure>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico · de r² a <span class="sym">N<sub>e</sub></span></div>
+    <p style="margin:0">En la población <i>Cuello_botella</i> se analizaron S = 40 plantas. El muestreo aporta E(r²) = 1/S + 3.19/S² = 0.025 + 0.00199 = 0.02699 (Waples, 2006, para S ≥ 30). El r² observado es 0.03171, así que a la deriva le corresponde r²′ = 0.03171 − 0.02699 = 0.00472. Entonces N<sub>e</sub> = [1/3 + √(1/9 − 2.76 r²′)] / (2 r²′) = (0.3333 + 0.3132) / 0.00944 = <b>68.5</b>. La población se simuló con 40 plantas: en 150 simulaciones iguales la mediana de la estimación fue 42, y esta muestra quedó por arriba del percentil 90.</p>
+  </div>
+
+  <table>
+    <caption><b>Tabla 10.4.</b> Los dos estimadores de N<sub>e</sub> y las cifras de referencia para conservación.</caption>
+    <thead><tr><th style="width:26%">Estimador</th><th style="width:40%">En qué se basa</th><th>Cuándo sirve</th></tr></thead>
+    <tbody>
+      <tr><td><b>Desequilibrio de ligamiento</b><br><span class="small">Waples (2006); Waples y Do (2008)</span></td><td>r² medio entre pares de loci menos lo esperado por el muestreo. Excluye alelos con frecuencia menor que P<sub>crit</sub> (0.02) porque inflan r². Intervalo por <i>jackknife</i> sobre loci.</td><td>El más preciso de una sola muestra. Funciona bien con N<sub>e</sub> pequeño o mediano; con N<sub>e</sub> grande el límite superior es ∞.</td></tr>
+      <tr><td><b>Exceso de heterocigotos</b><br><span class="small">Pudovkin y colaboradores (1996)</span></td><td>Con pocos padres, las frecuencias de machos y hembras difieren por azar y los hijos tienen más heterocigotos: D = (H<sub>o</sub> − H<sub>e</sub>)/H<sub>e</sub> y N<sub>e</sub> = 1/(2D) + 1/(2(D + 1)).</td><td>Solo con N<sub>e</sub> muy pequeño (decenas). Con D cerca de 0 su límite superior es ∞.</td></tr>
+      <tr><td colspan="3" style="background:#f7f3ee"><b>Cifras de referencia</b> · N<sub>e</sub> ≥ 50 evita la depresión por endogamia a corto plazo y N<sub>e</sub> ≥ 500 conserva el potencial evolutivo (Franklin, 1980); Frankham y colaboradores (2014) proponen elevarlas a 100 y 1000.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · leer un <span class="sym">N<sub>e</sub></span></div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>La estimación o su límite superior es ∞</b></td><td>El r² no se distingue del ruido del muestreo: N<sub>e</sub> es grande en relación con la muestra, no desconocido. Reporta el límite inferior.</td></tr>
+        <tr><td><b>Los límites quedan bajo 50 o bajo 100</b></td><td>La población pierde diversidad rápido; es una alerta de conservación.</td></tr>
+        <tr><td><b>La población se autofecunda o tiene F<sub>IS</sub> alto</b></td><td>La endogamia correlacionada entre loci infla r² y baja N<sub>e</sub>; interprétalo como un mínimo.</td></tr>
+        <tr><td><b>La muestra mezcla subpoblaciones o inmigrantes</b></td><td>La mezcla también crea desequilibrio: revisa la estructura (Bloque 7) antes de reportar.</td></tr>
+        <tr><td><b>Hay menos de 25 plantas o pocos loci</b></td><td>El intervalo será muy amplio; más loci ayudan tanto como más plantas.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">El método supone apareamiento al azar, loci no ligados y una población cerrada, y estima N<sub>e</sub> por generación.</p>
+  </div>
+
+  <!-- 10.3 -->
+  <h2 id="s10-3"><span class="num">10.3</span>Estructura genética espacial</h2>
+  <p>Dentro de una población continua, si la semilla cae cerca de la madre y el polen viaja poco, las plantas vecinas son parientes: hermanas, medias hermanas o primas. El parentesco disminuye con la distancia y forma manchas de familias. Medir cómo cae el parentesco con la distancia dice qué tan lejos se mueven los genes en cada generación, sin seguir una sola semilla (Vekemans y Hardy, 2004).</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Manchas de parentesco en un rodal y la caída del parentesco con el logaritmo de la distancia">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b"><text x="20" y="16">UN RODAL CON FAMILIAS</text><text x="360" y="16">PARENTESCO CONTRA DISTANCIA</text></g>
+      <rect x="20" y="30" width="290" height="192" rx="4" fill="#fbfaf7" stroke="#e3e0da"/>
+      <g fill="#c9ced6"><circle cx="40" cy="125" r="3.5"/><circle cx="150" cy="115" r="3.5"/><circle cx="290" cy="90" r="3.5"/><circle cx="285" cy="165" r="3.5"/><circle cx="165" cy="206" r="3.5"/><circle cx="72" cy="198" r="3.5"/><circle cx="190" cy="135" r="3.5"/><circle cx="125" cy="42" r="3.5"/><circle cx="255" cy="50" r="3.5"/><circle cx="60" cy="110" r="3.5"/><circle cx="215" cy="92" r="3.5"/><circle cx="35" cy="45" r="3.5"/></g>
+      <g transform="translate(70 70)" fill="#3b5b92"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(170 62)" fill="#b7791f"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(250 125)" fill="#0f766e"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(108 160)" fill="#b4234a"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(222 185)" fill="#7e3fb0"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <circle cx="250" cy="125" r="27" fill="none" stroke="#111" stroke-width="0.9" stroke-dasharray="3 2.5"/>
+      <line x1="250" y1="125" x2="277" y2="125" stroke="#111" stroke-width="0.9"/>
+      <text x="281" y="129" font-family="Crimson Pro, serif" font-style="italic" font-size="14" fill="#111">σ</text>
+      <g stroke="#111" stroke-width="1.4"><line x1="32" y1="212" x2="62" y2="212"/><line x1="32" y1="208" x2="32" y2="216"/><line x1="62" y1="208" x2="62" y2="216"/></g>
+      <text x="47" y="205" font-size="9" fill="#111" text-anchor="middle">10 m</text>
+      <text x="165" y="238" font-size="9.5" fill="#5d6472" text-anchor="middle">cada color es una familia; gris, plantas no emparentadas</text>
+      <line x1="340" y1="30" x2="340" y2="232" stroke="#dfe3ea" stroke-width="1"/>
+      <!-- right: class means of the simulated stand -->
+      <rect x="380" y="132.7" width="290" height="12.8" fill="#ebe7e1"/>
+      <text x="668" y="128" font-size="8.5" fill="#5d6472" text-anchor="end">banda del 95&#160;%</text>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="380" y1="190" x2="670" y2="190"/><line x1="380" y1="40" x2="380" y2="190"/></g>
+      <line x1="380" y1="139.1" x2="670" y2="139.1" stroke="#9aa3b2" stroke-width="0.8" stroke-dasharray="2 2"/>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="374" y="65.7">0.03</text><text x="374" y="91.2">0.02</text><text x="374" y="116.6">0.01</text><text x="374" y="142.1">0</text><text x="374" y="167.5">−0.01</text></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="401.8" y="203">13</text><text x="483.3" y="203">25</text><text x="570.7" y="203">50</text><text x="658.1" y="203">100 m</text></g>
+      <text x="525" y="220" font-size="10" fill="#111" text-anchor="middle">distancia (escala logarítmica)</text>
+      <text x="386" y="36" font-size="10" fill="#111">F<tspan dy="3" font-size="8">ij</tspan></text>
+      <line x1="380" y1="63.8" x2="670" y2="184.8" stroke="#111" stroke-width="1.3"/>
+      <g fill="#8a5a2b" stroke="#fff" stroke-width="1"><circle cx="401.8" cy="64.7" r="4.2"/><circle cx="481.8" cy="105.6" r="4.2"/><circle cx="520.9" cy="121.1" r="4.2"/><circle cx="549.2" cy="130.3" r="4.2"/><circle cx="570.7" cy="147.4" r="4.2"/><circle cx="589" cy="154.9" r="4.2"/><circle cx="604.7" cy="161.5" r="4.2"/><circle cx="619" cy="170.7" r="4.2"/><circle cx="633.5" cy="170" r="4.2"/><circle cx="654.4" cy="168" r="4.2"/></g>
+      <text x="412" y="54" font-size="10" fill="#111">F<tspan dy="3" font-size="8">1</tspan><tspan dy="-3"> = 0.029 (vecinos hasta 21 m)</tspan></text>
+      <text x="548" y="100" font-size="10" fill="#111">pendiente b<tspan dy="3" font-size="8">F</tspan><tspan dy="-3"> = −0.021</tspan></text>
+      <text x="548" y="76" font-size="10.5" font-weight="600" fill="#8a5a2b">Sp = 0.021 · Nb ≈ 47</text>
+    </svg>
+    <figcaption><b>Figura 10.3.</b> Izquierda: esquema de un rodal donde la semilla cae cerca de la madre. Las plantas de una misma familia quedan juntas, y σ mide cuánto se mueven los genes por generación. Derecha: parentesco medio de las 10 clases de distancia del rodal simulado de la sección 10.7, contra el logaritmo de la distancia, con la recta de regresión sobre los 19&nbsp;900 pares. Los vecinos tienen F<sub>1</sub> = 0.029, y la pendiente b<sub>F</sub> = −0.021 da Sp = 0.021.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Tabla 10.5.</b> Estadísticos de la estructura genética espacial.</caption>
+    <thead><tr><th style="width:26%">Estadístico</th><th style="width:38%">Definición</th><th>Qué dice</th></tr></thead>
+    <tbody>
+      <tr><td><b>F<sub>ij</sub></b> · parentesco<br><span class="small">Loiselle y colaboradores (1995)</span></td><td class="f">Σ<sub>a</sub> (p<sub>ia</sub> − p<sub>a</sub>)(p<sub>ja</sub> − p<sub>a</sub>) / Σ<sub>a</sub> p<sub>a</sub>(1 − p<sub>a</sub>) + 1/(2n − 1)</td><td>Para codominantes. 0 entre plantas tomadas al azar; 0.25 entre hermanas completas y 0.125 entre medias hermanas.</td></tr>
+      <tr><td><b>r</b> · autocorrelación<br><span class="small">Smouse y Peakall (1999)</span></td><td>Se calcula desde una distancia genética al cuadrado entre plantas, centrada.</td><td>Para cualquier marcador. Sin estructura su valor esperado es −1/(n − 1), no 0: la banda de permutaciones lo toma en cuenta.</td></tr>
+      <tr><td><b>F<sub>1</sub></b></td><td>Parentesco medio en la primera clase de distancia.</td><td>Qué tan emparentados están los vecinos.</td></tr>
+      <tr><td><b>b<sub>F</sub></b></td><td>Pendiente de F<sub>ij</sub> sobre ln(distancia), con todos los pares.</td><td>Qué tan rápido cae el parentesco.</td></tr>
+      <tr><td><b>Sp</b><br><span class="small">Vekemans y Hardy (2004)</span></td><td class="f">Sp = −b<sub>F</sub> / (1 − F<sub>1</sub>)</td><td>La intensidad de la estructura, comparable entre estudios.</td></tr>
+      <tr><td><b>Nb</b> · vecindario</td><td class="f">Nb ≈ 1/Sp = 4πDσ²</td><td>Con la densidad D de plantas, da la varianza de dispersión de genes σ² por generación.</td></tr>
+    </tbody>
+  </table>
+
+  <p>La app agrupa los pares de plantas en clases de distancia con el mismo número de pares, calcula el parentesco medio (o r) de cada clase y construye una banda del 95&nbsp;% permutando las plantas entre las ubicaciones 999 veces. Una clase por arriba de la banda indica que esas plantas están más emparentadas de lo que el azar explica.</p>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Importante · pares dentro de las poblaciones</div>
+    <p>Si cargas varias poblaciones separadas por kilómetros, los pares de plantas de poblaciones distintas quedan en las clases lejanas y arrastran la diferenciación entre poblaciones al correlograma, que ya mide el Bloque 5. Por eso <span class="ui">pairs</span> usa por omisión <span class="ui">within populations (fine scale)</span>: solo pares de la misma población, con el parentesco referido a las frecuencias de cada una y permutaciones dentro de cada población, y combina todas en un solo correlograma. <span class="ui">all pairs</span> mezcla ambas escalas. Si todas las plantas de una población comparten la coordenada del sitio, no hay estructura fina que medir: usa el aislamiento por distancia del Bloque 6.</p>
+  </div>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Ejemplo numérico · de Sp a la distancia de dispersión</div>
+    <p style="margin:0">En el rodal simulado, b<sub>F</sub> = −0.0207 y F<sub>1</sub> = 0.0292, así que Sp = 0.0207 / (1 − 0.0292) = <b>0.0213</b> y Nb ≈ 1/Sp = 47 plantas. Con una densidad de 400 plantas por hectárea (D = 0.04 plantas/m²), σ² = Nb/(4πD) = 47 / (4π × 0.04) = 93 m², es decir σ ≈ 9.7 m por generación. La simulación usó σ² = 78 m² (σ = 8.8 m), que corresponde a Nb = 39: Sp da el orden de magnitud correcto, con el error habitual de esta aproximación.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · estructura genética espacial</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>La primera clase queda sobre la banda y b<sub>F</sub> es significativa</b></td><td>Los vecinos son parientes. Reporta Sp y la distancia hasta la que dura la señal.</td></tr>
+        <tr><td><b>Sp ronda 0.01</b></td><td>Estructura débil, típica de especies de polinización cruzada (Sp medio 0.013; Vekemans y Hardy, 2004).</td></tr>
+        <tr><td><b>Sp ronda 0.04 o más</b></td><td>Estructura fuerte, como en especies con apareamiento mixto (0.037) o autógamas, o con semilla que cae cerca.</td></tr>
+        <tr><td><b>Ninguna clase sale de la banda</b></td><td>El polen y la semilla se mueven lejos a esta escala, o faltan plantas cercanas en la muestra.</td></tr>
+        <tr><td><b>Muestreaste pocas plantas o solo plantas lejanas</b></td><td>Se recomiendan unas 100 plantas o más, con muchos pares de vecinos cercanos.</td></tr>
+        <tr><td><b>Hay clones</b></td><td>Los rametos de un mismo geneto inflan F<sub>1</sub>: deja un rameto por geneto.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 10.4 -->
+  <h2 id="s10-4"><span class="num">10.4</span>Sistema de apareamiento</h2>
+  <p>Una planta que se autofecunda produce hijos más homocigos. Si la tasa de autofecundación s se mantiene por varias generaciones, la endogamia se estabiliza en F = s/(2 − s), de donde s = 2F/(1 + F). La app usa el F<sub>IS</sub> de Weir y Cockerham de cada población (Bloque 4) y su intervalo por remuestreo de loci para estimar s y la tasa de cruzamiento t = 1 − s.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 214" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Relación entre la tasa de autofecundación y la endogamia en equilibrio">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b"><text x="20" y="16">ENDOGAMIA EN EQUILIBRIO</text><text x="400" y="16">DE F A LA TASA DE AUTOFECUNDACIÓN</text></g>
+      <g stroke="#eceef2" stroke-width="1"><line x1="70" y1="145" x2="330" y2="145"/><line x1="70" y1="110" x2="330" y2="110"/><line x1="70" y1="75" x2="330" y2="75"/><line x1="70" y1="40" x2="330" y2="40"/></g>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="70" y1="180" x2="330" y2="180"/><line x1="70" y1="40" x2="70" y2="180"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="70" y="193">0</text><text x="122" y="193">0.2</text><text x="174" y="193">0.4</text><text x="226" y="193">0.6</text><text x="278" y="193">0.8</text><text x="330" y="193">1</text></g>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="64" y="183">0</text><text x="64" y="148">0.25</text><text x="64" y="113">0.5</text><text x="64" y="78">0.75</text><text x="64" y="43">1</text></g>
+      <text x="200" y="208" font-size="10" fill="#111" text-anchor="middle">tasa de autofecundación s</text>
+      <text x="76" y="34" font-size="10" fill="#111">F = s/(2 − s)</text>
+      <polyline points="70,180 83,176.4 96,172.6 109,168.6 122,164.4 135,160 148,155.3 161,150.3 174,145 187,139.4 200,133.3 213,126.9 226,120 239,112.6 252,104.6 265,96 278,86.7 291,76.5 304,65.5 317,53.3 330,40" fill="none" stroke="#111" stroke-width="1.8"/>
+      <circle cx="225.2" cy="120.5" r="5" fill="#8a5a2b" stroke="#fff" stroke-width="1.2"/>
+      <text x="238" y="134" font-size="9.5" fill="#111">Autogama: s = 0.60</text>
+      <circle cx="97.3" cy="172.2" r="5" fill="#0f766e" stroke="#fff" stroke-width="1.2"/>
+      <text x="122" y="176" font-size="9.5" fill="#111">rodal: F = 0.056 → s = 0.11 (real: 0.04)</text>
+      <line x1="370" y1="30" x2="370" y2="200" stroke="#dfe3ea" stroke-width="1"/>
+      <g font-size="10.5" fill="#111">
+        <text x="440" y="42" text-anchor="middle" font-weight="600">F</text><text x="540" y="42" text-anchor="middle" font-weight="600">s = 2F/(1 + F)</text><text x="640" y="42" text-anchor="middle" font-weight="600">t = 1 − s</text>
+        <g stroke="#dfe3ea" stroke-width="1"><line x1="400" y1="50" x2="680" y2="50"/></g>
+        <g text-anchor="middle">
+          <text x="440" y="68">0.05</text><text x="540" y="68">0.095</text><text x="640" y="68">0.905</text>
+          <text x="440" y="88">0.10</text><text x="540" y="88">0.182</text><text x="640" y="88">0.818</text>
+          <text x="440" y="108">0.20</text><text x="540" y="108">0.333</text><text x="640" y="108">0.667</text>
+          <text x="440" y="128">0.30</text><text x="540" y="128">0.462</text><text x="640" y="128">0.538</text>
+          <text x="440" y="148">0.43</text><text x="540" y="148">0.601</text><text x="640" y="148">0.399</text>
+          <text x="440" y="168">0.60</text><text x="540" y="168">0.750</text><text x="640" y="168">0.250</text>
+          <text x="440" y="188">0.80</text><text x="540" y="188">0.889</text><text x="640" y="188">0.111</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><b>Figura 10.4.</b> Izquierda: la endogamia que alcanza una población con tasa de autofecundación constante. Los puntos son dos poblaciones de práctica de la sección 10.7: la autógama, simulada con s = 0.60, y el rodal, donde casi toda la endogamia viene de cruzas entre vecinos emparentados. Derecha: la conversión inversa que usa la app, con la tasa de cruzamiento t.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · ¿cuánto se autofecunda?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>F<sub>IS</sub> es positivo en casi todos los loci</b></td><td>El déficit es de todo el genoma: autofecundación o cruzas entre parientes. s es una estimación razonable.</td></tr>
+        <tr><td><b>El déficit viene de unos pocos loci</b></td><td>Sospecha alelos nulos (Bloque 4) antes que autofecundación.</td></tr>
+        <tr><td><b>Hay estructura espacial</b></td><td>Las cruzas entre vecinos emparentados también producen F<sub>IS</sub> &gt; 0; s sobrestima la autofecundación.</td></tr>
+        <tr><td><b>Mezclaste plantas de grupos distintos</b></td><td>El efecto Wahlund crea déficit sin endogamia.</td></tr>
+        <tr><td><b>Necesitas la tasa real de una temporada</b></td><td>Genotipa madres y sus semillas y usa un modelo de apareamiento mixto (Ritland, 2002).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 10.5 -->
+  <h2 id="s10-5"><span class="num">10.5</span><span>P<sub>ST</sub> frente a F<sub>ST</sub></span></h2>
+  <p>La deriva diferencia a las poblaciones por igual en todo el genoma: F<sub>ST</sub> de marcadores neutrales mide cuánto. Un carácter cuantitativo bajo selección puede diferenciarse más (selección divergente, adaptación local) o menos (selección estabilizadora, el mismo óptimo en todas partes). Su equivalente de F<sub>ST</sub> es <b>Q<sub>ST</sub></b> = σ²<sub>B</sub>/(σ²<sub>B</sub> + 2σ²<sub>W</sub>), calculado con varianzas genéticas aditivas entre (B) y dentro (W) de poblaciones, que requieren un jardín común o cruzas (Whitlock, 2008).</p>
+
+  <p>Con medidas de campo solo hay varianzas fenotípicas. <b>P<sub>ST</sub></b> las usa con dos supuestos explícitos: c, la parte de la varianza entre poblaciones que es genética aditiva, y h², la heredabilidad dentro de ellas (Brommer, 2011). P<sub>ST</sub> = cσ²<sub>B</sub>/(cσ²<sub>B</sub> + 2h²σ²<sub>W</sub>). Con c/h² = 1 la comparación es la más optimista.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 214" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Tres caracteres comparados con el F_ST neutral">
+      <text x="20" y="16" font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b">TRES CARACTERES FRENTE AL F<tspan dy="3" font-size="8">ST</tspan><tspan dy="-3"> NEUTRAL</tspan></text>
+      <g stroke="#eceef2" stroke-width="1"><line x1="90" y1="142.5" x2="470" y2="142.5"/><line x1="90" y1="105" x2="470" y2="105"/><line x1="90" y1="67.5" x2="470" y2="67.5"/><line x1="90" y1="30" x2="470" y2="30"/></g>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="90" y1="180" x2="470" y2="180"/><line x1="90" y1="30" x2="90" y2="180"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="84" y="183">0</text><text x="84" y="145.5">0.2</text><text x="84" y="108">0.4</text><text x="84" y="70.5">0.6</text><text x="84" y="33">0.8</text></g>
+      <text x="40" y="108" font-size="10" fill="#111" text-anchor="middle">P<tspan dy="3" font-size="8">ST</tspan></text>
+      <rect x="138" y="90" width="44" height="90" fill="#b4234a"/>
+      <rect x="258" y="138.75" width="44" height="41.25" fill="#9aa3b2"/>
+      <rect x="378" y="170.6" width="44" height="9.4" fill="#0f766e"/>
+      <g stroke="#111" stroke-width="1.4"><line x1="160" y1="56.3" x2="160" y2="123.8"/><line x1="153" y1="56.3" x2="167" y2="56.3"/><line x1="153" y1="123.8" x2="167" y2="123.8"/><line x1="280" y1="101.3" x2="280" y2="168.8"/><line x1="273" y1="101.3" x2="287" y2="101.3"/><line x1="273" y1="168.8" x2="287" y2="168.8"/><line x1="400" y1="161.3" x2="400" y2="178.1"/><line x1="393" y1="161.3" x2="407" y2="161.3"/><line x1="393" y1="178.1" x2="407" y2="178.1"/></g>
+      <line x1="90" y1="151.9" x2="470" y2="151.9" stroke="#111" stroke-width="1.4" stroke-dasharray="6 4"/>
+      <text x="466" y="146" font-size="9.5" fill="#111" text-anchor="end">F<tspan dy="3" font-size="7.5">ST</tspan><tspan dy="-3"> neutral = 0.15</tspan></text>
+      <g font-size="10.5" fill="#111" text-anchor="middle"><text x="160" y="196">Carácter A</text><text x="280" y="196">Carácter B</text><text x="400" y="196">Carácter C</text></g>
+      <g font-size="10.5" fill="#111">
+        <text x="500" y="66"><tspan font-weight="600" fill="#b4234a">A</tspan> · todo el intervalo arriba:</text><text x="500" y="80">selección divergente</text>
+        <text x="500" y="116"><tspan font-weight="600" fill="#5d6472">B</tspan> · el intervalo cruza F<tspan dy="3" font-size="8">ST</tspan><tspan dy="-3">:</tspan></text><text x="500" y="130">compatible con la deriva</text>
+        <text x="500" y="166"><tspan font-weight="600" fill="#0f766e">C</tspan> · todo el intervalo abajo:</text><text x="500" y="180">selección estabilizadora</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 10.5.</b> Cómo se lee la comparación, con tres caracteres hipotéticos. Cada barra es el P<sub>ST</sub> de un carácter y la línea vertical su intervalo del 95&nbsp;%; la línea discontinua es el F<sub>ST</sub> de marcadores neutrales de las mismas poblaciones.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>El intervalo de <span class="sym">P<sub>ST</sub></span></div>
+    <p style="margin:0">La app obtiene σ²<sub>B</sub> y σ²<sub>W</sub> de un ANOVA de una vía. En el modelo aleatorio, el cociente F/(1 + n<sub>0</sub>λ) sigue una distribución F con G − 1 y N − G grados de libertad, donde λ = σ²<sub>B</sub>/σ²<sub>W</sub> y n<sub>0</sub> es el tamaño medio de población (Searle, Casella y McCulloch, 1992). De ahí salen límites exactos para λ y, como P<sub>ST</sub> crece con λ, para P<sub>ST</sub>. Con G poblaciones, σ²<sub>B</sub> descansa en solo G − 1 grados de libertad: con tres poblaciones el intervalo es muy ancho, y un P<sub>ST</sub> alto puede ser compatible con la deriva.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Regla de decisión · <span class="sym">P<sub>ST</sub></span> frente a <span class="sym">F<sub>ST</sub></span></div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">Si…</th><th>entonces…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Todo el intervalo de P<sub>ST</sub> queda sobre F<sub>ST</sub></b></td><td>El carácter se diferenció más que por deriva: selección divergente, si c/h² es realista.</td></tr>
+        <tr><td><b>Todo el intervalo queda bajo F<sub>ST</sub></b></td><td>Selección estabilizadora: las poblaciones se parecen más de lo esperado.</td></tr>
+        <tr><td><b>El intervalo cruza F<sub>ST</sub></b></td><td>No hay evidencia contra la deriva.</td></tr>
+        <tr><td><b>La conclusión cambia al bajar c/h² a 0.5</b></td><td>Depende del supuesto: dilo, o mide el carácter en jardín común.</td></tr>
+        <tr><td><b>Tienes menos de 10 poblaciones</b></td><td>Espera intervalos anchos; la comparación tiene poca potencia.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">F<sub>ST</sub> debe venir de marcadores neutrales de las mismas poblaciones (θ del Bloque 5).</p>
+  </div>
+
+  <!-- 10.6 -->
+  <h2 id="s10-6"><span class="num">10.6</span>Ajustes, tablas y figuras del bloque</h2>
+  <p>La tarjeta <span class="ui">1 · Settings</span> muestra solo los ajustes de los análisis que aplican a tus datos. Al cambiar uno, pulsa <span class="ui">Run the analyses</span>.</p>
+
+  <table>
+    <caption><b>Tabla 10.6.</b> Ajustes del Bloque 9.</caption>
+    <thead><tr><th style="width:34%">Ajuste</th><th>Opciones</th><th style="width:28%">Recomendación</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">IAM</span> · <span class="ui">TPM</span> · <span class="ui">SMM</span></td><td>Modelos de mutación de la prueba de exceso; por omisión TPM y SMM.</td><td>TPM y SMM con microsatélites.</td></tr>
+      <tr><td><span class="ui">accepted simulations per locus</span></td><td>50 a 2000 (predeterminado 300).</td><td>300; 1000 para publicar.</td></tr>
+      <tr><td><span class="ui">TPM single-step fraction</span> · <span class="ui">TPM variance</span></td><td>Predeterminados 0.95 y 12.</td><td>Los de Piry y colaboradores (1999).</td></tr>
+      <tr><td><span class="ui">repeat motif (bp) for M-ratio</span></td><td>1 a 6 (predeterminado 2).</td><td>El motivo de tus microsatélites.</td></tr>
+      <tr><td><span class="ui">N<sub>e</sub> (LD method): exclude alleles rarer than</span></td><td>0 a 0.1 (predeterminado 0.02).</td><td>0.02 (Waples y Do, 2010).</td></tr>
+      <tr><td><span class="ui">classes</span> · <span class="ui">permutations</span></td><td>3 a 30 clases con el mismo número de pares; 99 a 9999 permutaciones.</td><td>10 clases y 999 permutaciones.</td></tr>
+      <tr><td><span class="ui">pairs</span></td><td><span class="ui">within populations (fine scale)</span> o <span class="ui">all pairs</span>; aparece con dos o más poblaciones.</td><td>Dentro de poblaciones.</td></tr>
+      <tr><td><span class="ui">c</span> · <span class="ui">h²</span> · <span class="ui">F<sub>ST</sub></span></td><td>c y h² de 0.05 a 1; F<sub>ST</sub> neutral de referencia.</td><td>Prueba c/h² = 1 y 0.5.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Número entero.</td><td>Repórtala.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Tabla 10.7.</b> Tarjetas de resultados del Bloque 9.</caption>
+    <thead><tr><th style="width:30%">Tarjeta</th><th>Contenido</th><th class="c" style="width:22%">Figuras</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · What the analyses say</span></td><td>Cifras e interpretación de todos los análisis; descarga de todo en CSV.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Recent bottlenecks</span></td><td>Pruebas por población y modelo, tabla locus por locus.</td><td class="c">H<sub>e</sub> frente a H<sub>eq</sub> · cambio de moda</td></tr>
+      <tr><td><span class="ui">4 · Effective population size</span></td><td>r² observado y esperado, N<sub>e</sub> con intervalo y N<sub>e</sub> por exceso de heterocigotos.</td><td class="c">N<sub>e</sub> por población</td></tr>
+      <tr><td><span class="ui">5 · Fine-scale spatial genetic structure</span></td><td>Clases de distancia, valor, banda de permutaciones, P, b<sub>F</sub>, Sp y Nb.</td><td class="c">Correlograma</td></tr>
+      <tr><td><span class="ui">6 · Mating system</span></td><td>F<sub>IS</sub>, tasa de autofecundación y de cruzamiento con intervalos.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">7 · P<sub>ST</sub> versus F<sub>ST</sub></span></td><td>σ²<sub>B</sub>, σ²<sub>W</sub>, ANOVA, P<sub>ST</sub> con intervalo exacto y comparación con F<sub>ST</sub>.</td><td class="c">P<sub>ST</sub> por carácter</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 10.7 -->
+  <h2 id="s10-7"><span class="num">10.7</span>Paso a paso: tres poblaciones, un rodal y la morfología del maíz</h2>
+  <p>Tres archivos recorren el bloque. Los dos de microsatélites se simularon para este manual con parámetros conocidos y están en la carpeta <code>manual/herramientas</code>, junto con el programa que los genera (<code>generar-demografia.pl</code>). El tercero es el ejemplo de morfología del maíz de la app. Los valores son los que produce la app con los ajustes predeterminados y la semilla 1.</p>
+
+  <table>
+    <caption><b>Tabla 10.8.</b> Los datos de práctica y lo que se simuló en cada uno.</caption>
+    <thead><tr><th style="width:26%">Archivo</th><th style="width:30%">Contenido</th><th>Qué se simuló</th></tr></thead>
+    <tbody>
+      <tr><td><code>ssr-demografia.csv</code></td><td>3 poblaciones × 40 plantas × 20 microsatélites (motivo de 2 pb).</td><td><i>Estable</i>: muestra de una población grande en equilibrio (modelo TPM). <i>Cuello_botella</i>: 40 plantas durante 8 generaciones y 400 en la última, así que N<sub>e</sub> ≈ 40. <i>Autogama</i>: equilibrio con 60&nbsp;% de autofecundación (F = 0.43).</td></tr>
+      <tr><td><code>ssr-espacial.csv</code></td><td>200 plantas con latitud y longitud en una parcela de 1 ha, 12 microsatélites.</td><td>Un rodal continuo de 22&nbsp;500 plantas separadas 5 m, con 3000 generaciones de semilla (σ = 5 m) y polen (σ = 10 m desde la madre): σ² = 78 m² y Nb = 39.</td></tr>
+      <tr><td><span class="ui">Maize · morphology</span></td><td>3 razas × 25 plantas, 9 caracteres.</td><td>Las medias de cada raza se fijaron al simular; no hay datos de jardín común.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tres poblaciones: cuellos de botella, N<sub>e</sub> y autofecundación</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>En el Bloque 2 arrastra <code>ssr-demografia.csv</code> a <span class="ui">Drop your file here</span>, revisa que la app vea 20 loci codominantes y 3 poblaciones, y pulsa <span class="ui">Build the dataset and run the checks →</span>.</li>
+      <li>Abre el Bloque 9: los análisis corren solos en unos 30 segundos. Lee las cifras y la interpretación (figura 10.6).</li>
+      <li>En <span class="ui">3 · Recent bottlenecks</span> elige <span class="ui">Cuello_botella</span> y revisa las pruebas (figura 10.7), la tabla por locus (figura 10.8) y las gráficas (figuras 10.9 y 10.10).</li>
+      <li>Revisa N<sub>e</sub> (figura 10.11) y la tasa de autofecundación (figura 10.12).</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-resumen.png" alt="Cifras e interpretación de las tres poblaciones"></div>
+    <figcaption><b>Figura 10.6.</b> <span class="ui">What the analyses say</span>. Solo <i>Cuello_botella</i> tiene exceso de heterocigosis con TPM y con SMM (P = 0.011 y 0.049). <i>Estable</i> y <i>Autogama</i> no lo tienen (P = 0.121 y 0.088 con TPM); en <i>Autogama</i> la app simuló el equilibrio con n(2 − F) copias porque F<sub>IS</sub> = 0.43.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-pruebas.png" alt="Pruebas de cuello de botella de una población"></div>
+    <figcaption><b>Figura 10.7.</b> Pruebas de <i>Cuello_botella</i> con TPM: 14 de 20 loci con exceso contra 11.7 esperados (signos, P = 0.150), T<sub>2</sub> = 2.40 (P = 0.008) y Wilcoxon P = 0.011. La distribución conserva la forma de L y 9 de 20 loci tienen M &lt; 0.68.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-demo-loci.png" alt="Heterocigosidad observada y en equilibrio por locus"></div>
+    <figcaption><b>Figura 10.8.</b> Locus por locus: el exceso (en rojo) aparece en 14 loci. Cinco tienen una probabilidad de exceso menor que 0.05, de 0.043 (Ssr19) a menos de 0.001 (Ssr17), y ninguno domina: la señal viene de todo el genoma.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-het.png" alt="Figura de exceso de heterocigosis por locus"></div>
+    <figcaption><b>Figura 10.9.</b> H<sub>e</sub> observada (círculos) contra H<sub>eq</sub> ± 2 desviaciones estándar (barras grises) en cada locus de <i>Cuello_botella</i>. Los círculos naranjas quedan sobre su equilibrio.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-demo-moda.png" alt="Distribución de frecuencias alélicas de las tres poblaciones"></div>
+    <figcaption><b>Figura 10.10.</b> Cambio de moda: las tres poblaciones conservan la forma de L. <i>Cuello_botella</i> tiene menos alelos raros (34&nbsp;% contra 49&nbsp;% en la estable), pero la clase 0–0.1 sigue siendo la mayor. Tras 8 generaciones de reducción, este indicador todavía no la ve.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-demo-ne.png" alt="Tamaño efectivo de las tres poblaciones"></div>
+    <figcaption><b>Figura 10.11.</b> N<sub>e</sub> por desequilibrio de ligamiento: ∞ en la estable (límite inferior 295), 68 (46–127) en la que se redujo y 237 (88–∞) en la autógama. Con el método de exceso de heterocigotos, el límite superior es ∞ en las tres.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-self.png" alt="Tasa de autofecundación de las tres poblaciones"></div>
+    <figcaption><b>Figura 10.12.</b> <span class="ui">Mating system</span>: <i>Autogama</i> tiene F<sub>IS</sub> = 0.425 y una tasa de autofecundación de 59.7&nbsp;% (57.2–62.1&nbsp;%); la simulada fue 60&nbsp;%. Las otras dos poblaciones no tienen déficit de heterocigotos.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer los resultados de las tres poblaciones</div>
+    <ul style="margin:0">
+      <li><b>La reducción se detecta y la estabilidad no se confunde.</b> Wilcoxon da exceso con los dos modelos solo en la población que pasó 8 generaciones con 40 plantas.</li>
+      <li><b>La autofecundación ya no parece un cuello de botella.</b> Sin el ajuste por endogamia, la muestra autógama daba exceso con la prueba de signos (P = 0.027) y con T<sub>2</sub> (P = 0.020). Con F = 0.43, sus 40 plantas llevan unas 40 × (2 − 0.43) = 63 copias independientes, no 80.</li>
+      <li><b>Una sola estimación de N<sub>e</sub> varía.</b> El N<sub>e</sub> verdadero es 40 y esta muestra dio 68, con un intervalo que no lo incluye. En 150 repeticiones de la misma simulación, la mediana fue 42 y el intervalo incluyó el valor verdadero en 95&nbsp;% de los casos: esta muestra es de las que fallan.</li>
+      <li><b>La autógama muestra el sesgo de la endogamia.</b> Viene de una población enorme, pero la endogamia correlacionada entre loci eleva r² y el método da N<sub>e</sub> = 237.</li>
+    </ul>
+  </div>
+
+  <h3>Un rodal: estructura genética espacial</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Carga <code>ssr-espacial.csv</code> en el Bloque 2 (200 plantas con <code>Latitude</code> y <code>Longitude</code>, 12 loci) y construye el conjunto.</li>
+      <li>Abre el Bloque 9 y baja a <span class="ui">5 · Fine-scale spatial genetic structure</span> (figuras 10.13 y 10.14). Con una sola población, <span class="ui">pairs</span> no aparece: todos los pares son de la misma población.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-rodal-sgs.png" alt="Clases de distancia del rodal"></div>
+    <figcaption><b>Figura 10.13.</b> Clases de distancia del rodal, en metros. El parentesco medio pasa de 0.029 entre vecinos (5 a 21 m) a valores negativos después de 46 m. La nota da b<sub>F</sub> = −0.0207 (P = 0.002), Sp = 0.021 y Nb = 47.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-rodal-correlograma.png" alt="Correlograma del rodal"></div>
+    <figcaption><b>Figura 10.14.</b> Correlograma del rodal. Las cuatro primeras clases quedan sobre la banda de permutaciones y las lejanas por debajo: los vecinos son parientes hasta unos 46 m.</figcaption>
+  </figure>
+
+  <p>Las demás tarjetas también corren con este archivo, pero no son su objetivo, y enseñan dos precauciones. La tasa de autofecundación sale en 10.5&nbsp;%, aunque en la simulación solo el 4&nbsp;% de las semillas vino del polen de la propia planta: el resto del F<sub>IS</sub> de 0.056 viene de cruzas entre vecinos emparentados, como advierte la sección 10.4. Y la prueba de cuellos de botella encuentra exceso solo con TPM (P = 0.006; con SMM, P = 0.088): la simulación partió de frecuencias alélicas parejas y el rodal no está en equilibrio entre mutación y deriva, así que la app lo reporta como una señal débil.</p>
+
+  <h3>Agave: sin estructura fina dentro de las poblaciones</h3>
+  <p>El ejemplo <span class="ui">Agave · AFLP</span> trae coordenadas por planta en cuatro poblaciones separadas por 150 a 400 km. Con <span class="ui">within populations (fine scale)</span>, la app usa solo los 760 pares de plantas de la misma población y la <i>r</i> de Smouse y Peakall, porque las bandas son dominantes (figura 10.15). Con <span class="ui">all pairs</span>, las dos primeras clases (hasta 5 km, pares de la misma población) salen con r = 0.092 y 0.083, muy por encima de la banda, y las lejanas quedan negativas: esa “estructura” es la diferenciación entre poblaciones.</p>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b9-agave-correlograma.png" alt="Correlograma del agave dentro de poblaciones"></div>
+    <figcaption><b>Figura 10.15.</b> Agave con pares dentro de las poblaciones. r ronda −0.05, lo esperado sin estructura con 20 plantas por población (−1/19 = −0.053), y la primera clase queda dentro de la banda. La clase de 2.8 a 3.2 km sale apenas por debajo (P = 0.042), algo esperable al revisar 10 clases. Los datos se simularon sin estructura dentro de las poblaciones.</figcaption>
+  </figure>
+
+  <h3>Morfología del maíz: P<sub>ST</sub> frente a F<sub>ST</sub></h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Paso a paso</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Carga <span class="ui">Maize · morphology</span> en el Bloque 2, construye el conjunto y abre el Bloque 9.</li>
+      <li>En <span class="ui">F<sub>ST</sub></span> escribe 0.049, el θ de las mismas tres razas con microsatélites (sección 6.6). Revisa la tabla y la figura (figuras 10.16 y 10.17).</li>
+      <li>Cambia <span class="ui">c</span> a 0.5, pulsa <span class="ui">Run the analyses</span> y observa qué carácter cambia de lectura.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-morfo-tabla.png" alt="P_ST de los nueve caracteres del maíz"></div>
+    <figcaption><b>Figura 10.16.</b> P<sub>ST</sub> de los nueve caracteres con c/h² = 1. Las F del ANOVA van de 21.8 a 431, así que, aun con solo 2 grados de libertad entre razas, el límite inferior de cada intervalo supera 0.049.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-morfo-figura.png" alt="Figura de P_ST por carácter"></div>
+    <figcaption><b>Figura 10.17.</b> P<sub>ST</sub> con sus intervalos exactos y el F<sub>ST</sub> neutral. Los intervalos llegan casi a 1: con tres razas la estimación es imprecisa aunque las diferencias sean enormes.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Cómo leer los resultados del maíz</div>
+    <ul style="margin:0">
+      <li><b>La conclusión resiste casi siempre.</b> Con c/h² = 0.5, el límite inferior de <i>KernelRows</i> baja a 0.044 y queda bajo el F<sub>ST</sub>: su diferenciación ya no se distingue de la deriva. Los otros ocho caracteres siguen arriba.</li>
+      <li><b>Son datos sintéticos.</b> Las medias de cada raza se fijaron al simular y no hay jardín común, así que la conclusión depende del supuesto c/h².</li>
+    </ul>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · qué reportar en un artículo</div>
+    <p>De los cuellos de botella: modelos de mutación y parámetros del TPM, simulaciones aceptadas por locus, pruebas con su P y si hubo ajuste por endogamia. De N<sub>e</sub>: método, P<sub>crit</sub>, número de plantas y de loci, y el intervalo. De la estructura espacial: estimador, si los pares fueron dentro de poblaciones, clases, permutaciones, F<sub>1</sub>, b<sub>F</sub> con su P y Sp. De la autofecundación: F<sub>IS</sub> con su intervalo y la advertencia de que es una inferencia indirecta. De P<sub>ST</sub>: c/h², el F<sub>ST</sub> de referencia y cómo se obtuvieron los intervalos. La sección de métodos del informe del Bloque 10 redacta todo esto con la semilla.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Nota · verificación de los cálculos</div>
+    <p>Para este manual, la H<sub>eq</sub> simulada bajo el IAM coincidió con el valor exacto de la fórmula de Ewens en cuatro casos (40 a 80 copias), dentro de un error estándar, y las expectativas sin condicionar del IAM y del SMM coincidieron con la teoría. La prueba exacta de Wilcoxon coincidió con una enumeración independiente en 300 casos con empates. Con un generador coalescente independiente, la prueba corregida rechazó 8.5&nbsp;% de 200 poblaciones estables (la de signos, 5&nbsp;%), 3&nbsp;% de 100 autógamas con el ajuste (15&nbsp;% sin él) y detectó el 76&nbsp;% de 49 poblaciones reducidas. N<sub>e</sub> por desequilibrio de ligamiento y el D de Pudovkin se recalcularon en otro lenguaje desde los conteos de genotipos sin diferencias; en 150 simulaciones con N<sub>e</sub> = 40, la mediana fue 42 y el intervalo cubrió el valor verdadero 95&nbsp;% de las veces. El parentesco de Loiselle, F<sub>1</sub>, b<sub>F</sub> y Sp del rodal, y la r de Smouse y Peakall del agave con la fórmula de pares ordenados, se recalcularon sin diferencias. El intervalo exacto de P<sub>ST</sub> cubrió el valor verdadero en 94 a 96&nbsp;% de 2000 conjuntos simulados por escenario.</p>
+  </div>
+
+  <p style="margin-top:0.25in">El siguiente capítulo cierra los análisis: el Bloque 10 reúne figuras, tablas e interpretaciones en un informe y un paquete ZIP listos para publicar.</p>
+</section>
+
+</body>
+</html>
