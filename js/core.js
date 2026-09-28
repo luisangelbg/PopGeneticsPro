@@ -85,6 +85,8 @@ function showMessage(container, type, text) {
   if (typeof container === 'string') container = el(container);
   if (!container) return null;
   const div = mk('div', { class: 'msg msg-' + type }, text);
+  /* errors and warnings are announced to screen readers */
+  if (window.LABG) LABG.messageRole(div, type);
   container.appendChild(div);
   return div;
 }
@@ -219,17 +221,88 @@ function slug(s) {
 }
 
 /* ---------------- step navigation ---------------- */
+const STEP_ORDER = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+const stepBtn = n => document.querySelector('.step-btn[data-step="' + n + '"]');
+const stepOn = n => { const b = stepBtn(n); return !!b && !b.disabled; };
+
 function goStep(n) {
   els('.step-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + n));
   els('.step-btn').forEach(b => b.classList.toggle('active', b.dataset.step === String(n)));
   document.body.classList.toggle('on-home', String(n) === '1');
+  if (window.LABG) {
+    LABG.setCurrentStep(n);
+    const b = stepBtn(n);
+    if (b) LABG.announce('Block: ' + stepLabel(n));
+  }
+  refreshStepFooters();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   document.dispatchEvent(new CustomEvent('stepchange', { detail: { step: n } }));
 }
 function enableStep(n, on) {
-  const b = document.querySelector('.step-btn[data-step="' + n + '"]');
+  const b = stepBtn(n);
   if (b) b.disabled = (on === false);
+  refreshStepMarks();
+  refreshStepFooters();
 }
+
+/* Block 2 is "done" once data are loaded, that is, once a later block is open.
+   The analysis blocks are all opened together when the data arrive, so being
+   open does not mean they were run: they are not marked. */
+function refreshStepMarks() {
+  if (!window.LABG) return;
+  LABG.markStep('2', stepOn('2') && STEP_ORDER.slice(2).some(stepOn) ? 'done' : null);
+}
+
+/* Foot of every block: Previous / Next, with the name of the block. */
+function stepLabel(n) {
+  const b = stepBtn(n); if (!b) return '';
+  const num = b.querySelector('.step-num'), name = b.querySelector('.step-name');
+  return (num ? num.textContent.trim() + ' · ' : '') + (name ? name.textContent.trim() : '');
+}
+function refreshStepFooters() {
+  els('.step-panel').forEach(p => {
+    const n = p.id.replace('panel-', '');
+    const i = STEP_ORDER.indexOf(n);
+    if (i < 0) return;
+    let f = p.querySelector(':scope > .step-footer');
+    if (!f) {
+      f = mk('nav', { class: 'step-footer no-print', 'aria-label': 'Blocks' });
+      f.innerHTML = '<button type="button" class="btn btn-secondary prev"></button><button type="button" class="btn btn-primary next"></button>';
+      f.addEventListener('click', e => { const b = e.target.closest('button[data-go]'); if (b && !b.disabled) goStep(b.dataset.go); });
+      p.appendChild(f);
+    }
+    const prev = STEP_ORDER.slice(0, i).reverse().find(stepOn);
+    const next = STEP_ORDER.slice(i + 1).find(s => stepBtn(s));
+    const bp = f.querySelector('.prev'), bn = f.querySelector('.next');
+    bp.hidden = !prev;
+    if (prev) { bp.dataset.go = prev; bp.innerHTML = `← <span><small>Previous</small>${esc(stepLabel(prev))}</span>`; }
+    bn.hidden = !next;
+    if (next) {
+      bn.dataset.go = next; bn.disabled = !stepOn(next);
+      bn.innerHTML = `<span><small>Next</small>${esc(stepLabel(next))}</span> →`;
+    }
+  });
+}
+
+/* Common suite bar: theme, shortcuts, leave guard and keyboard. Only in the
+   app itself (a page that loads core.js without labg-core.js skips it). */
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.LABG) return;
+  LABG.theme.init('popgeneticspro.theme');
+  const tb = el('themeBtn');
+  if (tb) tb.addEventListener('click', () => LABG.theme.toggle());
+  const hb = el('helpBtn');
+  if (hb) hb.addEventListener('click', () => LABG.showShortcuts());
+  /* the brand is a link for the keyboard; going home is done by goStep */
+  const brand = el('brand');
+  if (brand) brand.addEventListener('click', e => e.preventDefault());
+  LABG.shortcuts([]);
+  LABG.bindStepKeys(goStep);
+  LABG.guardUnload(() => !!state.data);
+  LABG.setCurrentStep((document.querySelector('.step-btn.active') || {}).dataset?.step || '1');
+  refreshStepMarks();
+  refreshStepFooters();
+});
 
 /* "Continue" at the foot of a block: open the next block, or say why it does
    not apply to these data and offer the next one that does. The conditions

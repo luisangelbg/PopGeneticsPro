@@ -258,6 +258,8 @@
     if (preset) preset.addEventListener('change', applyPreset);
     /* start from the scenario shown in the list, so the sliders and the list agree */
     if (preset) applyPreset(); else reset(true);
+    /* the population colours are read from the theme when drawing */
+    document.addEventListener('themechange', draw);
   }
 
   document.addEventListener('DOMContentLoaded', init);
