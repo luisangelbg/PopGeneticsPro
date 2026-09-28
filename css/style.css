@@ -82,7 +82,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 20px 80px; }
 .feature .f-num { position: absolute; top: 10px; left: 10px; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: var(--on-primary); font-size: 0.78rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .feature h3 { margin: 4px 0 0; font-size: 1rem; }
 .feature p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
-.feature .f-tag { font-size: 0.7rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+.feature .f-tag { font-size: 0.7rem; font-weight: 600; color: var(--accent-text); text-transform: uppercase; letter-spacing: .06em; }
 .feature.soon .f-tag { color: var(--text-muted); }
 
 /* Workflow strip */
@@ -104,7 +104,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 20px 80px; }
 .method-card .m-sub { font-size: 0.74rem; color: var(--text-muted); }
 .method-card .m-fam { display: inline-block; font-size: 0.66rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-bottom: 6px; }
 .m-fam.hier { background: var(--primary-soft); color: var(--primary-text); }
-.m-fam.part { background: var(--accent-soft); color: var(--accent); }
+.m-fam.part { background: var(--accent-soft); color: var(--accent-text); }
 .m-fam.adv  { background: rgba(47,143,184,0.14); color: var(--sky); }
 .m-fam.val  { background: rgba(207,78,134,0.13); color: var(--c4); }
 
@@ -159,7 +159,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 20px 80px; }
 .acc:first-of-type { border-top: none; }
 .acc > summary { cursor: pointer; padding: 12px 4px; font-weight: 600; font-size: 0.95rem; list-style: none; display: flex; align-items: center; gap: 10px; }
 .acc > summary::-webkit-details-marker { display: none; }
-.acc > summary::before { content: "▸"; color: var(--accent); font-size: 0.85rem; transition: transform .15s; display: inline-block; width: 12px; }
+.acc > summary::before { content: "▸"; color: var(--accent-text); font-size: 0.85rem; transition: transform .15s; display: inline-block; width: 12px; }
 .acc[open] > summary::before { transform: rotate(90deg); }
 .acc > summary:hover { color: var(--primary-text); }
 .acc > summary .acc-tag { margin-left: auto; font-size: 0.68rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
@@ -198,7 +198,7 @@ code { font-family: var(--mono); background: var(--bg-soft); padding: 1px 5px; b
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 10px; }
 .chip { font-size: 0.76rem; padding: 3px 10px; border-radius: 999px; background: var(--bg-soft); border: 1px solid var(--border); }
 .chip.p { background: var(--primary-soft); border-color: rgba(var(--primary-rgb), 0.25); color: var(--primary-text); }
-.chip.a { background: var(--accent-soft); border-color: rgba(var(--accent-rgb), 0.3); color: var(--accent); }
+.chip.a { background: var(--accent-soft); border-color: rgba(var(--accent-rgb), 0.3); color: var(--accent-text); }
 
 /* ---------- Forms ---------- */
 input[type=text], input[type=number], select, textarea { padding: 8px 11px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--card-bg); color: var(--text); font-size: 0.9rem; max-width: 100%; font-family: inherit; }
@@ -289,7 +289,7 @@ tr.dim td { color: var(--text-muted); }
 .pill { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text-muted); }
 .pill.quant { background: rgba(var(--primary-rgb), 0.12); border-color: rgba(var(--primary-rgb), 0.3); color: var(--primary-text); }
 .pill.binary { background: rgba(47,143,184,0.14); border-color: rgba(47,143,184,0.35); color: var(--sky); }
-.pill.nominal { background: var(--accent-soft); border-color: rgba(var(--accent-rgb), 0.35); color: var(--accent); }
+.pill.nominal { background: var(--accent-soft); border-color: rgba(var(--accent-rgb), 0.35); color: var(--accent-text); }
 .pill.ordinal { background: rgba(123,176,65,0.16); border-color: rgba(123,176,65,0.4); color: #5a8a2a; }
 .pill.count { background: rgba(207,78,134,0.12); border-color: rgba(207,78,134,0.35); color: var(--c4); }
 .pill.id { background: var(--bg-soft); color: var(--text-muted); }
@@ -382,7 +382,7 @@ details.fig-editor > summary { cursor: pointer; font-size: 0.82rem; color: var(-
 
 /* method family chips */
 .m-fam.div { background: var(--primary-soft); color: var(--primary-text); }
-.m-fam.str { background: var(--accent-soft); color: var(--accent); }
+.m-fam.str { background: var(--accent-soft); color: var(--accent-text); }
 .m-fam.dst { background: rgba(47,143,184,0.14); color: var(--sky); }
 .m-fam.bay { background: rgba(154,92,196,0.15); color: var(--c6); }
 .m-fam.dna { background: rgba(63,174,158,0.15); color: var(--c8); }
@@ -396,7 +396,7 @@ details.fig-editor > summary { cursor: pointer; font-size: 0.82rem; color: var(-
 .marker .mk-s { font-size: 0.76rem; color: var(--text-muted); }
 .marker .mk-k { display: inline-block; font-size: 0.66rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; margin-top: 6px; }
 .mk-k.codom { background: var(--primary-soft); color: var(--primary-text); }
-.mk-k.domin { background: var(--accent-soft); color: var(--accent); }
+.mk-k.domin { background: var(--accent-soft); color: var(--accent-text); }
 .mk-k.seq { background: rgba(63,174,158,0.16); color: var(--c8); }
 .mk-k.morph { background: rgba(217,162,39,0.18); color: var(--gold); }
 
@@ -434,9 +434,9 @@ details.fig-editor > summary { cursor: pointer; font-size: 0.82rem; color: var(-
 /* ---------- Genotype / allele rendering (used from Block 2 on) ---------- */
 .allele-chip { font-family: var(--mono); font-size: 0.76rem; padding: 1px 6px; border-radius: 5px; background: var(--bg-soft); border: 1px solid var(--border); }
 .geno-cell { font-family: var(--mono); font-size: 0.78rem; white-space: nowrap; }
-.geno-het { color: var(--accent); } .geno-hom { color: var(--text); } .geno-miss { color: var(--text-muted); opacity: .6; }
+.geno-het { color: var(--accent-text); } .geno-hom { color: var(--text); } .geno-miss { color: var(--text-muted); opacity: .6; }
 .pill.codom { background: var(--primary-soft); border-color: rgba(var(--primary-rgb), 0.3); color: var(--primary-text); }
-.pill.domin { background: var(--accent-soft); border-color: rgba(var(--accent-rgb), 0.32); color: var(--accent); }
+.pill.domin { background: var(--accent-soft); border-color: rgba(var(--accent-rgb), 0.32); color: var(--accent-text); }
 .pill.hap { background: rgba(63,174,158,0.16); border-color: rgba(63,174,158,0.35); color: var(--c8); }
 .pill.seq { background: rgba(47,143,184,0.14); border-color: rgba(47,143,184,0.33); color: var(--sky); }
 
@@ -508,7 +508,7 @@ details.fig-editor > summary { cursor: pointer; font-size: 0.82rem; color: var(-
 .dz-cap.off { text-decoration: line-through; opacity: .7; }
 .tpl-preview table { font-family: var(--mono); font-size: 0.76rem; }
 .tpl-preview td, .tpl-preview th { white-space: nowrap; padding: 4px 9px; }
-.tpl-preview tr.tpl-sig td { background: var(--accent-soft); color: var(--accent); font-size: 0.7rem; white-space: normal; word-break: break-all; line-height: 1.45; }
+.tpl-preview tr.tpl-sig td { background: var(--accent-soft); color: var(--accent-text); font-size: 0.7rem; white-space: normal; word-break: break-all; line-height: 1.45; }
 .tpl-preview th { background: var(--primary-soft); color: var(--primary-text); }
 .tpl-preview td.tpl-empty { color: var(--border-strong); text-align: center; }
 .tpl-preview td.tpl-rowno, .tpl-preview th.tpl-rowno { color: var(--text-muted); background: var(--bg-soft); font-size: 0.68rem; text-align: right; }
