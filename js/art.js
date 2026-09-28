@@ -7,6 +7,8 @@
 
   /* seeded helpers so every illustration is identical on every reload */
   const R = (seed) => rng(seed);
+  /* illustrations can appear more than once on the page: ids inside them get a serial suffix */
+  let uid = 0;
 
   function path(d, cls, extra) { return `<path d="${d}" class="${cls}" ${extra || ''}/>`; }
   function txt(x, y, s, cls, size, anchor, extra) {
@@ -235,10 +237,11 @@
     for (let i = 1; i < n; i++) s += txt(x0 - 4, y0 + (i - 1) * c + 11, 'P' + (i + 1), 'art-mut', 7.5, 'end');
     for (let j = 0; j < n - 1; j++) s += txt(x0 + j * c + 7, y0 + (n - 1) * c + 10, 'P' + (j + 1), 'art-mut', 7.5, 'middle');
     /* legend */
-    s += `<defs><linearGradient id="fstg" x1="0" y1="0" x2="1" y2="0">
+    const gid = "fstg" + (++uid);
+    s += `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.12"/>
       <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.97"/></linearGradient></defs>`;
-    s += `<rect x="160" y="26" width="76" height="9" rx="2" fill="url(#fstg)"/>`;
+    s += `<rect x="160" y="26" width="76" height="9" rx="2" fill="url(#${gid})"/>`;
     s += txt(160, 22, '0', 'art-mut', 7) + txt(236, 22, '0.28', 'art-mut', 7, 'end');
     s += txt(198, 50, 'pairwise F', 'art-txt', 8.5, 'middle', 'font-weight="700"');
     s += txt(222, 52, 'ST', 'art-txt', 6.5, 'middle', 'font-weight="700"');
@@ -486,11 +489,12 @@
       return g;
     };
     s += flower(52, 46, 1, 1) + flower(150, 40, 0.9, 2) + flower(212, 74, 0.85, 3);
-    s += `<defs><marker id="am2" markerWidth="7" markerHeight="7" refX="6" refY="3.2" orient="auto"><path d="M0 0 L7 3.2 L0 6.4 z" fill="var(--accent)"/></marker></defs>`;
-    s += path('M72 40 Q 110 20 130 34', 'art-la', 'stroke-width="1.6" marker-end="url(#am2)"');
-    s += path('M168 50 Q 196 56 200 62', 'art-la', 'stroke-width="1.6" marker-end="url(#am2)"');
+    const mid = "am2-" + (++uid);
+    s += `<defs><marker id="${mid}" markerWidth="7" markerHeight="7" refX="6" refY="3.2" orient="auto"><path d="M0 0 L7 3.2 L0 6.4 z" fill="var(--accent)"/></marker></defs>`;
+    s += path('M72 40 Q 110 20 130 34', 'art-la', `stroke-width="1.6" marker-end="url(#${mid})"`);
+    s += path('M168 50 Q 196 56 200 62', 'art-la', `stroke-width="1.6" marker-end="url(#${mid})"`);
     /* selfing loop */
-    s += path('M46 62 C 26 84 72 90 60 66', 'art-lp', 'stroke-width="1.6" marker-end="url(#am2)"');
+    s += path('M46 62 C 26 84 72 90 60 66', 'art-lp', `stroke-width="1.6" marker-end="url(#${mid})"`);
     s += txt(52, 100, 'selfing', 'art-p', 7.5, 'middle', 'font-weight="700"');
     s += txt(150, 14, 'pollen flow', 'art-a', 7.5, 'middle', 'font-weight="700"');
     s += txt(248, 112, 'tm, ts, biparental inbreeding', 'art-mut', 7, 'end');

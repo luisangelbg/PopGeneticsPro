@@ -374,6 +374,9 @@
         <td>${secondary ? '' : `<select data-k="geo" style="max-width:190px">${geoOptions()}</select>`}</td>
         <td class="dt-prior"></td>
         <td><button class="rm" type="button" title="Remove">✕</button></td>`;
+      /* each field is named by its column header, for screen readers */
+      const heads = [...t.querySelectorAll('thead th')].map(th => th.textContent);
+      [...tr.children].forEach((td, j) => td.querySelectorAll('input, select').forEach(f => f.setAttribute('aria-label', `${heads[j]} · calibration ${i + 1}`)));
       tr.querySelectorAll('[data-k]').forEach(inp => {
         if (inp.dataset.k === 'geo') inp.value = c.geo || '';
         inp.addEventListener('change', () => {
@@ -653,12 +656,12 @@
       { key: 'hi', label: 'to', num: true, fmt: f2 },
       { key: 'geo', label: 'Epoch' },
     ];
-    if (which === 'mcmc') cols.push({ key: 'ess', label: 'ESS', num: true, html: true, get: r => (r.ess == null ? '—' : r.ess < 200 ? `<span style="color:var(--danger);font-weight:700">${Math.round(r.ess)}</span>` : String(Math.round(r.ess))) });
+    if (which === 'mcmc') cols.push({ key: 'ess', label: 'ESS', num: true, html: true, get: r => (r.ess == null ? '—' : r.ess < 200 ? `<span style="color:var(--danger-text);font-weight:700">${Math.round(r.ess)}</span>` : String(Math.round(r.ess))) });
     cols.push({ key: 'calib', label: 'Calibration', html: true, get: r => (r.calib ? `<span class="pill domin">${esc(r.calib)}</span>` : '') });
     if (isDatingExample()) {
       rows.forEach(r => { r.truth = trueAge(r.nd); r.inside = r.truth == null || r.lo == null ? null : r.truth >= r.lo && r.truth <= r.hi; });
       cols.push({ key: 'truth', label: 'Simulated age (Ma)', num: true, html: true,
-        get: r => (r.truth == null ? '<span class="geno-miss">clade not in the true tree</span>' : `${f2(r.truth)} ${r.inside == null ? '' : r.inside ? '<span style="color:var(--success)">✓ inside</span>' : '<span style="color:var(--danger)">✗ outside</span>'}`) });
+        get: r => (r.truth == null ? '<span class="geno-miss">clade not in the true tree</span>' : `${f2(r.truth)} ${r.inside == null ? '' : r.inside ? '<span style="color:var(--success-text)">✓ inside</span>' : '<span style="color:var(--danger-text)">✗ outside</span>'}`) });
     }
     buildTable('dtNodeTable', cols, rows, { limit: 300 });
     if (isDatingExample()) {
@@ -677,7 +680,7 @@
     buildTable('dtEssTable', [
       { key: 'name', label: 'Parameter' }, { key: 'mean', label: 'Mean', num: true, fmt: v => (Math.abs(v) < 0.01 ? v.toExponential(3) : v.toFixed(3)) },
       { key: 'lo', label: '95% HPD from', num: true, fmt: v => (Math.abs(v) < 0.01 ? v.toExponential(3) : v.toFixed(3)) }, { key: 'hi', label: 'to', num: true, fmt: v => (Math.abs(v) < 0.01 ? v.toExponential(3) : v.toFixed(3)) },
-      { key: 'ess', label: 'ESS', num: true, html: true, get: r => (r.ess == null ? '—' : r.ess < 200 ? `<span style="color:var(--danger);font-weight:700">${Math.round(r.ess)}</span>` : String(Math.round(r.ess))) },
+      { key: 'ess', label: 'ESS', num: true, html: true, get: r => (r.ess == null ? '—' : r.ess < 200 ? `<span style="color:var(--danger-text);font-weight:700">${Math.round(r.ess)}</span>` : String(Math.round(r.ess))) },
     ], rows);
     const pal = { key: 'palette', label: 'Palette', type: 'select', options: Object.entries(Fig.paletteNames), shared: true };
     const traceKeys = [['lnL', 'log likelihood'], ['rootAge', 'root age (Ma)'], ['rate', 'mean rate'], ['posterior', 'log posterior']].concat(p.sigma ? [['sigma', 'σ']] : []);

@@ -938,14 +938,14 @@ Fig.mount = (host, spec) => {
 
   /* --- export bar --- */
   const tools = mk('div', { class: 'fig-tools' });
-  const fmt = mk('select');
+  const fmt = mk('select', { 'aria-label': 'Format' });
   [['png', 'PNG'], ['tiff', 'TIFF (journal submission)'], ['svg', 'SVG (vector, editable)'], ['jpg', 'JPG'], ['webp', 'WEBP']]
     .forEach(([v, t]) => fmt.appendChild(mk('option', { value: v }, t)));
-  const res = mk('select');
+  const res = mk('select', { 'aria-label': 'Resolution' });
   [['2', 'Screen · 2× (150 dpi)'], ['4', 'High · 4× (300 dpi)'], ['6', 'Very high · 6× (450 dpi)'],
    ['8', 'Publication · 8× (600 dpi)'], ['12', 'Maximum · 12× (900 dpi)']].forEach(([v, t]) => res.appendChild(mk('option', { value: v }, t)));
   res.value = Prefs.get('figres', '4');
-  const bgSel = mk('select');
+  const bgSel = mk('select', { 'aria-label': 'Background' });
   [['#ffffff', 'White background'], ['transparent', 'Transparent (PNG)']].forEach(([v, t]) => bgSel.appendChild(mk('option', { value: v }, t)));
   const btn = mk('button', { class: 'btn btn-secondary btn-sm' }, '⬇ Download figure');
   const info = mk('span', { class: 'hint', style: 'margin:0' });

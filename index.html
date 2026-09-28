@@ -128,12 +128,12 @@
     </div>
 
     <div class="field-grid" style="margin-top:14px">
-      <div class="slider-row"><label>N per deme</label><input type="range" id="simN" min="10" max="500" step="5" value="100"><span class="range-val" id="simNVal">100</span></div>
-      <div class="slider-row"><label>Populations</label><input type="range" id="simD" min="2" max="10" step="1" value="6"><span class="range-val" id="simDVal">6</span></div>
-      <div class="slider-row"><label>Migration <i>m</i></label><input type="range" id="simM" min="0" max="0.2" step="0.001" value="0.02"><span class="range-val" id="simMVal">0.020</span></div>
-      <div class="slider-row"><label>Selection <i>s</i></label><input type="range" id="simS" min="-0.2" max="0.2" step="0.01" value="0"><span class="range-val" id="simSVal">0.00</span></div>
-      <div class="slider-row"><label>Mutation <i>u</i></label><input type="range" id="simU" min="0" max="0.01" step="0.0005" value="0"><span class="range-val" id="simUVal">0</span></div>
-      <div class="slider-row"><label>Selfing rate</label><input type="range" id="simSelf" min="0" max="0.98" step="0.02" value="0"><span class="range-val" id="simSelfVal">0%</span></div>
+      <div class="slider-row"><label for="simN">N per deme</label><input type="range" id="simN" min="10" max="500" step="5" value="100"><span class="range-val" id="simNVal">100</span></div>
+      <div class="slider-row"><label for="simD">Populations</label><input type="range" id="simD" min="2" max="10" step="1" value="6"><span class="range-val" id="simDVal">6</span></div>
+      <div class="slider-row"><label for="simM">Migration <i>m</i></label><input type="range" id="simM" min="0" max="0.2" step="0.001" value="0.02"><span class="range-val" id="simMVal">0.020</span></div>
+      <div class="slider-row"><label for="simS">Selection <i>s</i></label><input type="range" id="simS" min="-0.2" max="0.2" step="0.01" value="0"><span class="range-val" id="simSVal">0.00</span></div>
+      <div class="slider-row"><label for="simU">Mutation <i>u</i></label><input type="range" id="simU" min="0" max="0.01" step="0.0005" value="0"><span class="range-val" id="simUVal">0</span></div>
+      <div class="slider-row"><label for="simSelf">Selfing rate</label><input type="range" id="simSelf" min="0" max="0.98" step="0.02" value="0"><span class="range-val" id="simSelfVal">0%</span></div>
     </div>
 
     <div class="sim-readout" style="margin-top:12px">
@@ -1501,7 +1501,7 @@ Bayesian estimate with a prior on F   when HWE cannot be assumed</div>
             </div>
             <div id="dtOutgroupWrap">
               <h4 style="margin:10px 0 4px">Outgroup tips</h4>
-              <input type="text" id="dtOutgroupFilter" placeholder="filter names…" style="width:220px;margin-bottom:6px">
+              <input type="text" id="dtOutgroupFilter" aria-label="Filter the outgroup tip names" placeholder="filter names…" style="width:220px;margin-bottom:6px">
               <div class="dt-tiplist" id="dtOutgroup"></div>
             </div>
             <div class="btn-row">
@@ -1641,7 +1641,7 @@ Bayesian estimate with a prior on F   when HWE cannot be assumed</div>
     <div class="field-grid">
       <div class="field" id="demogBtlRow">
         <label>Bottleneck: mutation models and simulations</label>
-        <div class="checkbox-label"><input type="checkbox" id="btl_iam"> IAM &nbsp; <input type="checkbox" id="btl_tpm" checked> TPM &nbsp; <input type="checkbox" id="btl_smm" checked> SMM</div>
+        <div class="checkbox-label" role="group" aria-label="Mutation models"><label class="checkbox-label"><input type="checkbox" id="btl_iam"> IAM</label> &nbsp; <label class="checkbox-label"><input type="checkbox" id="btl_tpm" checked> TPM</label> &nbsp; <label class="checkbox-label"><input type="checkbox" id="btl_smm" checked> SMM</label></div>
         <div class="btn-row" style="margin:6px 0 0;gap:12px">
           <label class="inline-label">accepted simulations per locus <input type="number" id="btlAccept" min="50" max="2000" step="50" value="300" style="width:80px"></label>
           <label class="inline-label">TPM single-step fraction <input type="number" id="btlPSingle" min="0.5" max="1" step="0.05" value="0.95" style="width:70px"></label>

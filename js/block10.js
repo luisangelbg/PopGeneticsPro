@@ -18,7 +18,7 @@ function availability() {
   let ready = 0;
   Report.SECTIONS.forEach(s => {
     const ok = s.ready(); if (ok) ready++;
-    const lab = mk('label', { class: 'checkbox-label', style: ok ? '' : 'opacity:.5' });
+    const lab = mk('label', { class: 'checkbox-label' + (ok ? '' : ' off') });
     lab.innerHTML = `<input type="checkbox" id="rp_${s.key}" ${ok ? 'checked' : 'disabled'}> ${esc(s.title)} <span class="rp-state">${ok ? 'ready' : 'not run yet'}</span>`;
     list.appendChild(lab);
   });
