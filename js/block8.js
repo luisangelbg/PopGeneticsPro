@@ -39,7 +39,8 @@
     clearMessages('dnaMessages');
     const btn = el('btnRunDna'); btn.disabled = true; btn.textContent = 'Computing…';
     const t0 = performance.now();
-    setTimeout(() => {
+    const w = popWork('Analizando las secuencias', 'Analysing the sequences');
+    popAfterPaint(() => {
       try {
         R = DNA.compute(d, settings());
         state.dna = R;
@@ -48,7 +49,7 @@
         el('dnaTiming').textContent = `computed in ${((performance.now() - t0) / 1000).toFixed(1)} s · seed ${R.opts.seed}`;
       } catch (e) { console.error(e); showMessage('dnaMessages', 'error', 'The analysis failed: ' + esc(e.message)); }
       finally { btn.disabled = false; btn.textContent = 'Analyse the sequences'; }
-    }, 30);
+    }, w);
   }
 
   /* ================================================================ */

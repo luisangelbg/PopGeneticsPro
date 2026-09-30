@@ -494,7 +494,7 @@
     } catch (e) { showMessage('dtRunMessages', 'error', esc(e.message)); return; }
     DT.running = true;
     el('btnDtMCMC').disabled = true; el('btnDtLSD').disabled = true; el('btnDtCancel').style.display = '';
-    el('dtProgress').style.display = '';
+    popBarStart('dtProgress');
     const iterations = Math.max(10000, Number(el('dtIter').value) || 200000);
     const t0 = performance.now();
     try {
@@ -520,13 +520,16 @@
       res.wall = (performance.now() - t0) / 1000;
       DT.mcmc = res;
       showResult('mcmc');
+      popBarEnd('dtProgress', true, `MCMC done · ${iterations.toLocaleString('en-US')} iterations in ${res.wall.toFixed(1)} s`);
     } catch (e) {
+      if (e.message !== 'cancelled') popBarEnd('dtProgress', false, 'The MCMC failed');
       console.error(e);
       showMessage('dtRunMessages', e.message === 'cancelled' ? 'info' : 'error', e.message === 'cancelled' ? 'The MCMC was cancelled.' : 'The MCMC failed: ' + esc(e.message));
     } finally {
       DT.running = false;
       el('btnDtMCMC').disabled = false; el('btnDtLSD').disabled = false; el('btnDtCancel').style.display = 'none';
-      el('dtProgress').style.display = 'none';
+      const pb = el('dtProgress');
+      if (!pb.classList.contains('is-done') && !pb.classList.contains('is-failed')) pb.style.display = 'none';
     }
   }
 

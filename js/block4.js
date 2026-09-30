@@ -57,7 +57,8 @@
     const t0 = performance.now();
     const btn = el('btnRunHWE');
     btn.disabled = true; btn.textContent = 'Computing…';
-    setTimeout(() => {
+    const w = popWork('Pruebas de Hardy-Weinberg y desequilibrio de ligamiento', 'Hardy–Weinberg and linkage-disequilibrium tests');
+    popAfterPaint(() => {
       try {
         R = HWE.compute(d, settings());
         state.hwe = R;
@@ -69,7 +70,7 @@
         console.error(e);
         showMessage('hweMessages', 'error', 'The analysis failed: ' + esc(e.message));
       } finally { btn.disabled = false; btn.textContent = 'Run the tests'; }
-    }, 30);
+    }, w);
   }
 
   function runPairwise() {
@@ -81,14 +82,15 @@
     /* never leave the pairs of a previous sample or dataset on screen */
     PAIR = null; state.ldPairs = null;
     ['ldPairTable', 'fig4LD', 'fig4RdHist'].forEach(id => { el(id).innerHTML = ''; });
-    setTimeout(() => {
+    const w = popWork(`Desequilibrio de ligamiento: ${nPairs} pares`, `Linkage disequilibrium: ${nPairs} pairs`);
+    popAfterPaint(() => {
       const s = settings();
       /* keep the pairwise permutations affordable on large band matrices */
       if (nPairs > 400 && s.permsPair > 99) s.permsPair = 99;
       PAIR = HWE.computePairwise(d, scope === 'pooled' ? 'pooled' : Number(scope), s);
       state.ldPairs = PAIR;
       renderPairwise(d);
-    }, 20);
+    }, w);
   }
 
   /* ================================================================ */

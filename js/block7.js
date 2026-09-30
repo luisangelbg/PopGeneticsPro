@@ -64,7 +64,7 @@
     state.struct = B7.struct;
     B7.running = true;
     el('btnRunStruct').disabled = true; el('btnCancelStruct').style.display = '';
-    el('structProgress').style.display = '';
+    popBarStart('structProgress');
     setProgress(0, `0 of ${jobs.length} runs`);
     const t0 = performance.now();
     const onResult = (msg) => {
@@ -74,7 +74,8 @@
     const onDone = (cancelled) => {
       B7.running = false;
       el('btnRunStruct').disabled = false; el('btnCancelStruct').style.display = 'none';
-      el('structProgress').style.display = 'none';
+      if (cancelled || !B7.struct.results.length) el('structProgress').style.display = 'none';
+      else popBarEnd('structProgress', true, `${B7.struct.results.length} of ${jobs.length} runs done`);
       el('structTiming').textContent = `${B7.struct.results.length} runs in ${((performance.now() - t0) / 1000).toFixed(1)} s` + (cancelled ? ' (cancelled — showing the runs that finished)' : '');
       if (B7.struct.results.length) { summariseStructure(d); renderStructure(d); }
     };
@@ -286,7 +287,8 @@
     const d = state.data; if (!d) return;
     clearMessages('dapcMessages');
     const btn = el('btnRunDapc'); btn.disabled = true;
-    setTimeout(() => {
+    const w = popWork('Análisis discriminante de componentes principales (DAPC)', 'Discriminant analysis of principal components (DAPC)');
+    popAfterPaint(() => {
       try {
         const R = DAPC.dapc(d, { mode: el('dapcMode').value, Kmax: Number(el('dapcKmax').value) || 10, nPCA: Number(el('dapcNpca').value) || null, seed: Number(el('structSeed').value) || 1 });
         B7.dapc = R; state.dapc = R;
@@ -294,7 +296,7 @@
         el('dapcResults').style.display = '';
       } catch (e) { console.error(e); showMessage('dapcMessages', 'error', 'DAPC failed: ' + esc(e.message)); }
       finally { btn.disabled = false; }
-    }, 20);
+    }, w);
   }
   function renderDapc(d, R) {
     const L = R.lda;
@@ -357,16 +359,17 @@
     const d = state.data; if (!d) return;
     clearMessages('assignMessages');
     const btn = el('btnRunAssign'); btn.disabled = true;
-    setTimeout(() => {
+    const w = popWork('Pruebas de asignación', 'Assignment tests');
+    popAfterPaint(() => {
       try {
         const A = Assign.assignment(d, { method: el('assignMethod').value, sims: Number(el('assignSims').value) || 0, alpha: Number(el('assignAlpha').value) || 0.01, seed: Number(el('structSeed').value) || 1 });
-        if (!A) { showMessage('assignMessages', 'warning', 'Assignment needs at least two populations with five or more individuals.'); return; }
+        if (!A) { if (w) w._failed = true; showMessage('assignMessages', 'warning', 'Assignment needs at least two populations with five or more individuals.'); return; }
         B7.assign = A; state.assign = A;
         renderAssign(d, A);
         el('assignResults').style.display = '';
       } catch (e) { console.error(e); showMessage('assignMessages', 'error', 'Assignment failed: ' + esc(e.message)); }
       finally { btn.disabled = false; }
-    }, 20);
+    }, w);
   }
   function renderAssign(d, A) {
     const mis = A.rows.filter(r => r.best !== r.home);

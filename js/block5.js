@@ -52,7 +52,8 @@
     const btn = el('btnRunFst');
     btn.disabled = true; btn.textContent = 'Computing…';
     const t0 = performance.now();
-    setTimeout(() => {
+    const w = popWork('Diferenciación: F, AMOVA y comparaciones por pares', 'Differentiation: F-statistics, AMOVA and pairwise tests');
+    popAfterPaint(() => {
       try {
         R = Fst.compute(d, settings());
         state.fst = R;
@@ -63,7 +64,7 @@
         console.error(e);
         showMessage('fstMessages', 'error', 'The analysis failed: ' + esc(e.message));
       } finally { btn.disabled = false; btn.textContent = 'Compute differentiation'; }
-    }, 30);
+    }, w);
   }
 
   /* ================================================================ */

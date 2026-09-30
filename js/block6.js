@@ -72,7 +72,8 @@
     clearMessages('distMessages');
     const btn = el('btnRunDist'); btn.disabled = true; btn.textContent = 'Computing…';
     const t0 = performance.now();
-    setTimeout(() => {
+    const w = popWork('Distancias, ordenación y árboles', 'Distances, ordination and trees');
+    popAfterPaint(() => {
       try {
         R = GD.compute(d, settings());
         state.gd = R;
@@ -81,7 +82,7 @@
         el('distTiming').textContent = `computed in ${((performance.now() - t0) / 1000).toFixed(1)} s · seed ${R.opts.seed}`;
       } catch (e) { console.error(e); showMessage('distMessages', 'error', 'The analysis failed: ' + esc(e.message)); }
       finally { btn.disabled = false; btn.textContent = 'Compute distances, ordination and trees'; }
-    }, 30);
+    }, w);
   }
 
   /* ================================================================ */

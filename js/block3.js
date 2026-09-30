@@ -16,7 +16,8 @@
 
   function init() {
     if (!el('btnRunDiversity')) return;
-    el('btnRunDiversity').addEventListener('click', run);
+    /* from the button, with the waiting window (bootstrap over loci can take a while) */
+    el('btnRunDiversity').addEventListener('click', () => popAfterPaint(run, popWork('Diversidad genética', 'Genetic diversity')));
     el('divLocusIndex').addEventListener('change', renderLocusTable);
     el('btnFreqCSV').addEventListener('click', downloadFreqs);
     el('btnDivCSV').addEventListener('click', downloadSummary);

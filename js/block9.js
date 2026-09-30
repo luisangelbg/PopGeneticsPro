@@ -57,7 +57,8 @@
     clearMessages('demogMessages');
     const btn = el('btnRunDemog'); btn.disabled = true; btn.textContent = 'Computing…';
     const t0 = performance.now();
-    setTimeout(() => {
+    const w = popWork('Demografía, tamaño efectivo y estructura espacial', 'Demography, effective size and spatial structure');
+    popAfterPaint(() => {
       try {
         R = Demog.compute(d, settings());
         state.demog = R;
@@ -66,7 +67,7 @@
         el('demogTiming').textContent = `computed in ${((performance.now() - t0) / 1000).toFixed(1)} s · seed ${R.opts.seed}`;
       } catch (e) { console.error(e); showMessage('demogMessages', 'error', 'The analysis failed: ' + esc(e.message)); }
       finally { btn.disabled = false; btn.textContent = 'Run the analyses'; }
-    }, 30);
+    }, w);
   }
 
   const f3 = v => (v == null || !isFinite(v)) ? (v === Infinity ? '∞' : '—') : v.toFixed(3);

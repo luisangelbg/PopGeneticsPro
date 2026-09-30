@@ -87,8 +87,53 @@ function showMessage(container, type, text) {
   const div = mk('div', { class: 'msg msg-' + type }, text);
   /* errors and warnings are announced to screen readers */
   if (window.LABG) LABG.messageRole(div, type);
+  /* an error shown while a waiting window is open: that wait ends without a check mark */
+  if (type === 'error' && popWork.current) popWork.current._failed = true;
   container.appendChild(div);
   return div;
+}
+
+/* Waiting window of the suite (LABG.work) for the analyses that take over the page.
+   popWork(title) opens it; popAfterPaint(f, w) lets the browser paint it, runs f (the
+   same body the analysis always had) and then closes it: with the check mark over the
+   LABG isotype, or without it when f showed an error. Without labg-core.js (the test
+   pages) it is a plain setTimeout, as before. */
+function popWork(es, en) {
+  if (!window.LABG || !LABG.work) return null;
+  const w = LABG.work({ title: LABG.t(es, en || es), delay: 300 });
+  popWork.current = w;
+  return w;
+}
+popWork.current = null;
+
+/* The progress bars of the jobs that run in the background (STRUCTURE, the dating
+   MCMC): when the job ends the bar fills, turns green and a check mark pops at its
+   end (or red with a cross), stays a moment and hides. popBarStart clears a previous
+   ending. */
+function popBarStart(id) {
+  const b = el(id); if (!b) return;
+  clearTimeout(b._hide); b.classList.remove('is-done', 'is-failed'); b.style.display = '';
+}
+function popBarEnd(id, ok, text) {
+  const b = el(id); if (!b) return;
+  if (!b.querySelector('.lw-imark')) {
+    const m = mk('span', { class: 'lw-imark', 'aria-hidden': 'true' });
+    m.innerHTML = '<svg viewBox="0 0 52 52"><circle class="lw-disc" cx="26" cy="26" r="26"/><path class="lw-check" d="M14.5 27.5l8 8L38 19"/><path class="lw-cross" d="M18 18L34 34M34 18L18 34"/></svg>';
+    b.appendChild(m);
+  }
+  const t = b.querySelector('.progress-text'); if (t && text) t.textContent = text;
+  b.classList.add(ok === false ? 'is-failed' : 'is-done');
+  if (window.LABG && text) LABG.announce(text);
+  clearTimeout(b._hide); b._hide = setTimeout(() => { b.style.display = 'none'; }, 2600);
+}
+function popAfterPaint(f, w) {
+  const done = () => {
+    if (popWork.current === w) popWork.current = null;
+    if (w && !w.ended) { if (w._failed) w.close(); else w.done(); }
+  };
+  return (window.LABG ? LABG.nextPaint() : new Promise(r => setTimeout(r, 30)))
+    .then(f)
+    .then(done, e => { console.error(e); if (w) w._failed = true; done(); });
 }
 function clearMessages(container) {
   if (typeof container === 'string') container = el(container);
@@ -288,6 +333,18 @@ function refreshStepFooters() {
    app itself (a page that loads core.js without labg-core.js skips it). */
 document.addEventListener('DOMContentLoaded', () => {
   if (!window.LABG) return;
+  /* the waiting window: groups forming, as populations do, and a few true things about the app */
+  if (LABG.work) {
+    LABG.work.scene = 'cluster';
+    LABG.work.tips = [
+      ['El diseñador de plantillas del Bloque 2 arma una hoja lista para capturar tus datos.',
+        'The template designer in Block 2 builds a sheet ready for your data.'],
+      ['El estudio de árboles de los Bloques 6 y 8 añade imágenes a las puntas.',
+        'The tree studio in Blocks 6 and 8 adds pictures to the tips.'],
+      ['El Bloque 10 reúne todo en un informe HTML y un paquete .zip que lo reproduce.',
+        'Block 10 gathers everything into an HTML report and a .zip package that reproduces it.'],
+    ];
+  }
   LABG.theme.init('popgeneticspro.theme');
   const tb = el('themeBtn');
   if (tb) tb.addEventListener('click', () => LABG.theme.toggle());
