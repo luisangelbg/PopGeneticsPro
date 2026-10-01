@@ -192,6 +192,8 @@ Fig.text = (x, y, str, o) => {
     'stroke-linejoin': o.halo ? 'round' : null,
     'paint-order': o.halo ? 'stroke fill' : null,
     x, y,
+    'data-role': o.role === 'tick' ? 'tick' : o.role === 'axis' ? 'lab' : null,
+    'data-li': o.li != null ? o.li : null,
     'font-family': o.font || Fig.fonts.sans,
     'font-size': +size.toFixed(2),
     'font-weight': o.weight || 'normal',
@@ -264,6 +266,8 @@ Fig.frame = (svg, cfg, o) => {
   if (!cfg.title) m.top -= 22;
   if (cfg.subtitle) m.top += 16;
   const x0 = m.left, x1 = W - m.right, y0 = m.top, y1 = H - m.bottom;
+  /* what the figure editor needs to find its way: the plot area */
+  svg.dataset.plot = `${x0} ${y0} ${x1 - x0} ${y1 - y0}`;
   const g = Fig.g({ 'font-family': font });
   svg.appendChild(g);
   if (cfg.title) g.appendChild(Fig.text(W / 2, 26, cfg.title, { size: 17, weight: 'bold', anchor: 'middle', fill: t.fg, font, role: 'title' }));
@@ -273,34 +277,36 @@ Fig.frame = (svg, cfg, o) => {
 /* draw linear y axis with grid; sc = Fig.scaleLinear; f = frame */
 Fig.axisY = (f, sc, cfg, o) => {
   o = o || {};
+  { const S = f.g.ownerSVGElement; if (S && sc.domain && Math.abs(sc(sc.domain[0]) - f.y1) < 1 && Math.abs(sc(sc.domain[1]) - f.y0) < 1) S.dataset.yr = sc.domain[0] + ' ' + sc.domain[1]; }
   const ticks = o.ticks || Fig.ticks(sc.domain[0], sc.domain[1], o.count || 6);
   const g = Fig.g();
   ticks.forEach(v => {
     if (v < sc.domain[0] - 1e-9 || v > sc.domain[1] + 1e-9) return;
     const y = sc(v);
     if (cfg.grid !== false && f.t.grid !== 'none')
-      g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x1, y1: y, y2: y, stroke: f.t.grid, 'stroke-width': 1, 'stroke-dasharray': cfg.gridDash ? '3 3' : null }));
-    g.appendChild(Fig.el('line', { x1: f.x0 - 5, x2: f.x0, y1: y, y2: y, stroke: f.t.axis, 'stroke-width': 1 }));
+      g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x1, y1: y, y2: y, stroke: f.t.grid, 'data-role': 'grid', 'stroke-width': 1, 'stroke-dasharray': cfg.gridDash ? '3 3' : null }));
+    g.appendChild(Fig.el('line', { x1: f.x0 - 5, x2: f.x0, y1: y, y2: y, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1 }));
     g.appendChild(Fig.text(f.x0 - 9, y + 4, o.fmt ? o.fmt(v) : Fig.fmtTick(v), { size: 11, anchor: 'end', fill: f.t.fg, font: f.font, role: 'tick' }));
   });
-  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x0, y1: f.y0, y2: f.y1, stroke: f.t.axis, 'stroke-width': 1.2 }));
+  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x0, y1: f.y0, y2: f.y1, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1.2 }));
   if (cfg.ylab) g.appendChild(Fig.text(20, (f.y0 + f.y1) / 2, cfg.ylab, { size: 13, anchor: 'middle', fill: f.t.fg, font: f.font, rotate: -90, role: 'axis', weight: cfg.axisBold ? 'bold' : 'normal' }));
   f.g.appendChild(g);
   return g;
 };
 Fig.axisX = (f, sc, cfg, o) => {
   o = o || {};
+  { const S = f.g.ownerSVGElement; if (S && sc.domain && Math.abs(sc(sc.domain[0]) - f.x0) < 1 && Math.abs(sc(sc.domain[1]) - f.x1) < 1) S.dataset.xr = sc.domain[0] + ' ' + sc.domain[1]; }
   const ticks = o.ticks || Fig.ticks(sc.domain[0], sc.domain[1], o.count || 6);
   const g = Fig.g();
   ticks.forEach(v => {
     if (v < sc.domain[0] - 1e-9 || v > sc.domain[1] + 1e-9) return;
     const x = sc(v);
     if (cfg.grid !== false && f.t.grid !== 'none' && o.grid !== false)
-      g.appendChild(Fig.el('line', { x1: x, x2: x, y1: f.y0, y2: f.y1, stroke: f.t.grid, 'stroke-width': 1, 'stroke-dasharray': cfg.gridDash ? '3 3' : null }));
-    g.appendChild(Fig.el('line', { x1: x, x2: x, y1: f.y1, y2: f.y1 + 5, stroke: f.t.axis, 'stroke-width': 1 }));
+      g.appendChild(Fig.el('line', { x1: x, x2: x, y1: f.y0, y2: f.y1, stroke: f.t.grid, 'data-role': 'grid', 'stroke-width': 1, 'stroke-dasharray': cfg.gridDash ? '3 3' : null }));
+    g.appendChild(Fig.el('line', { x1: x, x2: x, y1: f.y1, y2: f.y1 + 5, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1 }));
     g.appendChild(Fig.text(x, f.y1 + 18, o.fmt ? o.fmt(v) : Fig.fmtTick(v), { size: 11, anchor: 'middle', fill: f.t.fg, font: f.font, role: 'tick' }));
   });
-  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x1, y1: f.y1, y2: f.y1, stroke: f.t.axis, 'stroke-width': 1.2 }));
+  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x1, y1: f.y1, y2: f.y1, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1.2 }));
   if (cfg.xlab) g.appendChild(Fig.text((f.x0 + f.x1) / 2, f.y1 + 44, cfg.xlab, { size: 13, anchor: 'middle', fill: f.t.fg, font: f.font, role: 'axis', weight: cfg.axisBold ? 'bold' : 'normal' }));
   f.g.appendChild(g);
   return g;
@@ -361,7 +367,7 @@ Fig.axisXBand = (f, band, labels, cfg, o) => {
   const g = Fig.g();
   labels.forEach((lab, i) => {
     const x = band.center(i);
-    g.appendChild(Fig.el('line', { x1: x, x2: x, y1: f.y1, y2: f.y1 + 5, stroke: f.t.axis, 'stroke-width': 1 }));
+    g.appendChild(Fig.el('line', { x1: x, x2: x, y1: f.y1, y2: f.y1 + 5, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1 }));
     if (String(lab) === '') return;
     if (L.angle === 0) {
       const ls = L.lines ? L.lines[i] : [String(lab)];
@@ -373,7 +379,7 @@ Fig.axisXBand = (f, band, labels, cfg, o) => {
       g.appendChild(Fig.text(x + L.size * (L.angle === -90 ? 0.35 : 0.25), f.y1 + 12, String(lab), { size: 11, anchor: 'end', fill: f.t.fg, font: f.font, role: 'tick', rotate: L.angle }));
     }
   });
-  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x1, y1: f.y1, y2: f.y1, stroke: f.t.axis, 'stroke-width': 1.2 }));
+  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x1, y1: f.y1, y2: f.y1, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1.2 }));
   if (cfg.xlab) g.appendChild(Fig.text((f.x0 + f.x1) / 2, f.y1 + L.depth + 18 * Fig.fs('axis'), cfg.xlab, { size: 13, anchor: 'middle', fill: f.t.fg, font: f.font, role: 'axis', weight: cfg.axisBold ? 'bold' : 'normal' }));
   f.g.appendChild(g);
   return g;
@@ -385,11 +391,11 @@ Fig.axisYBand = (f, band, labels, cfg) => {
   let longest = 0;
   labels.forEach((lab, i) => {
     const y = band.center(i);
-    g.appendChild(Fig.el('line', { x1: f.x0 - 5, x2: f.x0, y1: y, y2: y, stroke: f.t.axis, 'stroke-width': 1 }));
+    g.appendChild(Fig.el('line', { x1: f.x0 - 5, x2: f.x0, y1: y, y2: y, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1 }));
     g.appendChild(Fig.text(f.x0 - 9, y, String(lab), { size: 11, anchor: 'end', baseline: 'central', fill: f.t.fg, font: f.font, role: 'tick' }));
     longest = Math.max(longest, Fig.measure(String(lab), 11 * Fig.fs('tick'), f.font));
   });
-  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x0, y1: f.y0, y2: f.y1, stroke: f.t.axis, 'stroke-width': 1.2 }));
+  g.appendChild(Fig.el('line', { x1: f.x0, x2: f.x0, y1: f.y0, y2: f.y1, stroke: f.t.axis, 'data-role': 'axis', 'stroke-width': 1.2 }));
   if (cfg.xlab) g.appendChild(Fig.text(f.x0 - longest - 24 * Fig.fs('axis'), (f.y0 + f.y1) / 2, cfg.xlab, { size: 13, anchor: 'middle', fill: f.t.fg, font: f.font, rotate: -90, role: 'axis', weight: cfg.axisBold ? 'bold' : 'normal' }));
   f.g.appendChild(g);
   return g;
@@ -566,7 +572,7 @@ Fig.repelLabels = (g, f, items, o) => {
 /* legend: items [{label, color, shape?}] placed at top-right inside plot */
 Fig.legend = (f, items, cfg, o) => {
   o = o || {};
-  const g = Fig.g();
+  const g = Fig.g({ 'data-role': 'legend' });   /* tagged, with its entries, for the figure editor */
   const fs = 11 * Fig.fs('legend');
   const lh = fs * 1.55;
   const pos = cfg.legendPos || o.pos || 'right';
@@ -581,20 +587,20 @@ Fig.legend = (f, items, cfg, o) => {
   else { x = f.x1 - longest; y = f.y0 + 8; }
   if (pos === 'bottom') {
     let cx = x;
-    items.forEach(it => {
-      g.appendChild(Fig.el('rect', { x: cx, y: y - fs * 0.85, width: fs, height: fs, fill: it.color, rx: 2 }));
-      const tx = Fig.text(cx + fs + 5, y, it.label, { size: 11, fill: f.t.fg, font: f.font, role: 'legend' });
+    items.forEach((it, i) => {
+      g.appendChild(Fig.el('rect', { 'data-li': i, x: cx, y: y - fs * 0.85, width: fs, height: fs, fill: it.color, rx: 2 }));
+      const tx = Fig.text(cx + fs + 5, y, it.label, { size: 11, fill: f.t.fg, font: f.font, role: 'legend', li: i });
       g.appendChild(tx);
       cx += fs + 10 + String(it.label).length * fs * 0.6 + 14;
     });
   } else {
-    if (o.box !== false) g.appendChild(Fig.el('rect', { x: x - 8, y: y - 6, width: longest + 4, height: items.length * lh + 8, fill: f.t.bg, stroke: f.t.grid === 'none' ? f.t.axis : f.t.grid, rx: 4, opacity: 0.92 }));
+    if (o.box !== false) g.appendChild(Fig.el('rect', { 'data-role': 'legend-box', x: x - 8, y: y - 6, width: longest + 4, height: items.length * lh + 8, fill: f.t.bg, stroke: f.t.grid === 'none' ? f.t.axis : f.t.grid, rx: 4, opacity: 0.92 }));
     items.forEach((it, i) => {
       const yy = y + i * lh + fs * 0.85;
-      if (it.shape === 'line') g.appendChild(Fig.el('line', { x1: x, x2: x + fs, y1: yy - fs * 0.35, y2: yy - fs * 0.35, stroke: it.color, 'stroke-width': 2.5 }));
-      else if (it.shape === 'circle') g.appendChild(Fig.el('circle', { cx: x + fs / 2, cy: yy - fs * 0.35, r: fs * 0.45, fill: it.color, stroke: it.stroke || null, 'stroke-width': it.stroke ? 1 : null }));
-      else g.appendChild(Fig.el('rect', { x, y: yy - fs * 0.85, width: fs, height: fs, fill: it.color, rx: 2 }));
-      g.appendChild(Fig.text(x + fs + 6, yy, it.label, { size: 11, fill: f.t.fg, font: f.font, role: 'legend' }));
+      if (it.shape === 'line') g.appendChild(Fig.el('line', { 'data-li': i, x1: x, x2: x + fs, y1: yy - fs * 0.35, y2: yy - fs * 0.35, stroke: it.color, 'stroke-width': 2.5 }));
+      else if (it.shape === 'circle') g.appendChild(Fig.el('circle', { 'data-li': i, cx: x + fs / 2, cy: yy - fs * 0.35, r: fs * 0.45, fill: it.color, stroke: it.stroke || null, 'stroke-width': it.stroke ? 1 : null }));
+      else g.appendChild(Fig.el('rect', { 'data-li': i, x, y: yy - fs * 0.85, width: fs, height: fs, fill: it.color, rx: 2 }));
+      g.appendChild(Fig.text(x + fs + 6, yy, it.label, { size: 11, fill: f.t.fg, font: f.font, role: 'legend', li: i }));
     });
   }
   f.g.appendChild(g);
