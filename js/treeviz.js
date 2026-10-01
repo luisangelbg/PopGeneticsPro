@@ -217,17 +217,20 @@ const TV = {};
     if (!items.length) return 0;
     const fs = 10.5 * Fig.fs('legend'), lh = fs * 1.7;
     let cx = x, cy = y, rows = 1;
-    const g = measureOnly ? null : Fig.g();
+    /* tagged for the figure studio; data-li numbers the entries, not the headings */
+    const g = measureOnly ? null : Fig.g({ 'data-role': 'legend' });
+    let li = 0;
     items.forEach(it => {
       const w = it.head ? est(it.head, fs) + 10 : fs + 6 + est(it.label, fs) + 14;
       if (cx + w > x + maxW && cx > x) { cx = x; cy += lh; rows++; }
       if (g) {
         if (it.head) g.appendChild(Fig.text(cx, cy, it.head + ':', { size: 10.5, weight: 'bold', fill: f.t.fg, font: f.font, role: 'legend' }));
         else {
-          if (it.shape === 'bar') g.appendChild(Fig.el('rect', { x: cx, y: cy - fs * 0.6, width: fs, height: fs * 0.45, fill: it.color, rx: 1 }));
-          else if (it.shape === 'diamond') g.appendChild(Fig.marker(cx + fs / 2, cy - fs * 0.35, fs * 0.4, 'diamond', { fill: it.color }));
-          else g.appendChild(Fig.el('rect', { x: cx, y: cy - fs * 0.8, width: fs, height: fs, rx: 2.5, fill: it.color }));
-          g.appendChild(Fig.text(cx + fs + 6, cy, it.label, { size: 10.5, fill: f.t.fg, font: f.font, role: 'legend' }));
+          if (it.shape === 'bar') g.appendChild(Fig.el('rect', { x: cx, y: cy - fs * 0.6, width: fs, height: fs * 0.45, fill: it.color, rx: 1, 'data-li': li }));
+          else if (it.shape === 'diamond') g.appendChild(Fig.marker(cx + fs / 2, cy - fs * 0.35, fs * 0.4, 'diamond', { fill: it.color, 'data-li': li }));
+          else g.appendChild(Fig.el('rect', { x: cx, y: cy - fs * 0.8, width: fs, height: fs, rx: 2.5, fill: it.color, 'data-li': li }));
+          const tx = g.appendChild(Fig.text(cx + fs + 6, cy, it.label, { size: 10.5, fill: f.t.fg, font: f.font, role: 'legend' }));
+          tx.setAttribute('data-li', li++);
         }
       }
       cx += w;
@@ -262,16 +265,19 @@ const TV = {};
     const pos = cfg.legendPos || 'topleft';
     const x = pos.includes('right') ? f.x1 - w : f.x0;
     const y = pos.includes('bottom') ? f.y1 - h : f.y0;
-    const g = Fig.g();
-    g.appendChild(Fig.el('rect', { x, y, width: w, height: h, rx: 6, fill: f.t.bg, opacity: 0.9 }));
+    /* tagged for the figure studio (legend, its box); data-li numbers the entries, not the headings */
+    const g = Fig.g({ 'data-role': 'legend' });
+    g.appendChild(Fig.el('rect', { x, y, width: w, height: h, rx: 6, fill: f.t.bg, opacity: 0.9, 'data-role': 'legend-box' }));
+    let li = 0;
     items.forEach((it, k) => {
       const yy = y + 8 + k * lh + fs * 0.85;
       if (it.head) { g.appendChild(Fig.text(x + 8, yy, it.head, { size: 10.5, weight: 'bold', fill: f.t.fg, font: f.font, role: 'legend' })); return; }
-      if (it.shape === 'bar') g.appendChild(Fig.el('rect', { x: x + 8, y: yy - fs * 0.6, width: fs, height: fs * 0.45, fill: it.color, rx: 1 }));
-      else if (it.shape === 'diamond') g.appendChild(Fig.marker(x + 8 + fs / 2, yy - fs * 0.35, fs * 0.4, 'diamond', { fill: it.color }));
-      else if (it.shape === 'dot') g.appendChild(Fig.el('circle', { cx: x + 8 + fs / 2, cy: yy - fs * 0.35, r: fs * 0.3, fill: it.color, stroke: f.t.fg }));
-      else g.appendChild(Fig.el('rect', { x: x + 8, y: yy - fs * 0.8, width: fs, height: fs, rx: 2.5, fill: it.color }));
-      g.appendChild(Fig.text(x + 14 + fs, yy, it.label, { size: 10.5, fill: f.t.fg, font: f.font, role: 'legend', italic: !!it.italic }));
+      if (it.shape === 'bar') g.appendChild(Fig.el('rect', { x: x + 8, y: yy - fs * 0.6, width: fs, height: fs * 0.45, fill: it.color, rx: 1, 'data-li': li }));
+      else if (it.shape === 'diamond') g.appendChild(Fig.marker(x + 8 + fs / 2, yy - fs * 0.35, fs * 0.4, 'diamond', { fill: it.color, 'data-li': li }));
+      else if (it.shape === 'dot') g.appendChild(Fig.el('circle', { cx: x + 8 + fs / 2, cy: yy - fs * 0.35, r: fs * 0.3, fill: it.color, stroke: f.t.fg, 'data-li': li }));
+      else g.appendChild(Fig.el('rect', { x: x + 8, y: yy - fs * 0.8, width: fs, height: fs, rx: 2.5, fill: it.color, 'data-li': li }));
+      const tx = g.appendChild(Fig.text(x + 14 + fs, yy, it.label, { size: 10.5, fill: f.t.fg, font: f.font, role: 'legend', italic: !!it.italic }));
+      tx.setAttribute('data-li', li++);
     });
     f.g.appendChild(g);
   }

@@ -27,17 +27,21 @@ P5.amovaBar = (cfg, A) => {
     x += w;
   });
   g.appendChild(Fig.el('rect', { x: f.x0, y: barY, width: W, height: barH, fill: 'none', stroke: f.t.axis, 'stroke-width': 1 }));
+  /* for the figure studio: the bar is the plot area */
+  svg.setAttribute('data-plot', [f.x0, barY, W, barH].map(v => +(+v).toFixed(2)).join(' '));
   /* legend rows with Φ and P */
   const ly = barY + barH + 34, lh = 26;
+  /* one group for the figure studio, data-li per row; the footnote goes with it */
+  const lg = g.appendChild(Fig.g({ 'data-role': 'legend' }));
   shown.forEach((p, i) => {
     const col = Fig.color(cfg.palette, i), yy = ly + i * lh;
-    g.appendChild(Fig.el('rect', { x: f.x0, y: yy - 11, width: 14, height: 14, fill: col, rx: 3 }));
-    g.appendChild(Fig.text(f.x0 + 22, yy, `${p.label}: ${(p.pct * 100).toFixed(1)}%` + (p.pct < 0 ? ' (negative component, read as 0)' : ''), { size: 12, fill: f.t.fg, font: f.font, role: 'label' }));
+    lg.appendChild(Fig.el('rect', { x: f.x0, y: yy - 11, width: 14, height: 14, fill: col, rx: 3, 'data-li': i }));
+    lg.appendChild(Fig.text(f.x0 + 22, yy, `${p.label}: ${(p.pct * 100).toFixed(1)}%` + (p.pct < 0 ? ' (negative component, read as 0)' : ''), { size: 12, fill: f.t.fg, font: f.font, role: 'label' })).setAttribute('data-li', i);
     const right = p.phi + (p.p != null ? `   P = ${p.p < 0.001 ? '< 0.001' : p.p.toFixed(3)}${p.p < 0.05 ? ' *' : ''}` : '');
     /* ink, not a palette colour, so the Φ of one row is never read as belonging to another segment */
-    g.appendChild(Fig.text(f.x1, yy, right, { size: 12, anchor: 'end', fill: p.p != null && p.p < 0.05 ? f.t.fg : f.t.muted, font: f.font, weight: p.p != null && p.p < 0.05 ? 'bold' : 'normal', role: 'label' }));
+    lg.appendChild(Fig.text(f.x1, yy, right, { size: 12, anchor: 'end', fill: p.p != null && p.p < 0.05 ? f.t.fg : f.t.muted, font: f.font, weight: p.p != null && p.p < 0.05 ? 'bold' : 'normal', role: 'label' })).setAttribute('data-li', i);
   });
-  g.appendChild(Fig.text(f.x0, ly + shown.length * lh + 6, `${A.B} permutations · ${A.loci} ${A.loci === 1 ? 'locus' : 'loci'} · ${A.N} individuals in ${A.P} populations${A.hier ? ' and ' + A.G + ' regions' : ''}` + (shown.some(p => p.p != null && p.p < 0.05) ? ' · * P < 0.05' : ''), { size: 10, fill: f.t.muted, font: f.font, role: 'label' }));
+  lg.appendChild(Fig.text(f.x0, ly + shown.length * lh + 6, `${A.B} permutations · ${A.loci} ${A.loci === 1 ? 'locus' : 'loci'} · ${A.N} individuals in ${A.P} populations${A.hier ? ' and ' + A.G + ' regions' : ''}` + (shown.some(p => p.p != null && p.p < 0.05) ? ' · * P < 0.05' : ''), { size: 10, fill: f.t.muted, font: f.font, role: 'label' }));
   f.g.appendChild(g);
   return svg;
 };
@@ -77,9 +81,12 @@ P5.pairHeat = (cfg, R) => {
     g.appendChild(Fig.text(f.x0 + i * cell + cell / 2, f.y0 + n * cell + 8, nm, { size: 11, anchor: 'end', fill: f.t.fg, font: f.font, rotate: -45, role: 'tick' }));
   });
   const bx = f.x0 + n * cell + 24, bh = Math.min(180, n * cell);
-  for (let k = 0; k < 40; k++) g.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
-  [[stat === 'Nm' ? vmax.toFixed(1) : vmax.toFixed(2), f.y0 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => g.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
-  g.appendChild(Fig.text(bx + 6, f.y0 - 8, statLabel(stat, R), { size: 11, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
+  /* for the figure studio: the cells are the plot area and the colour bar is one group it can move */
+  svg.setAttribute('data-plot', [f.x0, f.y0, n * cell, n * cell].map(v => +(+v).toFixed(2)).join(' '));
+  const cb = g.appendChild(Fig.g({ 'data-legend': 'colorbar' }));
+  for (let k = 0; k < 40; k++) cb.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
+  [[stat === 'Nm' ? vmax.toFixed(1) : vmax.toFixed(2), f.y0 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => cb.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
+  cb.appendChild(Fig.text(bx + 6, f.y0 - 8, statLabel(stat, R), { size: 11, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
   if (cfg.upper !== 'none') g.appendChild(Fig.text(f.x0 + n * cell, f.y0 - 8, 'above the diagonal: P (Holm-corrected)', { size: 10, anchor: 'end', fill: f.t.muted, font: f.font, role: 'label' }));
   f.g.appendChild(g);
   return svg;

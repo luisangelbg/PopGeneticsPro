@@ -121,10 +121,12 @@ P3.freqHeat = (cfg, R) => {
     { size: 10, anchor: 'end', fill: f.t.fg, font: f.font, rotate: -45, role: 'tick' })));
   /* colour bar */
   const bx = f.x1 + 22, bh = Math.min(180, f.y1 - f.y0);
-  for (let k = 0; k < 40; k++) g.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
+  /* the colour bar is one group the figure studio can move */
+  const cb = g.appendChild(Fig.g({ 'data-legend': 'colorbar' }));
+  for (let k = 0; k < 40; k++) cb.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
   [['1.0', f.y0 + 4], ['0.5', f.y0 + bh / 2 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) =>
-    g.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
-  g.appendChild(Fig.text(bx + 6, f.y0 - 8, 'freq', { size: 10, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
+    cb.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
+  cb.appendChild(Fig.text(bx + 6, f.y0 - 8, 'freq', { size: 10, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
   f.g.appendChild(g);
   if (trimmed) f.g.appendChild(Fig.text(f.x0, f.H - 8, `showing the ${maxRows} most frequent alleles of ${R.freqRows.length}`, { size: 10, fill: f.t.muted, font: f.font, role: 'label' }));
   return svg;
@@ -243,10 +245,12 @@ P3.morphHeat = (cfg, R) => {
   });
   pops.forEach((p, i) => g.appendChild(Fig.text(f.x0 + i * cw + cw / 2, f.y1 + 8, p, { size: 10.5, anchor: 'end', fill: f.t.fg, font: f.font, rotate: -45, role: 'tick' })));
   const bx = f.x1 + 24, bh = Math.min(160, f.y1 - f.y0);
-  for (let k = 0; k < 40; k++) g.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
+  /* colour bar, in one group the figure studio can move */
+  const cb = g.appendChild(Fig.g({ 'data-legend': 'colorbar' }));
+  for (let k = 0; k < 40; k++) cb.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
   [['1', f.y0 + 4], ['0.5', f.y0 + bh / 2 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) =>
-    g.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
-  g.appendChild(Fig.text(bx + 6, f.y0 - 8, "H′", { size: 10, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
+    cb.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
+  cb.appendChild(Fig.text(bx + 6, f.y0 - 8, "H′", { size: 10, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
   f.g.appendChild(g);
   return svg;
 };

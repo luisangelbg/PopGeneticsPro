@@ -270,8 +270,11 @@ P6.distHeat = (cfg, M) => {
     g.appendChild(Fig.text(f.x0 + k * cell + cell / 2, f.y0 + n * cell + 8, M.names[i], { size: Math.min(11, cell * 0.6), anchor: 'end', fill: f.t.fg, font: f.font, rotate: -45, role: 'tick' }));
   });
   const bx = f.x0 + n * cell + 24, bh = Math.min(180, n * cell);
-  for (let k = 0; k < 40; k++) g.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
-  [[vmax.toFixed(3), f.y0 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => g.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
+  /* for the figure studio: the cells are the plot area and the colour bar is one group it can move */
+  svg.setAttribute('data-plot', [f.x0, f.y0, n * cell, n * cell].map(v => +(+v).toFixed(2)).join(' '));
+  const cb = g.appendChild(Fig.g({ 'data-legend': 'colorbar' }));
+  for (let k = 0; k < 40; k++) cb.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
+  [[vmax.toFixed(3), f.y0 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => cb.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
   f.g.appendChild(g);
   return svg;
 };

@@ -143,9 +143,10 @@
     /* legend in the gap between the two panels, where no curve can cover it */
     const sub = t => `<tspan baseline-shift="sub" font-size="7">${t}</tspan>`;
     const ly = y0 + 14;
-    s += `<line x1="${x0}" y1="${ly - 3}" x2="${x0 + 14}" y2="${ly - 3}" stroke="var(--accent)" stroke-width="2.2"/><text x="${x0 + 18}" y="${ly}" font-size="9" fill="var(--accent)" font-weight="700">H${sub('T')} total</text>`;
-    s += `<line x1="${x0 + 80}" y1="${ly - 3}" x2="${x0 + 94}" y2="${ly - 3}" stroke="var(--primary)" stroke-width="2.2"/><text x="${x0 + 98}" y="${ly}" font-size="9" fill="var(--primary)" font-weight="700">H${sub('S')} within demes</text>`;
-    s += `<line x1="${x0 + 196}" y1="${ly - 3}" x2="${x0 + 210}" y2="${ly - 3}" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="3 3"/><text x="${x0 + 214}" y="${ly}" font-size="8" fill="var(--text-muted)">drift only: H₀(1−1/2Nₑ)ᵗ</text>`;
+    /* one group for the figure studio, data-li per entry */
+    s += `<g data-role="legend"><line x1="${x0}" y1="${ly - 3}" x2="${x0 + 14}" y2="${ly - 3}" stroke="var(--accent)" stroke-width="2.2" data-li="0"/><text x="${x0 + 18}" y="${ly}" font-size="9" fill="var(--accent)" font-weight="700" data-li="0">H${sub('T')} total</text>`;
+    s += `<line x1="${x0 + 80}" y1="${ly - 3}" x2="${x0 + 94}" y2="${ly - 3}" stroke="var(--primary)" stroke-width="2.2" data-li="1"/><text x="${x0 + 98}" y="${ly}" font-size="9" fill="var(--primary)" font-weight="700" data-li="1">H${sub('S')} within demes</text>`;
+    s += `<line x1="${x0 + 196}" y1="${ly - 3}" x2="${x0 + 210}" y2="${ly - 3}" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="3 3" data-li="2"/><text x="${x0 + 214}" y="${ly}" font-size="8" fill="var(--text-muted)" data-li="2">drift only: H₀(1−1/2Nₑ)ᵗ</text></g>`;
 
     /* F_ST panel underneath */
     const fy0 = 258, fy1 = 182;

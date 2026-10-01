@@ -139,8 +139,10 @@ P4.nullHeat = (cfg, R) => {
   }
   R.pops.forEach((p, i) => g.appendChild(Fig.text(f.x0 + i * cw + cw / 2, f.y1 + 8, p, { size: 10.5, anchor: 'end', fill: f.t.fg, font: f.font, rotate: -40, role: 'tick' })));
   const bx = f.x1 + 22, bh = Math.min(160, f.y1 - f.y0);
-  for (let k = 0; k < 40; k++) g.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
-  [[top.toFixed(2) + '+', f.y0 + 4], [(top / 2).toFixed(2), f.y0 + bh / 2 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => g.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
+  /* colour bar, in one group the figure studio can move */
+  const cb = g.appendChild(Fig.g({ 'data-legend': 'colorbar' }));
+  for (let k = 0; k < 40; k++) cb.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
+  [[top.toFixed(2) + '+', f.y0 + 4], [(top / 2).toFixed(2), f.y0 + bh / 2 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => cb.appendChild(Fig.text(bx + 18, yy, t, { size: 9, fill: f.t.fg, font: f.font, role: 'tick' })));
   f.g.appendChild(g);
   return svg;
 };
@@ -178,18 +180,22 @@ P4.ldTriangle = (cfg, R, pair) => {
     if (i > 0 && (i - 1) % every === 0) g.appendChild(Fig.text(f.x0 - 6, f.y0 + (i - 1) * cellFit + cellFit / 2 + tick * 0.35, nm, { size: tick, anchor: 'end', fill: f.t.fg, font: f.font, role: 'tick' }));
     if (i < nL - 1 && i % every === 0) g.appendChild(Fig.text(f.x0 + i * cellFit + cellFit / 2, f.y0 + n * cellFit + 8, nm, { size: tick, anchor: 'end', fill: f.t.fg, font: f.font, rotate: -45, role: 'tick' }));
   });
+  /* for the figure studio: the cells are the plot area; the "not defined" key, the colour bar
+     and the star note are one group it can move */
+  svg.setAttribute('data-plot', [f.x0, f.y0, n * cellFit, n * cellFit].map(v => +(+v).toFixed(2)).join(' '));
+  const cb = g.appendChild(Fig.g({ 'data-legend': 'colorbar' }));
   if (pair.pairs.some(p => (stat === 'rd' ? p.rd : stat === 'r2' ? p.r2 : p.Dprime) == null)) {
     const yy = f.y0 + Math.min(180, n * cellFit) + 44;
-    g.appendChild(Fig.el('rect', { x: f.x0 + n * cellFit + 24, y: yy - 9, width: 11, height: 11, fill: Fig.alpha(f.t.fg, 0.1) }));
-    g.appendChild(Fig.text(f.x0 + n * cellFit + 40, yy, 'not defined', { size: 9.5, fill: f.t.muted, font: f.font, role: 'label' }));
-    g.appendChild(Fig.text(f.x0 + n * cellFit + 40, yy + 12, '(monomorphic)', { size: 9.5, fill: f.t.muted, font: f.font, role: 'label' }));
+    cb.appendChild(Fig.el('rect', { x: f.x0 + n * cellFit + 24, y: yy - 9, width: 11, height: 11, fill: Fig.alpha(f.t.fg, 0.1) }));
+    cb.appendChild(Fig.text(f.x0 + n * cellFit + 40, yy, 'not defined', { size: 9.5, fill: f.t.muted, font: f.font, role: 'label' }));
+    cb.appendChild(Fig.text(f.x0 + n * cellFit + 40, yy + 12, '(monomorphic)', { size: 9.5, fill: f.t.muted, font: f.font, role: 'label' }));
   }
   const bx = f.x0 + n * cellFit + 24, bh = Math.min(180, n * cellFit);
-  for (let k = 0; k < 40; k++) g.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
-  [[scaleMax.toFixed(2), f.y0 + 4], [(scaleMax / 2).toFixed(2), f.y0 + bh / 2 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => g.appendChild(Fig.text(bx + 18, yy, t, { size: 9.5, fill: f.t.fg, font: f.font, role: 'tick' })));
-  g.appendChild(Fig.text(bx + 6, f.y0 - 10, stat === 'rd' ? 'r̄_d' : stat === 'r2' ? 'r²' : "D′", { size: 11.5, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
+  for (let k = 0; k < 40; k++) cb.appendChild(Fig.el('rect', { x: bx, y: f.y0 + k * bh / 40, width: 13, height: bh / 40 + 0.6, fill: cmap(1 - k / 39) }));
+  [[scaleMax.toFixed(2), f.y0 + 4], [(scaleMax / 2).toFixed(2), f.y0 + bh / 2 + 4], ['0', f.y0 + bh + 4]].forEach(([t, yy]) => cb.appendChild(Fig.text(bx + 18, yy, t, { size: 9.5, fill: f.t.fg, font: f.font, role: 'tick' })));
+  cb.appendChild(Fig.text(bx + 6, f.y0 - 10, stat === 'rd' ? 'r̄_d' : stat === 'r2' ? 'r²' : "D′", { size: 11.5, anchor: 'middle', fill: f.t.muted, font: f.font, role: 'label' }));
   if (cfg.stars !== false && pair.pairs.some(p => { const pv = stat === 'rd' ? p.pAdj : p.pChi; return pv != null && pv < cfg.alpha; }))
-    g.appendChild(Fig.text(bx - 6, f.y0 + bh + 80, stat === 'rd' ? '* significant after correction' : '* χ² P below α', { size: 9.5, fill: f.t.muted, font: f.font, role: 'label' }));
+    cb.appendChild(Fig.text(bx - 6, f.y0 + bh + 80, stat === 'rd' ? '* significant after correction' : '* χ² P below α', { size: 9.5, fill: f.t.muted, font: f.font, role: 'label' }));
   f.g.appendChild(g);
   return svg;
 };
