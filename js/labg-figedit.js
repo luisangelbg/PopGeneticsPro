@@ -1,6 +1,6 @@
 /* LABG Suite — Copyright (C) 2026 Luis Ángel Barrera-Guzmán.
    Free software under the GNU General Public License, version 3; see LICENSE. */
-/* LABG Suite — the editor of each figure (common module).
+/* LABG Suite — Editor ✎ LABG v1.0.0: the editor of each figure (common module).
 
    A ✎ button on every figure opens a floating panel that works on THAT figure,
    the way a plotting program does:
@@ -38,6 +38,7 @@
 
 (function () {
   'use strict';
+  const VERSION = '1.0.0';
   if (window.FigEdit && window.FigEdit.__labg) return;
   const me = document.currentScript;
   const dset = me ? me.dataset : {};
@@ -1097,7 +1098,7 @@ svg.fe-editing [data-fe-drag] text{cursor:move}
     (document.head || document.documentElement).appendChild(s);
   }
 
-  const FigEdit = { __labg: true, config: CFG, apply, applyTo, bakeString, strip, decorate, show, hide, reset, addNote, summary, load, FONTS, POS, DASH,
+  const FigEdit = { __labg: true, version: VERSION, config: CFG, apply, applyTo, bakeString, strip, decorate, show, hide, reset, addNote, summary, load, FONTS, POS, DASH,
     get: id => edits(id), has, all: () => JSON.parse(JSON.stringify(E)), save, keyOf, findSvg, figures,
     textsOf, seriesOf, legendOf, axisTitles, toHex, _isEmpty: isEmpty, _render: () => { if (panel && cur) render(); }, _cur: () => cur };
   window.FigEdit = FigEdit;
