@@ -157,15 +157,55 @@ S.betainc = (x, a, b) => {
   };
   return x < (a + 1) / (a + b + 2) ? bt * cf(x, a, b) / a : 1 - bt * cf(1 - x, b, a) / b;
 };
+/* erf and erfc to double precision: the rational Chebyshev approximations of Cody (1969),
+   Mathematics of Computation 23: 631–637 (erfc directly, so the normal tails keep their
+   relative precision) */
+const ERF = {
+  a: [3.16112374387056560e00, 1.13864154151050156e02, 3.77485237685302021e02, 3.20937758913846947e03, 1.85777706184603153e-1],
+  b: [2.36012909523441209e01, 2.44024637934444173e02, 1.28261652607737228e03, 2.84423683343917062e03],
+  c: [5.64188496988670089e-1, 8.88314979438837594e00, 6.61191906371416295e01, 2.98635138197400131e02, 8.81952221241769090e02, 1.71204761263407058e03, 2.05107837782607147e03, 1.23033935479799725e03, 2.15311535474403846e-8],
+  d: [1.57449261107098347e01, 1.17693950891312499e02, 5.37181101862009858e02, 1.62138957456669019e03, 3.29079923573345963e03, 4.36261909014324716e03, 3.43936767414372164e03, 1.23033935480374942e03],
+  p: [3.05326634961232344e-1, 3.60344899949804439e-1, 1.25781726111229246e-1, 1.60837851487422766e-2, 6.58749161529837803e-4, 1.63153871373020978e-2],
+  q: [2.56852019228982242e00, 1.87295284992346725e00, 5.27905102951428412e-1, 6.05183413124413191e-2, 2.33520497626869185e-3],
+};
+/* erfc(y) for y > 0.46875 */
+function erfcTail(y) {
+  let num, den, res;
+  if (y <= 4) {
+    num = ERF.c[8] * y; den = y;
+    for (let i = 0; i < 7; i++) { num = (num + ERF.c[i]) * y; den = (den + ERF.d[i]) * y; }
+    res = (num + ERF.c[7]) / (den + ERF.d[7]);
+  } else {
+    if (y >= 27) return 0;
+    const z = 1 / (y * y);
+    num = ERF.p[5] * z; den = z;
+    for (let i = 0; i < 4; i++) { num = (num + ERF.p[i]) * z; den = (den + ERF.q[i]) * z; }
+    res = z * (num + ERF.p[4]) / (den + ERF.q[4]);
+    res = (5.6418958354775628695e-1 - res) / y;
+  }
+  const ysq = Math.trunc(y * 16) / 16, del = (y - ysq) * (y + ysq);
+  return Math.exp(-ysq * ysq) * Math.exp(-del) * res;
+}
 S.erf = x => {
-  const t = 1 / (1 + 0.5 * Math.abs(x));
-  const y = 1 - t * Math.exp(-x * x - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 +
-    t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
-  return x >= 0 ? y : -y;
+  const y = Math.abs(x);
+  if (y <= 0.46875) {
+    const z = y > 1.11e-16 ? x * x : 0;
+    let num = ERF.a[4] * z, den = z;
+    for (let i = 0; i < 3; i++) { num = (num + ERF.a[i]) * z; den = (den + ERF.b[i]) * z; }
+    return x * (num + ERF.a[3]) / (den + ERF.b[3]);
+  }
+  const r = 1 - erfcTail(y);
+  return x < 0 ? -r : r;
+};
+S.erfc = x => {
+  const y = Math.abs(x);
+  if (y <= 0.46875) return 1 - S.erf(x);
+  const r = erfcTail(y);
+  return x < 0 ? 2 - r : r;
 };
 
 /* ================= distributions ================= */
-S.pnorm = (z, mu, sd) => { z = (z - (mu || 0)) / (sd || 1); return 0.5 * (1 + S.erf(z / Math.SQRT2)); };
+S.pnorm = (z, mu, sd) => { z = (z - (mu || 0)) / (sd || 1); return 0.5 * S.erfc(-z / Math.SQRT2); };
 S.dnorm = (x, mu, sd) => { mu = mu || 0; sd = sd || 1; const z = (x - mu) / sd; return Math.exp(-0.5 * z * z) / (sd * Math.sqrt(2 * Math.PI)); };
 /* Acklam's inverse normal, refined by one Newton step */
 S.qnorm = p => {
