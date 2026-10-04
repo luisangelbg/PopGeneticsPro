@@ -227,7 +227,7 @@ S.ptukey = (q, k, df) => {
     const qsqz = w * 0.5;
     if (qsqz >= bb) return 1;
     let pr_w = 2 * S.pnorm(qsqz) - 1;
-    pr_w = pr_w >= 1 ? 1 : Math.pow(pr_w, k);
+    pr_w = pr_w >= Math.exp(C2 / k) ? Math.pow(pr_w, k) : 0;   /* pr_w^k < 2e-22 counts as 0 */
     const wincr = w > wlar ? wincr1 : wincr2;
     let blb = qsqz;
     const binc = (bb - qsqz) / wincr;
@@ -255,7 +255,8 @@ S.ptukey = (q, k, df) => {
       blb = bub; bub += binc;
     }
     pr_w += einsum;
-    return pr_w <= Math.exp(C1 / k) ? 0 : Math.min(pr_w, 1);
+    /* one range (nranges = 1): the cut-off is exp(C1), not exp(C1 / k) */
+    return pr_w <= Math.exp(C1) ? 0 : Math.min(pr_w, 1);
   };
   if (df > 25000) return wprob(q);
   const nlegq = 16, ihalfq = 8;
