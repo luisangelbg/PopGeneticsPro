@@ -6,7 +6,9 @@
 **Population genetics for plants, from the field to the paper — without writing code.** All ten blocks are complete (version 1.0.1).
 
 **Online version:** https://luisangelbg.github.io/PopGeneticsPro/ ·
-**User manual (Spanish):** [PDF](manual/PopGeneticsPro_Manual_de_usuario_ES.pdf) ·
+**User manual (English):** [PDF](manual/en/PopGeneticsPro%20User%27s%20Manual%20%28English%29.pdf) ·
+[HTML](https://luisangelbg.github.io/PopGeneticsPro/manual/en/manual-completo.html)  
+**User manual (Spanish):** [PDF](manual/PopGeneticsPro%20User%27s%20Manual.pdf) ·
 [HTML](https://luisangelbg.github.io/PopGeneticsPro/manual/es/manual-completo.html)
 
 A web platform (HTML + JavaScript, no installation; it also runs offline from a local copy) that takes plant population genetic data —
@@ -131,9 +133,10 @@ supported.
 
 ## User manual
 
-A user manual in Spanish walks through every block with worked examples, the decision rules behind each
-interpretation, file formats, a glossary, troubleshooting and the full reference list: `manual/PopGeneticsPro_Manual_de_usuario_ES.pdf`
-(249 pages) or, chapter by chapter, `manual/es/`.
+A user manual, in English and in Spanish, walks through every block with worked examples, the decision rules
+behind each interpretation, file formats, a glossary, troubleshooting and the full reference list:
+`manual/en/PopGeneticsPro User's Manual (English).pdf` (252 pages) or, chapter by chapter, `manual/en/`; in
+Spanish, `manual/PopGeneticsPro User's Manual.pdf` (249 pages) and `manual/es/`.
 
 ## Licence and citation
 

@@ -19,7 +19,7 @@ manual/
     ssr-espacial.csv        200 plantas con coordenadas de un rodal simulado con dispersión restringida (σ² = 78 m², Nb = 39)
     reunir-reglas.pl        reescribe el apéndice B con las reglas de decisión de los capítulos: perl herramientas/reunir-reglas.pl es (desde manual/)
     unir-manual.pl          une portada y partes en es/manual-completo.html para imprimir el manual completo (ver "Cómo obtener el PDF")
-  PopGeneticsPro_Manual_de_usuario_ES.pdf   el manual completo en español
+  PopGeneticsPro User's Manual.pdf      el manual completo en español
   es/
     00-portada.html    portada blanca: título en español e inglés, doble hélice de ADN que se abre en un árbol filogenético hacia maíz, jitomate, uva, chayote, mariposa monarca, catarina y abeja; hoja con puntos de referencia, diagrama floral y árbol circular (todo dibujado con gráficos vectoriales originales)
     00-portada.pdf     vista previa impresa de la portada
@@ -35,7 +35,9 @@ manual/
     10-bloque9.html    capítulo 10 · Bloque 9: cuellos de botella, N_e por desequilibrio de ligamiento, estructura genética espacial y Sp, autofecundación, P_ST frente a F_ST; poblaciones simuladas, un rodal, agave y morfología del maíz
     11-bloque10.html   capítulo 11 · Bloque 10: editor de figuras (contenido y estilo, paletas), exportación (formatos, píxeles, dpi y tamaño impreso de las letras), informe HTML/PDF, párrafo de métodos y paquete ZIP; el informe del maíz
     12-apendices.html  apéndices A–F: formatos de archivo (entrada y salida, con ejemplos), las 43 reglas de decisión reunidas, glosario (siglas, términos y símbolos), solución de problemas, 109 referencias verificadas y componentes de terceros
-  en/                  versión en inglés (pendiente)
+  en/                  versión en inglés: las mismas partes con el mismo marcado y las mismas capturas, su
+                       manual-completo.html y «PopGeneticsPro User's Manual (English).pdf» (252 hojas).
+                       Se obtiene igual: perl herramientas/reunir-reglas.pl en y perl herramientas/unir-manual.pl en
 ```
 
 ## Ver una parte
@@ -116,7 +118,7 @@ msedge --headless=new --no-pdf-header-footer --virtual-time-budget=300000 --prin
 - `unir-manual.pl` escribe `es/manual-completo.html` con la portada, las 15 secciones de `01-introduccion.html` a `12-apendices.html` y los estilos propios de cada parte. Una regla que un capítulo define distinto (por ejemplo `td.f` del capítulo 4) se limita a las hojas de ese capítulo. Ese archivo no se edita: se corrigen las partes y se vuelve a generar.
 - Hay que imprimirlo de una sola vez. Unir PDF sueltos pierde los enlaces del índice y reinicia la numeración.
 - Edge no escribe el PDF si la ruta de `--print-to-pdf` tiene espacios; imprime en una carpeta sin espacios y copia el archivo.
-- El resultado va en `manual/PopGeneticsPro_Manual_de_usuario_ES.pdf`: 249 hojas (portada, 5 preliminares con números romanos y 243 numeradas), 102 enlaces en el índice. Tarda unos 20 segundos.
+- El resultado va en `manual/PopGeneticsPro User's Manual.pdf`: 249 hojas (portada, 5 preliminares con números romanos y 243 numeradas), 102 enlaces en el índice. Tarda unos 20 segundos.
 
 **Una parte sola**, para revisarla:
 

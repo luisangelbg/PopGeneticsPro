@@ -8,19 +8,23 @@ use strict; use warnings; use utf8;
 use open qw(:std :encoding(UTF-8));
 
 my $dir = shift or die "uso: perl herramientas/reunir-reglas.pl <carpeta del idioma>\n";
-my @caps = (
-  ['01-introduccion.html', 'k0',  '1',   'Introducción a PopGeneticsPro'],
-  ['02-bloque1.html',      'k1',  'B1',  'Inicio, teoría y simulador'],
-  ['03-bloque2.html',      'k2',  'B2',  'Datos y control de calidad'],
-  ['04-bloque3.html',      'k3',  'B3',  'Frecuencias alélicas y diversidad'],
-  ['05-bloque4.html',      'k4',  'B4',  'Hardy–Weinberg y desequilibrio de ligamiento'],
-  ['06-bloque5.html',      'k5',  'B5',  'Diferenciación y AMOVA'],
-  ['07-bloque6.html',      'k6',  'B6',  'Distancias, ordenación y árboles'],
-  ['08-bloque7.html',      'k7',  'B7',  'Agrupamiento bayesiano y asignación'],
-  ['09-bloque8.html',      'k8',  'B8',  'Secuencias de ADN y fechado molecular'],
-  ['10-bloque9.html',      'k9',  'B9',  'Demografía y estructura espacial'],
-  ['11-bloque10.html',     'k10', 'B10', 'Figuras e informe'],
+# los nombres de los capítulos y las palabras del índice siguen al idioma de la carpeta
+my %L = (
+  es => { sec => 'Sección', secs => 'Sección', y => 'y', pref => 'Regla de decisión · ', repe => qr/cuánta diferenciación es mucha/,
+          caps => ['Introducción a PopGeneticsPro', 'Inicio, teoría y simulador', 'Datos y control de calidad',
+                   'Frecuencias alélicas y diversidad', 'Hardy–Weinberg y desequilibrio de ligamiento',
+                   'Diferenciación y AMOVA', 'Distancias, ordenación y árboles', 'Agrupamiento bayesiano y asignación',
+                   'Secuencias de ADN y fechado molecular', 'Demografía y estructura espacial', 'Figuras e informe'] },
+  en => { sec => 'Section', secs => 'Sections', y => 'and', pref => 'Decision rule · ', repe => qr/how much differentiation is a lot/,
+          caps => ['Introduction to PopGeneticsPro', 'Home, theory and simulator', 'Data and quality control',
+                   'Allele frequencies and diversity', 'Hardy–Weinberg and linkage disequilibrium',
+                   'Differentiation and AMOVA', 'Distances, ordination and trees', 'Bayesian clustering and assignment',
+                   'DNA sequences and molecular dating', 'Demography and spatial structure', 'Figures and report'] },
 );
+my $L = $L{$dir} or die "no sé los rótulos del idioma «$dir»\n";
+my @archivos = qw(01-introduccion.html 02-bloque1.html 03-bloque2.html 04-bloque3.html 05-bloque4.html 06-bloque5.html
+                  07-bloque6.html 08-bloque7.html 09-bloque8.html 10-bloque9.html 11-bloque10.html);
+my @caps = map { [$archivos[$_], 'k' . $_, $_ ? 'B' . $_ : '1', $L->{caps}[$_]] } 0 .. $#archivos;
 my @indice;
 my $cuerpo = '';
 my $n = 0;
@@ -41,7 +45,7 @@ for my $c (@caps) {
     while ($before =~ /<h2 id="s\d+-\d+"><span class="num">([\d.]+)<\/span>/g) { $snum = $1; }
     $pos = $end;
     my ($tit) = $box =~ /<div class="caja-t"><span class="ico">✓<\/span>(.*?)<\/div>/s;
-    next if $snum eq '2.2' && $tit =~ /cuánta diferenciación es mucha/;
+    next if $snum eq '2.2' && $tit =~ $L->{repe};
     push @reglas, [$snum, $tit, $box];
   }
   next unless @reglas;
@@ -50,12 +54,12 @@ for my $c (@caps) {
   for my $r (@reglas) {
     my ($snum, $tit, $box) = @$r;
     $n++;
-    my $extra = ($snum eq '6.4' && $tit =~ /cuánta diferenciación es mucha/) ? ' y 2.2' : '';
+    my $extra = ($snum eq '6.4' && $tit =~ $L->{repe}) ? " $L->{y} 2.2" : '';
     $box =~ s/^<div class="caja regla"[^>]*>/<div class="caja regla">/;
-    $box =~ s{(<div class="caja-t"><span class="ico">✓</span>.*?)</div>}{$1<span class="sec-ref">Sección $snum$extra</span></div>}s;
+    $box =~ s{(<div class="caja-t"><span class="ico">✓</span>.*?)</div>}{$1<span class="sec-ref">@{[ $extra ? $L->{secs} : $L->{sec} ]} $snum$extra</span></div>}s;
     $box =~ s/\n    /\n  /g;
     $cuerpo .= "\n  $box\n";
-    (my $corto = $tit) =~ s/^(?:<span>)?Regla de decisión · //;
+    (my $corto = $tit) =~ s/^(?:<span>)?\Q$L->{pref}\E//;
     $corto =~ s/<\/span>$// if $tit =~ /^<span>/;
     $corto =~ s/<span class="sym">(.*?)<\/span>/$1/g;
     $corto =~ s/<span style="[^"]*">(.*?)<\/span>/$1/g;

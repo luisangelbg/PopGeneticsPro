@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · User manual · Block 9: demography and spatial structure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  figure.mini .marco { width: 50%; margin: 0 auto; }
+  figure.mini figcaption { margin-left: 12%; margin-right: 12%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b9" data-pestana="B9" data-orden="10" style="--acento: var(--b9)">
+  <div class="cap-apertura">
+    <div class="cap-num">B9</div>
+    <div class="cap-etiqueta">Chapter ten · Block 9 · Demography</div>
+    <h1 data-corto="Block 9 · Demography and space">Demography and spatial structure</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">Allele frequencies keep a memory of what happened to a population: whether it shrank recently, how many plants really contribute to the next generation, how far pollen and seed travel, how much it self-fertilises and whether its traits have diverged more than drift allows. Block 9 brings together five analyses that appear depending on the data you load.</p>
+    <div class="cap-franja"><span class="k9"></span><span class="k9" style="opacity:.75"></span><span class="k9" style="opacity:.5"></span><span class="k9" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>10.1</b>Recent bottlenecks</li>
+      <li><b>10.2</b>Effective population size</li>
+      <li><b>10.3</b>Spatial genetic structure</li>
+      <li><b>10.4</b>Mating system</li>
+      <li><b>10.5</b>P<sub>ST</sub> versus F<sub>ST</sub></li>
+      <li><b>10.6</b>Block settings, tables and figures</li>
+      <li><b>10.7</b>Step by step: three populations, a stand and maize morphology</li>
+    </ul>
+  </div>
+
+  <p class="lead">Not every analysis suits every dataset. Bottlenecks and effective size require codominant genotypes from diploid plants; spatial structure, a coordinate for each plant; P<sub>ST</sub>, measured traits. The <span class="ui">1 · Settings</span> card tells you which ones apply to your data, and the block runs by itself when you open it.</p>
+
+  <table class="compacta">
+    <caption><b>Table 10.1.</b> Which analysis appears with which data.</caption>
+    <thead><tr><th style="width:30%">Analysis</th><th style="width:40%">Data required</th><th>Example in this chapter</th></tr></thead>
+    <tbody>
+      <tr><td>Bottlenecks</td><td>Codominant, diploid, with declared populations of 10 plants or more.</td><td>Three simulated populations</td></tr>
+      <tr><td>Effective size (N<sub>e</sub>)</td><td>The same.</td><td>Three simulated populations</td></tr>
+      <tr><td>Spatial structure</td><td>At least 10 plants, each with its own latitude and longitude; any marker.</td><td>Simulated stand · agave</td></tr>
+      <tr><td>Mating system</td><td>Codominant, diploid, with declared populations.</td><td>Three simulated populations</td></tr>
+      <tr><td>P<sub>ST</sub> versus F<sub>ST</sub></td><td>Quantitative traits in two or more populations.</td><td>Maize morphology</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 10.1 -->
+  <h2 id="s10-1"><span class="num">10.1</span>Recent bottlenecks</h2>
+  <p>When a population shrinks, it loses its rare alleles first: an allele carried by only a few plants easily disappears if those plants leave no offspring. Expected heterozygosity, by contrast, barely changes, because it depends mainly on the common alleles. For a while the population is left with <b>more heterozygosity than its number of alleles warrants</b>. Cornuet and Luikart (1996) called this heterozygosity excess and turned it into a test.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="What a bottleneck leaves behind: loss of rare alleles and heterozygosity excess">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b"><text x="20" y="16">ALLELES PER FREQUENCY CLASS (20 LOCI)</text><text x="380" y="16">HETEROZYGOSITY EXCESS</text></g>
+      <!-- left: allele frequency classes -->
+      <line x1="30" y1="196" x2="350" y2="196" stroke="#9aa3b2" stroke-width="1"/>
+      <g fill="#3b5b92"><rect x="40" y="66" width="24" height="130"/><rect x="70" y="133.6" width="24" height="62.4"/><rect x="100" y="150.9" width="24" height="45.1"/><rect x="130" y="180.4" width="24" height="15.6"/><rect x="160" y="183.9" width="24" height="12.1"/></g>
+      <g fill="#8a5a2b"><rect x="200" y="135.3" width="24" height="60.7"/><rect x="230" y="150.9" width="24" height="45.1"/><rect x="260" y="157.9" width="24" height="38.1"/><rect x="290" y="180.4" width="24" height="15.6"/><rect x="320" y="187.3" width="24" height="8.7"/></g>
+      <g font-size="9.5" fill="#111" text-anchor="middle"><text x="52" y="62">75</text><text x="82" y="129.6">36</text><text x="112" y="146.9">26</text><text x="142" y="176.4">9</text><text x="172" y="179.9">7</text><text x="212" y="131.3">35</text><text x="242" y="146.9">26</text><text x="272" y="153.9">22</text><text x="302" y="176.4">9</text><text x="332" y="183.3">5</text></g>
+      <g font-size="8" fill="#5d6472" text-anchor="middle"><text x="52" y="207">0–.1</text><text x="82" y="207">.1–.2</text><text x="112" y="207">.2–.3</text><text x="142" y="207">.3–.4</text><text x="172" y="207">.4–.5</text><text x="212" y="207">0–.1</text><text x="242" y="207">.1–.2</text><text x="272" y="207">.2–.3</text><text x="302" y="207">.3–.4</text><text x="332" y="207">.4–.5</text></g>
+      <g font-size="10.5" fill="#111" text-anchor="middle"><text x="112" y="226">Stable · 153 alleles</text><text x="272" y="226">Bottleneck · 104</text></g>
+      <g font-size="10" fill="#8a5a2b"><text x="200" y="74">40 fewer rare alleles;</text><text x="200" y="88">intermediates barely change</text></g>
+      <line x1="362" y1="30" x2="362" y2="232" stroke="#dfe3ea" stroke-width="1"/>
+      <!-- right: He against the number of alleles -->
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="400" y1="210" x2="670" y2="210"/><line x1="400" y1="40" x2="400" y2="210"/></g>
+      <g stroke="#eceef2" stroke-width="1"><line x1="400" y1="161.4" x2="670" y2="161.4"/><line x1="400" y1="112.9" x2="670" y2="112.9"/><line x1="400" y1="64.3" x2="670" y2="64.3"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="400" y="223">2</text><text x="454" y="223">4</text><text x="508" y="223">6</text><text x="562" y="223">8</text><text x="616" y="223">10</text><text x="670" y="223">12</text></g>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="394" y="213">0.2</text><text x="394" y="164.4">0.4</text><text x="394" y="115.9">0.6</text><text x="394" y="67.3">0.8</text></g>
+      <text x="535" y="242" font-size="10" fill="#111" text-anchor="middle">number of alleles (k)</text>
+      <text x="406" y="36" font-size="10" fill="#111">H<tspan dy="3" font-size="8">e</tspan></text>
+      <polyline points="400,203.3 427,166.9 454,128.4 481,103.7 508,88.3 535,78.3 562,68.5 589,62.1 616,56.8 643,52.6 670,49.2" fill="none" stroke="#111" stroke-width="1.8"/>
+      <text x="588" y="98" font-size="9.5" fill="#5d6472">H<tspan dy="3" font-size="7.5">eq</tspan><tspan dy="-3"> at equilibrium</tspan></text>
+      <text x="588" y="111" font-size="9.5" fill="#5d6472">(TPM, 80 copies)</text>
+      <path d="M546 74 Q 520 72 494 87" fill="none" stroke="#8a5a2b" stroke-width="1.2" stroke-dasharray="3 2.5" marker-end="url(#f101)"/>
+      <defs><marker id="f101" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a2b"/></marker></defs>
+      <circle cx="552.6" cy="69.9" r="5.5" fill="#3b5b92" stroke="#fff" stroke-width="1.2"/>
+      <circle cx="486.4" cy="89.8" r="5.5" fill="#8a5a2b" stroke="#fff" stroke-width="1.2"/>
+      <line x1="486.4" y1="100.6" x2="486.4" y2="95.5" stroke="#8a5a2b" stroke-width="1.6"/>
+      <circle cx="486.4" cy="100.6" r="2" fill="#111"/>
+      <g font-size="10" fill="#111"><text x="560" y="84">Stable</text><text x="478" y="80" text-anchor="end">Bottleneck</text></g>
+      <text x="494" y="130" font-size="10" fill="#8a5a2b">excess: H<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> − H</tspan><tspan dy="3" font-size="8">eq</tspan><tspan dy="-3"> = +0.045</tspan></text>
+    </svg>
+    <figcaption><b>Figure 10.1.</b> What a bottleneck leaves behind, using the practice data of section 10.7. Left: the population that spent 8 generations with 40 plants has 35 alleles with a frequency below 0.1, against 75 in the stable one, and almost the same number of intermediate alleles. Right: the curve is the H<sub>eq</sub> that the app simulates for 80 copies under the TPM model, and the points are the means over the 20 loci. With 5.2 alleles, the reduced population retains an H<sub>e</sub> of 0.695, more than that number of alleles warrants.</figcaption>
+  </figure>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · two different excesses</div>
+    <p>The <b>heterozygosity excess</b> of this test compares the H<sub>e</sub> calculated from allele frequencies with the value expected for the observed number of alleles. It has nothing to do with the <b>heterozygote excess</b> (H<sub>o</sub> &gt; H<sub>e</sub>) of Block 4, which compares observed genotypes with Hardy–Weinberg proportions.</p>
+  </div>
+
+  <p>To know how much H<sub>e</sub> “corresponds” to a given number of alleles, you have to assume how the alleles mutate. The app offers the three classic models (table 10.2) and, locus by locus, simulates samples from a stable population under the chosen model.</p>
+
+  <table>
+    <caption><b>Table 10.2.</b> Mutation models of the test.</caption>
+    <thead><tr><th style="width:24%">Model</th><th style="width:38%">How an allele changes</th><th>When to use it</th></tr></thead>
+    <tbody>
+      <tr><td><b>IAM</b> · infinite alleles</td><td>Each mutation creates an allele that did not exist before.</td><td>Allozymes and markers without an ordering of sizes. With microsatellites it finds bottlenecks too easily.</td></tr>
+      <tr><td><b>SMM</b> · stepwise</td><td>Each mutation adds or removes one repeat.</td><td>Very regular microsatellites. It is the most conservative: it struggles to detect reductions.</td></tr>
+      <tr><td><b>TPM</b> · two-phase<br><span class="small">Di Rienzo et al. (1994)</span></td><td>Most mutations are single-step (95% by default) and the rest multi-step, with variance 12.</td><td>Microsatellites in general; it is the recommended model (Piry, Luikart and Cornuet, 1999). The app uses it together with the SMM.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>How the equilibrium heterozygosity is obtained</div>
+    <p>For each locus with n plants and k alleles, the app simulates coalescent genealogies of 2n copies under the chosen mutation model. It tunes θ = 4N<sub>e</sub>μ until the samples have about k alleles on average and keeps only those with exactly k (300 by default). The mean of their H<sub>e</sub> is <b>H<sub>eq</sub></b>, and the fraction of simulations with an H<sub>e</sub> equal to or greater than the observed one is the excess probability of that locus.</p>
+    <p style="margin-bottom:0">If the plants self-fertilise, their two copies of a locus often descend from a single ancestral copy: n plants with inbreeding F carry on average n(2 − F) independent copies, not 2n. Fewer independent copies show fewer alleles, and the population would appear to have an excess without having shrunk. For this reason the app estimates F<sub>IS</sub> in each population and, if it is positive, simulates the equilibrium with n(2 − F) copies.</p>
+  </div>
+
+  <p>Each locus gives a noisy comparison; the conclusion comes from combining the loci. The app applies three statistical tests and two shape indicators (table 10.3).</p>
+
+  <table>
+    <caption><b>Table 10.3.</b> Tests and indicators of a bottleneck.</caption>
+    <thead><tr><th style="width:24%">Test</th><th style="width:40%">What it does</th><th>How to read it</th></tr></thead>
+    <tbody>
+      <tr><td><b>Sign test</b><br><span class="small">Cornuet and Luikart (1996)</span></td><td>Counts the loci with H<sub>e</sub> &gt; H<sub>eq</sub> and compares them with the number expected at equilibrium, which is slightly more than half because the distribution of H<sub>e</sub> is skewed.</td><td>P &lt; 0.05: too many loci with an excess. Low power.</td></tr>
+      <tr><td><b>Standardised differences</b> (T<sub>2</sub>)</td><td>Sums (H<sub>e</sub> − H<sub>eq</sub>)/SD over all loci and divides by √L.</td><td>P &lt; 0.05: average excess. Requires 20 loci or more.</td></tr>
+      <tr><td><b>Wilcoxon</b> signed-rank test<br><span class="small">Luikart et al. (1998)</span></td><td>Ranks the loci by the position of their H<sub>e</sub> within their own equilibrium distribution and tests whether high positions predominate.</td><td>The most powerful with few loci (from 4). It is the one used by the interpretation and the key figures.</td></tr>
+      <tr><td><b>Mode shift</b><br><span class="small">Luikart et al. (1998)</span></td><td>Distributes the alleles of all loci into frequency classes (0–0.1, 0.1–0.2…).</td><td>L-shaped: stable. If the 0–0.1 class is no longer the largest, the distribution has shifted. Qualitative; requires large samples.</td></tr>
+      <tr><td><b>M ratio</b><br><span class="small">Garza and Williamson (2001)</span></td><td>M = k / (range of sizes in repeats + 1): after a reduction, gaps remain in the ladder of sizes.</td><td>M &lt; 0.68 suggests a reduction older or longer than the one the excess detects. Requires sizes in bp and the motif.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · why Wilcoxon does not use the raw differences</div>
+    <p>The Wilcoxon test assumes that, without a bottleneck, the differences H<sub>e</sub> − H<sub>eq</sub> are distributed symmetrically around zero. They are not: given k, H<sub>e</sub> usually lies slightly above its mean and occasionally far below it. With 200 stable populations of 40 plants and 20 microsatellites, simulated for this manual, Wilcoxon on the raw differences “found” a bottleneck in 47 (23.5%), instead of the expected 5%. Applied to the position of each locus within its equilibrium distribution, converted to a normal score, it rejected 17 (8.5%); the sign test, 10 (5%). That is why the app uses the second form. That 8.5% is still somewhat above the nominal level, because θ is estimated from the same data: one more reason to require TPM and SMM to agree.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · was there a bottleneck?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Wilcoxon gives P &lt; 0.05 for excess under both TPM and SMM</b></td><td>There is a signal of a recent reduction. Confirm it with another sample or with the history of the population.</td></tr>
+        <tr><td><b>Only the IAM gives an excess</b></td><td>With microsatellites this is not enough: the IAM exaggerates the excess.</td></tr>
+        <tr><td><b>The excess comes from one or two loci</b></td><td>Check those loci: a null allele or selection affects a single locus, demography affects them all.</td></tr>
+        <tr><td><b>There is a significant deficit</b></td><td>The population may have grown or received immigrants carrying rare alleles.</td></tr>
+        <tr><td><b>M &lt; 0.68 without an excess</b></td><td>An older or longer reduction is compatible; the excess has already faded.</td></tr>
+        <tr><td><b>There are fewer than 10 polymorphic loci or fewer than 20 plants</b></td><td>The test has low power: “no signal” does not prove stability (Luikart and Cornuet, 1998).</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">The signal is transient: once the population reaches a new mutation–drift equilibrium, the excess disappears even if the population remains small.</p>
+  </div>
+
+  <!-- 10.2 -->
+  <h2 id="s10-2"><span class="num">10.2</span>Effective population size</h2>
+  <p>The effective size, N<sub>e</sub>, is the number of plants in an ideal population that would lose diversity through drift at the same rate as the real one. It is almost always smaller than the census size: not all plants reproduce, some leave far more offspring than others and population size changes from year to year. On average, N<sub>e</sub> is about one tenth of the number of adults (Frankham, 1995). It is the figure that matters for conservation, because it sets the rate at which diversity is lost and inbreeding increases.</p>
+
+  <p>The app estimates it with the <b>linkage disequilibrium method</b> (Hill, 1981; Waples, 2006). In a small population, drift creates random associations between alleles at unlinked loci. The association is measured with r², which has two sources: the sampling of S plants (about 1/S) and drift (about 1/(3N<sub>e</sub>)). The app subtracts what is expected from sampling and converts the remainder into N<sub>e</sub> with the corrections of Waples (2006). It estimates the N<sub>e</sub> of the parental generation of the sampled plants.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 196" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="The two sources of r²: sampling and drift">
+      <text x="20" y="16" font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b">MEAN r² BETWEEN PAIRS OF LOCI</text>
+      <g font-size="10"><rect x="300" y="7" width="12" height="11" fill="#c9ced6"/><text x="317" y="16" fill="#111">expected from sampling 40 plants</text><rect x="520" y="7" width="12" height="11" fill="#8a5a2b"/><text x="537" y="16" fill="#111">drift or inbreeding</text></g>
+      <g font-size="11" fill="#111"><text x="20" y="59">Estable</text><text x="20" y="104">Cuello_botella</text><text x="20" y="149">Autogama</text></g>
+      <g fill="#c9ced6"><rect x="150" y="44" width="323.9" height="22"/><rect x="150" y="89" width="323.9" height="22"/><rect x="150" y="134" width="323.9" height="22"/></g>
+      <g fill="#8a5a2b"><rect x="473.9" y="89" width="56.6" height="22"/><rect x="473.9" y="134" width="16.8" height="22"/></g>
+      <g font-size="10.5" fill="#111"><text x="545" y="59">0.02698 → N<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = ∞</tspan></text><text x="545" y="104">0.03171 → N<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 68</tspan></text><text x="545" y="149">0.02839 → N<tspan dy="3" font-size="8">e</tspan><tspan dy="-3"> = 237</tspan></text></g>
+      <line x1="150" y1="170" x2="570" y2="170" stroke="#9aa3b2" stroke-width="1"/>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="150" y1="170" x2="150" y2="174"/><line x1="270" y1="170" x2="270" y2="174"/><line x1="390" y1="170" x2="390" y2="174"/><line x1="510" y1="170" x2="510" y2="174"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="150" y="186">0</text><text x="270" y="186">0.01</text><text x="390" y="186">0.02</text><text x="510" y="186">0.03</text></g>
+    </svg>
+    <figcaption><b>Figure 10.2.</b> Mean r² over the 190 pairs of loci in the three practice populations. With 40 plants, sampling alone gives 0.02699 (grey). In the stable population nothing else remains and N<sub>e</sub> = ∞. In the one that went through 40 plants, 0.00472 is left over, which gives N<sub>e</sub> = 68. In the selfing population 0.00140 is left over, which comes not from drift but from inbreeding correlated across loci.</figcaption>
+  </figure>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Worked example · from r² to <span class="sym">N<sub>e</sub></span></div>
+    <p style="margin:0">In the <i>Cuello_botella</i> population, S = 40 plants were analysed. Sampling contributes E(r²) = 1/S + 3.19/S² = 0.025 + 0.00199 = 0.02699 (Waples, 2006, for S ≥ 30). The observed r² is 0.03171, so the share due to drift is r²′ = 0.03171 − 0.02699 = 0.00472. Then N<sub>e</sub> = [1/3 + √(1/9 − 2.76 r²′)] / (2 r²′) = (0.3333 + 0.3132) / 0.00944 = <b>68.5</b>. The population was simulated with 40 plants: in 150 identical simulations the median estimate was 42, and this sample fell above the 90th percentile.</p>
+  </div>
+
+  <table>
+    <caption><b>Table 10.4.</b> The two N<sub>e</sub> estimators and the reference figures for conservation.</caption>
+    <thead><tr><th style="width:26%">Estimator</th><th style="width:40%">What it is based on</th><th>When it is useful</th></tr></thead>
+    <tbody>
+      <tr><td><b>Linkage disequilibrium</b><br><span class="small">Waples (2006); Waples and Do (2008)</span></td><td>Mean r² between pairs of loci minus the value expected from sampling. It excludes alleles with a frequency below P<sub>crit</sub> (0.02) because they inflate r². Interval by <i>jackknife</i> over loci.</td><td>The most precise single-sample estimator. It works well with small or moderate N<sub>e</sub>; with large N<sub>e</sub> the upper limit is ∞.</td></tr>
+      <tr><td><b>Heterozygote excess</b><br><span class="small">Pudovkin et al. (1996)</span></td><td>With few parents, male and female allele frequencies differ by chance and the offspring carry more heterozygotes: D = (H<sub>o</sub> − H<sub>e</sub>)/H<sub>e</sub> and N<sub>e</sub> = 1/(2D) + 1/(2(D + 1)).</td><td>Only with very small N<sub>e</sub> (tens). With D close to 0 its upper limit is ∞.</td></tr>
+      <tr><td colspan="3" style="background:#f7f3ee"><b>Reference figures</b> · N<sub>e</sub> ≥ 50 avoids inbreeding depression in the short term and N<sub>e</sub> ≥ 500 retains evolutionary potential (Franklin, 1980); Frankham et al. (2014) propose raising them to 100 and 1000.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · reading an <span class="sym">N<sub>e</sub></span></div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>The estimate or its upper limit is ∞</b></td><td>The r² cannot be distinguished from sampling noise: N<sub>e</sub> is large relative to the sample, not unknown. Report the lower limit.</td></tr>
+        <tr><td><b>The limits fall below 50 or below 100</b></td><td>The population is losing diversity rapidly; this is a conservation warning.</td></tr>
+        <tr><td><b>The population self-fertilises or has a high F<sub>IS</sub></b></td><td>Inbreeding correlated across loci inflates r² and lowers N<sub>e</sub>; interpret it as a minimum.</td></tr>
+        <tr><td><b>The sample mixes subpopulations or immigrants</b></td><td>Admixture also creates disequilibrium: check the structure (Block 7) before reporting.</td></tr>
+        <tr><td><b>There are fewer than 25 plants or few loci</b></td><td>The interval will be very wide; more loci help as much as more plants.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">The method assumes random mating, unlinked loci and a closed population, and estimates N<sub>e</sub> per generation.</p>
+  </div>
+
+  <!-- 10.3 -->
+  <h2 id="s10-3"><span class="num">10.3</span>Spatial genetic structure</h2>
+  <p>Within a continuous population, if seed falls close to the mother and pollen travels only short distances, neighbouring plants are relatives: full sibs, half sibs or cousins. Relatedness declines with distance and forms patches of families. Measuring how relatedness falls with distance tells you how far genes move in each generation, without tracking a single seed (Vekemans and Hardy, 2004).</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Patches of relatives in a stand and the decline of relatedness with the logarithm of distance">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b"><text x="20" y="16">A STAND WITH FAMILIES</text><text x="360" y="16">RELATEDNESS VERSUS DISTANCE</text></g>
+      <rect x="20" y="30" width="290" height="192" rx="4" fill="#fbfaf7" stroke="#e3e0da"/>
+      <g fill="#c9ced6"><circle cx="40" cy="125" r="3.5"/><circle cx="150" cy="115" r="3.5"/><circle cx="290" cy="90" r="3.5"/><circle cx="285" cy="165" r="3.5"/><circle cx="165" cy="206" r="3.5"/><circle cx="72" cy="198" r="3.5"/><circle cx="190" cy="135" r="3.5"/><circle cx="125" cy="42" r="3.5"/><circle cx="255" cy="50" r="3.5"/><circle cx="60" cy="110" r="3.5"/><circle cx="215" cy="92" r="3.5"/><circle cx="35" cy="45" r="3.5"/></g>
+      <g transform="translate(70 70)" fill="#3b5b92"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(170 62)" fill="#b7791f"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(250 125)" fill="#0f766e"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(108 160)" fill="#b4234a"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <g transform="translate(222 185)" fill="#7e3fb0"><circle r="4.5"/><circle cx="12" cy="5" r="4.5"/><circle cx="-10" cy="8" r="4.5"/><circle cx="6" cy="-12" r="4.5"/><circle cx="-14" cy="-6" r="4.5"/><circle cx="16" cy="-8" r="4.5"/><circle cx="-4" cy="15" r="4.5"/><circle cx="9" cy="16" r="4.5"/><circle cx="-16" cy="12" r="4.5"/></g>
+      <circle cx="250" cy="125" r="27" fill="none" stroke="#111" stroke-width="0.9" stroke-dasharray="3 2.5"/>
+      <line x1="250" y1="125" x2="277" y2="125" stroke="#111" stroke-width="0.9"/>
+      <text x="281" y="129" font-family="Crimson Pro, serif" font-style="italic" font-size="14" fill="#111">σ</text>
+      <g stroke="#111" stroke-width="1.4"><line x1="32" y1="212" x2="62" y2="212"/><line x1="32" y1="208" x2="32" y2="216"/><line x1="62" y1="208" x2="62" y2="216"/></g>
+      <text x="47" y="205" font-size="9" fill="#111" text-anchor="middle">10 m</text>
+      <text x="165" y="238" font-size="9.5" fill="#5d6472" text-anchor="middle">each colour is a family; grey, unrelated plants</text>
+      <line x1="340" y1="30" x2="340" y2="232" stroke="#dfe3ea" stroke-width="1"/>
+      <!-- right: class means of the simulated stand -->
+      <rect x="380" y="132.7" width="290" height="12.8" fill="#ebe7e1"/>
+      <text x="668" y="128" font-size="8.5" fill="#5d6472" text-anchor="end">95% band</text>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="380" y1="190" x2="670" y2="190"/><line x1="380" y1="40" x2="380" y2="190"/></g>
+      <line x1="380" y1="139.1" x2="670" y2="139.1" stroke="#9aa3b2" stroke-width="0.8" stroke-dasharray="2 2"/>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="374" y="65.7">0.03</text><text x="374" y="91.2">0.02</text><text x="374" y="116.6">0.01</text><text x="374" y="142.1">0</text><text x="374" y="167.5">−0.01</text></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="401.8" y="203">13</text><text x="483.3" y="203">25</text><text x="570.7" y="203">50</text><text x="658.1" y="203">100 m</text></g>
+      <text x="525" y="220" font-size="10" fill="#111" text-anchor="middle">distance (logarithmic scale)</text>
+      <text x="386" y="36" font-size="10" fill="#111">F<tspan dy="3" font-size="8">ij</tspan></text>
+      <line x1="380" y1="63.8" x2="670" y2="184.8" stroke="#111" stroke-width="1.3"/>
+      <g fill="#8a5a2b" stroke="#fff" stroke-width="1"><circle cx="401.8" cy="64.7" r="4.2"/><circle cx="481.8" cy="105.6" r="4.2"/><circle cx="520.9" cy="121.1" r="4.2"/><circle cx="549.2" cy="130.3" r="4.2"/><circle cx="570.7" cy="147.4" r="4.2"/><circle cx="589" cy="154.9" r="4.2"/><circle cx="604.7" cy="161.5" r="4.2"/><circle cx="619" cy="170.7" r="4.2"/><circle cx="633.5" cy="170" r="4.2"/><circle cx="654.4" cy="168" r="4.2"/></g>
+      <text x="412" y="54" font-size="10" fill="#111">F<tspan dy="3" font-size="8">1</tspan><tspan dy="-3"> = 0.029 (neighbours up to 21 m)</tspan></text>
+      <text x="548" y="100" font-size="10" fill="#111">slope b<tspan dy="3" font-size="8">F</tspan><tspan dy="-3"> = −0.021</tspan></text>
+      <text x="548" y="76" font-size="10.5" font-weight="600" fill="#8a5a2b">Sp = 0.021 · Nb ≈ 47</text>
+    </svg>
+    <figcaption><b>Figure 10.3.</b> Left: diagram of a stand where seed falls close to the mother. Plants of the same family stay together, and σ measures how far genes move per generation. Right: mean relatedness in the 10 distance classes of the simulated stand of section 10.7, plotted against the logarithm of distance, with the regression line fitted to the 19,900 pairs. Neighbours have F<sub>1</sub> = 0.029, and the slope b<sub>F</sub> = −0.021 gives Sp = 0.021.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Table 10.5.</b> Spatial genetic structure statistics.</caption>
+    <thead><tr><th style="width:26%">Statistic</th><th style="width:38%">Definition</th><th>What it tells you</th></tr></thead>
+    <tbody>
+      <tr><td><b>F<sub>ij</sub></b> · relatedness<br><span class="small">Loiselle et al. (1995)</span></td><td class="f">Σ<sub>a</sub> (p<sub>ia</sub> − p<sub>a</sub>)(p<sub>ja</sub> − p<sub>a</sub>) / Σ<sub>a</sub> p<sub>a</sub>(1 − p<sub>a</sub>) + 1/(2n − 1)</td><td>For codominant markers. 0 between plants taken at random; 0.25 between full sibs and 0.125 between half sibs.</td></tr>
+      <tr><td><b>r</b> · autocorrelation<br><span class="small">Smouse and Peakall (1999)</span></td><td>Calculated from a centred squared genetic distance between plants.</td><td>For any marker. Without structure its expected value is −1/(n − 1), not 0: the permutation band takes this into account.</td></tr>
+      <tr><td><b>F<sub>1</sub></b></td><td>Mean relatedness in the first distance class.</td><td>How closely related neighbours are.</td></tr>
+      <tr><td><b>b<sub>F</sub></b></td><td>Slope of F<sub>ij</sub> on ln(distance), using all pairs.</td><td>How fast relatedness declines.</td></tr>
+      <tr><td><b>Sp</b><br><span class="small">Vekemans and Hardy (2004)</span></td><td class="f">Sp = −b<sub>F</sub> / (1 − F<sub>1</sub>)</td><td>The strength of the structure, comparable across studies.</td></tr>
+      <tr><td><b>Nb</b> · neighbourhood</td><td class="f">Nb ≈ 1/Sp = 4πDσ²</td><td>Together with the plant density D, it gives the gene dispersal variance σ² per generation.</td></tr>
+    </tbody>
+  </table>
+
+  <p>The app groups the pairs of plants into distance classes containing the same number of pairs, calculates the mean relatedness (or r) of each class and builds a 95% band by permuting the plants among the locations 999 times. A class above the band indicates that those plants are more closely related than chance can explain.</p>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · pairs within populations</div>
+    <p>If you load several populations kilometres apart, the pairs of plants from different populations fall into the distant classes and drag the differentiation between populations, which Block 5 already measures, into the correlogram. That is why <span class="ui">pairs</span> defaults to <span class="ui">within populations (fine scale)</span>: only pairs from the same population, with relatedness referred to the allele frequencies of each population and permutations within each population, all combined into a single correlogram. <span class="ui">all pairs</span> mixes both scales. If all the plants of a population share the coordinate of the site, there is no fine-scale structure to measure: use the isolation by distance analysis of Block 6.</p>
+  </div>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Worked example · from Sp to the dispersal distance</div>
+    <p style="margin:0">In the simulated stand, b<sub>F</sub> = −0.0207 and F<sub>1</sub> = 0.0292, so Sp = 0.0207 / (1 − 0.0292) = <b>0.0213</b> and Nb ≈ 1/Sp = 47 plants. With a density of 400 plants per hectare (D = 0.04 plants/m²), σ² = Nb/(4πD) = 47 / (4π × 0.04) = 93 m², that is, σ ≈ 9.7 m per generation. The simulation used σ² = 78 m² (σ = 8.8 m), which corresponds to Nb = 39: Sp gives the correct order of magnitude, with the usual error of this approximation.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · spatial genetic structure</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>The first class lies above the band and b<sub>F</sub> is significant</b></td><td>Neighbours are relatives. Report Sp and the distance up to which the signal persists.</td></tr>
+        <tr><td><b>Sp is around 0.01</b></td><td>Weak structure, typical of outcrossing species (mean Sp 0.013; Vekemans and Hardy, 2004).</td></tr>
+        <tr><td><b>Sp is around 0.04 or more</b></td><td>Strong structure, as in species with mixed mating (0.037) or selfing species, or with seed that falls nearby.</td></tr>
+        <tr><td><b>No class falls outside the band</b></td><td>Pollen and seed move far at this scale, or the sample lacks nearby plants.</td></tr>
+        <tr><td><b>You sampled few plants or only distant plants</b></td><td>About 100 plants or more are recommended, with many pairs of close neighbours.</td></tr>
+        <tr><td><b>There are clones</b></td><td>Ramets of the same genet inflate F<sub>1</sub>: keep one ramet per genet.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 10.4 -->
+  <h2 id="s10-4"><span class="num">10.4</span>Mating system</h2>
+  <p>A plant that self-fertilises produces more homozygous offspring. If the selfing rate s remains constant over several generations, inbreeding stabilises at F = s/(2 − s), from which s = 2F/(1 + F). The app uses the Weir and Cockerham F<sub>IS</sub> of each population (Block 4) and its bootstrap interval over loci to estimate s and the outcrossing rate t = 1 − s.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 214" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Relationship between the selfing rate and equilibrium inbreeding">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b"><text x="20" y="16">EQUILIBRIUM INBREEDING</text><text x="400" y="16">FROM F TO THE SELFING RATE</text></g>
+      <g stroke="#eceef2" stroke-width="1"><line x1="70" y1="145" x2="330" y2="145"/><line x1="70" y1="110" x2="330" y2="110"/><line x1="70" y1="75" x2="330" y2="75"/><line x1="70" y1="40" x2="330" y2="40"/></g>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="70" y1="180" x2="330" y2="180"/><line x1="70" y1="40" x2="70" y2="180"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="70" y="193">0</text><text x="122" y="193">0.2</text><text x="174" y="193">0.4</text><text x="226" y="193">0.6</text><text x="278" y="193">0.8</text><text x="330" y="193">1</text></g>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="64" y="183">0</text><text x="64" y="148">0.25</text><text x="64" y="113">0.5</text><text x="64" y="78">0.75</text><text x="64" y="43">1</text></g>
+      <text x="200" y="208" font-size="10" fill="#111" text-anchor="middle">selfing rate s</text>
+      <text x="76" y="34" font-size="10" fill="#111">F = s/(2 − s)</text>
+      <polyline points="70,180 83,176.4 96,172.6 109,168.6 122,164.4 135,160 148,155.3 161,150.3 174,145 187,139.4 200,133.3 213,126.9 226,120 239,112.6 252,104.6 265,96 278,86.7 291,76.5 304,65.5 317,53.3 330,40" fill="none" stroke="#111" stroke-width="1.8"/>
+      <circle cx="225.2" cy="120.5" r="5" fill="#8a5a2b" stroke="#fff" stroke-width="1.2"/>
+      <text x="238" y="134" font-size="9.5" fill="#111">Autogama: s = 0.60</text>
+      <circle cx="97.3" cy="172.2" r="5" fill="#0f766e" stroke="#fff" stroke-width="1.2"/>
+      <text x="122" y="176" font-size="9.5" fill="#111">stand: F = 0.056 → s = 0.11 (true: 0.04)</text>
+      <line x1="370" y1="30" x2="370" y2="200" stroke="#dfe3ea" stroke-width="1"/>
+      <g font-size="10.5" fill="#111">
+        <text x="440" y="42" text-anchor="middle" font-weight="600">F</text><text x="540" y="42" text-anchor="middle" font-weight="600">s = 2F/(1 + F)</text><text x="640" y="42" text-anchor="middle" font-weight="600">t = 1 − s</text>
+        <g stroke="#dfe3ea" stroke-width="1"><line x1="400" y1="50" x2="680" y2="50"/></g>
+        <g text-anchor="middle">
+          <text x="440" y="68">0.05</text><text x="540" y="68">0.095</text><text x="640" y="68">0.905</text>
+          <text x="440" y="88">0.10</text><text x="540" y="88">0.182</text><text x="640" y="88">0.818</text>
+          <text x="440" y="108">0.20</text><text x="540" y="108">0.333</text><text x="640" y="108">0.667</text>
+          <text x="440" y="128">0.30</text><text x="540" y="128">0.462</text><text x="640" y="128">0.538</text>
+          <text x="440" y="148">0.43</text><text x="540" y="148">0.601</text><text x="640" y="148">0.399</text>
+          <text x="440" y="168">0.60</text><text x="540" y="168">0.750</text><text x="640" y="168">0.250</text>
+          <text x="440" y="188">0.80</text><text x="540" y="188">0.889</text><text x="640" y="188">0.111</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><b>Figure 10.4.</b> Left: the inbreeding reached by a population with a constant selfing rate. The points are two practice populations from section 10.7: the selfing population, simulated with s = 0.60, and the stand, where almost all the inbreeding comes from matings between related neighbours. Right: the inverse conversion used by the app, with the outcrossing rate t.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · how much selfing?</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>F<sub>IS</sub> is positive at almost all loci</b></td><td>The deficit is genome-wide: selfing or matings between relatives. s is a reasonable estimate.</td></tr>
+        <tr><td><b>The deficit comes from a few loci</b></td><td>Suspect null alleles (Block 4) before selfing.</td></tr>
+        <tr><td><b>There is spatial structure</b></td><td>Matings between related neighbours also produce F<sub>IS</sub> &gt; 0; s overestimates selfing.</td></tr>
+        <tr><td><b>You mixed plants from different groups</b></td><td>The Wahlund effect creates a deficit without inbreeding.</td></tr>
+        <tr><td><b>You need the actual rate for one season</b></td><td>Genotype mothers and their seeds and use a mixed-mating model (Ritland, 2002).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 10.5 -->
+  <h2 id="s10-5"><span class="num">10.5</span><span>P<sub>ST</sub> versus F<sub>ST</sub></span></h2>
+  <p>Drift differentiates populations equally across the whole genome: F<sub>ST</sub> from neutral markers measures by how much. A quantitative trait under selection may diverge more (divergent selection, local adaptation) or less (stabilising selection, the same optimum everywhere). Its F<sub>ST</sub> counterpart is <b>Q<sub>ST</sub></b> = σ²<sub>B</sub>/(σ²<sub>B</sub> + 2σ²<sub>W</sub>), calculated from additive genetic variances between (B) and within (W) populations, which require a common garden or crosses (Whitlock, 2008).</p>
+
+  <p>With field measurements only phenotypic variances are available. <b>P<sub>ST</sub></b> uses them under two explicit assumptions: c, the proportion of the between-population variance that is additive genetic, and h², the heritability within populations (Brommer, 2011). P<sub>ST</sub> = cσ²<sub>B</sub>/(cσ²<sub>B</sub> + 2h²σ²<sub>W</sub>). With c/h² = 1 the comparison is at its most optimistic.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 214" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Three traits compared with the neutral F_ST">
+      <text x="20" y="16" font-size="10" letter-spacing="1.2" font-weight="500" fill="#8a5a2b">THREE TRAITS VERSUS F<tspan dy="3" font-size="8">ST</tspan><tspan dy="-3"> FROM NEUTRAL MARKERS</tspan></text>
+      <g stroke="#eceef2" stroke-width="1"><line x1="90" y1="142.5" x2="470" y2="142.5"/><line x1="90" y1="105" x2="470" y2="105"/><line x1="90" y1="67.5" x2="470" y2="67.5"/><line x1="90" y1="30" x2="470" y2="30"/></g>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="90" y1="180" x2="470" y2="180"/><line x1="90" y1="30" x2="90" y2="180"/></g>
+      <g font-size="9" fill="#5d6472" text-anchor="end"><text x="84" y="183">0</text><text x="84" y="145.5">0.2</text><text x="84" y="108">0.4</text><text x="84" y="70.5">0.6</text><text x="84" y="33">0.8</text></g>
+      <text x="40" y="108" font-size="10" fill="#111" text-anchor="middle">P<tspan dy="3" font-size="8">ST</tspan></text>
+      <rect x="138" y="90" width="44" height="90" fill="#b4234a"/>
+      <rect x="258" y="138.75" width="44" height="41.25" fill="#9aa3b2"/>
+      <rect x="378" y="170.6" width="44" height="9.4" fill="#0f766e"/>
+      <g stroke="#111" stroke-width="1.4"><line x1="160" y1="56.3" x2="160" y2="123.8"/><line x1="153" y1="56.3" x2="167" y2="56.3"/><line x1="153" y1="123.8" x2="167" y2="123.8"/><line x1="280" y1="101.3" x2="280" y2="168.8"/><line x1="273" y1="101.3" x2="287" y2="101.3"/><line x1="273" y1="168.8" x2="287" y2="168.8"/><line x1="400" y1="161.3" x2="400" y2="178.1"/><line x1="393" y1="161.3" x2="407" y2="161.3"/><line x1="393" y1="178.1" x2="407" y2="178.1"/></g>
+      <line x1="90" y1="151.9" x2="470" y2="151.9" stroke="#111" stroke-width="1.4" stroke-dasharray="6 4"/>
+      <text x="466" y="146" font-size="9.5" fill="#111" text-anchor="end">neutral F<tspan dy="3" font-size="7.5">ST</tspan><tspan dy="-3"> = 0.15</tspan></text>
+      <g font-size="10.5" fill="#111" text-anchor="middle"><text x="160" y="196">Trait A</text><text x="280" y="196">Trait B</text><text x="400" y="196">Trait C</text></g>
+      <g font-size="10.5" fill="#111">
+        <text x="500" y="66"><tspan font-weight="600" fill="#b4234a">A</tspan> · whole interval above:</text><text x="500" y="80">divergent selection</text>
+        <text x="500" y="116"><tspan font-weight="600" fill="#5d6472">B</tspan> · the interval crosses F<tspan dy="3" font-size="8">ST</tspan><tspan dy="-3">:</tspan></text><text x="500" y="130">compatible with drift</text>
+        <text x="500" y="166"><tspan font-weight="600" fill="#0f766e">C</tspan> · whole interval below:</text><text x="500" y="180">stabilising selection</text>
+      </g>
+    </svg>
+    <figcaption><b>Figure 10.5.</b> How to read the comparison, with three hypothetical traits. Each bar is the P<sub>ST</sub> of a trait and the vertical line its 95% interval; the dashed line is the F<sub>ST</sub> from neutral markers in the same populations.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>The <span class="sym">P<sub>ST</sub></span> interval</div>
+    <p style="margin:0">The app obtains σ²<sub>B</sub> and σ²<sub>W</sub> from a one-way ANOVA. In the random-effects model, the ratio F/(1 + n<sub>0</sub>λ) follows an F distribution with G − 1 and N − G degrees of freedom, where λ = σ²<sub>B</sub>/σ²<sub>W</sub> and n<sub>0</sub> is the mean population size (Searle, Casella and McCulloch, 1992). This yields exact limits for λ and, since P<sub>ST</sub> increases with λ, for P<sub>ST</sub>. With G populations, σ²<sub>B</sub> rests on only G − 1 degrees of freedom: with three populations the interval is very wide, and a high P<sub>ST</sub> may be compatible with drift.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · <span class="sym">P<sub>ST</sub></span> versus <span class="sym">F<sub>ST</sub></span></div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>The whole P<sub>ST</sub> interval lies above F<sub>ST</sub></b></td><td>The trait has diverged more than drift would cause: divergent selection, if c/h² is realistic.</td></tr>
+        <tr><td><b>The whole interval lies below F<sub>ST</sub></b></td><td>Stabilising selection: the populations are more alike than expected.</td></tr>
+        <tr><td><b>The interval crosses F<sub>ST</sub></b></td><td>There is no evidence against drift.</td></tr>
+        <tr><td><b>The conclusion changes when c/h² is lowered to 0.5</b></td><td>It depends on the assumption: say so, or measure the trait in a common garden.</td></tr>
+        <tr><td><b>You have fewer than 10 populations</b></td><td>Expect wide intervals; the comparison has low power.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">F<sub>ST</sub> must come from neutral markers in the same populations (θ from Block 5).</p>
+  </div>
+
+  <!-- 10.6 -->
+  <h2 id="s10-6"><span class="num">10.6</span>Block settings, tables and figures</h2>
+  <p>The <span class="ui">1 · Settings</span> card shows only the settings of the analyses that apply to your data. After changing one, press <span class="ui">Run the analyses</span>.</p>
+
+  <table>
+    <caption><b>Table 10.6.</b> Block 9 settings.</caption>
+    <thead><tr><th style="width:34%">Setting</th><th>Options</th><th style="width:28%">Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">IAM</span> · <span class="ui">TPM</span> · <span class="ui">SMM</span></td><td>Mutation models of the excess test; TPM and SMM by default.</td><td>TPM and SMM with microsatellites.</td></tr>
+      <tr><td><span class="ui">accepted simulations per locus</span></td><td>50 to 2000 (default 300).</td><td>300; 1000 for publication.</td></tr>
+      <tr><td><span class="ui">TPM single-step fraction</span> · <span class="ui">TPM variance</span></td><td>Defaults 0.95 and 12.</td><td>Those of Piry et al. (1999).</td></tr>
+      <tr><td><span class="ui">repeat motif (bp) for M-ratio</span></td><td>1 to 6 (default 2).</td><td>The motif of your microsatellites.</td></tr>
+      <tr><td><span class="ui">N<sub>e</sub> (LD method): exclude alleles rarer than</span></td><td>0 to 0.1 (default 0.02).</td><td>0.02 (Waples and Do, 2010).</td></tr>
+      <tr><td><span class="ui">classes</span> · <span class="ui">permutations</span></td><td>3 to 30 classes with the same number of pairs; 99 to 9999 permutations.</td><td>10 classes and 999 permutations.</td></tr>
+      <tr><td><span class="ui">pairs</span></td><td><span class="ui">within populations (fine scale)</span> or <span class="ui">all pairs</span>; appears with two or more populations.</td><td>Within populations.</td></tr>
+      <tr><td><span class="ui">c</span> · <span class="ui">h²</span> · <span class="ui">F<sub>ST</sub></span></td><td>c and h² from 0.05 to 1; neutral reference F<sub>ST</sub>.</td><td>Try c/h² = 1 and 0.5.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Integer.</td><td>Report it.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Table 10.7.</b> Block 9 result cards.</caption>
+    <thead><tr><th style="width:30%">Card</th><th>Content</th><th class="c" style="width:22%">Figures</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · What the analyses say</span></td><td>Key figures and interpretation of all analyses; download of everything as CSV.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Recent bottlenecks</span></td><td>Tests by population and model, locus-by-locus table.</td><td class="c">H<sub>e</sub> versus H<sub>eq</sub> · mode shift</td></tr>
+      <tr><td><span class="ui">4 · Effective population size</span></td><td>Observed and expected r², N<sub>e</sub> with interval and N<sub>e</sub> from heterozygote excess.</td><td class="c">N<sub>e</sub> by population</td></tr>
+      <tr><td><span class="ui">5 · Fine-scale spatial genetic structure</span></td><td>Distance classes, value, permutation band, P, b<sub>F</sub>, Sp and Nb.</td><td class="c">Correlogram</td></tr>
+      <tr><td><span class="ui">6 · Mating system</span></td><td>F<sub>IS</sub>, selfing and outcrossing rates with intervals.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">7 · P<sub>ST</sub> versus F<sub>ST</sub></span></td><td>σ²<sub>B</sub>, σ²<sub>W</sub>, ANOVA, P<sub>ST</sub> with exact interval and comparison with F<sub>ST</sub>.</td><td class="c">P<sub>ST</sub> by trait</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 10.7 -->
+  <h2 id="s10-7"><span class="num">10.7</span>Step by step: three populations, a stand and maize morphology</h2>
+  <p>Three files take you through the block. The two microsatellite files were simulated for this manual with known parameters and are in the <code>manual/herramientas</code> folder, together with the program that generates them (<code>generar-demografia.pl</code>). The third is the app’s maize morphology example. The values are those produced by the app with the default settings and seed 1.</p>
+
+  <table>
+    <caption><b>Table 10.8.</b> The practice data and what was simulated in each file.</caption>
+    <thead><tr><th style="width:26%">File</th><th style="width:30%">Content</th><th>What was simulated</th></tr></thead>
+    <tbody>
+      <tr><td><code>ssr-demografia.csv</code></td><td>3 populations × 40 plants × 20 microsatellites (2 bp motif).</td><td><i>Estable</i>: sample from a large population at equilibrium (TPM model). <i>Cuello_botella</i>: 40 plants for 8 generations and 400 in the last one, so N<sub>e</sub> ≈ 40. <i>Autogama</i>: equilibrium with 60% selfing (F = 0.43).</td></tr>
+      <tr><td><code>ssr-espacial.csv</code></td><td>200 plants with latitude and longitude in a 1 ha plot, 12 microsatellites.</td><td>A continuous stand of 22,500 plants spaced 5 m apart, with 3000 generations of seed dispersal (σ = 5 m) and pollen dispersal (σ = 10 m from the mother): σ² = 78 m² and Nb = 39.</td></tr>
+      <tr><td><span class="ui">Maize · morphology</span></td><td>3 landraces × 25 plants, 9 traits.</td><td>The mean of each landrace was fixed in the simulation; there are no common-garden data.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Three populations: bottlenecks, N<sub>e</sub> and selfing</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Step by step</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>In Block 2, drag <code>ssr-demografia.csv</code> onto <span class="ui">Drop your file here</span>, check that the app sees 20 codominant loci and 3 populations, and press <span class="ui">Build the dataset and run the checks →</span>.</li>
+      <li>Open Block 9: the analyses run by themselves in about 30 seconds. Read the key figures and the interpretation (figure 10.6).</li>
+      <li>In <span class="ui">3 · Recent bottlenecks</span> choose <span class="ui">Cuello_botella</span> and review the tests (figure 10.7), the locus table (figure 10.8) and the plots (figures 10.9 and 10.10).</li>
+      <li>Review N<sub>e</sub> (figure 10.11) and the selfing rate (figure 10.12).</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-resumen.png" alt="Key figures and interpretation for the three populations"></div>
+    <figcaption><b>Figure 10.6.</b> <span class="ui">What the analyses say</span>. Only <i>Cuello_botella</i> has a heterozygosity excess under both TPM and SMM (P = 0.011 and 0.049). <i>Estable</i> and <i>Autogama</i> do not (P = 0.121 and 0.088 under TPM); in <i>Autogama</i> the app simulated the equilibrium with n(2 − F) copies because F<sub>IS</sub> = 0.43.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-pruebas.png" alt="Bottleneck tests for one population"></div>
+    <figcaption><b>Figure 10.7.</b> Tests for <i>Cuello_botella</i> under TPM: 14 of 20 loci with an excess against 11.7 expected (sign test, P = 0.150), T<sub>2</sub> = 2.40 (P = 0.008) and Wilcoxon P = 0.011. The distribution keeps its L shape and 9 of 20 loci have M &lt; 0.68.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-demo-loci.png" alt="Observed and equilibrium heterozygosity by locus"></div>
+    <figcaption><b>Figure 10.8.</b> Locus by locus: the excess (in red) appears at 14 loci. Five have an excess probability below 0.05, from 0.043 (Ssr19) to less than 0.001 (Ssr17), and none dominates: the signal comes from the whole genome.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-het.png" alt="Heterozygosity excess figure by locus"></div>
+    <figcaption><b>Figure 10.9.</b> Observed H<sub>e</sub> (circles) against H<sub>eq</sub> ± 2 standard deviations (grey bars) at each locus of <i>Cuello_botella</i>. The orange circles lie above their equilibrium.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-demo-moda.png" alt="Allele frequency distribution of the three populations"></div>
+    <figcaption><b>Figure 10.10.</b> Mode shift: all three populations keep the L shape. <i>Cuello_botella</i> has fewer rare alleles (34% against 49% in the stable one), but the 0–0.1 class is still the largest. After 8 generations of reduction, this indicator does not yet detect it.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-demo-ne.png" alt="Effective size of the three populations"></div>
+    <figcaption><b>Figure 10.11.</b> N<sub>e</sub> from linkage disequilibrium: ∞ in the stable population (lower limit 295), 68 (46–127) in the reduced one and 237 (88–∞) in the selfing one. With the heterozygote excess method, the upper limit is ∞ in all three.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-demo-self.png" alt="Selfing rate of the three populations"></div>
+    <figcaption><b>Figure 10.12.</b> <span class="ui">Mating system</span>: <i>Autogama</i> has F<sub>IS</sub> = 0.425 and a selfing rate of 59.7% (57.2–62.1%); the simulated rate was 60%. The other two populations show no heterozygote deficit.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>How to read the results for the three populations</div>
+    <ul style="margin:0">
+      <li><b>The reduction is detected and stability is not mistaken for it.</b> Wilcoxon gives an excess under both models only in the population that spent 8 generations with 40 plants.</li>
+      <li><b>Selfing no longer looks like a bottleneck.</b> Without the inbreeding adjustment, the selfing sample gave an excess with the sign test (P = 0.027) and with T<sub>2</sub> (P = 0.020). With F = 0.43, its 40 plants carry about 40 × (2 − 0.43) = 63 independent copies, not 80.</li>
+      <li><b>A single N<sub>e</sub> estimate varies.</b> The true N<sub>e</sub> is 40 and this sample gave 68, with an interval that does not include it. In 150 replicates of the same simulation, the median was 42 and the interval included the true value in 95% of cases: this sample is one of those that miss.</li>
+      <li><b>The selfing population shows the bias caused by inbreeding.</b> It comes from a huge population, but inbreeding correlated across loci raises r² and the method gives N<sub>e</sub> = 237.</li>
+    </ul>
+  </div>
+
+  <h3>A stand: spatial genetic structure</h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Step by step</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Load <code>ssr-espacial.csv</code> in Block 2 (200 plants with <code>Latitude</code> and <code>Longitude</code>, 12 loci) and build the dataset.</li>
+      <li>Open Block 9 and scroll down to <span class="ui">5 · Fine-scale spatial genetic structure</span> (figures 10.13 and 10.14). With a single population, <span class="ui">pairs</span> does not appear: all pairs belong to the same population.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-rodal-sgs.png" alt="Distance classes of the stand"></div>
+    <figcaption><b>Figure 10.13.</b> Distance classes of the stand, in metres. Mean relatedness goes from 0.029 between neighbours (5 to 21 m) to negative values beyond 46 m. The note gives b<sub>F</sub> = −0.0207 (P = 0.002), Sp = 0.021 and Nb = 47.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-rodal-correlograma.png" alt="Correlogram of the stand"></div>
+    <figcaption><b>Figure 10.14.</b> Correlogram of the stand. The first four classes lie above the permutation band and the distant ones below it: neighbours are relatives up to about 46 m.</figcaption>
+  </figure>
+
+  <p>The other cards also run with this file, although they are not its purpose, and they illustrate two precautions. The selfing rate comes out at 10.5%, even though in the simulation only 4% of the seeds came from the plant’s own pollen: the rest of the F<sub>IS</sub> of 0.056 comes from matings between related neighbours, as section 10.4 warns. And the bottleneck test finds an excess only under TPM (P = 0.006; under SMM, P = 0.088): the simulation started from even allele frequencies and the stand is not at mutation–drift equilibrium, so the app reports it as a weak signal.</p>
+
+  <h3>Agave: no fine-scale structure within populations</h3>
+  <p>The <span class="ui">Agave · AFLP</span> example includes coordinates for each plant in four populations 150 to 400 km apart. With <span class="ui">within populations (fine scale)</span>, the app uses only the 760 pairs of plants from the same population and the Smouse and Peakall <i>r</i>, because the bands are dominant (figure 10.15). With <span class="ui">all pairs</span>, the first two classes (up to 5 km, pairs from the same population) come out with r = 0.092 and 0.083, far above the band, and the distant ones are negative: that “structure” is the differentiation between populations.</p>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b9-agave-correlograma.png" alt="Agave correlogram within populations"></div>
+    <figcaption><b>Figure 10.15.</b> Agave with pairs within populations. r is around −0.05, the value expected without structure with 20 plants per population (−1/19 = −0.053), and the first class lies within the band. The 2.8 to 3.2 km class falls just below it (P = 0.042), which is to be expected when checking 10 classes. The data were simulated without structure within populations.</figcaption>
+  </figure>
+
+  <h3>Maize morphology: P<sub>ST</sub> versus F<sub>ST</sub></h3>
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Step by step</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>Load <span class="ui">Maize · morphology</span> in Block 2, build the dataset and open Block 9.</li>
+      <li>In <span class="ui">F<sub>ST</sub></span> type 0.049, the θ of the same three landraces with microsatellites (section 6.6). Review the table and the figure (figures 10.16 and 10.17).</li>
+      <li>Change <span class="ui">c</span> to 0.5, press <span class="ui">Run the analyses</span> and see which trait changes its reading.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b9-morfo-tabla.png" alt="P_ST of the nine maize traits"></div>
+    <figcaption><b>Figure 10.16.</b> P<sub>ST</sub> of the nine traits with c/h² = 1. The ANOVA F values range from 21.8 to 431, so, even with only 2 degrees of freedom between landraces, the lower limit of each interval exceeds 0.049.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b9-morfo-figura.png" alt="Figure of P_ST by trait"></div>
+    <figcaption><b>Figure 10.17.</b> P<sub>ST</sub> with its exact intervals and the neutral F<sub>ST</sub>. The intervals reach almost 1: with three landraces the estimate is imprecise even when the differences are enormous.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>How to read the maize results</div>
+    <ul style="margin:0">
+      <li><b>The conclusion almost always holds.</b> With c/h² = 0.5, the lower limit for <i>KernelRows</i> drops to 0.044 and falls below F<sub>ST</sub>: its differentiation can no longer be distinguished from drift. The other eight traits remain above it.</li>
+      <li><b>These are synthetic data.</b> The mean of each landrace was fixed in the simulation and there is no common garden, so the conclusion depends on the c/h² assumption.</li>
+    </ul>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · what to report in a paper</div>
+    <p>For bottlenecks: mutation models and TPM parameters, accepted simulations per locus, tests with their P values and whether an inbreeding adjustment was applied. For N<sub>e</sub>: method, P<sub>crit</sub>, number of plants and loci, and the interval. For spatial structure: estimator, whether pairs were within populations, classes, permutations, F<sub>1</sub>, b<sub>F</sub> with its P value, and Sp. For selfing: F<sub>IS</sub> with its interval and the caveat that it is an indirect inference. For P<sub>ST</sub>: c/h², the reference F<sub>ST</sub> and how the intervals were obtained. The methods section of the Block 10 report drafts all of this, including the seed.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · verification of the calculations</div>
+    <p>For this manual, the H<sub>eq</sub> simulated under the IAM matched the exact value from Ewens’s formula in four cases (40 to 80 copies), within one standard error, and the unconditional expectations of the IAM and SMM matched theory. The exact Wilcoxon test matched an independent enumeration in 300 cases with ties. With an independent coalescent generator, the corrected test rejected 8.5% of 200 stable populations (the sign test, 5%), 3% of 100 selfing populations with the adjustment (15% without it) and detected 76% of 49 reduced populations. The linkage disequilibrium N<sub>e</sub> and Pudovkin’s D were recalculated in another language from the genotype counts with no differences; in 150 simulations with N<sub>e</sub> = 40, the median was 42 and the interval covered the true value 95% of the time. Loiselle’s relatedness, F<sub>1</sub>, b<sub>F</sub> and Sp of the stand, and the Smouse and Peakall r of the agave with the ordered-pairs formula, were recalculated with no differences. The exact P<sub>ST</sub> interval covered the true value in 94 to 96% of 2000 datasets simulated per scenario.</p>
+  </div>
+
+  <p style="margin-top:0.25in">The next chapter concludes the analyses: Block 10 gathers figures, tables and interpretations into a report and a ZIP package ready for publication.</p>
+</section>
+
+</body>
+</html>

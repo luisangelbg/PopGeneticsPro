@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · User manual · Block 10: figures and report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  figure.mini .marco { width: 50%; margin: 0 auto; }
+  figure.mini figcaption { margin-left: 12%; margin-right: 12%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+  code.ruta { font-size: 0.92em; }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b10" data-pestana="B10" data-orden="11" style="--acento: var(--b10)">
+  <div class="cap-apertura">
+    <div class="cap-num">B10</div>
+    <div class="cap-etiqueta">Chapter eleven · Block 10 · Figures &amp; report</div>
+    <h1 data-corto="Block 10 · Figures and report">Figures and report</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">An analysis is finished when it can be published. Every figure in the app can be adjusted and exported in the format and resolution a journal requires. Block 10 gathers what you have run into a report: key figures, tables, interpretations, figures exactly as you left them, a methods paragraph with the settings used and a ZIP package with the data, tables, trees and figures.</p>
+    <div class="cap-franja"><span class="k10"></span><span class="k10" style="opacity:.75"></span><span class="k10" style="opacity:.5"></span><span class="k10" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>11.1</b>The figure editor</li>
+      <li><b>11.2</b>Exporting for publication</li>
+      <li><b>11.3</b>The automatic report and the ZIP package</li>
+      <li><b>11.4</b>Step by step: the maize report</li>
+    </ul>
+  </div>
+
+  <p class="lead">There are two ways to get results out of the app. The first is figure by figure, from the export row below each figure, in any block. The second is everything at once, from Block 10, once you have run the blocks you are interested in.</p>
+
+  <table class="compacta">
+    <caption><b>Table 11.1.</b> What you can get out of the app and from where.</caption>
+    <thead><tr><th style="width:28%">Output</th><th style="width:30%">Where</th><th>What for</th></tr></thead>
+    <tbody>
+      <tr><td>A figure in PNG, TIFF, SVG, JPG or WEBP</td><td>Export row below each figure</td><td>A paper, a thesis or a presentation.</td></tr>
+      <tr><td>Tables in CSV</td><td>Download buttons in each block</td><td>Rebuilding a table in the journal’s format.</td></tr>
+      <tr><td>HTML report</td><td>Block 10 · <span class="ui">Report (HTML)</span></td><td>Sharing the whole analysis in a single file that opens in any browser.</td></tr>
+      <tr><td>PDF report</td><td>Block 10 · <span class="ui">Print / save as PDF</span></td><td>A version for printing or archiving.</td></tr>
+      <tr><td>ZIP package</td><td>Block 10 · <span class="ui">Full package (ZIP)</span></td><td>Supplementary material and a backup of the analysis.</td></tr>
+      <tr><td>Methods paragraph</td><td>Block 10 · <span class="ui">Copy the methods paragraph</span></td><td>A starting point for the methods section.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 11.1 -->
+  <h2 id="s11-1"><span class="num">11.1</span>The figure editor</h2>
+  <p>All the figures in the app are vector graphics and share the same editor. Below each one, <span class="ui">⚙ Edit figure — titles, colours, fonts, sizes</span> opens two tabs: <span class="ui">Content &amp; colours</span>, with the options specific to that figure, and <span class="ui">Style &amp; typography</span>, with the options common to all of them. Each change redraws the figure instantly.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b10-editor-contenido.png" alt="Content tab of the figure editor"></div>
+    <figcaption><b>Figure 11.1.</b> <span class="ui">Content &amp; colours</span> for the diversity figure of Block 3: title, index, error bars, order, palette and value options. Below it is the export row, which reports the size in pixels and centimetres of the file to be downloaded.</figcaption>
+  </figure>
+
+  <p>The content tab changes with each figure: a tree offers root, layout and support values; a heat map, its colour scale; a bar chart also offers <span class="ui">Flip axes (horizontal bars)</span> to rotate it when the names are long. The style tab is the same for all of them (figure 11.2 and table 11.2).</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b10-editor-estilo.png" alt="Style and typography tab of the figure editor"></div>
+    <figcaption><b>Figure 11.2.</b> <span class="ui">Style &amp; typography</span>: theme, font family, four font-size controls, gridlines, orientation of the category labels and figure size.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Table 11.2.</b> <span class="ui">Style &amp; typography</span> controls.</caption>
+    <thead><tr><th style="width:30%">Control</th><th style="width:40%">Options</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Theme</span></td><td>Light, Paper, Dark, Minimal and Journal (black axes, no grid).</td><td>Journal for papers; Dark for presentations with a dark background.</td></tr>
+      <tr><td><span class="ui">Font family</span></td><td>Sans-serif, System interface font, Serif, Monospace.</td><td>These are generic families: each computer uses whichever typeface of that kind it has installed.</td></tr>
+      <tr><td><span class="ui">Font size: all</span> · <span class="ui">titles</span> · <span class="ui">axes &amp; ticks</span> · <span class="ui">labels &amp; legend</span></td><td>Multipliers from 0.6 to 2.6 (all) and from 0.6 to 3 (each group).</td><td>If the text grows, the canvas grows with it so that nothing is cut off.</td></tr>
+      <tr><td><span class="ui">Bold axis titles</span> · <span class="ui">Gridlines</span> · <span class="ui">Dashed gridlines</span></td><td>Checkboxes.</td><td>—</td></tr>
+      <tr><td><span class="ui">Category labels</span></td><td>Auto (wrap, then tilt), Horizontal (wrap), Tilted 45° or Vertical.</td><td>Only in category charts.</td></tr>
+      <tr><td><span class="ui">Width (px)</span> · <span class="ui">Height (px)</span></td><td>400 to 2400 and 300 to 2000.</td><td>Sets the size of the figure and, with it, the size of the text when printed (section 11.2).</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · the style is remembered</div>
+    <p>The theme, typeface, font sizes, grid and label orientation are shared preferences: when you change them in one figure, the app saves them in this browser and applies them to the figures it draws afterwards, even in another session. The title, colours and size belong to each figure. This way all the figures in a paper share the same look.</p>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b10-temas.png" alt="The same figure in three styles"></div>
+    <figcaption><b>Figure 11.3.</b> The diversity figure in three styles. Left: Light theme and the app’s palette. Centre: Journal theme, Okabe and Ito (2008) palette, serif typeface and text 1.25 times larger. Right: Dark theme with the Tol (2021) palette.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Table 11.3.</b> Palettes and colour scales.</caption>
+    <thead><tr><th style="width:28%">Type</th><th>Options</th></tr></thead>
+    <tbody>
+      <tr><td>Palettes for groups</td><td>PopGeneticsPro (default), Vivid, Harvest, Soil &amp; crop, Ocean, Sunset, Meadow, Bold, Soft, Deep, Pastel.</td></tr>
+      <tr><td>Colour-blind safe</td><td>Okabe and Ito (2008) and Tol (2021).</td></tr>
+      <tr><td>Black and white</td><td>Greyscale.</td></tr>
+      <tr><td>Continuous scales (heat maps)</td><td>Viridis, Magma, Inferno, Plasma and Cividis (colour-blind safe); diverging Red–Yellow–Blue, Red–Blue, Spectral and Blue–White–Red; sequential Greens, Yellow–Green, Browns and Heat.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · preparing a figure</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>The figure is going into a paper</b></td><td>Journal or Minimal theme, with the same typeface and sizes in every figure.</td></tr>
+        <tr><td><b>You distinguish groups by colour</b></td><td>Okabe and Ito or Tol: they avoid confusing red and green. In heat maps, Viridis or Cividis.</td></tr>
+        <tr><td><b>It will be printed in black and white</b></td><td>Greyscale, plus values or shapes that do not depend on colour.</td></tr>
+        <tr><td><b>The category names are long</b></td><td><span class="ui">Flip axes</span>, or <span class="ui">Category labels</span> at 45°.</td></tr>
+        <tr><td><b>The journal reduces the figure to one column</b></td><td>Lower <span class="ui">Width</span> and raise <span class="ui">Font size: all</span> before exporting (section 11.2).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 11.2 -->
+  <h2 id="s11-2"><span class="num">11.2</span>Exporting for publication</h2>
+  <p>The export row has three menus and a button: <span class="ui">Format</span>, <span class="ui">Resolution</span>, white or transparent background, and <span class="ui">Download figure</span>. On the right, the app reports the dimensions of the file it is about to create: in figure 11.1, <i>3400 × 2040 px · 28.8 × 17.3 cm at 300 dpi</i>.</p>
+
+  <table>
+    <caption><b>Table 11.4.</b> Export formats.</caption>
+    <thead><tr><th style="width:15%">Format</th><th style="width:43%">What it stores</th><th>When to use it</th></tr></thead>
+    <tbody>
+      <tr><td><b>PNG</b></td><td>Lossless image with the resolution written into the file. White or transparent background.</td><td>Almost always; transparent to place it on another background.</td></tr>
+      <tr><td><b>TIFF</b></td><td>Uncompressed RGB image with the resolution in the file. Very large files.</td><td>Journals that require TIFF.</td></tr>
+      <tr><td><b>SVG</b></td><td>The vector drawing: it scales without losing sharpness and every text or colour can be edited.</td><td>Retouching in a vector drawing program, or very large figures.</td></tr>
+      <tr><td><b>JPG</b></td><td>Lossy compressed image (97% quality) with the resolution in the file.</td><td>Only if required; on lines and text, compression leaves halos.</td></tr>
+      <tr><td><b>WEBP</b></td><td>Image compressed for the web, without the resolution in the file.</td><td>Web pages and online documents.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Pixels, dpi and printed size</div>
+    <p>The app draws each figure at 75 pixels per inch. <span class="ui">Resolution</span> multiplies the pixels: 2× is 150 dpi, 4× (default) 300 dpi, 6× 450, 8× 600 and 12× 900. The printed size at that resolution does not change: an 850 px figure measures 850/75 = 11.3 inches, 28.8 cm, at any resolution. What the resolution increases is sharpness.</p>
+    <p style="margin-bottom:0">Text is drawn in pixels: 11 px for axis tick labels and legends, 13 px for axis titles and 17 px for the title. At natural size, 11 px is 10.6 points. If the journal reduces the figure, the text shrinks in the same proportion: <b>printed size (pt) ≈ 28.3 × size in px × final width (cm) / figure width (px)</b>.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="-20 0 700 272" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Text shrinks when the figure is reduced to one column">
+      <text x="20" y="16" font-size="10" letter-spacing="1.2" font-weight="500" fill="#334155">TEXT SHRINKS WITH THE FIGURE</text>
+      <!-- A: natural size -->
+      <rect x="20" y="30" width="330" height="198" fill="#fff" stroke="#9aa3b2"/>
+      <g stroke="#9aa3b2" stroke-width="1"><line x1="62" y1="205" x2="335" y2="205"/><line x1="62" y1="50" x2="62" y2="205"/></g>
+      <rect x="85" y="81.3" width="60" height="123.7" fill="#4f46a5"/><rect x="170" y="87.2" width="60" height="117.8" fill="#e0803c"/><rect x="255" y="78.8" width="60" height="126.2" fill="#1fa39a"/>
+      <g font-size="12.8" fill="#111" text-anchor="end"><text x="56" y="71">0.8</text><text x="56" y="140">0.4</text><text x="56" y="209">0</text></g>
+      <!-- B: the same figure in an 8.5 cm column -->
+      <rect x="390" y="30" width="97" height="58" fill="#fff" stroke="#9aa3b2"/>
+      <g stroke="#9aa3b2" stroke-width="0.6"><line x1="402" y1="80" x2="484" y2="80"/><line x1="402" y1="34" x2="402" y2="80"/></g>
+      <rect x="408" y="43.3" width="18" height="36.7" fill="#4f46a5"/><rect x="433" y="45" width="18" height="35" fill="#e0803c"/><rect x="458" y="42.5" width="18" height="37.5" fill="#1fa39a"/>
+      <g font-size="3.8" fill="#111" text-anchor="end"><text x="400" y="40.3">0.8</text><text x="400" y="60.8">0.4</text><text x="400" y="81.2">0</text></g>
+      <!-- C: Width 400 px, Font size 1.5, in 8.5 cm -->
+      <rect x="530" y="30" width="97" height="121" fill="#fff" stroke="#9aa3b2"/>
+      <g stroke="#9aa3b2" stroke-width="0.8"><line x1="562" y1="140" x2="622" y2="140"/><line x1="562" y1="40" x2="562" y2="140"/></g>
+      <rect x="568" y="60.2" width="14" height="79.8" fill="#4f46a5"/><rect x="588" y="64" width="14" height="76" fill="#e0803c"/><rect x="608" y="58.6" width="14" height="81.4" fill="#1fa39a"/>
+      <g font-size="11.7" fill="#111" text-anchor="end"><text x="558" y="55">0.8</text><text x="558" y="99.6">0.4</text><text x="558" y="144">0</text></g>
+      <g font-size="10.5" fill="#111" text-anchor="middle">
+        <text x="185" y="248">Width 840: the figure is 850 px, 28.8 cm</text><text x="185" y="263" fill="#5d6472">at natural size, 10.6 pt tick labels</text>
+        <text x="438" y="106">the same in an</text><text x="438" y="120">8.5 cm column</text><text x="438" y="135" fill="#b4234a" font-weight="600">3.1 pt</text>
+        <text x="578" y="170">Width 400 and Font</text><text x="578" y="184">size: all 1.5, at 8.5 cm</text><text x="578" y="199" fill="#0f766e" font-weight="600">9.7 pt</text>
+      </g>
+    </svg>
+    <figcaption><b>Figure 11.4.</b> The diversity figure at its natural size and reduced to an 8.5 cm column. The proportions between the three cases are real; the three text sizes are drawn larger than the scale of the diagram so that they can be read. With <span class="ui">Width</span> 400 and <span class="ui">Font size: all</span> 1.5 the figure is 410 px wide and its tick labels reach 9.7 pt in the column.</figcaption>
+  </figure>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Worked example · a figure for one column</div>
+    <p style="margin:0">The journal publishes figures in an 8.5 cm column at 600 dpi with text of at least 7 pt. The diversity figure is 850 px wide: reduced to 8.5 cm, its 11 px tick labels would end up at 28.3 × 11 × 8.5 / 850 = <b>3.1 pt</b>. With <span class="ui">Width</span> 400 and <span class="ui">Font size: all</span> 1.5, the figure is 410 px wide and the tick labels 16.5 px, which come to 28.3 × 16.5 × 8.5 / 410 = <b>9.7 pt</b>. For 600 dpi at 8.5 cm you need 8.5/2.54 × 600 = 2008 px of width; <span class="ui">Publication · 8× (600 dpi)</span> gives 410 × 8 = 3280 px, which is more than enough.</p>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · very large figures</div>
+    <p>The browser cannot create images of more than 16,000 pixels per side or more than 120 megapixels. If the chosen resolution exceeds these limits (a tree with hundreds of tips at 900 dpi, for example), the app lowers the resolution as much as necessary, keeps the proportions and shows a warning in orange next to the button. For more detail, export as SVG.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · which format and resolution</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>The journal requires TIFF or PNG</b></td><td>Check the final width and the resolution it demands; calculate the pixels needed and choose the factor that reaches them.</td></tr>
+        <tr><td><b>The figure has thin lines and text</b></td><td>PNG or TIFF at 600 dpi, or SVG; not JPG.</td></tr>
+        <tr><td><b>You are going to edit it afterwards</b></td><td>SVG: every text and colour can be changed.</td></tr>
+        <tr><td><b>It is for a presentation</b></td><td>PNG at 150 or 300 dpi, with a transparent background if the slide is coloured.</td></tr>
+        <tr><td><b>The journal changes the resolution of the file</b></td><td>It does not matter: what preserves quality is the number of pixels.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 11.3 -->
+  <h2 id="s11-3"><span class="num">11.3</span>The automatic report and the ZIP package</h2>
+  <p>Block 10 does not calculate anything new: it takes what is already on screen in the other blocks. Each table and each interpretation goes in exactly as you see it, and each figure as you left it in its editor. If you change a setting or a figure, return to Block 10 and the report is rebuilt with the change.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b10-tarjeta.png" alt="Report options card"></div>
+    <figcaption><b>Figure 11.5.</b> <span class="ui">1 · What goes into the report</span> with the maize SSR data: six blocks with results and 27 figures. At the top are the title, the authors and a note; in the middle, the available sections and the optional parts; at the bottom, the format and resolution of the figures in the ZIP and the output buttons.</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Table 11.5.</b> Parts of the report.</caption>
+    <thead><tr><th style="width:28%">Part</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td>Header and contents</td><td>Title, authors, date, data file, number of individuals, loci and populations, optional note and table of contents with links.</td></tr>
+      <tr><td><span class="ui">Executive summary</span></td><td>Key figures: data, diversity, inbreeding, differentiation, isolation by distance, clusters, assignment, sequences, root age and spatial structure, depending on what you ran.</td></tr>
+      <tr><td><span class="ui">Drafted results section</span></td><td>The interpretations from all blocks, without the warning boxes, as a draft of the results.</td></tr>
+      <tr><td>One section per block</td><td>Key figures, interpretation, numbered tables with titles and numbered figures. The caption of each figure adds the settings that affect it: permutations, bootstrap replicates, model or seed.</td></tr>
+      <tr><td><span class="ui">Methods paragraph</span></td><td>The methods used, with the actual settings and the authors and year of each method.</td></tr>
+      <tr><td><span class="ui">How to cite the software</span></td><td>The citation of the program, its licence and the BibTeX entry.</td></tr>
+      <tr><td><span class="ui">Appendix: data as analysed</span></td><td>The data matrix as it was analysed (optional).</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · what you see is what goes in</div>
+    <p>The report copies what each card shows at that moment. If in Block 9 you chose to view one population in <span class="ui">3 · Recent bottlenecks</span>, that is the one that goes into its figure; if a card is hidden because it does not apply to your data, it is left out. The three output buttons rebuild the report before saving it, so a title or a checkbox you change after the preview is always included.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · the methods paragraph is a draft</div>
+    <p>The paragraph names each method with its authors and year, and the settings it ran with (permutations, bootstrap replicates, models, seeds). It does not include the full reference list: take the references from appendix E, which gathers them with their details and marks those the paragraph may cite. Also check that the paragraph describes what you will actually report; if you removed a section from the report, its methods remain in the paragraph.</p>
+  </div>
+
+  <table>
+    <caption><b>Table 11.6.</b> Contents of the ZIP package. Only the files of the analyses you ran are included.</caption>
+    <thead><tr><th style="width:30%">Folder or file</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ruta">report.html</code></td><td>The report, identical to the one from <span class="ui">Report (HTML)</span>.</td></tr>
+      <tr><td><code class="ruta">data/</code></td><td>The data as analysed (CSV) and, with sequences, the haplotypes in FASTA.</td></tr>
+      <tr><td><code class="ruta">tables/</code></td><td>Allele frequencies, diversity, Hardy–Weinberg and null alleles, F-statistics by locus, pairwise differentiation, distances, PCoA coordinates, ancestry proportions by K and choice of K, assignment, haplotypes, bottleneck tests, N<sub>e</sub>, spatial autocorrelation, selfing, P<sub>ST</sub> and node ages.</td></tr>
+      <tr><td><code class="ruta">trees/</code></td><td>Population and individual trees (Newick) and dated trees (Newick and NEXUS).</td></tr>
+      <tr><td><code class="ruta">dating/</code></td><td>The MCMC chain log of the dating analysis.</td></tr>
+      <tr><td><code class="ruta">figures/svg/</code> · <code class="ruta">figures/png/</code></td><td>Each figure in SVG and in the chosen format (PNG, TIFF, JPG or WEBP) at the chosen resolution.</td></tr>
+      <tr><td><code class="ruta">methods.txt</code> · <code class="ruta">README.txt</code></td><td>The methods paragraph in plain text and the guide to the package.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · which output to use</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>You are writing the paper or thesis</b></td><td>Copy the methods paragraph and adapt it; rebuild the tables from the CSV files; export the figures following the rule in section 11.2.</td></tr>
+        <tr><td><b>You are sharing the analysis with co-authors</b></td><td>The HTML report: a single file that opens in any browser, with vector figures.</td></tr>
+        <tr><td><b>You are preparing the supplementary material</b></td><td>The ZIP: data, tables, trees and figures.</td></tr>
+        <tr><td><b>You want a fixed copy</b></td><td><span class="ui">Print / save as PDF</span> and the ZIP, with the seeds recorded.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 11.4 -->
+  <h2 id="s11-4"><span class="num">11.4</span>Step by step: the maize report</h2>
+  <p>With the maize microsatellite example and five blocks run with their default settings, the report has 6 sections, 20 tables and 27 figures, weighs 346&nbsp;KB and takes up 30 letter-size pages when printed.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Step by step</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>In Block 2, load <span class="ui">Maize populations · SSR</span> and press <span class="ui">Build the dataset and run the checks →</span>. Open Blocks 3, 4, 5, 6 and 9: each one runs when you open it.</li>
+      <li>In Block 3, open the editor of <span class="ui">Diversity of every population</span> and try out themes, palettes and sizes (figures 11.1 to 11.3). Settle on the style you will use in all of them.</li>
+      <li>Open Block 10, type the title and the authors and review the selected sections (figure 11.5).</li>
+      <li>Press <span class="ui">Build and preview the report</span> and look through the preview (figures 11.6 to 11.8).</li>
+      <li>Save the result with <span class="ui">Report (HTML)</span>, <span class="ui">Print / save as PDF</span> or <span class="ui">Full package (ZIP)</span>, and copy the methods paragraph with <span class="ui">Copy the methods paragraph</span>.</li>
+    </ol>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>What to check before handing in the report</div>
+    <ul style="margin:0">
+      <li><b>The summary repeats the interpretations.</b> The draft results section brings together the texts that later appear in each section; if the report is just for you, untick <span class="ui">Drafted results section</span> and it becomes shorter.</li>
+      <li><b>Every interpretation is a draft.</b> The sentences are generated from general rules; check that they apply to your species and your sampling design.</li>
+      <li><b>The full maize ZIP has 72 files and 7.6&nbsp;MB</b> with PNG figures at 300&nbsp;dpi: the report, the data, 12 tables, 2 trees, 27 figures in SVG and 27 in PNG, the methods and the guide. In TIFF it is several times larger.</li>
+      <li><b>When printing to PDF,</b> enable background graphics in the print dialog to keep the colour of the key figures. Figures are not split across pages and short tables stay with their titles.</li>
+    </ul>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b10-informe-inicio.png" alt="Beginning of the maize report"></div>
+    <figcaption><b>Figure 11.6.</b> Beginning of the report: title, authors, date and data; the table of contents with links; the key figures, with F<sub>IS</sub> and G′<sub>ST</sub> written with subscripts; and the draft results section, which brings together the interpretations from the blocks.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b10-informe-seccion.png" alt="Differentiation section of the report"></div>
+    <figcaption><b>Figure 11.7.</b> The Block 5 section: key figures, interpretation and the AMOVA table with its note. Tables and figures are numbered automatically throughout the report; this is table 11.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b10-informe-metodos.png" alt="Methods and software citation in the report"></div>
+    <figcaption><b>Figure 11.8.</b> The methods paragraph, with the settings that were used (1000 permutations per exact test, Holm correction, 999 AMOVA permutations, 300 simulations per locus…), and the section for citing the program with its BibTeX entry.</figcaption>
+  </figure>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · verification of the outputs</div>
+    <p>For this manual, the ZIP package was read with an independent reader of the format: its 68 test files had correct headers and directory and a CRC-32 identical to the one recalculated bit by bit, and its 27 PNG files opened without errors. The TIFF of the AMOVA figure had its tags in order, 150&nbsp;dpi on both axes and the same pixels as the equivalent PNG, without a single difference. The PNG carried 5906 dots per metre (150&nbsp;dpi). The editor redrew the 27 maize figures with five combinations of theme, typeface, font sizes from 0.6 to 2.2, flipped axes and widths from 520 to 1600 px: 135 figures without errors and without any text outside the canvas.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · corrections made to the app while preparing this chapter</div>
+    <p>The transparent PNG background came out white, because the figure paints its own background; it now stays transparent. The JPG did not store the resolution, and programs read it at 72 or 96&nbsp;dpi; it now carries it. Block 10 downloads used the previous preview even if the title or the sections had been changed; the report is now rebuilt for every output. The ZIP did not include the results of Block 9 or of the dating analysis; it now contains their tables, trees and the MCMC log. The printed report numbered the table of contents twice, cut off the BibTeX entry, split the key-figure boxes and separated titles from their tables; and symbols such as F<sub>ST</sub> appeared with an underscore in the titles of tables, figures and key figures.</p>
+  </div>
+
+  <p style="margin-top:0.25in">This chapter concludes the tour of the blocks. The appendices gather the file formats, the decision rules from the whole manual, a glossary, troubleshooting, the references and the third-party components.</p>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · User manual · Block 7: Bayesian clustering and assignment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  figure.mini .marco { width: 50%; margin: 0 auto; }
+  figure.mini figcaption { margin-left: 12%; margin-right: 12%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b7" data-pestana="B7" data-orden="8" style="--acento: var(--b7)">
+  <div class="cap-apertura">
+    <div class="cap-num">B7</div>
+    <div class="cap-etiqueta">Chapter eight · Block 7 · Clustering</div>
+    <h1 data-corto="Block 7 · Clustering and assignment">Bayesian clustering and assignment</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">Up to this point, the populations were the ones you declared. Block 7 asks the data how many genetic clusters they support and which one each individual belongs to, using two complementary methods: a Bayesian admixture model and discriminant analysis of principal components (DAPC). It then assigns each genotype to the population where it is most likely and flags possible migrants.</p>
+    <div class="cap-franja"><span class="k7"></span><span class="k7" style="opacity:.75"></span><span class="k7" style="opacity:.5"></span><span class="k7" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>8.1</b>The admixture model</li>
+      <li><b>8.2</b>How many clusters? ΔK, Ln P(D) and Puechmaille</li>
+      <li><b>8.3</b>DAPC</li>
+      <li><b>8.4</b>Assignment and migrants</li>
+      <li><b>8.5</b>Block settings, tables and figures</li>
+      <li><b>8.6</b>Step by step: agave with AFLP</li>
+    </ul>
+  </div>
+
+  <!-- 8.1 -->
+  <h2 id="s8-1"><span class="num">8.1</span>The admixture model</h2>
+  <p class="lead">If the plants you sampled come from several gene pools, each gene pool has its own allele frequencies. The model of Pritchard, Stephens and Donnelly (2000) searches for those gene pools without knowing in advance where each plant came from.</p>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>The idea in one sentence</div>
+    <p>The model assumes <b>K clusters</b>, each with its own allele frequencies <b>P</b>, and, for each individual, the fraction of its genome that comes from each cluster, <b>Q</b>. The algorithm distributes the allele copies among the clusters so that, within each cluster, the genotypes fit Hardy–Weinberg equilibrium as closely as possible and the loci are independent. An individual with Q = (1, 0, 0) comes entirely from cluster 1; one with Q = (0.6, 0.4, 0) is admixed between clusters 1 and 2.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Three gene pools and the membership Q of five individuals">
+      <defs><marker id="f81" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#9aa3b2"/></marker></defs>
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#7e3fb0"><text x="20" y="16">K = 3 CLUSTERS AND THEIR FREQUENCIES (P)</text><text x="400" y="16">MEMBERSHIP OF EACH INDIVIDUAL (Q)</text></g>
+      <g transform="translate(20 34)" font-size="10">
+        <g><rect x="0" y="0" width="100" height="120" rx="8" fill="#f1eaf7"/><text x="50" y="18" text-anchor="middle" font-weight="600" fill="#5b2d82">Cluster 1</text>
+          <rect x="20" y="36" width="16" height="70" fill="#5b2d82"/><rect x="42" y="86" width="16" height="20" fill="#5b2d82"/><rect x="64" y="96" width="16" height="10" fill="#5b2d82"/></g>
+        <g transform="translate(118 0)"><rect x="0" y="0" width="100" height="120" rx="8" fill="#fbeee4"/><text x="50" y="18" text-anchor="middle" font-weight="600" fill="#c2410c">Cluster 2</text>
+          <rect x="20" y="96" width="16" height="10" fill="#c2410c"/><rect x="42" y="46" width="16" height="60" fill="#c2410c"/><rect x="64" y="76" width="16" height="30" fill="#c2410c"/></g>
+        <g transform="translate(236 0)"><rect x="0" y="0" width="100" height="120" rx="8" fill="#e5f3f1"/><text x="50" y="18" text-anchor="middle" font-weight="600" fill="#0f766e">Cluster 3</text>
+          <rect x="20" y="86" width="16" height="20" fill="#0f766e"/><rect x="42" y="96" width="16" height="10" fill="#0f766e"/><rect x="64" y="36" width="16" height="70" fill="#0f766e"/></g>
+        <g fill="#5d6472" font-size="9" text-anchor="middle"><text x="48" y="136">alleles a · b · c of one locus</text><text x="166" y="136">the same locus</text><text x="284" y="136">the same locus</text></g>
+      </g>
+      <path d="M362 94 H392" stroke="#9aa3b2" stroke-width="1.6" marker-end="url(#f81)"/>
+      <g transform="translate(410 34)">
+        <line x1="0" y1="0" x2="0" y2="150" stroke="#9aa3b2"/>
+        <g font-size="9" fill="#5d6472" text-anchor="end"><text x="-4" y="4">1</text><text x="-4" y="79">0.5</text><text x="-4" y="154">0</text></g>
+        <!-- individuo 1: puro grupo 1 -->
+        <rect x="10" y="0" width="40" height="150" fill="#5b2d82"/>
+        <!-- individuo 2: 0.6 grupo 1, 0.4 grupo 2 -->
+        <rect x="62" y="60" width="40" height="90" fill="#5b2d82"/><rect x="62" y="0" width="40" height="60" fill="#c2410c"/>
+        <!-- individuo 3: puro grupo 2 -->
+        <rect x="114" y="0" width="40" height="150" fill="#c2410c"/>
+        <!-- individuo 4: 0.2 / 0.1 / 0.7 -->
+        <rect x="166" y="120" width="40" height="30" fill="#5b2d82"/><rect x="166" y="105" width="40" height="15" fill="#c2410c"/><rect x="166" y="0" width="40" height="105" fill="#0f766e"/>
+        <!-- individuo 5: puro grupo 3 -->
+        <rect x="218" y="0" width="40" height="150" fill="#0f766e"/>
+        <g font-size="9.5" fill="#111" text-anchor="middle"><text x="30" y="168">pure</text><text x="82" y="168">admixed</text><text x="134" y="168">pure</text><text x="186" y="168">admixed</text><text x="238" y="168">pure</text></g>
+        <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="30" y="182">(1, 0, 0)</text><text x="82" y="182">(0.6, 0.4, 0)</text><text x="134" y="182">(0, 1, 0)</text><text x="186" y="182">(0.2, 0.1, 0.7)</text><text x="238" y="182">(0, 0, 1)</text></g>
+      </g>
+    </svg>
+    <figcaption><b>Figure 8.1.</b> On the left, three clusters with different frequencies for the alleles of one locus. On the right, each bar is an individual and its colours add up to 1: the fraction of its genome that comes from each cluster. This is how to read the app’s membership bar plot (<i>barplot</i>).</figcaption>
+  </figure>
+
+  <table>
+    <caption><b>Table 8.1.</b> The elements of the model and what the app reports for each of them.</caption>
+    <thead><tr><th style="width:24%">Element</th><th>What it is</th><th style="width:30%">Where it appears</th></tr></thead>
+    <tbody>
+      <tr><td><b>K</b></td><td>Number of clusters tested. The app runs several values, from <span class="ui">K from</span> to <span class="ui">K to</span>.</td><td>K table and plots in card 2.</td></tr>
+      <tr><td><b>Q</b> (membership)</td><td>Fraction of each individual’s genome that comes from each cluster; average over all the sampled iterations.</td><td>Bar plot, table by population and <span class="ui">Q matrix (CSV)</span>.</td></tr>
+      <tr><td><b>P</b> (frequencies)</td><td>Allele frequencies of each cluster, with a Dirichlet prior with λ = 1 (frequencies independent among clusters).</td><td>Used in the calculation; not shown.</td></tr>
+      <tr><td><b>α</b> (admixture)</td><td>How admixed the individuals are: small (&lt; 0.2), almost all pure; close to 1 or larger, widespread admixture or an excessive K. It is estimated at each iteration.</td><td>Interpretation in card 2.</td></tr>
+      <tr><td><b>Ln P(D)</b></td><td>Estimate of the likelihood of the model with K clusters: mean of ln L minus half its variance during sampling.</td><td>K table and the <span class="ui">Ln P(D) against K</span> plot.</td></tr>
+      <tr><td><b>Burn-in</b> and <b>iterations</b></td><td>Iterations discarded while the chain stabilises, and those averaged afterwards.</td><td><span class="ui">Burn-in iterations</span> · <span class="ui">Sampled iterations</span>.</td></tr>
+      <tr><td><b>Replicates</b></td><td>Independent runs for each K, with different seeds; they make it possible to measure the variation of Ln P(D) and the agreement between solutions.</td><td><span class="ui">Replicates per K</span>; H′ column.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · details of this implementation</div>
+    <p>The app offers the admixture model (default) and the no-admixture model, in which each individual belongs to a single cluster; in both, allele frequencies are independent among clusters. Dominant bands are treated as haploid loci, one copy per individual. Missing data simply contribute nothing. The runs are carried out in a background thread, so you can keep using the page; when the app is opened by double-clicking, some browsers do not allow that thread and the runs are carried out in the page itself, with the same results.</p>
+  </div>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · what the model assumes</div>
+    <p>The model expects Hardy–Weinberg equilibrium and independent loci within each cluster. In plants this often fails: <b>selfing</b> and <b>clonal propagation</b> create heterozygote deficits and linkage; <b>families</b> sampled together form clusters that are not populations; <b>isolation by distance</b> turns a continuous gradient into artificial clusters; and <b>uneven sampling</b> makes ΔK underestimate K. Before interpreting, check F<sub>IS</sub> and the linkage results of Block 4 and the isolation by distance of Block 6.</p>
+  </div>
+
+  <!-- 8.2 -->
+  <h2 id="s8-2"><span class="num">8.2</span>How many clusters? ΔK, Ln P(D) and Puechmaille</h2>
+  <p>No single number decides K on its own. The app runs the model with several values of K and several replicates, and brings together four lines of evidence: the likelihood Ln P(D), Evanno’s ΔK, Puechmaille’s estimators and the agreement between replicates. The final decision is made by looking at the bar plots as well.</p>
+
+  <table class="compacta">
+    <caption><b>Table 8.2.</b> The criteria for choosing K. L(K) is the mean Ln P(D) of the replicates with K clusters and s its standard deviation.</caption>
+    <thead><tr><th style="width:22%">Criterion</th><th style="width:34%">Calculation</th><th>How to read it</th></tr></thead>
+    <tbody>
+      <tr><td><b>Ln P(D)</b><br><span class="small">Pritchard et al. (2000)</span></td><td class="f">mean(ln L) − variance(ln L)/2</td><td>It usually rises up to the best-supported K and then levels off or falls, while the replicates spread out (s increases).</td></tr>
+      <tr><td><b>ΔK</b><br><span class="small">Evanno et al. (2005)</span></td><td class="f">L′(K) = L(K) − L(K−1)<br>|L″(K)| = |L′(K+1) − L′(K)|<br>ΔK = |L″(K)| / s</td><td>It measures how abrupt the change in Ln P(D) is. It finds the uppermost level of structure; it cannot choose K = 1 or the last K, and it requires two or more replicates.</td></tr>
+      <tr><td><b>MedMeaK · MaxMeaK · MedMedK · MaxMedK</b><br><span class="small">Puechmaille (2016)</span></td><td class="f">clusters to which at least one population belongs with a mean (Mea) or median (Med) Q ≥ 0.5; median (Med) or maximum (Max) across replicates</td><td>Designed for uneven sampling. Their highest value estimates K. They require declared populations.</td></tr>
+      <tr><td><b>H′</b><br><span class="small">Jakobsson and Rosenberg (2007)</span></td><td class="f">1 − ‖Q<sub>1</sub> − Q<sub>2</sub>‖ / √(2N), averaged over pairs of aligned replicates</td><td>1 = identical replicates. Below 0.90, the runs reach different solutions.</td></tr>
+      <tr><td><b>Individuals with Q ≥ 0.8</b></td><td class="f">individuals with at least 80% of their genome in one cluster (consensus Q)</td><td>If none exceeds 0.8, the clusters do not separate individuals: the signal is weak.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Worked example · ΔK of the agave at K = 3</div>
+    <p>The mean Ln P(D) values of the three replicates are −2768.9 with K = 2, −2699.7 with K = 3 and −2671.5 with K = 4, and the standard deviation with K = 3 is 4.04.</p>
+    <ol class="pasos" style="margin-bottom:0.04in">
+      <li>L′(3) = −2699.7 − (−2768.9) = 69.2 and L′(4) = −2671.5 − (−2699.7) = 28.2.</li>
+      <li>|L″(3)| = |28.2 − 69.2| = 41.0.</li>
+      <li>ΔK(3) = 41.0 / 4.04 = 10.1. The app shows 10.18 because it works with the unrounded values.</li>
+    </ol>
+    <p style="margin:0">With K = 4, Ln P(D) is higher, but its standard deviation (10.94) almost triples and ΔK(4) drops to 5.43: ΔK prefers K = 3 even though the best fit is at K = 4.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · choosing K</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>ΔK, Ln P(D) and Puechmaille agree</b></td><td>That K is well supported. Confirm it in the bar plot.</td></tr>
+        <tr><td><b>ΔK gives a smaller K than Ln P(D)</b></td><td>ΔK marks the uppermost level of structure; the K from Ln P(D) may be the subdivision within it. Choose the largest K at which every cluster has individuals with high Q and the replicates agree.</td></tr>
+        <tr><td><b>Ln P(D) is highest at K = 1</b></td><td>The ΔK peak is not evidence of clusters on its own, because ΔK never chooses K = 1. Accept K = 2 only if there are individuals with Q ≥ 0.8 in both clusters.</td></tr>
+        <tr><td><b>H′ falls below 0.90</b></td><td>Replicates are in different solutions: lengthen the chains, increase the replicates and do not interpret the consensus plot for that K.</td></tr>
+        <tr><td><b>A Puechmaille estimator counts a cluster whose mean Q does not reach 0.6</b> in any population</td><td>The count is fragile and the app warns about it: confirm it with the bar plot and with the individuals with Q ≥ 0.8.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The agave: four clusters</h3>
+  <p>The 80 agave plants with 60 AFLP bands, with the default settings (K from 1 to 6, 3 replicates, 5000 + 10,000 iterations), give a typical case in which ΔK and Ln P(D) disagree.</p>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b7-agave-k.png" alt="K table for the agave"></div>
+    <figcaption><b>Figure 8.2.</b> <span class="ui">How many clusters?</span> with the agave. Ln P(D) rises up to K = 4 (−2671.5) and then falls while the standard deviation grows (17.47 and 55.68). ΔK peaks at K = 3 (10.18). The Puechmaille estimators reach 4 at K = 4 and drop afterwards; the app warns that the least-used cluster, that of Guerrero, barely reaches a mean membership of 0.52. H′ stays above 0.97 up to K = 4, and 14 to 15 plants have Q ≥ 0.8 with K from 2 to 4.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-graficas-k.png" alt="Ln P(D) and ΔK against K"></div>
+    <figcaption><b>Figure 8.3.</b> Mean Ln P(D) ± standard deviation (left; the orange dot is the maximum) and ΔK (right). The bar at K = 6 shows how the replicates spread out when K is excessive.</figcaption>
+  </figure>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-agave-puechmaille.png" alt="Puechmaille estimators"></div>
+    <figcaption><b>Figure 8.4.</b> Puechmaille estimators against the K tested. The dotted line is K = K: as long as the estimators follow it, every new cluster is used by some population. They depart from it after K = 4.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-barras.png" alt="Membership bar plot with K = 4"></div>
+    <figcaption><b>Figure 8.5.</b> <span class="ui">Membership of every individual</span> with K = 4 (consensus of 3 replicates). Each population has its own cluster, with a mean membership of 0.61 (Oaxaca north), 0.65 (Oaxaca south), 0.68 (Puebla) and 0.52 (Guerrero), the most admixed. The four sampled populations are the four genetic clusters.</figcaption>
+  </figure>
+
+  <h3>When there are no clear clusters: maize with microsatellites</h3>
+  <p>The three maize landraces differ, but only slightly: θ = 0.049 in chapter 6. With 8 microsatellites and the default settings, the admixture model does not separate them, and the example shows why reading ΔK is not enough.</p>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-ssr-k.png" alt="K table for maize with microsatellites"></div>
+    <figcaption><b>Figure 8.6.</b> Maize with microsatellites. ΔK has a clear peak at K = 2 (13.04), but Ln P(D) is highest at K = 1 (−1783.4) and no individual reaches Q ≥ 0.8 with K from 2 to 5. The Puechmaille estimators count 2 clusters at K = 2, but the app warns that the mean membership barely exceeds 0.5.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-ssr-barras.png" alt="Maize bar plot with K = 2"></div>
+    <figcaption><b>Figure 8.7.</b> The bar plot with K = 2: all plants lie between 0.45 and 0.56 in each cluster, and the three landraces have mean memberships of 0.49 to 0.52. There are no clusters. Compare it with figure 8.5.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Failing to detect clusters is not the same as having no differentiation</div>
+    <p>The AMOVA in chapter 6 found significant differences between these landraces, and the DAPC in section 8.3 distinguishes them in 72% of cases. The Bayesian model needs moderate differentiation, or many loci, to form clusters of individuals; with small differences and few loci, the honest answer is “one cluster”. Moreover, the simulated data in this example have a heterozygote deficit within the landraces (F = 0.16), which the model does not expect.</p>
+  </div>
+
+  <!-- 8.3 -->
+  <h2 id="s8-3"><span class="num">8.3</span>DAPC</h2>
+  <p>Discriminant analysis of principal components (Jombart, Devillard and Balloux, 2010) does not use a genetic model: it assumes neither Hardy–Weinberg equilibrium nor independent loci. It first summarises the genotypes with a principal component analysis (PCA) and then looks for the axes that best separate the groups, whether they are the populations you declared or groups the method itself finds.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 176" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Steps of DAPC">
+      <defs><marker id="f82" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7e3fb0"/></marker></defs>
+      <g font-size="10.5" text-anchor="middle">
+        <g><rect x="10" y="30" width="150" height="96" rx="10" fill="#f1eaf7" stroke="#d9c7ea"/>
+          <text x="85" y="54" font-weight="600" fill="#5b2d82">1 · Frequencies</text>
+          <text x="85" y="74" fill="#111" font-size="9.5">individuals × alleles</text>
+          <text x="85" y="90" fill="#111" font-size="9.5">(0, 0.5 or 1 per allele;</text>
+          <text x="85" y="106" fill="#111" font-size="9.5">presence of each band)</text></g>
+        <g><rect x="190" y="30" width="150" height="96" rx="10" fill="#f1eaf7" stroke="#d9c7ea"/>
+          <text x="265" y="54" font-weight="600" fill="#5b2d82">2 · PCA</text>
+          <text x="265" y="74" fill="#111" font-size="9.5">the first components are</text>
+          <text x="265" y="90" fill="#111" font-size="9.5">kept: the smaller of</text>
+          <text x="265" y="106" fill="#111" font-size="9.5">90% of variance and N/3</text></g>
+        <g><rect x="370" y="30" width="150" height="96" rx="10" fill="#f1eaf7" stroke="#d9c7ea"/>
+          <text x="445" y="54" font-weight="600" fill="#5b2d82">3 · Groups</text>
+          <text x="445" y="74" fill="#111" font-size="9.5">declared populations,</text>
+          <text x="445" y="90" fill="#111" font-size="9.5">or k-means on the</text>
+          <text x="445" y="106" fill="#111" font-size="9.5">components, K by BIC</text></g>
+        <g><rect x="550" y="30" width="140" height="96" rx="10" fill="#7e3fb0"/>
+          <text x="620" y="54" font-weight="600" fill="#fff">4 · Discriminant</text>
+          <text x="620" y="74" fill="#fff" font-size="9.5">axes that maximise the</text>
+          <text x="620" y="90" fill="#fff" font-size="9.5">between-group variance</text>
+          <text x="620" y="106" fill="#fff" font-size="9.5">relative to within-group</text></g>
+        <path d="M162 78 H186" stroke="#7e3fb0" stroke-width="1.6" marker-end="url(#f82)"/>
+        <path d="M342 78 H366" stroke="#7e3fb0" stroke-width="1.6" marker-end="url(#f82)"/>
+        <path d="M522 78 H546" stroke="#7e3fb0" stroke-width="1.6" marker-end="url(#f82)"/>
+      </g>
+      <text x="350" y="152" font-size="9.5" fill="#5d6472" text-anchor="middle">Result: discriminant coordinates, probability of membership in each group and reassignment percentage</text>
+    </svg>
+    <figcaption><b>Figure 8.8.</b> The four steps of DAPC. Keeping too few components loses information; keeping too many makes the discriminant axes fit the particular individuals in the sample.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Reassignment and leave-one-out validation</div>
+    <p>DAPC computes, for each individual, the probability of belonging to each group, and <b>reassigns</b> it to the most probable one. That success rate is optimistic, because the same individuals defined the axes. The app also computes the <b>leave-one-out</b> success rate: each individual is classified with a discriminant analysis built without it. That is the figure to report and to compare with chance (1/number of groups).</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Table 8.3.</b> DAPC success with the maize according to the number of components retained. Reassignment keeps rising; leave-one-out success levels off.</caption>
+    <thead><tr><th>Components retained</th><th class="c">2</th><th class="c">6</th><th class="c">10</th><th class="c">12</th><th class="c">15</th><th class="c">18</th><th class="c">22 (automatic)</th><th class="c">25</th></tr></thead>
+    <tbody>
+      <tr><td>Variance retained (%)</td><td class="c">17.4</td><td class="c">42.7</td><td class="c">60.9</td><td class="c">68.1</td><td class="c">77.2</td><td class="c">84.5</td><td class="c">91.0</td><td class="c">94.4</td></tr>
+      <tr><td>Reassignment (%)</td><td class="c">56.0</td><td class="c">68.0</td><td class="c">77.3</td><td class="c">80.0</td><td class="c">88.0</td><td class="c">92.0</td><td class="c">94.7</td><td class="c">92.0</td></tr>
+      <tr><td><b>Leave-one-out (%)</b></td><td class="c">54.7</td><td class="c">64.0</td><td class="c">68.0</td><td class="c">70.7</td><td class="c">70.7</td><td class="c">72.0</td><td class="c">72.0</td><td class="c">76.0</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-dapc.png" alt="DAPC results with the agave"></div>
+    <figcaption><b>Figure 8.9.</b> <span class="ui">DAPC results</span> with the agave: 26 components (81.2% of the variance) and 3 discriminant axes. Reassignment is 98.8% and leave-one-out success 82.5%, against 25% expected by chance. Oaxaca north (70%) and Guerrero (75%) are the least distinct groups.</figcaption>
+  </figure>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-agave-dapc-dispersion.png" alt="DAPC scatter plot"></div>
+    <figcaption><b>Figure 8.10.</b> The first two discriminant axes (45.3% and 30% of the between-group variance), with 95% ellipses and centroids. Puebla lies on the left, Oaxaca north on the right and Oaxaca south at the bottom; Guerrero, in the centre, overlaps with Puebla and with Oaxaca north, and it is also the population that receives the most plants in the assignment of section 8.4.</figcaption>
+  </figure>
+
+  <figure class="mini">
+    <div class="marco"><img src="../img/b7-agave-compoplot.png" alt="DAPC membership probabilities"></div>
+    <figcaption><b>Figure 8.11.</b> DAPC membership probabilities (<i>compoplot</i>). Almost all plants have a probability close to 1 of belonging to their own population: this is the optimistic reassignment of figure 8.9. These are not ancestry proportions like the Q values of figure 8.5, but the certainty of the classification.</figcaption>
+  </figure>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-issr-dapc.png" alt="DAPC with k-means groups for the ISSR landraces"></div>
+    <figcaption><b>Figure 8.12.</b> DAPC with k-means groups for the 15 ISSR landraces. The app warns that the BIC is still falling at the largest K tested (7): this is the edge of the search, not an estimate. The groups contain 1 to 3 landraces; the one left on its own cannot be evaluated by leaving it out.</figcaption>
+  </figure>
+
+  <figure class="mini">
+    <div class="marco"><img src="../img/b7-issr-bic.png" alt="BIC curve for the ISSR landraces"></div>
+    <figcaption><b>Figure 8.13.</b> The BIC for the landraces falls from 18.3 (K = 1) to 7.0 (K = 7) with no minimum or elbow. The PCoA and the tree of Block 6 are a better choice.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · reading a DAPC</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Leave-one-out success clearly exceeds chance</b></td><td>The groups are genetically distinguishable. Report that figure, not the reassignment.</td></tr>
+        <tr><td><b>Reassignment far exceeds leave-one-out success</b></td><td>Part of the success is fit to the sample. Try several numbers of components and keep the one beyond which leave-one-out success stops improving (table 8.3).</td></tr>
+        <tr><td><b>One group has low success</b> (below 70%)</td><td>Its individuals are confused with other groups; see which ones in the scatter plot.</td></tr>
+        <tr><td><b>Groups found by k-means</b></td><td>Success is high by construction. Look for a minimum or an elbow in the BIC curve; if it is still falling at the largest K tested, there is no optimum and the groups are merely a convenient partition.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 8.4 -->
+  <h2 id="s8-4"><span class="num">8.4</span>Assignment and migrants</h2>
+  <p>The assignment test answers a different question: does each individual resemble the population where you collected it more than any other? It computes the probability of its multilocus genotype in each population, assuming Hardy–Weinberg equilibrium (p² for a homozygote, 2pq for a heterozygote, multiplying across loci), and assigns it to the population where that probability is highest (Paetkau et al., 1995; Rannala and Mountain, 1997).</p>
+
+  <table class="compacta">
+    <caption><b>Table 8.4.</b> The two ways of estimating the allele frequencies of each population. n<sub>a</sub> is the number of copies of the allele, n the total number of copies in the population and k the number of alleles at the locus across all the data.</caption>
+    <thead><tr><th style="width:30%">Method</th><th style="width:30%">Frequency</th><th>Comment</th></tr></thead>
+    <tbody>
+      <tr><td><b>Rannala and Mountain (1997)</b><br><span class="small">Bayesian, default</span></td><td class="f">(n<sub>a</sub> + 1/k) / (n + 1)</td><td>An allele absent from the population receives a small but reasonable frequency. This is the recommended method.</td></tr>
+      <tr><td><b>Paetkau et al. (1995)</b></td><td class="f">n<sub>a</sub> / n, or 0.01 if the allele is missing</td><td>The value 0.01 is an arbitrary convention; it is included for comparison with older studies.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Worked example · an AA plant from population 1</div>
+    <p>One locus with two alleles. Population 1 has 30 copies of A and 10 of B (20 plants); population 2, 12 of A and 28 of B. The plant is AA and was collected in population 1, so before the calculation its two copies of A are removed from that population (<b>leave-one-out</b>): 28 out of 38 remain.</p>
+    <table class="compacta" style="margin:0.04in 0 0.06in">
+      <thead><tr><th style="width:22%">Population</th><th>Frequency of A (Rannala and Mountain)</th><th class="c" style="width:16%">L = p²</th><th class="c" style="width:12%">ln L</th></tr></thead>
+      <tbody>
+        <tr><td>1 (its population)</td><td>(28 + 1/2) / (38 + 1) = 0.731</td><td class="c">0.534</td><td class="c">−0.63</td></tr>
+        <tr><td>2</td><td>(12 + 1/2) / (40 + 1) = 0.305</td><td class="c">0.093</td><td class="c">−2.38</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:0">The genotype is 5.7 times more likely in population 1: it is assigned to its own population. With several loci, the ln L values of each locus are added. Without leaving the plant out, the frequency of A in its population would be 0.744 and correct assignment would look slightly easier than it really is.</p>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>The first-generation migrant test</div>
+    <p>A misassigned individual is not necessarily a migrant: if the populations are similar, many residents fit almost as well in another one. To separate the two cases, the app computes λ = ln(L<sub>home</sub>/L<sub>max</sub>), where L<sub>home</sub> is the likelihood in the population where the individual was collected and L<sub>max</sub> the highest among all of them (Paetkau et al., 2004). λ equals 0 if the individual fits best in its own population and is negative if it fits better in another. The app then simulates genotypes of residents of that population (500 by default) and computes λ for each one; each simulated genotype is evaluated against a resample with replacement of the population, so that it has the same sampling error as a real resident evaluated with leave-one-out. The P value is the fraction of simulated residents with a λ as low or lower. With P &lt; α (0.01 by default), the individual is flagged as a possible migrant.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 198" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="Distribution of λ in simulated residents and the observed value">
+      <g transform="translate(70 4)">
+        <line x1="0" y1="150" x2="560" y2="150" stroke="#111"/>
+        <g font-size="9.5" fill="#5d6472" text-anchor="middle">
+          <text x="0" y="166">−8</text><text x="70" y="166">−7</text><text x="140" y="166">−6</text><text x="210" y="166">−5</text><text x="280" y="166">−4</text><text x="350" y="166">−3</text><text x="420" y="166">−2</text><text x="490" y="166">−1</text><text x="560" y="166">0</text>
+        </g>
+        <text x="280" y="186" font-size="10.5" fill="#111" text-anchor="middle">λ = ln(L<tspan dy="3" font-size="8">home</tspan><tspan dy="-3">/L</tspan><tspan dy="3" font-size="8">max</tspan><tspan dy="-3">) for 500 simulated residents</tspan></text>
+        <g fill="#d9c7ea">
+          <rect x="316" y="146" width="30" height="4"/><rect x="351" y="140" width="30" height="10"/><rect x="386" y="130" width="30" height="20"/><rect x="421" y="112" width="30" height="38"/><rect x="456" y="92" width="30" height="58"/><rect x="491" y="64" width="30" height="86"/>
+        </g>
+        <rect x="532" y="10" width="26" height="140" fill="#7e3fb0"/>
+        <text x="524" y="22" font-size="9.5" fill="#5b2d82" text-anchor="end">most fit best in their own population (λ = 0)</text>
+        <line x1="163" y1="36" x2="163" y2="150" stroke="#b4234a" stroke-width="2" stroke-dasharray="4 3"/>
+        <circle cx="163" cy="150" r="5" fill="#b4234a"/>
+        <text x="171" y="50" font-size="10.5" fill="#b4234a" font-weight="600">observed: λ = −5.67</text>
+        <text x="171" y="66" font-size="9.5" fill="#b4234a">none of the 500 simulated values is that low</text>
+        <text x="171" y="81" font-size="9.5" fill="#b4234a">P = (0 + 1)/(500 + 1) = 0.002 &lt; 0.01 → possible migrant</text>
+      </g>
+    </svg>
+    <figcaption><b>Figure 8.14.</b> The idea behind the migrant test, with the values of the agave plant Oaxaca_south_12. The distribution is schematic: the one in the app comes from the simulated genotypes of the population where the plant was collected.</figcaption>
+  </figure>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · assignment and migrants</div>
+    <table class="compacta">
+      <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Self-assignment is high</b></td><td>The populations are distinguishable. Compare it with chance (1/number of populations) and with the F<sub>ST</sub> of chapter 6: it increases with differentiation and with the number and variability of the loci (Cornuet et al., 1999).</td></tr>
+        <tr><td><b>Two populations exchange many individuals</b> in the matrix</td><td>They are the least differentiated pair. This is not proof of current gene flow.</td></tr>
+        <tr><td><b>Few individuals flagged as migrants</b></td><td>With N individuals and α = 0.01, about N × 0.01 are expected by chance. If the number flagged does not greatly exceed that value, treat them as candidates for review, not as proven migrants.</td></tr>
+        <tr><td><b>A misassigned individual with a high P</b></td><td>It is a resident that resembles another population, not a migrant.</td></tr>
+        <tr><td><b>Populations with fewer than 5 individuals</b></td><td>They are excluded from the test: their frequencies are not reliable.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">The test assumes that all possible source populations are in the data. A migrant from an unsampled population appears as an unusual individual in all of them.</p>
+  </div>
+
+  <figure class="chica">
+    <div class="marco"><img src="../img/b7-agave-asignacion.png" alt="Assignment results with the agave"></div>
+    <figcaption><b>Figure 8.15.</b> <span class="ui">Assignment results</span> with the agave: 87.5% of the plants are assigned to their own population (70 of 80). One plant, Oaxaca_south_12, is flagged as a possible migrant, assigned to Guerrero (P = 0.002), but with 80 plants 0.8 are expected by chance, and the app says so.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-asignacion-graficas.png" alt="Assignment matrix and likelihoods"></div>
+    <figcaption><b>Figure 8.16.</b> On the left, the assignment matrix in percentages: the diagonal ranges from 85 to 90%. On the right, the likelihood of each genotype in its own population (horizontal axis) against the best of the others (vertical axis). Plants above the diagonal fit better in another population and are labelled; the circle with a thick outline is the possible migrant.</figcaption>
+  </figure>
+
+  <!-- 8.5 -->
+  <h2 id="s8-5"><span class="num">8.5</span>Block settings, tables and figures</h2>
+  <p>Block 7 opens with six or more individuals and three polymorphic markers; it does not apply to morphological characters or to a single sequence alignment. The three parts (Bayesian clustering, DAPC and assignment) are run separately, each with its own button.</p>
+
+  <table>
+    <caption><b>Table 8.5.</b> Block 7 settings.</caption>
+    <thead><tr><th style="width:32%">Setting</th><th>Options</th><th style="width:30%">Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Model</span></td><td><i>Admixture</i> or <i>No admixture</i> (each individual from a single cluster).</td><td>Admixture, unless you know there are no hybrids.</td></tr>
+      <tr><td><span class="ui">K from</span> · <span class="ui">K to</span></td><td>1 to 20. On entering, K runs from 1 to the number of populations plus 2.</td><td>Include K = 1 and at least two values above the expected one.</td></tr>
+      <tr><td><span class="ui">Replicates per K</span></td><td>1 to 20 (default 3). ΔK needs 2 or more.</td><td>10 to 20 for publication.</td></tr>
+      <tr><td><span class="ui">Burn-in iterations</span> · <span class="ui">Sampled iterations</span></td><td>Default 5000 + 10,000.</td><td>1000 + 2000 to explore; 50,000 + 100,000 for publication.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Integer; DAPC and assignment use it too.</td><td>Report it in the methods.</td></tr>
+      <tr><td><span class="ui">Groups</span> (DAPC)</td><td>The populations from Block 2, or groups found by k-means with K chosen by BIC (<span class="ui">Largest K to try</span>, default 10).</td><td>Populations if there are any; k-means to explore.</td></tr>
+      <tr><td><span class="ui">Principal components retained</span></td><td>Empty: the smaller of 90% of the variance and N/3.</td><td>Compare several values using leave-one-out success.</td></tr>
+      <tr><td><span class="ui">Allele frequencies</span> (assignment)</td><td>Rannala and Mountain (1997) or Paetkau et al. (1995).</td><td>Rannala and Mountain.</td></tr>
+      <tr><td><span class="ui">Simulated genotypes per population</span></td><td>0 to 10,000 (default 500); 0 skips the migrant test.</td><td>500; 1000 or more for publication.</td></tr>
+      <tr><td><span class="ui">Migrant threshold α</span></td><td>0.001 to 0.1 (default 0.01).</td><td>0.01.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Table 8.6.</b> Block 7 result cards.</caption>
+    <thead><tr><th style="width:28%">Card</th><th>Contents</th><th class="c" style="width:24%">Download</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · How many clusters?</span></td><td>Interpretation, K table (Ln P(D), ΔK, H′, individuals with Q ≥ 0.8 and Puechmaille estimators), plots of Ln P(D), ΔK and Puechmaille.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Membership of every individual</span></td><td>Bar plot of the chosen K and run (consensus or each replicate) and mean membership by population.</td><td class="c"><span class="ui">Q matrix (CSV)</span></td></tr>
+      <tr><td><span class="ui">5 · DAPC results</span></td><td>Interpretation, success by group (reassignment and leave-one-out), BIC curve if k-means was used, scatter plot and membership probabilities.</td><td class="c"><span class="ui">Coordinates and memberships (CSV)</span></td></tr>
+      <tr><td><span class="ui">7 · Assignment results</span></td><td>Interpretation, assignment matrix, heat map, likelihood plot and a table of every individual sorted by P value.</td><td class="c"><span class="ui">Assignment of every individual (CSV)</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- 8.6 -->
+  <h2 id="s8-6"><span class="num">8.6</span>Step by step: agave with AFLP</h2>
+  <p>The four agave populations, with 20 plants each and 60 bands, take us through the whole block. The values in this chapter are those produced by the app with the default settings and seed 1.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Step by step</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>In Block 2, load <span class="ui">Agave · AFLP</span>, build the dataset and open Block 7 (figure 8.17).</li>
+      <li>Click <span class="ui">Run the MCMC</span>. The 18 runs take about 3 minutes; the progress bar shows the Ln P(D) of each one.</li>
+      <li>In <span class="ui">How many clusters?</span>, compare Ln P(D), ΔK, the Puechmaille estimators and H′ (figures 8.2 to 8.4).</li>
+      <li>In <span class="ui">Membership of every individual</span>, change <span class="ui">K</span> to 3, 4 and 5 and see at which value every cluster has plants of its own (figure 8.5).</li>
+      <li>Click <span class="ui">Run DAPC</span> with the populations as groups (figures 8.9 to 8.11).</li>
+      <li>Click <span class="ui">Run the assignment</span> and check the matrix, the likelihoods and the table of individuals (figures 8.15 and 8.16).</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b7-agave-ajustes.png" alt="Bayesian clustering settings"></div>
+    <figcaption><b>Figure 8.17.</b> Bayesian clustering settings with the agave: 80 individuals and 60 bands treated as haploid loci, K from 1 to 6 and 3 replicates.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>How to read these results</div>
+    <ul style="margin:0">
+      <li><b>Four clusters, not three.</b> ΔK prefers K = 3, but Ln P(D) and the four Puechmaille estimators point to K = 4, the replicates agree (H′ = 0.974) and the bar plot gives each population its own cluster. The Guerrero cluster is the weakest (0.52), so it should be confirmed with long chains and more replicates before publication.</li>
+      <li><b>Differentiated populations, with admixture.</b> Mean membership in their own cluster ranges from 0.52 to 0.68 and α is around 0.5 with K = 3: many plants carry ancestry from other clusters, consistent with the θ<sub>B</sub> of 0.125 in chapter 6.</li>
+      <li><b>The three methods agree on the ranking.</b> Guerrero and Oaxaca north are the least distinct in the DAPC (75 and 70% with leave-one-out), Guerrero is the most admixed in the bar plot and it receives five of the ten misassigned plants.</li>
+      <li><b>No evidence of migrants.</b> One plant flagged out of 80, when 0.8 are expected by chance.</li>
+    </ul>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · what to report in a paper</div>
+    <p>For Bayesian clustering: the model, the values of K tested, the number of replicates, the <i>burn-in</i> and sampling iterations, the seed, and all the criteria for choosing K, with the bar plot of the chosen K (and, if they differ, that of the ΔK value). For DAPC: the number of components, how the groups were defined and the leave-one-out success. For assignment: the frequency method, the self-assignment rate and, for migrants, the number of simulations, α and how many are expected by chance. The methods section of the Block 10 report writes all of this up.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · verification of the calculations</div>
+    <p>For this manual, the app’s Ln P(D) with K = 1 was compared with its analytical value under the Dirichlet distribution (−1783.4 versus −1783.3 for the maize), and the gamma random number generator reproduced the theoretical mean and variance. With simulated data from three clusters (90 individuals, 10 loci), Ln P(D) and ΔK pointed to K = 3, H′ was 0.97 and the estimated Q differed from the true one by 0.05 on average. ΔK, H′ and the Puechmaille estimators were recomputed separately. The PCA, discriminant axes, membership probabilities and leave-one-out success of the DAPC matched an independent discriminant analysis (differences smaller than 10<sup>−12</sup>). The assignment likelihoods matched an independent calculation (10<sup>−15</sup>). Without migrants, the test flagged 2 of 270 residents with P &lt; 0.01, as expected by chance, and it detected 9 of 12 planted migrants.</p>
+  </div>
+
+  <p style="margin-top:0.25in">The next chapter moves from markers to sequences: Block 8 analyses haplotype diversity, neutrality tests, demographic history and the haplotype network of an alignment.</p>
+</section>
+
+</body>
+</html>

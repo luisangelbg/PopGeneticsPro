@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · User manual · Block 6: distances, ordination and trees</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  figure.chica .marco { width: 70%; margin: 0 auto; }
+  figure.chica figcaption { margin-left: 15%; margin-right: 15%; }
+  figure.mini .marco { width: 50%; margin: 0 auto; }
+  figure.mini figcaption { margin-left: 12%; margin-right: 12%; }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+  table.geno td, table.geno th { text-align: center; font-family: var(--sans); }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="cap-b6" data-pestana="B6" data-orden="7" style="--acento: var(--b6)">
+  <div class="cap-apertura">
+    <div class="cap-num">B6</div>
+    <div class="cap-etiqueta">Chapter seven · Block 6 · Distance</div>
+    <h1 data-corto="Block 6 · Distances, ordination and trees">Distances, ordination and trees</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">How far apart, genetically, are populations and individuals? Block 6 measures this with distance coefficients and draws it in three ways: as a map (principal coordinates analysis, PCoA), as a tree with <i>bootstrap</i> support and, if coordinates are available, against geography. Its trees can carry images of the OTUs and be made ready for publication.</p>
+    <div class="cap-franja"><span class="k6"></span><span class="k6" style="opacity:.75"></span><span class="k6" style="opacity:.5"></span><span class="k6" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>7.1</b>Genetic distances</li>
+      <li><b>7.2</b>Principal coordinates (PCoA)</li>
+      <li><b>7.3</b>NJ and UPGMA trees with bootstrap</li>
+      <li><b>7.4</b>Trees with images of the OTUs</li>
+      <li><b>7.5</b>Mantel and isolation by distance</li>
+      <li><b>7.6</b>Block settings, tables and figures</li>
+      <li><b>7.7</b>Step by step: maize landraces with ISSR</li>
+    </ul>
+  </div>
+
+  <!-- 7.1 -->
+  <h2 id="s7-1"><span class="num">7.1</span>Genetic distances</h2>
+  <p class="lead">A genetic distance sums up in a single number how different two individuals or two populations are. All the pairwise distances together form a matrix, and from that matrix come the map, the tree and the comparison with geography.</p>
+
+  <table>
+    <caption><b>Table 7.1.</b> Distances between populations. <i>x<sub>i</sub></i> and <i>y<sub>i</sub></i> are the frequencies of allele <i>i</i> in the two populations; J<sub>X</sub> = Σ<i>x<sub>i</sub></i>², J<sub>Y</sub> = Σ<i>y<sub>i</sub></i>² and J<sub>XY</sub> = Σ<i>x<sub>i</sub>y<sub>i</sub></i>, averaged over loci.</caption>
+    <thead><tr><th style="width:21%">Coefficient</th><th style="width:33%">Formula</th><th>When to use it</th></tr></thead>
+    <tbody>
+      <tr><td><b>Nei (1972)</b><br><span class="small">standard distance</span></td><td class="f">D = −ln [J<sub>XY</sub> / √(J<sub>X</sub>J<sub>Y</sub>)]</td><td>The classic one. It grows with the time since separation if there is mutation–drift equilibrium. The ratio inside the logarithm is the genetic identity I.</td></tr>
+      <tr><td><b>Nei (1978)</b><br><span class="small">unbiased (default)</span></td><td class="f">same, with J<sub>X</sub> corrected: <span style="white-space:nowrap">(2<i>n</i>J<sub>X</sub> − 1)/(2<i>n</i> − 1)</span></td><td>The general-purpose option: it corrects the bias of small samples.</td></tr>
+      <tr><td><b>Cavalli-Sforza and Edwards (1967)</b></td><td class="f">(2/π) √[2(1 − Σ√(<i>x<sub>i</sub>y<sub>i</sub></i>))], averaged over loci</td><td>For reconstructing the branching order when populations diverged by drift; it frequently recovers the correct tree (Takezaki and Nei, 1996).</td></tr>
+      <tr><td><b>Reynolds, Weir and Cockerham (1983)</b></td><td class="f">√{ΣΣ(<i>x<sub>i</sub></i> − <i>y<sub>i</sub></i>)² / [2Σ(1 − Σ<i>x<sub>i</sub>y<sub>i</sub></i>)]}, sums over loci and alleles</td><td>Based on the coancestry coefficient; suitable for recent divergence by drift, without mutation.</td></tr>
+      <tr><td><b>Rogers (1972)</b></td><td class="f">√[Σ(<i>x<sub>i</sub></i> − <i>y<sub>i</sub></i>)²/2], averaged over loci</td><td>Euclidean and bounded between 0 and 1; useful with dominant markers.</td></tr>
+      <tr><td><b>Prevosti et al. (1975)</b></td><td class="f">Σ|<i>x<sub>i</sub></i> − <i>y<sub>i</sub></i>|/2, averaged over loci</td><td>The proportion of alleles not shared; very intuitive.</td></tr>
+      <tr><td><b>Net D<sub>A</sub></b><br><span class="small">sequences only (default)</span></td><td class="f">d<sub>XY</sub> − (d<sub>X</sub> + d<sub>Y</sub>)/2</td><td>Nucleotide divergence between populations minus the divergence within each of them (Nei and Li, 1979). With a substitution rate, it estimates separation times.</td></tr>
+      <tr><td><b>d<sub>XY</sub></b><br><span class="small">sequences only</span></td><td class="f">mean of the <i>p</i> distances between sequences of X and of Y</td><td>Total divergence, without subtracting the internal variation.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Worked example · one locus with two alleles</div>
+    <p>Population X has frequencies 0.8 and 0.2; population Y, 0.3 and 0.7. Then J<sub>X</sub> = 0.8² + 0.2² = 0.68, J<sub>Y</sub> = 0.58 and J<sub>XY</sub> = 0.8 × 0.3 + 0.2 × 0.7 = 0.38.</p>
+    <table class="compacta" style="margin:0.04in 0 0.06in">
+      <thead><tr><th style="width:22%">Coefficient</th><th>Calculation</th><th class="c" style="width:19%">Result</th></tr></thead>
+      <tbody>
+        <tr><td>Identity I</td><td>0.38 / √(0.68 × 0.58) = 0.38 / 0.628</td><td class="c"><b>0.605</b></td></tr>
+        <tr><td>Nei (1972)</td><td>−ln 0.605</td><td class="c"><b>0.502</b></td></tr>
+        <tr><td>Cavalli-Sforza</td><td>√(0.8×0.3) + √(0.2×0.7) = 0.864; (2/π) √[2(1 − 0.864)]</td><td class="c"><b>0.332</b></td></tr>
+        <tr><td>Reynolds</td><td>(0.5² + 0.5²) = 0.5; √[0.5 / (2 × (1 − 0.38))]</td><td class="c"><b>0.635</b></td></tr>
+        <tr><td>Rogers · Prevosti</td><td>√(0.5/2) · (0.5 + 0.5)/2</td><td class="c"><b>0.500 · 0.500</b></td></tr>
+      </tbody>
+    </table>
+    <p style="margin:0">The values differ from one another because each coefficient uses a different scale: never compare numbers from different coefficients. With two-allele loci or bands, Rogers and Prevosti always give the same result.</p>
+  </div>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Two levels, two kinds of distance</div>
+    <p><b>Between populations</b>, allele frequencies are compared: two populations with the same alleles in the same proportions are at distance zero, even if every plant is different. <b>Between individuals</b>, genotypes or band profiles are compared plant by plant. The app computes both when there are three or more populations of several individuals; with one sample per unit (the ISSR landraces), everything is computed between the units, and with morphological characters, between the plants.</p>
+  </div>
+
+  <h3>Distances between individuals</h3>
+  <table class="compacta">
+    <caption><b>Table 7.2.</b> Distances between individuals by data type.</caption>
+    <thead><tr><th style="width:18%">Data</th><th style="width:30%">Coefficient</th><th>What it counts</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="2">Codominant</td><td><b>Smouse and Peakall (1999)</b> (default)</td><td>Squared genotypic distance, locus by locus (table 7.3), summed and rescaled if any locus is missing. It is the AMOVA distance.</td></tr>
+      <tr><td>Shared alleles (Bowcock et al., 1994)</td><td>1 − (shared alleles / 2), averaged over loci.</td></tr>
+      <tr><td rowspan="4">Dominant</td><td><b>Jaccard</b> (default)</td><td>Differing bands / bands present in at least one plant. It ignores shared absences.</td></tr>
+      <tr><td>Dice (Nei and Li, 1979)</td><td>Like Jaccard, but gives double weight to shared bands.</td></tr>
+      <tr><td>Simple matching</td><td>Proportion of differing bands, also counting shared absences.</td></tr>
+      <tr><td>Squared Euclidean</td><td>Number of differing bands; the AMOVA distance with bands.</td></tr>
+      <tr><td>Sequences</td><td><b><i>p</i> distance</b></td><td>Proportion of differing sites; sites with a gap or an ambiguous base are omitted pair by pair.</td></tr>
+      <tr><td>Characters</td><td><b>Gower (1971)</b></td><td>Difference in each character divided by its range; 0 or 1 for text characters; averaged over characters.</td></tr>
+    </tbody>
+  </table>
+
+  <table class="compacta geno" style="width:78%;margin-left:auto;margin-right:auto">
+    <caption><b>Table 7.3.</b> Smouse and Peakall distance between two diploid genotypes at one locus. Different letters are different alleles.</caption>
+    <thead><tr><th>Genotypes</th><th>AA · AA</th><th>AB · AB</th><th>AA · AB</th><th>AB · AC</th><th>AB · CD</th><th>AA · BC</th><th>AA · BB</th></tr></thead>
+    <tbody><tr><td>Distance</td><td>0</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></tbody>
+  </table>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Sequences: haplotype identity or nucleotide divergence</div>
+    <p>Frequency-based distances only ask whether two haplotypes are identical: if two populations share none, Nei’s distance is infinite, even if the haplotypes differ by a single base. With sequences, the app uses the <b>net nucleotide divergence D<sub>A</sub></b> by default, which does measure how many sites separate the populations, and resamples the <b>alignment sites</b> for the <i>bootstrap</i>. In the pine, 3 of the 6 pairs of populations share no haplotypes: Nei’s distance is infinite, whereas D<sub>A</sub> ranges from 0.0033 to 0.0068 (from 1.6 to 3.3 net sites out of 480).</p>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-pino-resumen.png" alt="Block 6 summary with pine haplotypes"></div>
+    <figcaption><b>Figure 7.1.</b> With the pine, the app chooses D<sub>A</sub>. Sierra Norte and Nevado are the most divergent populations (0.0068) and Sierra Norte and Cofre the closest (0.0033); that grouping has 87% support when the sites are resampled.</figcaption>
+  </figure>
+
+  <!-- 7.2 -->
+  <h2 id="s7-2"><span class="num">7.2</span>Principal coordinates (PCoA)</h2>
+  <p>Principal coordinates analysis (Gower, 1966) turns a distance matrix into a map: it looks for the axes on which the distances between points reproduce the genetic distances as closely as possible. The first axis captures most of the variation, the second most of what remains, and so on. Unlike principal component analysis, it works with any coefficient, which is why it is the usual ordination method in population genetics.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 232" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="From a distance matrix to a map">
+      <defs><marker id="f71" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b4234a"/></marker></defs>
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#b4234a"><text x="20" y="16">DISTANCE MATRIX</text><text x="420" y="16">MAP (PCOA)</text></g>
+      <g transform="translate(20 34)" font-size="11" text-anchor="middle">
+        <g fill="#5d6472" font-size="10"><text x="75" y="12">A</text><text x="125" y="12">B</text><text x="175" y="12">C</text><text x="225" y="12">D</text><text x="30" y="45">A</text><text x="30" y="85">B</text><text x="30" y="125">C</text><text x="30" y="165">D</text></g>
+        <g fill="#f3e4e8"><rect x="50" y="22" width="50" height="38"/><rect x="100" y="62" width="50" height="38"/><rect x="150" y="102" width="50" height="38"/><rect x="200" y="142" width="50" height="38"/></g>
+        <g fill="#111"><text x="75" y="45">—</text><text x="125" y="45">0.2</text><text x="175" y="45">0.7</text><text x="225" y="45">0.8</text>
+        <text x="75" y="85">0.2</text><text x="125" y="85">—</text><text x="175" y="85">0.6</text><text x="225" y="85">0.7</text>
+        <text x="75" y="125">0.7</text><text x="125" y="125">0.6</text><text x="175" y="125">—</text><text x="225" y="125">0.3</text>
+        <text x="75" y="165">0.8</text><text x="125" y="165">0.7</text><text x="175" y="165">0.3</text><text x="225" y="165">—</text></g>
+        <rect x="50" y="22" width="200" height="158" fill="none" stroke="#d5dae4"/>
+      </g>
+      <path d="M300 118 H400" stroke="#b4234a" stroke-width="2" marker-end="url(#f71)"/>
+      <text x="350" y="108" font-size="9.5" text-anchor="middle" fill="#5d6472">decomposition</text>
+      <text x="350" y="138" font-size="9.5" text-anchor="middle" fill="#5d6472">into axes</text>
+      <g transform="translate(420 30)">
+        <line x1="0" y1="95" x2="260" y2="95" stroke="#9aa3b2"/><line x1="130" y1="5" x2="130" y2="172" stroke="#9aa3b2"/>
+        <text x="258" y="112" font-size="9.5" text-anchor="end" fill="#5d6472">PCo 1 (90%)</text>
+        <text x="136" y="16" font-size="9.5" fill="#5d6472">PCo 2 (7%)</text>
+        <g fill="#b4234a"><circle cx="22" cy="91" r="7"/><circle cx="51" cy="93" r="7"/></g>
+        <g fill="#14213d"><circle cx="208" cy="136" r="7"/><circle cx="239" cy="60" r="7"/></g>
+        <g font-size="11" fill="#111" font-weight="600"><text x="17" y="77">A</text><text x="46" y="115">B</text><text x="220" y="140">C</text><text x="234" y="46">D</text></g>
+        <path d="M10 170 C 30 180, 55 180, 75 170" stroke="#b4234a" fill="none" stroke-dasharray="3 3"/>
+        <text x="42" y="194" font-size="9" text-anchor="middle" fill="#b4234a">A and B close</text>
+        <path d="M190 170 C 205 180, 235 180, 250 170" stroke="#14213d" fill="none" stroke-dasharray="3 3"/>
+        <text x="220" y="194" font-size="9" text-anchor="middle" fill="#14213d">C and D close</text>
+      </g>
+    </svg>
+    <figcaption><b>Figure 7.2.</b> PCoA of four hypothetical units, computed with the app. The first axis (90% of the variation) separates the two pairs, the largest difference in the matrix; the second (7%) mainly separates C from D, which are farther apart (0.3) than A and B (0.2).</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Negative eigenvalues and the Lingoes correction</div>
+    <p>If a distance is Euclidean, it can be drawn without distortion and all the PCoA eigenvalues are positive. Many genetic distances are not (Jaccard, Nei, Gower), and some negative eigenvalues appear: they are variation that no map can represent. The app computes the percentages over the positive eigenvalues and warns you about it. The <b>Lingoes correction</b> adds a constant to the squared distances to make them Euclidean; the percentages are then exact, although somewhat smaller. The Smouse and Peakall distances and the squared Euclidean distance for bands are already squared, and the app uses them as they are.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · reading a PCoA</div>
+    <table class="compacta">
+      <thead><tr><th style="width:38%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Axes 1 and 2 add up to more than 50%</b></td><td>The map is a good summary: closeness on the plane reflects the matrix.</td></tr>
+        <tr><td><b>They add up to less than 25%</b></td><td>This is usual with individuals and highly variable markers. The map shows trends; two nearby points may differ on other axes. Check axis 3 as well.</td></tr>
+        <tr><td><b>The population ellipses overlap a great deal</b></td><td>Low differentiation, consistent with a small F<sub>ST</sub> (chapter 6). A significant AMOVA is not a contradiction.</td></tr>
+        <tr><td><b>An individual falls within the cloud of another population</b></td><td>Possible migrant, labelling error or admixture; check it with the assignment in Block 7.</td></tr>
+        <tr><td><b>There are many large negative eigenvalues</b></td><td>Turn on the Lingoes correction before reporting percentages.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b6-ssr-pcoa.png" alt="PCoA of maize individuals with microsatellites"></div>
+    <figcaption><b>Figure 7.3.</b> PCoA of the 75 maize plants (Smouse and Peakall), with 95% ellipses and centroids. Axes 1 and 2 add up to 17.5%, which is normal with individuals. Chalqueño stands apart on the left; Cónico and Palomero, the closest landraces (Nei’s D 0.114), overlap.</figcaption>
+  </figure>
+
+  <!-- 7.3 -->
+  <h2 id="s7-3"><span class="num">7.3</span>NJ and UPGMA trees with bootstrap</h2>
+  <p>A tree draws the matrix as a hierarchy of groupings. The app builds two, for populations and for individuals: <b>UPGMA</b> (Sokal and Michener, 1958) joins the closest pairs first and averages the distances; it assumes that all branches evolve at the same rate, so it gives a rooted tree with all the tips at the same height. <b>Neighbour-joining</b> (NJ; Saitou and Nei, 1987) makes no such assumption: it allows branches of different lengths and produces an unrooted tree, which the app roots at the midpoint or on an outgroup.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 206" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="UPGMA versus neighbour-joining">
+      <g font-size="10" letter-spacing="1.2" font-weight="500" fill="#b4234a"><text x="20" y="16">UPGMA · ROOT AND CONSTANT RATE</text><text x="370" y="16">NEIGHBOUR-JOINING · FREE BRANCHES</text></g>
+      <g transform="translate(40 36)" stroke="#111" stroke-width="2" fill="none">
+        <path d="M-14 75 H0"/><path d="M0 30 V120"/><path d="M0 30 H40"/><path d="M0 120 H70"/>
+        <path d="M40 10 V50"/><path d="M40 10 H160"/><path d="M40 50 H160"/>
+        <path d="M70 95 V145"/><path d="M70 95 H160"/><path d="M70 145 H160"/>
+      </g>
+      <g font-size="11" fill="#111" transform="translate(40 36)"><text x="168" y="14">A</text><text x="168" y="54">B</text><text x="168" y="99">C</text><text x="168" y="149">D</text></g>
+      <line x1="200" y1="40" x2="200" y2="186" stroke="#9aa3b2" stroke-dasharray="3 3"/><text x="120" y="200" font-size="9" fill="#5d6472" text-anchor="middle">all tips at the same distance from the root</text>
+      <line x1="350" y1="28" x2="350" y2="200" stroke="#d5dae4"/>
+      <g transform="translate(400 40)" stroke="#111" stroke-width="2" fill="none">
+        <path d="M120 70 L60 40"/><path d="M60 40 L10 10"/><path d="M60 40 L20 90"/>
+        <path d="M120 70 L180 55"/><path d="M180 55 L260 20"/><path d="M180 55 L215 110"/>
+      </g>
+      <g font-size="11" fill="#111" transform="translate(400 40)"><text x="0" y="8">A</text><text x="8" y="104">B</text><text x="266" y="22">C</text><text x="221" y="126">D</text></g>
+      <text x="530" y="200" font-size="9" fill="#5d6472" text-anchor="middle">C evolved faster: its branch is longer</text>
+    </svg>
+    <figcaption><b>Figure 7.4.</b> The two methods with the same four OTUs. UPGMA forces all of them to reach the same height; NJ lets each lineage have its own rate. When they disagree, NJ gives the safer picture.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>What bootstrap support means</div>
+    <p>The <i>bootstrap</i> (Felsenstein, 1985) repeats the analysis 1000 times with loci resampled with replacement (bands for dominant markers and alignment sites for sequences). In each replicate a new tree is built and the groupings that appear are recorded. The number on a branch is the percentage of replicates in which the same grouping reappears: it measures how much that grouping depends on a few loci, <b>not</b> the probability that it is true. The app computes it for the population trees and also for the individual trees when there are 60 individuals or fewer, such as the landraces with one sample each or the species in an alignment.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · support and fit of the tree</div>
+    <table class="compacta">
+      <thead><tr><th style="width:36%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Support of 70% or more</b></td><td>The grouping is robust to the loci sampled; it can be described.</td></tr>
+        <tr><td><b>Support of 50 to 70%</b></td><td>Weak grouping; mention it as a trend.</td></tr>
+        <tr><td><b>Support below 50%</b></td><td>Do not interpret the branching order. The app hides it by default.</td></tr>
+        <tr><td><b>Only three populations</b></td><td>An unrooted three-tip tree has no internal branches to test: it only shows lengths. The app says so.</td></tr>
+        <tr><td><b>UPGMA cophenetic correlation greater than 0.85</b></td><td>The tree reproduces the distances well. If it is lower, the tree distorts them; prefer NJ and the PCoA.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">With few loci, low support is normal and does not mean the tree is wrong: it means the data are not enough to resolve it. Zero-length branches (identical units) receive no support, because the order in which they are joined is arbitrary.</p>
+  </div>
+
+  <h3>A tree with a known answer</h3>
+  <p>The five-genus example was simulated on a known tree: the outgroup <i>Exterocarpus</i> and, within the ingroup, (<i>Fictaria</i>, <i>Modelanthus</i>) and (<i>Demoxylon</i>, (<i>Probocarpa</i>, <i>Testiflora</i>)). The NJ tree of genera with D<sub>A</sub> recovers exactly that topology, with support values of 94, 100 and 99%.</p>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b6-generos-arbol.png" alt="NJ tree of the five genera with support"></div>
+    <figcaption><b>Figure 7.5.</b> NJ tree of the genera with the net nucleotide divergence D<sub>A</sub>, midpoint-rooted, and its support table. The three groupings match the tree on which the data were simulated; the UPGMA cophenetic correlation is 0.943.</figcaption>
+  </figure>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · the root of the tree</div>
+    <p>NJ produces an unrooted tree. The app displays it rooted at the <b>midpoint</b> of the longest path between two tips, which is a good choice when rates are similar. If you know an outgroup, type it in <span class="ui">Outgroup tips</span> with <span class="ui">Root</span> set to <span class="ui">outgroup</span>; the root of a tree of populations of the same species hardly ever has evolutionary meaning, and in that case the <span class="ui">unrooted</span> layout is advisable.</p>
+  </div>
+
+  <!-- 7.4 -->
+  <h2 id="s7-4"><span class="num">7.4</span>Trees with images of the OTUs</h2>
+  <p>The trees in this block are edited in a full studio: rectangular, circular or unrooted layout; clades coloured by population, by region or cut from the tree; rings with the population, the region or the ancestry from Block 7; and <b>images</b> of each tip or group next to its branch. The images are stored in the browser, linked to the data file, and never leave the computer.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Step by step · adding images to a tree</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>In the <span class="ui">6 · Trees</span> card, choose the tree in <span class="ui">Tree</span> and click <span class="ui">🖼 Images of the OTUs…</span>.</li>
+      <li>The list shows the groups (populations or regions) and the tips. Choose a name and drag its image onto the box, or click <span class="ui">Add several images…</span> to load several at once: they are assigned by file name.</li>
+      <li>Adjust the framing (zoom, offset, rotation), the tone and, if the photo has a plain background, <span class="ui">Remove a plain background</span>.</li>
+      <li>Enter the source and the licence, and tick the confirmation that the image shows exactly that taxon. Without that tick, the image is not drawn.</li>
+      <li>Close with <span class="ui">Done</span>, open <span class="ui">Edit figure</span> and, under <span class="ui">Images</span>, choose <span class="ui">one per tip</span> or <span class="ui">one per group or clade</span>.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-imagenes-gestor.png" alt="OTU image manager"></div>
+    <figcaption><b>Figure 7.6.</b> The image manager. On the left, the names with their status (✓ confirmed); on the right, the framing, the tone and background adjustments, the source, the licence and the confirmation. The illustrations in this example are original drawings made for the manual, because the genera in the example are fictitious.</figcaption>
+  </figure>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · the image is evidence</div>
+    <p>Anyone reading a tree with photographs understands that each photo shows that taxon. Use only images of the same species, variety or landrace: your own photos, herbarium specimens or images whose licence allows reuse (for example CC BY), and give credit. Never a “similar” species or a generic photo. The app asks you to confirm this for each image and stores the source and licence so that you can cite them.</p>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-imagenes.png" alt="Rectangular tree with one image per genus"></div>
+    <figcaption><b>Figure 7.7.</b> NJ tree of the 16 species, rooted on the outgroup <i>Exterocarpus</i>, coloured by genus and with one image per genus. All the groupings in the tree have 95% support or more when the 1600 alignment sites are resampled.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-imagenes-circular.png" alt="Circular tree with one image per genus"></div>
+    <figcaption><b>Figure 7.8.</b> The same tree in circular layout and midpoint-rooted, with shaded clades, arcs bearing the name of each genus and names in italics. It is exported like any other figure (PNG, TIFF, SVG, JPG or WEBP) with the images included.</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Table 7.4.</b> Main options of the tree studio (<span class="ui">Edit figure</span>).</caption>
+    <thead><tr><th style="width:30%">Option</th><th>What it is for</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Layout</span></td><td>Rectangular (default up to 25 tips), circular or unrooted (equal angle).</td></tr>
+      <tr><td><span class="ui">Root</span> · <span class="ui">Outgroup tips</span></td><td>Root as computed, at the midpoint or on an outgroup (NJ trees).</td></tr>
+      <tr><td><span class="ui">Colour</span> · <span class="ui">Number of clades</span></td><td>Colour by population or region, or cut the tree into <i>k</i> clades with names of your own.</td></tr>
+      <tr><td><span class="ui">Ring: Population</span> · <span class="ui">Ring: Region</span> · <span class="ui">Ring: Ancestry (Block 7)</span></td><td>Rings with the population or region of each individual, or with its ancestry proportions from Block 7.</td></tr>
+      <tr><td><span class="ui">Images</span> · <span class="ui">Image size</span> · <span class="ui">Image frame</span></td><td>One image per tip or per group, its size, frame and leader lines.</td></tr>
+      <tr><td><span class="ui">Support</span> · <span class="ui">Hide support below (%)</span></td><td>Support as dots or numbers, and the threshold below which it is hidden.</td></tr>
+      <tr><td><span class="ui">Italic names</span> · <span class="ui">Branch lengths</span></td><td>Scientific names in italics; proportional branches or aligned tips (cladogram).</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 7.5 -->
+  <h2 id="s7-5"><span class="num">7.5</span>Mantel and isolation by distance</h2>
+  <p>If seeds and pollen travel only short distances, nearby populations exchange more migrants than distant ones and are more alike. This pattern is called <b>isolation by distance</b>. The <b>Mantel</b> test (1967) measures the correlation between the genetic distance matrix and the geographic distance matrix, and tests it by permuting the rows and columns of one of them. The app computes great-circle geographic distances from latitude and longitude.</p>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>Rousset’s regression</div>
+    <p>Rousset (1997) showed that, in two dimensions, F<sub>ST</sub>/(1 − F<sub>ST</sub>) increases linearly with the logarithm of distance, and that the slope is 1/(4Dπσ²), where D is the plant density and σ² the mean squared parent–offspring dispersal distance. The app therefore plots θ/(1 − θ) for each pair of populations against ln(distance) and tests that relationship with Mantel. A positive, significant slope indicates isolation by distance; its value allows the genetic neighbourhood to be estimated if the density is known.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Decision rule · isolation by distance</div>
+    <table class="compacta">
+      <thead><tr><th style="width:38%">If…</th><th>then…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Positive slope and significant Mantel test</b> between populations</td><td>Isolation by distance: gene flow decreases with distance.</td></tr>
+        <tr><td><b>Not significant</b></td><td>Distance does not predict differentiation at this scale: extensive gene flow, structure due to another cause (habitat, altitude, history) or too few populations.</td></tr>
+        <tr><td><b>Few populations</b> (6 or fewer)</td><td>With <i>n</i> populations there are only <i>n</i>! ways to reorder them; with 4, the smallest possible P is 1/24 ≈ 0.04. Read the slope and the figure, not the P value.</td></tr>
+        <tr><td><b>Mantel significant only between individuals</b></td><td>Pairs from the same population are close together and alike, so the correlation mainly reflects the differences between populations. Fine-scale spatial structure is studied in Block 9.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-agave-ibd.png" alt="Isolation by distance in agave"></div>
+    <figcaption><b>Figure 7.9.</b> Isolation by distance in the four agave populations, which are between 152 and 389 km apart. Rousset’s slope is negative (−0.050; Mantel r = −0.62, P = 0.92): there is no isolation by distance. Between individual plants the correlation is positive (r = 0.19, P = 0.001), but this is because plants from the same population share coordinates and are alike; on the right you can see the columns of pairs at each distance.</figcaption>
+  </figure>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · coordinates</div>
+    <p>The <span class="ui">7 · Isolation by distance</span> card appears when the file includes latitude and longitude (Block 2) for at least 4 individuals. With decimal degrees, the great-circle distance in kilometres is used; if the values do not fit as degrees (projected coordinates, for example UTM), they are used as Euclidean distances in map units. The test between populations uses the centroid of each population and requires all of them to have coordinates.</p>
+  </div>
+
+  <!-- 7.6 -->
+  <h2 id="s7-6"><span class="num">7.6</span>Block settings, tables and figures</h2>
+  <p>Block 6 opens with three or more units, with any data type. On entering, everything is computed with the default settings; if you change any of them, click <span class="ui">Compute distances, ordination and trees</span>.</p>
+
+  <table>
+    <caption><b>Table 7.5.</b> Block 6 settings.</caption>
+    <thead><tr><th style="width:32%">Setting</th><th>Options</th><th style="width:30%">Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">Distance between populations</span></td><td>The coefficients in table 7.1. It appears with three or more replicated populations.</td><td>Nei (1978); D<sub>A</sub> with sequences.</td></tr>
+      <tr><td><span class="ui">Distance between individuals</span></td><td>Depending on the data type (table 7.2).</td><td>The default for each type.</td></tr>
+      <tr><td><span class="ui">Bootstrap replicates over loci</span></td><td>0 to 10,000 (default 1000); it reads <i>bands</i> or <i>alignment sites</i> depending on the data.</td><td>1000.</td></tr>
+      <tr><td><span class="ui">Lingoes correction for negative eigenvalues</span></td><td>Off by default.</td><td>Turn it on to report exact percentages.</td></tr>
+      <tr><td><span class="ui">Mantel permutations</span></td><td>0 to 9999 (default 999).</td><td>999; 9999 for the paper.</td></tr>
+      <tr><td><span class="ui">Random seed</span></td><td>Integer.</td><td>Report it in the methods.</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <caption><b>Table 7.6.</b> Block 6 result cards.</caption>
+    <thead><tr><th style="width:29%">Card</th><th>Contents</th><th class="c" style="width:22%">Download</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ui">2 · What the distances say</span></td><td>Figures and interpretation: most and least distant pairs, tree support, PCoA and isolation by distance.</td><td class="c">—</td></tr>
+      <tr><td><span class="ui">3 · Distances between populations</span></td><td>Matrix of the chosen coefficient (with Nei’s identity I), all the coefficients pair by pair and the heat map.</td><td class="c"><span class="ui">Population matrix (CSV)</span></td></tr>
+      <tr><td><span class="ui">4 · Distances between individuals</span></td><td>Summary and, for up to 30 units, the full matrix.</td><td class="c"><span class="ui">Individual matrix (CSV)</span></td></tr>
+      <tr><td><span class="ui">5 · Principal coordinates</span></td><td>Eigenvalues and percentages, PCoA of individuals and of populations, and the eigenvalue plot.</td><td class="c"><span class="ui">Scores of every unit (CSV)</span></td></tr>
+      <tr><td><span class="ui">6 · Trees</span></td><td>NJ and UPGMA trees of populations and of individuals, with the tree studio and the support table.</td><td class="c"><span class="ui">Newick</span></td></tr>
+      <tr><td><span class="ui">7 · Isolation by distance</span></td><td>Geographic distances and θ per pair, and the plots between populations and between individuals.</td><td class="c">—</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 7.7 -->
+  <h2 id="s7-7"><span class="num">7.7</span>Step by step: maize landraces with ISSR</h2>
+  <p>The 15 maize landraces have one bulked sample each and 31 ISSR bands. There are no populations with replicates, so Block 6 works between the landraces: it is the central analysis for this kind of data.</p>
+
+  <div class="caja ejemplo">
+    <div class="caja-t"><span class="ico">▸</span>Step by step</div>
+    <ol class="pasos" style="margin-bottom:0">
+      <li>In Block 2, load <span class="ui">Maize landraces · ISSR</span>, build the dataset and open Block 6.</li>
+      <li>A notice explains that the analysis is carried out between landraces; the distance is Jaccard and the <i>bootstrap</i> is done over bands (figure 7.10).</li>
+      <li>Read the figures and the interpretation (figure 7.11) and check the distance matrix (figure 7.12).</li>
+      <li>Explore the PCoA and the eigenvalue plot (figures 7.13 and 7.14).</li>
+      <li>Check the NJ tree and its support table (figures 7.15 and 7.16); in <span class="ui">Tree</span>, compare it with UPGMA.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-ajustes.png" alt="Block 6 settings with the ISSR landraces"></div>
+    <figcaption><b>Figure 7.10.</b> Settings with the maize landraces. The distance between populations does not appear, and the <i>bootstrap</i> is done over the bands.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-resumen.png" alt="Block 6 summary with the ISSR landraces"></div>
+    <figcaption><b>Figure 7.11.</b> <span class="ui">What the distances say</span>. 15 landraces compared with Jaccard; the first two PCoA axes add up to 49.2%, and only 1 of the 12 groupings in the NJ tree reaches 70% support.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-matriz.png" alt="Jaccard distance matrix between landraces"></div>
+    <figcaption><b>Figure 7.12.</b> Part of the Jaccard matrix (mean 0.488). The most similar pair is Arrocillo–Chiquito (0.176) and the most different Arrocillo–Chapalote (0.737).</figcaption>
+  </figure>
+
+  <table class="compacta">
+    <caption><b>Table 7.7.</b> Nearest neighbour of each landrace according to Jaccard.</caption>
+    <thead><tr><th>Landrace</th><th>Most similar</th><th class="c">Distance</th><th>Landrace</th><th>Most similar</th><th class="c">Distance</th></tr></thead>
+    <tbody>
+      <tr><td>Arrocillo</td><td>Chiquito</td><td class="c">0.176</td><td>Cacahuacintle</td><td>Bolita</td><td class="c">0.286</td></tr>
+      <tr><td>Ancho</td><td>Apachito</td><td class="c">0.214</td><td>Chalqueño</td><td>Cacahuacintle</td><td class="c">0.308</td></tr>
+      <tr><td>Azul</td><td>Bolita</td><td class="c">0.235</td><td>Bofo</td><td>Azul</td><td class="c">0.333</td></tr>
+      <tr><td>Comiteco</td><td>Chiquito</td><td class="c">0.263</td><td>Blando Sonora</td><td>Cónico</td><td class="c">0.375</td></tr>
+      <tr><td>Celaya</td><td>Bofo</td><td class="c">0.375</td><td>Chapalote</td><td>Ancho</td><td class="c">0.385</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="marco"><img src="../img/b6-pcoa.png" alt="PCoA of the maize landraces"></div>
+    <figcaption><b>Figure 7.13.</b> PCoA of the landraces. The first axis (29.3%) runs from Chalqueño, Celaya and Cacahuacintle on the left to Arrocillo, Chiquito and Apachito on the right; the second (19.9%) separates Chapalote, Ancho and Apachito towards the bottom. The labels are spread out automatically so that they do not overlap.</figcaption>
+  </figure>
+
+  <figure class="mini">
+    <div class="marco"><img src="../img/b6-scree.png" alt="PCoA eigenvalues"></div>
+    <figcaption><b>Figure 7.14.</b> Variation of each axis and cumulative variation (Σ). There are 3 small negative eigenvalues (the smallest, −0.034); with the Lingoes correction the first three axes become 25.3, 17.7 and 14.1%.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b6-arbol.png" alt="NJ tree of the maize landraces"></div>
+    <figcaption><b>Figure 7.15.</b> NJ tree rooted at the midpoint and cut into three clades. Clade A brings together Comiteco, Arrocillo, Chiquito, Chapalote, Ancho and Apachito, the same landraces as at the right-hand and lower end of the PCoA. Only Arrocillo–Chiquito (84%) and Ancho–Apachito (65%) exceed 50% support.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <div class="marco"><img src="../img/b6-soporte.png" alt="Bootstrap support table"></div>
+    <figcaption><b>Figure 7.16.</b> <span class="ui">Bootstrap support of every grouping</span>, sorted from highest to lowest. Each row names the smaller side of the grouping. The large clades have almost no support: A, 17%, and C, 4%.</figcaption>
+  </figure>
+
+  <div class="caja teoria">
+    <div class="caja-t"><span class="ico">θ</span>How to read these results</div>
+    <ul style="margin:0">
+      <li><b>The PCoA and the tree tell the same story.</b> Arrocillo, Chiquito and Comiteco form one group, and Ancho and Apachito another, in both representations.</li>
+      <li><b>Only two pairs are robust.</b> Arrocillo–Chiquito has 84% in NJ and 70% in UPGMA, and Ancho–Apachito 65 and 72%. The rest of the branching is not resolved with 31 bands.</li>
+      <li><b>The three clades are a way of arranging the figure, not demonstrated groups.</b> Their support is low; proposing groups of landraces requires the clustering of Block 7 or more markers.</li>
+      <li><b>UPGMA somewhat distorts the distances</b> (cophenetic correlation 0.767): NJ and the PCoA are the reference.</li>
+    </ul>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · what to report in a paper</div>
+    <p>The distance coefficient and why it was chosen; the PCoA with the percentage of the axes shown, stating whether the Lingoes correction was applied; the tree method, how it was rooted and the number of <i>bootstrap</i> replicates, showing only support values of 50% or more; and, if coordinates are available, the Mantel correlation, its P value and the number of permutations. If the tree carries images, cite the source and licence of each one. The <span class="ui">Newick</span> download saves the tree with the support values for other tree-editing programs.</p>
+  </div>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · verification of the calculations</div>
+    <p>For this manual, the six between-population coefficients were recomputed with independent code for the maize (differences smaller than 10<sup>−15</sup>), as were the Smouse and Peakall, shared-allele, Jaccard, Dice, simple matching, Euclidean, D<sub>A</sub> and d<sub>XY</sub> distances. The PCoA reproduces the Euclidean band distance exactly when all its axes are used (error of 10<sup>−12</sup>). NJ recovered the topology and branch lengths of 20 randomly generated additive trees, UPGMA gave ultrametric trees, the great-circle distance from Mexico City to Oaxaca was 365 km, and under the null hypothesis the Mantel test was significant in 7 out of 100 cases. The five-genus tree recovered the simulated topology.</p>
+  </div>
+
+  <p style="margin-top:0.25in">The next chapter looks for structure that was not declared in advance: Block 7 clusters individuals with a Bayesian admixture model, chooses the number of groups, performs discriminant analysis of principal components and detects possible migrants.</p>
+</section>
+
+</body>
+</html>

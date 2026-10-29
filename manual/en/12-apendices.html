@@ -1,0 +1,1447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PopGeneticsPro · User manual · Appendices</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../interior.css">
+<!-- reparte el contenido en hojas tamaño carta, con encabezados y números de página -->
+<script src="../paginar.js"></script>
+<style>
+  td.f { font-family: var(--serif); font-size: 10.5pt; color: var(--negro); }
+  .caja-t .sym { text-transform: none; letter-spacing: 0; font-size: 1.15em; }
+  .caja-t .sec-ref { margin-left: auto; letter-spacing: 0.08em; font-size: 7.4pt; opacity: 0.85; }
+  /* archivos de ejemplo */
+  .pre-t { font-family: var(--sans); font-size: 8.5pt; color: var(--gris); margin: 0.12in 0 0; letter-spacing: 0.02em; }
+  .pre-t b { color: var(--negro); font-weight: 500; }
+  pre.archivo { font-family: var(--mono); font-size: 7.9pt; line-height: 1.38; color: var(--negro); background: #f6f8fc; border: 1px solid var(--linea); border-left: 3px solid var(--acento); border-radius: 0 4px 4px 0; padding: 0.07in 0.12in; margin: 0.05in 0 0.18in; white-space: pre-wrap; word-break: break-all; break-inside: avoid; }
+  /* índice de reglas */
+  ul.indice-reglas { list-style: none; padding: 0; margin: 0.12in 0 0.2in; display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.35in; font-family: var(--sans); font-size: 8.8pt; }
+  ul.indice-reglas li { margin: 0; padding: 0.035in 0; border-top: 1px solid var(--linea); break-inside: avoid; }
+  ul.indice-reglas li b { display: inline-block; min-width: 2.7em; color: var(--negro); font-weight: 500; }
+  ul.indice-reglas li.grupo { grid-column: 1 / -1; border-top: 0; padding-top: 0.12in; font-weight: 500; color: var(--negro); }
+  ul.indice-reglas li.grupo .chip { margin-right: 0.55em; }
+  h3.ap-cap { font-size: 13pt; }
+  h3.ap-cap .chip { font-size: 8.5pt; margin-right: 0.55em; position: relative; top: -0.12em; }
+  /* glosario */
+  tr.letra td { background: #eef1f6 !important; font-family: var(--serif); font-size: 12.5pt; font-weight: 600; color: var(--negro); }
+  td.termino b { font-family: var(--serif); font-size: 10.5pt; }
+  /* referencias */
+  ul.refs { list-style: none; padding: 0; margin: 0.12in 0 0.2in; font-size: 9.7pt; line-height: 1.36; }
+  ul.refs li { padding-left: 1.5em; text-indent: -1.5em; margin-bottom: 0.32em; break-inside: avoid; text-align: left; hyphens: manual; }
+  ul.refs .doi { font-family: var(--sans); font-size: 0.8em; color: var(--gris); overflow-wrap: anywhere; }
+  .ejemplo-archivo { break-inside: avoid; }
+  ul.refs .m { color: var(--marino); font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<section class="capitulo" id="apendices" data-pestana="A" data-orden="12" style="--acento: var(--bx)">
+  <div class="cap-apertura">
+    <div class="cap-num">A–F</div>
+    <div class="cap-etiqueta">Appendices · reference material</div>
+    <h1 data-corto="Appendices">Appendices</h1>
+    <div class="cap-regla"></div>
+    <p class="cap-resumen">The appendices are not meant to be read from start to finish but to be consulted. Here you will find the exact rules by which the app reads and writes each file, the manual’s 43 decision rules gathered in one place, a glossary of terms, abbreviations and symbols, solutions to the most common problems, the full references for the methods, and the third-party components with their licences.</p>
+    <div class="cap-franja"><span class="kx"></span><span class="kx" style="opacity:.75"></span><span class="kx" style="opacity:.5"></span><span class="kx" style="opacity:.3"></span></div>
+    <ul class="cap-contenido">
+      <li><b>A</b>File formats</li>
+      <li><b>B</b>Summary of decision rules</li>
+      <li><b>C</b>Glossary</li>
+      <li><b>D</b>Troubleshooting</li>
+      <li><b>E</b>References</li>
+      <li><b>F</b>Third-party components</li>
+    </ul>
+  </div>
+
+  <!-- ====================================================================== A -->
+  <h2 id="ap-a"><span class="num">A</span>File formats</h2>
+  <p class="lead">Chapter 3 explains how to lay out your data (tables 3.1 and 3.2). This appendix collects the exact rules: how the app recognises each file, which column names it understands, what counts as missing and what each downloaded file contains.</p>
+
+  <h3>A.1 How the app recognises a file</h3>
+  <table class="compacta">
+    <caption><b>Table A.1.</b> File types loaded in Block 2 and how the app tells them apart.</caption>
+    <thead><tr><th style="width:21%">File</th><th style="width:31%">How it is recognised</th><th>What you should know</th></tr></thead>
+    <tbody>
+      <tr><td><b>Spreadsheet</b><br><code>.xlsx .xls .xlsm .xlsb .ods</code></td><td>By its extension.</td><td>The first sheet is read; if there are several, <span class="ui">Sheet</span> appears so you can choose another. Numbers are stored as numbers, so a decimal comma causes no problems.</td></tr>
+      <tr><td><b>Delimited text</b><br><code>.csv .txt .tsv</code></td><td>Anything that is not one of the other types.</td><td>Separator: whichever of comma, semicolon and tab is most frequent in the first 20 lines (the comma if they tie). Spaces do not separate columns. UTF-8 encoding, with or without a byte-order mark. Double quotes are accepted.</td></tr>
+      <tr><td><b>FASTA</b><br><code>.fasta .fas .fa</code></td><td>The text begins with <code>&gt;</code>, whatever the extension.</td><td>Sequences on one or several lines per sample. Alignment is not required, but different lengths are flagged.</td></tr>
+      <tr><td><b>VCF</b></td><td>A <code>##fileformat=VCF</code> line at the top.</td><td>Diploid SNP genotypes; see table A.7.</td></tr>
+      <tr><td><b>Project file .arp</b></td><td>A <code>[Profile]</code> section with <code>NbSamples</code>, <code>SampleData</code> or <code>GenotypicData</code>.</td><td>Genotypic or haplotypic data by sample.</td></tr>
+      <tr><td><b>Population file .gen</b></td><td>A line that says only <code>POP</code>, and at least one comma in the text.</td><td>Diploids only.</td></tr>
+      <tr><td><b>Genotype file .str</b></td><td><b>Only by the extension</b> <code>.str</code> or <code>.stru</code>.</td><td>The same file saved as <code>.txt</code> is read as a table: change its extension.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>A.2 Tables: one row per individual</h3>
+  <table class="compacta">
+    <caption><b>Table A.2.</b> How each type of data is written in a table and when the app recognises it on its own. If it gets it wrong, correct <span class="ui">Marker type</span> and <span class="ui">How genotypes are written</span> (section 3.4).</caption>
+    <thead><tr><th style="width:19%">Data</th><th style="width:43%">How it is written</th><th>When it is recognised automatically</th></tr></thead>
+    <tbody>
+      <tr><td><b>Codominant,</b> one allele per column</td><td>Two columns per locus (three or four for polyploids). The name goes in the first; the second repeats the name, is left empty or ends in <code>_1/_2</code>, <code>a/b</code> or <code>A/B</code>. Sizes in bp or codes.</td><td>When the name pairs cover at least 80% of the data columns.</td></tr>
+      <tr><td><b>Codominant,</b> genotype in one cell</td><td>One column per locus: <code>182/186</code>, <code>182|186</code>, <code>182:186</code>, <code>182;186</code>, <code>182,186</code> or with a space. Also <code>182186</code> (2 or 3 digits per allele), <code>94-98</code> and <code>AG</code>.</td><td>When more than 60% of the cells look like <code>x/y</code>, <code>x|y</code>, <code>x:y</code>, <code>NN-NN</code> or two letters. The other forms are read correctly, but you have to choose <span class="ui">Whole genotype in one cell</span>.</td></tr>
+      <tr><td><b>Dominant</b> (bands)</td><td><code>1</code> present and <code>0</code> absent; also <code>p/a</code>, <code>present/absent</code>, <code>+/−</code>, <code>yes/no</code>. <code>−1</code> is always missing.</td><td>When more than 90% of the data columns contain only 0 and 1. A column with <code>−1</code> no longer looks binary: use empty cells or choose the type by hand.</td></tr>
+      <tr><td><b>Haploid</b></td><td>One code per column (chloroplast haplotype, size of a cpSSR).</td><td>When more than 60% of the data columns contain text. With numeric codes, choose the type by hand.</td></tr>
+      <tr><td><b>Sequences in cells</b></td><td>One column per gene region, with the complete sequence (20 letters or more). IUPAC letters, <code>−</code> for gaps; U is converted to T and a full stop to a gap.</td><td>When more than 60% of the cells are sequences. The regions are concatenated in column order.</td></tr>
+      <tr><td><b>Morphological</b></td><td>One column per character. Numbers with a decimal point or comma (<code>13.5</code> or <code>13,5</code>); class characters may be written as text.</td><td>When more than half of the columns are continuous measurements (more than 12 distinct values). A file with 12 rows or fewer must be typed by hand.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dos">
+    <div class="caja nota" style="margin:0">
+      <div class="caja-t"><span class="ico">i</span>Missing values</div>
+      <p style="margin:0">The following are always missing: an empty cell, <code>-9</code>, <code>-99</code>, <code>-999</code>, <code>NA</code>, <code>N/A</code>, <code>NaN</code>, <code>?</code>, <code>.</code>, <code>..</code>, <code>null</code>, <code>missing</code> and <code>x</code>, in upper or lower case. So is the value of <span class="ui">Code used for missing data</span>: <code>0</code> by default for codominant data. With haploid data and characters, 0 is a value. A genotype with only one of its alleles becomes missing and is flagged.</p>
+    </div>
+    <div class="caja nota" style="margin:0">
+      <div class="caja-t"><span class="ico">i</span>Types of morphological character</div>
+      <p style="margin:0">Each column is classified automatically: <b>binary</b> (only 0 and 1), <b>quantitative</b> (mostly numbers, more than 12 distinct values), <b>discrete</b> (mostly numbers, 12 values or fewer) or <b>nominal</b> (mostly text). In a numeric column, text that is not a number becomes missing and is flagged.</p>
+    </div>
+  </div>
+
+  <h3>A.3 Label and coordinate columns</h3>
+  <table class="compacta">
+    <caption><b>Table A.3.</b> Column names that the app assigns to each role on its own. They can be changed in the column roles card (section 3.4).</caption>
+    <thead><tr><th style="width:17%">Role</th><th>Names it recognises</th></tr></thead>
+    <tbody>
+      <tr><td><b>ID</b></td><td>ID, Ind, Individual, Unit, Sample, Plant, Tree, Accession, Genotype, Code, OTU, Taxon, Name, Clave, Individuo, Muestra, Planta, Unidad, or the name of the chosen unit (Landrace, Accession…).</td></tr>
+      <tr><td><b>Population</b></td><td>Pop, Population, Población, Site, Locality, Location, Deme, Race, Raza, Landrace, Provenance, Origin, Sitio, Localidad, Procedencia.</td></tr>
+      <tr><td><b>Region</b></td><td>Region, Región, Zone, Zona, Group, State, Estado, Area, Área, Cluster, Subregion, Watershed, Province, Provincia, País, Country.</td></tr>
+      <tr><td><b>Latitude</b></td><td>Lat, Latitude, Latitud, Y_coord, Northing.</td></tr>
+      <tr><td><b>Longitude</b></td><td>Lon, Long, Longitude, Longitud, X_coord, Easting.</td></tr>
+    </tbody>
+  </table>
+  <p>What counts is the <b>whole name</b>, in the plural or with a unit or note: <code>Populations</code>, <code>Latitude (°)</code>, <code>Lat_N</code>. A name that merely begins with the word, such as <code>Population_origin</code>, counts as population or region if the column holds text; that is why Spanish trait names such as <code>Longitud_mazorca</code> (ear length), <code>Area_foliar</code> (leaf area) or <code>Estado_fenologico</code> (phenological stage) remain characters. Without an ID column, the app numbers the rows <code>Ind1, Ind2…</code>; without a population column, each row is its own unit.</p>
+  <table class="compacta">
+    <caption><b>Table A.4.</b> How coordinates are read.</caption>
+    <thead><tr><th style="width:26%">If the coordinates are…</th><th style="width:37%">the app…</th><th>Units of the results</th></tr></thead>
+    <tbody>
+      <tr><td><b>Decimal degrees</b> (south and west negative)</td><td>Computes the great-circle distance (Earth radius 6,371&nbsp;km). A value outside ±90° or ±180° becomes missing and is flagged.</td><td>Kilometres; in the spatial structure analysis of Block 9, metres if all pairs are less than 5&nbsp;km apart.</td></tr>
+      <tr><td><b>Projected</b> (UTM in metres)</td><td>Recognises them when most values do not fit in degrees, and uses the Euclidean distance.</td><td>Map units (metres with UTM).</td></tr>
+      <tr><td><b>Per population</b> (all plants share the same ones)</td><td>Valid for isolation by distance between populations, but not for fine-scale spatial structure, which requires one coordinate per plant.</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · details that cause confusion when loading a table</div>
+    <ul style="margin:0">
+      <li><b>Leading zeros.</b> In a CSV, an ID <code>001</code> is read as the number 1 and no longer matches the <code>001</code> in a FASTA file or in the sample sheet. Use IDs with letters (<code>P001</code>) or an <code>.xlsx</code> with those cells formatted as text.</li>
+      <li><b>Decimal comma in a comma-separated CSV.</b> An unquoted <code>19,43</code> splits the row into two columns. Save the CSV with semicolons or use a decimal point.</li>
+      <li><b>Population names.</b> They are compared exactly: <code>Tlaxco</code> and <code>tlaxco</code> are two different populations.</li>
+      <li><b><code>Group</code></b> means region in a table, but population in the sample sheet (table A.8).</li>
+    </ul>
+  </div>
+
+  <h3>A.4 The template row</h3>
+  <p>The templates from the designer (section 3.3) carry in row 1 the cell <code>#PopGeneticsPro template</code> followed by <code>key=value</code> pairs, one per cell. Row 2 holds the column names and the data start in row 3. With this row the app guesses nothing: it reads the declared layout and compares it with what it found.</p>
+  <table class="compacta">
+    <caption><b>Table A.5.</b> Keys of the template row. Values are case-sensitive; keys are not.</caption>
+    <thead><tr><th style="width:22%">Key</th><th style="width:44%">Values</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>v</code></td><td><code>1</code></td><td>Template version.</td></tr>
+      <tr><td><code>kind</code></td><td><code>codominant</code> · <code>dominant</code> · <code>haploid</code> · <code>sequence</code> · <code>morph</code></td><td>Data type (SNPs are <code>codominant</code>).</td></tr>
+      <tr><td><code>ploidy</code></td><td>Integer (codominant data only).</td><td>Alleles per locus.</td></tr>
+      <tr><td><code>cells</code></td><td><code>columns</code> · <code>combined</code></td><td>One allele per column, or genotype in one cell.</td></tr>
+      <tr><td><code>coding</code></td><td><code>size</code> · <code>nucleotide</code> · <code>code</code></td><td>With <code>size</code>, an allele that is not a number becomes missing.</td></tr>
+      <tr><td><code>missing</code></td><td>Any code; empty if missing data are empty cells.</td><td>Missing-data code.</td></tr>
+      <tr><td><code>unit</code></td><td><code>individuals</code> · <code>landraces</code> · <code>accessions</code> · <code>varieties</code> · <code>populations</code> · <code>clones</code> · <code>genotypes</code> · <code>samples</code> · <code>OTUs</code></td><td>What the rows are called throughout the app.</td></tr>
+      <tr><td><code>sampling</code></td><td><code>pops</code> · <code>bulk</code></td><td>Plants per population, or one bulk sample per unit.</td></tr>
+      <tr><td><code>orientation</code></td><td><code>rows-are-individuals</code> · <code>rows-are-loci</code></td><td>Bands in rows (dominant data only).</td></tr>
+      <tr><td><code>loci</code> · <code>units</code> · <code>pops</code></td><td>Integers.</td><td>Only for checking what was read.</td></tr>
+      <tr><td><code>sizes</code> · <code>popnames</code></td><td><code>8|8|8</code> · <code>SanJuan|ElMirador|LaCumbre</code></td><td>Planned plants and name of each population, in order.</td></tr>
+      <tr><td><code>id</code> · <code>pop</code> · <code>region</code> · <code>lat</code> · <code>lon</code></td><td>Exact column name.</td><td>Which column holds each label.</td></tr>
+    </tbody>
+  </table>
+  <div class="ejemplo-archivo">
+  <p class="pre-t"><b>Example.</b> CSV template with 3 loci and 2 populations (3 and 2 plants); row 1 is a single line.</p>
+  <pre class="archivo">#PopGeneticsPro template,v=1,kind=codominant,ploidy=2,cells=columns,coding=size,missing=0,unit=individuals,sampling=pops,orientation=rows-are-individuals,loci=3,units=5,pops=2,sizes=3|2,popnames=Conico|Chalqueno,id=Individual,pop=Population
+Individual,Population,phi024,phi024,phi053,phi053,umc1147,umc1147
+Con01,Conico,122,122,0,0,0,0
+Con02,Conico,126,118,160,154,96,96
+Con03,Conico,124,118,152,156,102,102
+Cha01,Chalqueno,126,126,164,164,96,96
+Cha02,Chalqueno,126,120,160,164,96,96</pre>
+  </div>
+
+  <h3>A.5 Layout with parameter rows</h3>
+  <table class="compacta">
+    <caption><b>Table A.6.</b> What goes in each cell of the layout with parameter rows (figure 3.7). The app recognises it when the numbers in row 1 are consistent.</caption>
+    <thead><tr><th style="width:26%">Cell</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td><b>A1 · B1 · C1</b></td><td>Number of loci, of individuals and of populations.</td></tr>
+      <tr><td><b>D1 onwards</b></td><td>Plants in each population (as many cells as populations); they must add up to B1.</td></tr>
+      <tr><td><b>Next cell</b> (optional)</td><td>Number of regions and, to its right, the plants in each region; these also add up to B1.</td></tr>
+      <tr><td><b>Row 2</b></td><td>Title in A2; population names below their sizes, and region names below theirs.</td></tr>
+      <tr><td><b>Row 3</b></td><td>Headers: individual, population and the loci. With codominant data, two columns per locus with the name only in the first.</td></tr>
+      <tr><td><b>Row 4 onwards</b></td><td>Data, with the populations in consecutive blocks. <code>Lat</code> and <code>Long</code> may follow after an empty column.</td></tr>
+    </tbody>
+  </table>
+  <p>The data columns run from column C to the first empty column; divided by A1 they give the columns per locus: two means codominant; one means dominant if more than 90% are 0/1, and haploid otherwise. With dominant data, the default missing code is <code>−1</code>. This layout exists only for diploid codominant, dominant and haploid data with populations.</p>
+  <div class="ejemplo-archivo">
+  <p class="pre-t"><b>Example.</b> 3 loci, 5 individuals in 2 populations (3 and 2 plants). For one region, write <code>3,5,2,3,2,1,5</code> in row 1 and its name in G2.</p>
+  <pre class="archivo">3,5,2,3,2
+Maize SSR subset,,,Conico,Chalqueno
+Sample,Pop,phi024,,phi053,,umc1147,
+Con01,Conico,122,122,0,0,0,0
+Con02,Conico,126,118,160,154,96,96
+Con03,Conico,124,118,152,156,102,102
+Cha01,Chalqueno,126,126,164,164,96,96
+Cha02,Chalqueno,126,120,160,164,96,96</pre>
+  </div>
+
+  <h3>A.6 Files with their own format</h3>
+  <table class="compacta">
+    <caption><b>Table A.7.</b> What the app reads from each special format. None of them carries regions or coordinates, and some lack populations too: these are supplied with the sample sheet (table A.8).</caption>
+    <thead><tr><th style="width:15%">Format</th><th style="width:47%">Structure it reads</th><th>Missing data and limits</th></tr></thead>
+    <tbody>
+      <tr><td><b>FASTA</b></td><td>Header <code>&gt;ID | Population | Region</code> (fields may also be separated by two or more spaces). <code>&gt;ID_pop</code> is not split. Identical sequences form one haplotype.</td><td><code>−</code> gap; <code>N</code> and <code>?</code> unknown. Block 8 discards sites with a gap or an ambiguous base (section 9.1); dating uses them as partial states. Repeated IDs are not flagged.</td></tr>
+      <tr><td><b>VCF</b></td><td>Tab-separated columns; samples from column 10 onwards. Locus: the ID or <code>CHROM_POS</code>. The GT field is read: <code>0</code> is REF and <code>1</code> the first ALT; <code>/</code> and <code>|</code> are equivalent.</td><td><code>./.</code> missing. An allele 2, 3… or a partial call (<code>0/.</code>) makes the genotype missing. QUAL, FILTER and INFO are not used: filter beforehand. No populations.</td></tr>
+      <tr><td><b>.str</b></td><td>Optional line with the marker names; column 1 ID, column 2 population; then one allele per marker. Two consecutive rows per individual = diploid; one row = haploid.</td><td>Only <code>−9</code> is missing (0 is an allele). IDs without spaces. A row with two columns per locus is not accepted.</td></tr>
+      <tr><td><b>.gen</b></td><td>Line 1, title; locus names up to the first <code>POP</code>; each individual: <code>name , codes</code>. Codes of 4 digits (2 per allele) or 6 (3 per allele).</td><td><code>0000</code> or <code>000000</code> missing. Populations are named <code>Pop1, Pop2…</code> (rename them with the sample sheet). Diploids only.</td></tr>
+      <tr><td><b>.arp</b></td><td><code>GenotypicData=1</code> diploid and <code>=0</code> haploid (without the key, diploid). Samples in <code>SampleName="…"</code> and <code>SampleData={ … }</code>; in genotypic data, the second allele is on the next line.</td><td><code>?</code> missing. The frequency column is ignored: each line is one individual. Sequences enter as codes, not as an alignment.</td></tr>
+    </tbody>
+  </table>
+  <div class="ejemplo-archivo">
+  <p class="pre-t"><b>Example.</b> VCF with two sites; in the file the columns are separated by a tab (here they are aligned with spaces for readability). Con02 at the second site (<code>0/2</code>) becomes missing because it uses the second alternative allele.</p>
+  <pre class="archivo">##fileformat=VCFv4.2
+#CHROM  POS    ID        REF  ALT  QUAL  FILTER  INFO  FORMAT  Con01    Con02   Con03
+1       10234  S1_10234  A    G    .     PASS    .     GT:DP   0/1:12   1|1:8   ./.:0
+1       55871  .         C    T,A  .     PASS    .     GT      0/0      0/2     1/1</pre>
+  </div>
+
+  <h3>A.7 Sample sheet</h3>
+  <table class="compacta">
+    <caption><b>Table A.8.</b> Columns of the sample sheet (<span class="ui">Choose a sample sheet</span>), which supplements a FASTA, a VCF or a .str, .gen or .arp file. The first sheet of an <code>.xlsx</code>, <code>.xls</code> or <code>.ods</code> workbook is read, or a CSV.</caption>
+    <thead><tr><th style="width:19%">Column</th><th style="width:45%">Names it recognises</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><b>ID</b> (required)</td><td>ID, Ind, Individual, Sample, Plant, Tree, Accession, Genotype, Landrace, Name, Seq, Sequence, OTU, Clave, Individuo, Muestra, Planta.</td><td>Compared ignoring case and leading or trailing spaces.</td></tr>
+      <tr><td><b>Population</b></td><td>Pop, Population, Población, Site, Locality, <b>Group</b>, Deme, Localidad, Sitio.</td><td rowspan="3">Only cells with a value replace what the file contained. Coordinates accept a decimal comma.</td></tr>
+      <tr><td><b>Region</b></td><td>Region, Zone, State, Estado, Area, Province, Country, País.</td></tr>
+      <tr><td><b>Latitude · Longitude</b></td><td>Lat, Latitude, Latitud, Y · Lon, Long, Longitude, Longitud, X.</td></tr>
+    </tbody>
+  </table>
+  <p><span class="ui">Download an empty sample sheet with these IDs</span> writes <code>&lt;file&gt;_samples.csv</code> with the columns <code>ID, Population, Region, Latitude, Longitude</code> and the IDs already filled in.</p>
+
+  <h3>A.8 Files produced by the app</h3>
+  <table class="compacta">
+    <caption><b>Table A.9.</b> Format of each downloadable file. Figures, the report and the ZIP package are described in sections 11.2 and 11.3.</caption>
+    <thead><tr><th style="width:23%">File</th><th>Content and format</th></tr></thead>
+    <tbody>
+      <tr><td><b>Results tables</b> (<code>.csv</code>)</td><td>Comma-separated, with a decimal point, in UTF-8 with a byte-order mark and Windows line endings. Values that do not exist are left empty. The name is that of the data file plus a suffix: <code>_diversity_summary</code>, <code>_hwe_fis_null</code>, <code>_pairwise_differentiation</code>, <code>_pcoa_scores</code>, <code>_assignment</code>, <code>_haplotype_table</code>, <code>_demography</code>…</td></tr>
+      <tr><td><b>Data sheet</b></td><td><span class="ui">Save as</span>: <code>.xlsx</code> or <code>.ods</code> (sheet <code>Data</code>), <code>.csv</code>, <code>_semicolon.csv</code> or <code>.tsv</code>, with the values exactly as they were entered.</td></tr>
+      <tr><td><b>Templates</b></td><td><code>.xlsx</code> with the sheets <code>Data</code>, <code>Instructions</code> and <code>Design</code>; <code>.csv</code> with the template row; <code>_parameter_rows.csv</code>; <code>.fasta</code> (<code>&gt;ID | Population | Region</code>, 60 bases per line); <code>_samples.csv</code>; <code>_instructions.txt</code>. <span class="ui">Export in another layout</span> writes the loaded data in these same layouts.</td></tr>
+      <tr><td><b>Block 6 trees</b> (<code>.nwk</code>)</td><td>Newick with branch lengths to 6 decimal places and bootstrap support as a whole percentage after each closing parenthesis. Spaces and punctuation in names are replaced by <code>_</code>.</td></tr>
+      <tr><td><b>Dated trees</b> (<code>.nwk</code>, <code>.nex</code>)</td><td>
+        <code>_ml_tree.nwk</code>: lengths in substitutions per site. <code>_dated_lsd</code> and <code>_dated_mcmc</code>: chronogram with lengths in millions of years; names containing punctuation go in single quotes. The NEXUS file adds a <code>TRANSLATE</code> table and annotates each node as <code>[&amp;height=…,height_95%_HPD={a,b},posterior=…,calibration="…"]</code>. With MCMC, <code>height</code> is the median and the interval is the 95% HPD; with LSD, the estimate and the 2.5 and 97.5 percentiles of the resampling.</td></tr>
+      <tr><td><b>Node ages</b> (<code>.csv</code>)</td><td>One row per internal node: <code>Clade</code> (tips separated by <code>|</code>), <code>Tips</code>, <code>Age (Ma)</code> or <code>Median age (Ma)</code>, <code>Lower 95%</code>, <code>Upper 95%</code>, <code>ESS</code> (MCMC only), <code>Calibration</code> and <code>Epoch</code> (epoch or period of the geological time scale).</td></tr>
+      <tr><td><b>MCMC log</b> (<code>_mcmc.log</code>)</td><td>Tab-separated text with an initial comment line. Columns: <code>state</code>, <code>posterior</code>, <code>log_likelihood</code>, <code>prior</code>, <code>clock_rate</code>; <code>rate_sigma</code> with a relaxed clock, <code>kappa</code> with K80 or HKY, <code>alpha</code> with Γ; <code>birth_rate</code> (Yule) or <code>theta</code> (coalescent); <code>root_age</code> and one <code>height(clade)</code> column per internal node. Only samples after the burn-in, about 2,000 rows.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ====================================================================== B -->
+  <h2 id="ap-b" data-nueva-hoja><span class="num">B</span>Summary of decision rules</h2>
+  <p class="lead">The manual’s 43 decision rules, in the order of the app. Each box gives the section where the theory behind it is explained; read them as guides to interpretation, not as laws: the biological context of your species always comes first.</p>
+  <p>Look for your question in the index first. The rule from section 2.2 on how much differentiation is a lot is repeated, in fuller form, in section 6.4, and appears here only once.</p>
+<!-- reglas: inicio (lo escribe herramientas/reunir-reglas.pl; no editar a mano) -->
+  <ul class="indice-reglas">
+    <li class="grupo"><span class="chip k0">1</span>Introduction to PopGeneticsPro</li>
+    <li><b>1.8</b>How many plants per population?</li>
+    <li><b>1.9</b>Reading a P value</li>
+    <li class="grupo"><span class="chip k1">B1</span>Home, theory and simulator</li>
+    <li><b>2.3</b>Does selection or drift win?</li>
+    <li><b>2.4</b>More loci or more individuals?</li>
+    <li class="grupo"><span class="chip k2">B2</span>Data and quality control</li>
+    <li><b>3.3</b>The design checks</li>
+    <li><b>3.4</b>How the app works out the marker type</li>
+    <li><b>3.5</b>Missing data</li>
+    <li><b>3.5</b>Monomorphic loci and extreme bands</li>
+    <li><b>3.5</b>Repeated genotypes</li>
+    <li><b>3.7</b>Reading the coefficient of variation of a trait</li>
+    <li class="grupo"><span class="chip k3">B3</span>Allele frequencies and diversity</li>
+    <li><b>4.3</b>Is diversity high or low?</li>
+    <li><b>4.3</b>Do two populations differ in diversity?</li>
+    <li><b>4.3</b>Fixation index F</li>
+    <li><b>4.3</b>PIC of a marker</li>
+    <li><b>4.3</b>Private alleles and locally common alleles</li>
+    <li><b>4.6</b>Which estimator to use with bands?</li>
+    <li><b>4.6</b>Phenotypic H′</li>
+    <li class="grupo"><span class="chip k4">B4</span>Hardy–Weinberg and linkage disequilibrium</li>
+    <li><b>5.1</b>Which Hardy–Weinberg test to read</li>
+    <li><b>5.2</b>Inbreeding, Wahlund or null alleles?</li>
+    <li><b>5.3</b>Reading r̄<sub>d</sub></li>
+    <li><b>5.4</b>Which correction to use</li>
+    <li class="grupo"><span class="chip k5">B5</span>Differentiation and AMOVA</li>
+    <li><b>6.4</b>How much differentiation is a lot?</li>
+    <li><b>6.4</b>Which estimator should you report?</li>
+    <li><b>6.4</b>Reading an AMOVA with regions</li>
+    <li><b>6.4</b>Population pairs and migrants</li>
+    <li class="grupo"><span class="chip k6">B6</span>Distances, ordination and trees</li>
+    <li><b>7.2</b>Reading a PCoA</li>
+    <li><b>7.3</b>Support and fit of the tree</li>
+    <li><b>7.5</b>Isolation by distance</li>
+    <li class="grupo"><span class="chip k7">B7</span>Bayesian clustering and assignment</li>
+    <li><b>8.2</b>Choosing K</li>
+    <li><b>8.3</b>Reading a DAPC</li>
+    <li><b>8.4</b>Assignment and migrants</li>
+    <li class="grupo"><span class="chip k8">B8</span>DNA sequences and molecular dating</li>
+    <li><b>9.2</b>Neutrality and mismatch</li>
+    <li><b>9.3</b>Phylogeographic structure</li>
+    <li><b>9.4</b>Reading a haplotype network</li>
+    <li><b>9.5</b>Calibrating and reading a dated tree</li>
+    <li class="grupo"><span class="chip k9">B9</span>Demography and spatial structure</li>
+    <li><b>10.1</b>Was there a bottleneck?</li>
+    <li><b>10.2</b>Reading an N<sub>e</sub></li>
+    <li><b>10.3</b>Spatial genetic structure</li>
+    <li><b>10.4</b>How much selfing?</li>
+    <li><b>10.5</b>P<sub>ST</sub> versus F<sub>ST</sub></li>
+    <li class="grupo"><span class="chip k10">B10</span>Figures and report</li>
+    <li><b>11.1</b>Preparing a figure</li>
+    <li><b>11.2</b>Which format and resolution</li>
+    <li><b>11.3</b>Which output to use</li>
+  </ul>
+
+  <h3 class="ap-cap"><span class="chip k0">1</span>Introduction to PopGeneticsPro</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · how many plants per population?<span class="sec-ref">Section 1.8</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:26%">Size per population</th><th style="width:20%">Interpretation</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td><b>25 to 30 or more</b></td><td>Adequate</td><td>Sufficient to estimate allele frequencies reliably with microsatellites (Hale et al., 2012). All analyses are dependable.</td></tr>
+      <tr><td><b>10 to 24</b></td><td>Acceptable, with caution</td><td>Compare diversity using <b>rarefied allelic richness</b> rather than the raw number of alleles, and report confidence intervals.</td></tr>
+      <tr><td><b>5 to 9</b></td><td>Limited</td><td>Rare alleles are lost and F<sub>IS</sub> values are unstable. Use such samples for description, not for precise comparisons between populations.</td></tr>
+      <tr><td><b>Fewer than 5</b></td><td>Insufficient</td><td>The app flags this in quality control. Consider pooling neighbouring populations or restricting the analysis to distances and ordination.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">With dominant markers, more plants and more polymorphic bands are advisable, because each band carries less information than a microsatellite.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · reading a P value<span class="sec-ref">Section 1.9</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:24%">P value</th><th style="width:28%">Evidence against the null hypothesis</th><th>How to word it</th></tr></thead>
+    <tbody>
+      <tr><td><b>P &lt; 0.001</b></td><td>Very strong</td><td>“The departure is highly significant”.</td></tr>
+      <tr><td><b>0.001 ≤ P &lt; 0.01</b></td><td>Strong</td><td>“The departure is significant”.</td></tr>
+      <tr><td><b>0.01 ≤ P &lt; 0.05</b></td><td>Moderate</td><td>“There is evidence of a departure”; confirm it with other loci or populations.</td></tr>
+      <tr><td><b>P ≥ 0.05</b></td><td>Insufficient</td><td>“No departure was detected”. Do not claim that the population <i>is</i> in equilibrium: the test may have lacked statistical power.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">Always report the exact P value and the effect size (for example, F<sub>IS</sub> with its interval), not just whether the result is significant.</p>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k1">B1</span>Home, theory and simulator</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · does selection or drift win?<span class="sec-ref">Section 2.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:22%">4 N<sub>e</sub> |s|</th><th style="width:26%">Which dominates</th><th>What to expect</th></tr></thead>
+    <tbody>
+      <tr><td><b>Less than 1</b></td><td>Drift</td><td>The allele behaves almost as if it were neutral; it can be lost even though it is advantageous. Example: N<sub>e</sub> = 10 and <i>s</i> = 0.01 give 0.4.</td></tr>
+      <tr><td><b>1 to 10</b></td><td>Both</td><td>Selection steers the change, but chance produces variable outcomes among populations.</td></tr>
+      <tr><td><b>More than 10</b></td><td>Selection</td><td>The change is almost deterministic. Example: N<sub>e</sub> = 100 and <i>s</i> = 0.1 give 40.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">Practical consequence: in small populations, even adaptive variants can be lost by chance. Maintaining large effective sizes also maintains the capacity to adapt.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · more loci or more individuals?<span class="sec-ref">Section 2.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:36%">If your objective is…</th><th>… invest in</th></tr></thead>
+    <tbody>
+      <tr><td><b>Estimating differentiation</b> (F<sub>ST</sub>, AMOVA, distances)</td><td><b>More loci.</b> Each locus is an independent replicate of the history of the populations, and the variance of F<sub>ST</sub> decreases faster when you add loci than when you add individuals.</td></tr>
+      <tr><td><b>Finding rare or private alleles</b></td><td><b>More individuals.</b> An allele at a frequency of 2% has only a 64% probability of appearing in 25 diploid plants.</td></tr>
+      <tr><td><b>Detecting kinship or spatial structure</b></td><td><b>Both</b>, with mapped individuals and highly polymorphic markers.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k2">B2</span>Data and quality control</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · the design checks<span class="sec-ref">Section 3.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:36%">If the design has…</th><th>the designer warns that…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Fewer than 5 plants</b> in a population</td><td>this is not enough for any within-population test; 20 to 30 are needed to estimate frequencies well (Hale et al., 2012).</td></tr>
+      <tr><td><b>20 or more plants</b> per population</td><td>this is enough for allele frequencies, H<sub>e</sub>, F<sub>IS</sub> and Hardy–Weinberg tests.</td></tr>
+      <tr><td><b>Fewer than 5 polymorphic loci</b></td><td>multilocus analyses (Bayesian clustering, assignment, r̄<sub>d</sub>) are not reliable; clustering is usually run with 10 or more.</td></tr>
+      <tr><td><b>Few populations per region</b></td><td>the number of possible permutations limits the smallest P value of Φ<sub>CT</sub> in the AMOVA (Fitzpatrick, 2009). With 2 + 2 populations there are only 3 distinct arrangements and P never falls below 0.33.</td></tr>
+      <tr><td><b>10 or more plants</b> per population (codominant)</td><td>N<sub>e</sub> from linkage disequilibrium and the bottleneck tests of Block 9 become available; their precision improves greatly with 30 or more plants and 10 or more polymorphic loci.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · how the app works out the marker type<span class="sec-ref">Section 3.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:6%">#</th><th style="width:48%">If it finds…</th><th>then the data are…</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>row 1 of a PopGeneticsPro template</td><td>the type declared in it</td></tr>
+      <tr><td>2</td><td>a parameter row with two columns per locus</td><td>codominant (with one column per locus: dominant or haploid)</td></tr>
+      <tr><td>3</td><td>more than 90% of the data columns containing only 0 and 1</td><td>dominant</td></tr>
+      <tr><td>4</td><td>columns with complete DNA sequences</td><td>sequences</td></tr>
+      <tr><td>5</td><td>columns with genotypes in one cell (182/186, A/G)</td><td>codominant, genotype in one cell</td></tr>
+      <tr><td>6</td><td>column names that come in pairs</td><td>codominant, one allele per column</td></tr>
+      <tr><td>7</td><td>most columns with continuous measurements</td><td>morphological</td></tr>
+      <tr><td>8</td><td>most columns with a text code</td><td>haploid</td></tr>
+      <tr><td>9</td><td>none of the above</td><td>codominant (check it)</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">Only the data columns are examined: a latitude or ID column does not turn a matrix of 0s and 1s into measurements. The orientation is worked out first: a matrix of 0s and 1s whose first column repeats names, or with many more rows than columns, is read with the bands in rows.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · missing data<span class="sec-ref">Section 3.5</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:26%">Missing data</th><th style="width:22%">Reading</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td><b>Less than 5%</b></td><td>Very good</td><td>Carry on without changes.</td></tr>
+      <tr><td><b>5 to 10%</b></td><td>Acceptable</td><td>Carry on, but check whether the missing data are concentrated in one locus or one population.</td></tr>
+      <tr><td><b>More than 10%</b></td><td>Worrying</td><td>Remove the loci or individuals with the most missing data rather than letting the gaps drive the result.</td></tr>
+      <tr><td><b>An individual with more than 25%</b></td><td>Weak individual</td><td>The app names it. Genotype it again, or exclude it if its absence does not leave the population too small.</td></tr>
+      <tr><td><b>A locus with far more missing data than the rest</b></td><td>Problematic locus</td><td>It may have null alleles or amplify poorly. Check it in Block 4 as well.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · monomorphic loci and extreme bands<span class="sec-ref">Section 3.5</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">If a locus or band…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Is monomorphic</b> (a single allele, or a band present in all or in none)</td><td>It contributes nothing to differentiation or distances. The app keeps it and warns you; it counts towards the percentage of polymorphic loci (%P).</td></tr>
+      <tr><td><b>Is a dominant band with a frequency below 5% or above 95%</b></td><td>Its frequency is poorly estimated from a gel. It is common practice to remove such bands before analysis; the app counts them in a warning.</td></tr>
+      <tr><td><b>Has an allele found in a single plant only</b></td><td>It may be real (a rare allele) or a scoring error. Check the electropherogram before reporting it as a private allele.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · repeated genotypes<span class="sec-ref">Section 3.5</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:34%">If you find…</th><th>the most likely explanation is…</th><th style="width:30%">what to do</th></tr></thead>
+    <tbody>
+      <tr><td><b>Identical pairs in a clonal species</b></td><td>ramets of the same genet</td><td>keep one per genotype</td></tr>
+      <tr><td><b>Identical pairs in a species without vegetative reproduction</b></td><td>the same plant sampled or entered twice, or too few loci</td><td>check the labels and the field sheet</td></tr>
+      <tr><td><b>Pairs that match at 95% or more without being identical</b></td><td>close relatives, or the same plant with a scoring error</td><td>check the loci that differ</td></tr>
+      <tr><td><b>Many identical pairs with few loci</b></td><td>a lack of power to tell individuals apart</td><td>add loci before concluding that there is clonality</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">With sequences, sharing a haplotype is normal, and with traits there is no multilocus genotype: in both cases this check does not apply.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · reading the coefficient of variation of a trait<span class="sec-ref">Section 3.7</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:22%">CV</th><th style="width:24%">Variation</th><th>In the example</th></tr></thead>
+    <tbody>
+      <tr><td><b>Less than 10%</b></td><td>Low</td><td>Days to flowering, 9.8%: a very stable trait across plants.</td></tr>
+      <tr><td><b>10 to 30%</b></td><td>Moderate</td><td>Plant height (17.3%), ear length (25.9%) and ear diameter (25.8%).</td></tr>
+      <tr><td><b>More than 30%</b></td><td>High</td><td>Cob weight (41.6%) and 100-kernel weight (39.3%): good candidates for differentiating populations or for selection.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">An indicative guide: the expected CV depends on the trait and the environment. A very high CV may also reveal data-entry errors, such as a weight in grams entered as kilograms; check the minimum and maximum.</p>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k3">B3</span>Allele frequencies and diversity</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · is diversity high or low?<span class="sec-ref">Section 4.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:30%">Marker</th><th style="width:22%">Typical H<sub>e</sub></th><th>Interpretation</th></tr></thead>
+    <tbody>
+      <tr><td><b>Microsatellites</b> in outcrossing plants</td><td>0.45 to 0.85</td><td>Below 0.45, low diversity (bottleneck, isolation, selfing); above 0.85, very high.</td></tr>
+      <tr><td><b>Microsatellites</b> in selfing plants</td><td>below 0.45</td><td>Low values are normal; compare with other species with a similar mating system.</td></tr>
+      <tr><td><b>AFLP, ISSR, RAPD</b></td><td>0.15 to 0.40</td><td>The theoretical maximum is 0.5, because each band has only two states. Never compare H<sub>e</sub> from dominant markers with H<sub>e</sub> from microsatellites.</td></tr>
+      <tr><td>Chloroplast <b>haplotypes</b> or sequences</td><td>highly variable</td><td>Depends on the marker and on history. Report it together with the number of haplotypes and the nucleotide diversity from Block 8.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">These are indicative ranges taken from the plant literature: they help you place a number, not judge a dataset. What is really informative is the comparison among your own populations with the same marker.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · do two populations differ in diversity?<span class="sec-ref">Section 4.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>The 95% intervals of H<sub>e</sub> do not overlap</b></td><td>The difference is supported by the loci sampled.</td></tr>
+      <tr><td><b>The intervals overlap</b></td><td>The difference is not resolved: treat the populations as equally diverse. The app says so explicitly.</td></tr>
+      <tr><td><b>There are fewer than three loci</b></td><td>Loci cannot be resampled and intervals cannot be calculated: the difference is not tested (the case of a single sequence alignment).</td></tr>
+      <tr><td><b>Sample sizes differ by more than a factor of two</b> among populations</td><td>Do not compare N<sub>a</sub> or the number of private alleles; use uH<sub>e</sub> and A<sub>r</sub>. The app warns you.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The intervals are obtained by <i>bootstrap</i> over loci: loci are resampled with replacement 1000 times and the 2.5 and 97.5 percentiles of the mean are taken. They reflect how much the result would change with other loci, not with other plants.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>Fixation index F<span class="sec-ref">Section 4.3</span></div>
+    <table class="compacta">
+      <thead><tr><th style="width:42%">F</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Greater than 0.1</b></td><td>Clear heterozygote deficit.</td></tr>
+        <tr><td><b>−0.05 to 0.1</b></td><td>Close to equilibrium.</td></tr>
+        <tr><td><b>Less than −0.05</b></td><td>Heterozygote excess.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">F is a description. Whether there is inbreeding, null alleles or a Wahlund effect is decided in Block 4 with F<sub>IS</sub> and its tests.</p>
+  </div>
+
+  <div class="caja regla">
+    <div class="caja-t"><span class="ico">✓</span>PIC of a marker<span class="sec-ref">Section 4.3</span></div>
+    <table class="compacta">
+      <thead><tr><th style="width:42%">PIC</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Greater than 0.5</b></td><td>Highly informative.</td></tr>
+        <tr><td><b>0.25 to 0.5</b></td><td>Moderately informative.</td></tr>
+        <tr><td><b>Less than 0.25</b></td><td>Slightly informative.</td></tr>
+      </tbody>
+    </table>
+    <p class="regla-pie">Categories of Botstein et al. (1980). Useful for choosing loci for variety identification or paternity testing.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · private alleles and locally common alleles<span class="sec-ref">Section 4.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">If you find…</th><th>the interpretation is…</th></tr></thead>
+    <tbody>
+      <tr><td><b>A private allele with frequency ≥ 5%</b> (<i>frequent</i>)</td><td>Evidence of a distinct gene pool: restricted gene flow or an independent history. A priority for conservation.</td></tr>
+      <tr><td><b>A rare private allele</b> (<i>rare</i>, &lt; 5%)</td><td>It may be real or simply a sampling accident; with more plants it might turn up in other populations.</td></tr>
+      <tr><td><b>A locally common allele</b>, ≥ 5% in 25% or fewer of the populations</td><td>Strong signal of restricted gene flow.</td></tr>
+      <tr><td><b>A locally common allele</b>, ≥ 5% in half or fewer of the populations</td><td>Moderate signal. The app reports both thresholds when there are four or more populations.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · which estimator to use with bands?<span class="sec-ref">Section 4.6</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:36%">If your species…</th><th>use…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Is outcrossing</b> and you have 20 or more plants per population</td><td>Lynch and Milligan. With large samples it coincides with the square root; with few plants it corrects the square root’s bias.</td></tr>
+      <tr><td><b>Is outcrossing</b> but some bands are absent from almost every plant</td><td>Bayesian with F = 0: it does not leave frequencies at 0 or 1 when a band is missing from the whole sample.</td></tr>
+      <tr><td><b>Is selfing</b> or has known inbreeding</td><td>Bayesian with F between 0.8 and 0.95: without this correction the frequency of the recessive allele is underestimated.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">Whichever method you choose, report it: H<sub>e</sub> from dominant markers depends on it. Comparisons among populations hardly change, as table 4.6 shows.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · phenotypic H′<span class="sec-ref">Section 4.6</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:24%">H′</th><th style="width:24%">Diversity</th><th>Interpretation</th></tr></thead>
+    <tbody>
+      <tr><td><b>0.6 or more</b></td><td>High</td><td>The plants cover almost the whole range of the trait. Useful material as a source of variation.</td></tr>
+      <tr><td><b>0.4 to 0.6</b></td><td>Medium</td><td>Moderate variation, common within a landrace or local variety.</td></tr>
+      <tr><td><b>Less than 0.4</b></td><td>Low</td><td>Trait uniform in that population: fixed by selection or with a narrow genetic base.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">An indicative guide used in studies of local varieties. H′ mixes genetic and environmental variation: to find out whether differences among populations exceed what drift would produce, P<sub>ST</sub> is compared with F<sub>ST</sub> in Block 9.</p>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k4">B4</span>Hardy–Weinberg and linkage disequilibrium</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · which Hardy–Weinberg test to read<span class="sec-ref">Section 5.1</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>You use microsatellites or SNPs with rare alleles</b></td><td>Read the exact test. The app flags unreliable χ² values with †.</td></tr>
+      <tr><td><b>You want to know the direction</b> of the departure</td><td>Use the one-tailed tests: <span class="ui">one-sided: heterozygote deficit</span> or <span class="ui">excess</span> (Rousset and Raymond, 1995). They are more powerful than the global test when you already suspect inbreeding.</td></tr>
+      <tr><td><b>The exact P is close to α</b></td><td>Raise the permutations to 10,000. With 1000, a P of 0.05 has an error of ±0.007; with 10,000, of ±0.002.</td></tr>
+      <tr><td><b>You are comparing with an older paper</b></td><td>Show χ² for reference only and explain that the conclusion rests on the exact test.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">A Monte Carlo test never gives P = 0: with B permutations and b tables as unusual as the observed one, P = (b + 1)/(B + 1). The smallest possible value with 1000 permutations is 0.001.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · inbreeding, Wahlund or null alleles?<span class="sec-ref">Section 5.2</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:36%">Pattern</th><th style="width:22%">Likely cause</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td><b>Positive F<sub>IS</sub> at most loci</b> and an interval for <i>f</i> that excludes 0</td><td>Inbreeding</td><td>Report <i>f</i> with its interval and the selfing rate <i>s</i> for reference. Keep the loci.</td></tr>
+      <tr><td><b>One locus with a significant deficit in half or more of the populations</b> and a null frequency above 5%</td><td>Null allele</td><td>The app flags the locus as <span class="ui">suspected null allele</span>. Recompute F<sub>ST</sub> without it in Block 5 and compare.</td></tr>
+      <tr><td><b>General deficit and linkage disequilibrium within the population</b></td><td>Wahlund or selfing</td><td>Look for subgroups with Block 7. If they appear, the “population” mixes gene pools.</td></tr>
+      <tr><td><b>Both patterns at once</b></td><td>Inbreeding plus a null</td><td>Estimate <i>f</i> from the unflagged loci and report both results.</td></tr>
+      <tr><td><b>Scattered departures</b>, with no repeated locus or population</td><td>Chance or scoring errors</td><td>This does not justify removing loci. Check the gels for the extreme cases.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The automatic diagnosis in card 2 applies this rule. A significant excess of heterozygotes (<i>f</i> with an interval below 0) suggests clonality, a recent cross between different sources or, in small samples, mere chance.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span><span>Decision rule · reading <span style="text-transform:none;letter-spacing:0;font-size:1.2em">r̄<sub>d</sub></span></span><span class="sec-ref">Section 5.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>r̄<sub>d</sub> ≈ 0 and not significant</b> in every population</td><td>The loci behave as independent. The Block 7 methods, which assume this, can be used without reservation.</td></tr>
+      <tr><td><b>r̄<sub>d</sub> significant and below 0.05</b></td><td>Detectable but weak association; it does not bias analyses that assume independence.</td></tr>
+      <tr><td><b>r̄<sub>d</sub> significant and above 0.05</b> within populations</td><td>Selfing, clonality or recent admixture. Read Bayesian clustering and assignments with caution.</td></tr>
+      <tr><td><b>Significant only in the pooled sample</b></td><td>A sign of differentiation between populations, not of physical linkage.</td></tr>
+      <tr><td><b>One particular pair stands out</b> in several populations</td><td>Possible physical linkage between those two loci. Consider using only one of them in analyses that require independence.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The 0.05 threshold is a guide: in outcrossing plants with unlinked markers, r̄<sub>d</sub> usually stays below 0.01; in clonal or highly selfing species, values of 0.1 to 0.5 are common.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · which correction to use<span class="sec-ref">Section 5.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>use…</th></tr></thead>
+    <tbody>
+      <tr><td><b>You have dozens of tests</b> and every rejection matters (HWE per locus)</td><td>Holm, the default option.</td></tr>
+      <tr><td><b>You have hundreds or thousands of tests</b> (pairs of loci with dominant markers)</td><td>Benjamini–Hochberg: Holm would be so strict that it would detect nothing.</td></tr>
+      <tr><td><b>You are interested in the population as a whole</b>, not each locus</td><td>Fisher’s method, in addition to the per-locus correction.</td></tr>
+      <tr><td><b>No individual test survives</b> but there are many small P values</td><td>Examine the pattern (do they recur at one locus or in one population?) before concluding that nothing is going on.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k5">B5</span>Differentiation and AMOVA</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · how much differentiation is a lot?<span class="sec-ref">Sections 6.4 and 2.2</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:24%">F<sub>ST</sub> or θ</th><th style="width:26%">Differentiation</th><th>Interpretation</th></tr></thead>
+    <tbody>
+      <tr><td><b>Below 0.05</b></td><td>Low</td><td>The populations share almost all their frequencies; abundant gene flow or recent separation.</td></tr>
+      <tr><td><b>0.05 to 0.15</b></td><td>Moderate</td><td>Clear but shallow structure. Common in outcrossing plants with nuclear markers.</td></tr>
+      <tr><td><b>0.15 to 0.25</b></td><td>High</td><td>Well-differentiated populations; little exchange or a separate history.</td></tr>
+      <tr><td><b>Above 0.25</b></td><td>Very high</td><td>Common in selfing species, isolated populations and chloroplast markers.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">Wright’s (1978) scale. It was designed for F<sub>ST</sub> with markers that have few alleles: with microsatellites, whose H<sub>S</sub> is high, a θ of 0.05 can conceal quite different populations (figure 6.2), so read it together with G′<sub>ST</sub> or D.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · which estimator should you report?<span class="sec-ref">Section 6.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">If your question is…</th><th>report…</th></tr></thead>
+    <tbody>
+      <tr><td><b>How much structure there is</b> and how it relates to drift and migration</td><td>θ (F<sub>ST</sub>) with its interval, and Φ<sub>ST</sub> or Φ<sub>PT</sub> from AMOVA with its P.</td></tr>
+      <tr><td><b>How different the allele pools are</b>, for example for conservation</td><td>Jost’s D or G′<sub>ST</sub>, in addition to θ.</td></tr>
+      <tr><td><b>Comparison with another study or another marker</b></td><td>G′<sub>ST</sub> or D, which do not depend on the H<sub>S</sub> ceiling, and the same kind of locus average used in the other study.</td></tr>
+      <tr><td><b>Comparison with an older study</b> that only gave G<sub>ST</sub></td><td>G<sub>ST</sub> as a reference, noting its ceiling.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The general recommendation is not to report a single estimator: θ plus D or G′<sub>ST</sub> covers both interpretations (Meirmans and Hedrick, 2011).</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · reading an AMOVA with regions<span class="sec-ref">Section 6.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Φ<sub>CT</sub> is significant</b> and the region component is larger than the population component</td><td>The grouping into regions is real and captures most of the structure.</td></tr>
+      <tr><td><b>Φ<sub>CT</sub> and Φ<sub>SC</sub> are significant</b>, with populations weighing more</td><td>The regions differ, but within each one the populations differ even more.</td></tr>
+      <tr><td><b>Φ<sub>SC</sub> is significant and Φ<sub>CT</sub> is not</b></td><td>The populations differ, but they do not group according to the regions you defined. Try a grouping suggested by the data (Block 7).</td></tr>
+      <tr><td><b>Few populations</b> (table 6.3)</td><td>The test of Φ<sub>CT</sub> cannot reach significance: read the size of the component.</td></tr>
+      <tr><td><b>None is significant</b></td><td>At this scale, the species behaves almost as a single large population.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · population pairs and migrants<span class="sec-ref">Section 6.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>The corrected P of a pair is below 0.05</b></td><td>The two populations differ in frequencies; treat them as distinct units.</td></tr>
+      <tr><td><b>Nm is above 4</b></td><td>Gene flow is sufficient to keep them similar.</td></tr>
+      <tr><td><b>Nm is between 1 and 4</b></td><td>Moderate exchange; drift leaves a mark but does not separate them completely.</td></tr>
+      <tr><td><b>Nm is below 1</b></td><td>Drift dominates and the populations diverge; conserving each one is a priority.</td></tr>
+      <tr><td><b>All corrected P values are equal</b> and small</td><td>This is the minimum possible with those permutations (with 199 and 3 pairs, 0.005 × 3 = 0.015). Increase the permutations to tell them apart.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The Nm thresholds are indicative and inherit all the limitations of the island model.</p>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k6">B6</span>Distances, ordination and trees</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · reading a PCoA<span class="sec-ref">Section 7.2</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Axes 1 and 2 add up to more than 50%</b></td><td>The map is a good summary: closeness on the plane reflects the matrix.</td></tr>
+      <tr><td><b>They add up to less than 25%</b></td><td>This is usual with individuals and highly variable markers. The map shows trends; two nearby points may differ on other axes. Check axis 3 as well.</td></tr>
+      <tr><td><b>The population ellipses overlap a great deal</b></td><td>Low differentiation, consistent with a small F<sub>ST</sub> (chapter 6). A significant AMOVA is not a contradiction.</td></tr>
+      <tr><td><b>An individual falls within the cloud of another population</b></td><td>Possible migrant, labelling error or admixture; check it with the assignment in Block 7.</td></tr>
+      <tr><td><b>There are many large negative eigenvalues</b></td><td>Turn on the Lingoes correction before reporting percentages.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · support and fit of the tree<span class="sec-ref">Section 7.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:36%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Support of 70% or more</b></td><td>The grouping is robust to the loci sampled; it can be described.</td></tr>
+      <tr><td><b>Support of 50 to 70%</b></td><td>Weak grouping; mention it as a trend.</td></tr>
+      <tr><td><b>Support below 50%</b></td><td>Do not interpret the branching order. The app hides it by default.</td></tr>
+      <tr><td><b>Only three populations</b></td><td>An unrooted three-tip tree has no internal branches to test: it only shows lengths. The app says so.</td></tr>
+      <tr><td><b>UPGMA cophenetic correlation greater than 0.85</b></td><td>The tree reproduces the distances well. If it is lower, the tree distorts them; prefer NJ and the PCoA.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">With few loci, low support is normal and does not mean the tree is wrong: it means the data are not enough to resolve it. Zero-length branches (identical units) receive no support, because the order in which they are joined is arbitrary.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · isolation by distance<span class="sec-ref">Section 7.5</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:38%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Positive slope and significant Mantel test</b> between populations</td><td>Isolation by distance: gene flow decreases with distance.</td></tr>
+      <tr><td><b>Not significant</b></td><td>Distance does not predict differentiation at this scale: extensive gene flow, structure due to another cause (habitat, altitude, history) or too few populations.</td></tr>
+      <tr><td><b>Few populations</b> (6 or fewer)</td><td>With <i>n</i> populations there are only <i>n</i>! ways to reorder them; with 4, the smallest possible P is 1/24 ≈ 0.04. Read the slope and the figure, not the P value.</td></tr>
+      <tr><td><b>Mantel significant only between individuals</b></td><td>Pairs from the same population are close together and alike, so the correlation mainly reflects the differences between populations. Fine-scale spatial structure is studied in Block 9.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k7">B7</span>Bayesian clustering and assignment</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · choosing K<span class="sec-ref">Section 8.2</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>ΔK, Ln P(D) and Puechmaille agree</b></td><td>That K is well supported. Confirm it in the bar plot.</td></tr>
+      <tr><td><b>ΔK gives a smaller K than Ln P(D)</b></td><td>ΔK marks the uppermost level of structure; the K from Ln P(D) may be the subdivision within it. Choose the largest K at which every cluster has individuals with high Q and the replicates agree.</td></tr>
+      <tr><td><b>Ln P(D) is highest at K = 1</b></td><td>The ΔK peak is not evidence of clusters on its own, because ΔK never chooses K = 1. Accept K = 2 only if there are individuals with Q ≥ 0.8 in both clusters.</td></tr>
+      <tr><td><b>H′ falls below 0.90</b></td><td>Replicates are in different solutions: lengthen the chains, increase the replicates and do not interpret the consensus plot for that K.</td></tr>
+      <tr><td><b>A Puechmaille estimator counts a cluster whose mean Q does not reach 0.6</b> in any population</td><td>The count is fragile and the app warns about it: confirm it with the bar plot and with the individuals with Q ≥ 0.8.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · reading a DAPC<span class="sec-ref">Section 8.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Leave-one-out success clearly exceeds chance</b></td><td>The groups are genetically distinguishable. Report that figure, not the reassignment.</td></tr>
+      <tr><td><b>Reassignment far exceeds leave-one-out success</b></td><td>Part of the success is fit to the sample. Try several numbers of components and keep the one beyond which leave-one-out success stops improving (table 8.3).</td></tr>
+      <tr><td><b>One group has low success</b> (below 70%)</td><td>Its individuals are confused with other groups; see which ones in the scatter plot.</td></tr>
+      <tr><td><b>Groups found by k-means</b></td><td>Success is high by construction. Look for a minimum or an elbow in the BIC curve; if it is still falling at the largest K tested, there is no optimum and the groups are merely a convenient partition.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · assignment and migrants<span class="sec-ref">Section 8.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Self-assignment is high</b></td><td>The populations are distinguishable. Compare it with chance (1/number of populations) and with the F<sub>ST</sub> of chapter 6: it increases with differentiation and with the number and variability of the loci (Cornuet et al., 1999).</td></tr>
+      <tr><td><b>Two populations exchange many individuals</b> in the matrix</td><td>They are the least differentiated pair. This is not proof of current gene flow.</td></tr>
+      <tr><td><b>Few individuals flagged as migrants</b></td><td>With N individuals and α = 0.01, about N × 0.01 are expected by chance. If the number flagged does not greatly exceed that value, treat them as candidates for review, not as proven migrants.</td></tr>
+      <tr><td><b>A misassigned individual with a high P</b></td><td>It is a resident that resembles another population, not a migrant.</td></tr>
+      <tr><td><b>Populations with fewer than 5 individuals</b></td><td>They are excluded from the test: their frequencies are not reliable.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The test assumes that all possible source populations are in the data. A migrant from an unsampled population appears as an unusual individual in all of them.</p>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k8">B8</span>DNA sequences and molecular dating</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · neutrality and mismatch<span class="sec-ref">Section 9.2</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>D, Fs and R<sub>2</sub> are not significant</b></td><td>Nothing compels you to propose changes in size: the data are compatible with a stable population.</td></tr>
+      <tr><td><b>Fs and R<sub>2</sub> are significant</b> (with or without a negative D)</td><td>Evidence of expansion. Look at the mismatch: if r is also small, read τ as the date of the expansion.</td></tr>
+      <tr><td><b>D is negative and significant, but Fs and R<sub>2</sub> are not</b></td><td>An excess of rare variants that may come from a selective sweep just as well as from growth.</td></tr>
+      <tr><td><b>D is positive and significant</b></td><td>Contraction, balancing selection or, most commonly in plants, a sample that mixes lineages or differentiated populations. Repeat the tests population by population.</td></tr>
+      <tr><td><b>The mismatch is ragged</b> (r not significant)</td><td>There is no evidence of expansion; τ is not a date.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">Selection and demography leave similar signatures at a single locus. Only several independent loci showing the same signal allow it to be attributed to demography.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · phylogeographic structure<span class="sec-ref">Section 9.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>N<sub>ST</sub> significantly greater than G<sub>ST</sub></b></td><td>Phylogeographic structure: related lineages share a region. Look in the haplotype network to see which lineages they are.</td></tr>
+      <tr><td><b>N<sub>ST</sub> ≈ G<sub>ST</sub></b>, both high</td><td>Populations differentiated in frequencies, with no geographic ordering of lineages: recent isolation or weakly divergent haplotypes.</td></tr>
+      <tr><td><b>Six haplotypes or fewer</b></td><td>Few ways to shuffle them: the P value cannot fall very low. The app warns you; read the difference N<sub>ST</sub> − G<sub>ST</sub>.</td></tr>
+      <tr><td><b>Organelle DNA</b></td><td>Compare it with the nuclear F<sub>ST</sub> of chapter 6. DNA dispersed by seed is usually far more structured than nuclear DNA; in most conifers the chloroplast is dispersed by pollen.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · reading a haplotype network<span class="sec-ref">Section 9.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If the network shows…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>A star</b>: a frequent central haplotype and many rare derived haplotypes one step away</td><td>The picture of a recent expansion from that haplotype.</td></tr>
+      <tr><td><b>Groups of haplotypes separated by many mutations</b></td><td>Old lineages; if each group occupies a region, phylogeographic structure (compare with N<sub>ST</sub>).</td></tr>
+      <tr><td><b>Many loops</b></td><td>Homoplasy (the same change in two lineages), recombination or intermediate haplotypes that were not sampled.</td></tr>
+      <tr><td><b>Median vectors</b> (small black nodes)</td><td>Inferred haplotypes: extinct or unsampled. They are not observations.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The area of each circle is proportional to the number of sequences, the sectors show the populations and each tick on a line is a mutation.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · calibrating and reading a dated tree<span class="sec-ref">Section 9.5</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>There are only minimum ages</b></td><td>The dates may drift towards older ages: give a maximum to some calibration, a secondary calibration or a maximum age for the root. The app warns you.</td></tr>
+      <tr><td><b>Any ESS is below 200</b></td><td>The chain has not explored the posterior distribution well: lengthen it or rerun it with another seed before reporting.</td></tr>
+      <tr><td><b>The interval for σ comes close to zero</b></td><td>The data are compatible with a strict clock.</td></tr>
+      <tr><td><b>The posterior of a calibration resembles its prior</b></td><td>The sequences say little about that age. Compare it with the <span class="ui">Sample from the prior only</span> option.</td></tr>
+      <tr><td><b>Data from a single species</b></td><td>Use a rate and the coalescent model. The ages are coalescence times of the haplotypes, older than the split of the populations that carry them.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k9">B9</span>Demography and spatial structure</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · was there a bottleneck?<span class="sec-ref">Section 10.1</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Wilcoxon gives P &lt; 0.05 for excess under both TPM and SMM</b></td><td>There is a signal of a recent reduction. Confirm it with another sample or with the history of the population.</td></tr>
+      <tr><td><b>Only the IAM gives an excess</b></td><td>With microsatellites this is not enough: the IAM exaggerates the excess.</td></tr>
+      <tr><td><b>The excess comes from one or two loci</b></td><td>Check those loci: a null allele or selection affects a single locus, demography affects them all.</td></tr>
+      <tr><td><b>There is a significant deficit</b></td><td>The population may have grown or received immigrants carrying rare alleles.</td></tr>
+      <tr><td><b>M &lt; 0.68 without an excess</b></td><td>An older or longer reduction is compatible; the excess has already faded.</td></tr>
+      <tr><td><b>There are fewer than 10 polymorphic loci or fewer than 20 plants</b></td><td>The test has low power: “no signal” does not prove stability (Luikart and Cornuet, 1998).</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The signal is transient: once the population reaches a new mutation–drift equilibrium, the excess disappears even if the population remains small.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · reading an <span class="sym">N<sub>e</sub></span><span class="sec-ref">Section 10.2</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>The estimate or its upper limit is ∞</b></td><td>The r² cannot be distinguished from sampling noise: N<sub>e</sub> is large relative to the sample, not unknown. Report the lower limit.</td></tr>
+      <tr><td><b>The limits fall below 50 or below 100</b></td><td>The population is losing diversity rapidly; this is a conservation warning.</td></tr>
+      <tr><td><b>The population self-fertilises or has a high F<sub>IS</sub></b></td><td>Inbreeding correlated across loci inflates r² and lowers N<sub>e</sub>; interpret it as a minimum.</td></tr>
+      <tr><td><b>The sample mixes subpopulations or immigrants</b></td><td>Admixture also creates disequilibrium: check the structure (Block 7) before reporting.</td></tr>
+      <tr><td><b>There are fewer than 25 plants or few loci</b></td><td>The interval will be very wide; more loci help as much as more plants.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">The method assumes random mating, unlinked loci and a closed population, and estimates N<sub>e</sub> per generation.</p>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · spatial genetic structure<span class="sec-ref">Section 10.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>The first class lies above the band and b<sub>F</sub> is significant</b></td><td>Neighbours are relatives. Report Sp and the distance up to which the signal persists.</td></tr>
+      <tr><td><b>Sp is around 0.01</b></td><td>Weak structure, typical of outcrossing species (mean Sp 0.013; Vekemans and Hardy, 2004).</td></tr>
+      <tr><td><b>Sp is around 0.04 or more</b></td><td>Strong structure, as in species with mixed mating (0.037) or selfing species, or with seed that falls nearby.</td></tr>
+      <tr><td><b>No class falls outside the band</b></td><td>Pollen and seed move far at this scale, or the sample lacks nearby plants.</td></tr>
+      <tr><td><b>You sampled few plants or only distant plants</b></td><td>About 100 plants or more are recommended, with many pairs of close neighbours.</td></tr>
+      <tr><td><b>There are clones</b></td><td>Ramets of the same genet inflate F<sub>1</sub>: keep one ramet per genet.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · how much selfing?<span class="sec-ref">Section 10.4</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>F<sub>IS</sub> is positive at almost all loci</b></td><td>The deficit is genome-wide: selfing or matings between relatives. s is a reasonable estimate.</td></tr>
+      <tr><td><b>The deficit comes from a few loci</b></td><td>Suspect null alleles (Block 4) before selfing.</td></tr>
+      <tr><td><b>There is spatial structure</b></td><td>Matings between related neighbours also produce F<sub>IS</sub> &gt; 0; s overestimates selfing.</td></tr>
+      <tr><td><b>You mixed plants from different groups</b></td><td>The Wahlund effect creates a deficit without inbreeding.</td></tr>
+      <tr><td><b>You need the actual rate for one season</b></td><td>Genotype mothers and their seeds and use a mixed-mating model (Ritland, 2002).</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · <span class="sym">P<sub>ST</sub></span> versus <span class="sym">F<sub>ST</sub></span><span class="sec-ref">Section 10.5</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>The whole P<sub>ST</sub> interval lies above F<sub>ST</sub></b></td><td>The trait has diverged more than drift would cause: divergent selection, if c/h² is realistic.</td></tr>
+      <tr><td><b>The whole interval lies below F<sub>ST</sub></b></td><td>Stabilising selection: the populations are more alike than expected.</td></tr>
+      <tr><td><b>The interval crosses F<sub>ST</sub></b></td><td>There is no evidence against drift.</td></tr>
+      <tr><td><b>The conclusion changes when c/h² is lowered to 0.5</b></td><td>It depends on the assumption: say so, or measure the trait in a common garden.</td></tr>
+      <tr><td><b>You have fewer than 10 populations</b></td><td>Expect wide intervals; the comparison has low power.</td></tr>
+    </tbody>
+  </table>
+  <p class="regla-pie">F<sub>ST</sub> must come from neutral markers in the same populations (θ from Block 5).</p>
+  </div>
+
+  <h3 class="ap-cap"><span class="chip k10">B10</span>Figures and report</h3>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · preparing a figure<span class="sec-ref">Section 11.1</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>The figure is going into a paper</b></td><td>Journal or Minimal theme, with the same typeface and sizes in every figure.</td></tr>
+      <tr><td><b>You distinguish groups by colour</b></td><td>Okabe and Ito or Tol: they avoid confusing red and green. In heat maps, Viridis or Cividis.</td></tr>
+      <tr><td><b>It will be printed in black and white</b></td><td>Greyscale, plus values or shapes that do not depend on colour.</td></tr>
+      <tr><td><b>The category names are long</b></td><td><span class="ui">Flip axes</span>, or <span class="ui">Category labels</span> at 45°.</td></tr>
+      <tr><td><b>The journal reduces the figure to one column</b></td><td>Lower <span class="ui">Width</span> and raise <span class="ui">Font size: all</span> before exporting (section 11.2).</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · which format and resolution<span class="sec-ref">Section 11.2</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>The journal requires TIFF or PNG</b></td><td>Check the final width and the resolution it demands; calculate the pixels needed and choose the factor that reaches them.</td></tr>
+      <tr><td><b>The figure has thin lines and text</b></td><td>PNG or TIFF at 600 dpi, or SVG; not JPG.</td></tr>
+      <tr><td><b>You are going to edit it afterwards</b></td><td>SVG: every text and colour can be changed.</td></tr>
+      <tr><td><b>It is for a presentation</b></td><td>PNG at 150 or 300 dpi, with a transparent background if the slide is coloured.</td></tr>
+      <tr><td><b>The journal changes the resolution of the file</b></td><td>It does not matter: what preserves quality is the number of pixels.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="caja regla">
+  <div class="caja-t"><span class="ico">✓</span>Decision rule · which output to use<span class="sec-ref">Section 11.3</span></div>
+  <table class="compacta">
+    <thead><tr><th style="width:40%">If…</th><th>then…</th></tr></thead>
+    <tbody>
+      <tr><td><b>You are writing the paper or thesis</b></td><td>Copy the methods paragraph and adapt it; rebuild the tables from the CSV files; export the figures following the rule in section 11.2.</td></tr>
+      <tr><td><b>You are sharing the analysis with co-authors</b></td><td>The HTML report: a single file that opens in any browser, with vector figures.</td></tr>
+      <tr><td><b>You are preparing the supplementary material</b></td><td>The ZIP: data, tables, trees and figures.</td></tr>
+      <tr><td><b>You want a fixed copy</b></td><td><span class="ui">Print / save as PDF</span> and the ZIP, with the seeds recorded.</td></tr>
+    </tbody>
+  </table>
+  </div>
+<!-- reglas: fin -->
+  <!-- ====================================================================== C -->
+  <h2 id="ap-c" data-nueva-hoja><span class="num">C</span>Glossary</h2>
+  <p class="lead">The terms, abbreviations and symbols used in the manual, with a brief definition and the section where each is explained at length. Below many terms is their Spanish name, as it appears in the Spanish edition of this manual and in the Spanish-language literature.</p>
+
+  <h3>C.1 Abbreviations</h3>
+  <table class="compacta">
+    <caption><b>Table C.1.</b> Abbreviations used in the manual and in the app. File formats are described in appendix A.</caption>
+    <thead><tr><th style="width:12%">Abbreviation</th><th style="width:38%">Meaning</th><th style="width:12%">Abbreviation</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><b>AFLP</b></td><td>Amplified fragment length polymorphism</td><td><b>IUPAC</b></td><td>Ambiguous base codes of the International Union of Pure and Applied Chemistry (R = A or G, Y = C or T, N = any)</td></tr>
+      <tr><td><b>AICc</b></td><td>Akaike information criterion corrected for small samples</td><td><b>JC</b></td><td>Jukes and Cantor substitution model</td></tr>
+      <tr><td><b>AMOVA</b></td><td>Analysis of molecular variance</td><td><b>K80, K2P</b></td><td>Kimura two-parameter substitution model</td></tr>
+      <tr><td><b>BIC</b></td><td>Bayesian information criterion</td><td><b>LD</b></td><td>Linkage disequilibrium</td></tr>
+      <tr><td><b>bp</b></td><td>Base pairs</td><td><b>LSD</b></td><td><i>Least-squares dating</i> of a tree</td></tr>
+      <tr><td><b>CI</b></td><td>Confidence interval</td><td><b>Ma</b></td><td>Millions of years</td></tr>
+      <tr><td><b>cpDNA</b></td><td>Chloroplast DNA</td><td><b>MCMC</b></td><td>Markov chain Monte Carlo</td></tr>
+      <tr><td><b>CV</b></td><td>Coefficient of variation</td><td><b>mtDNA</b></td><td>Mitochondrial DNA</td></tr>
+      <tr><td><b>DAPC</b></td><td>Discriminant analysis of principal components</td><td><b>NJ</b></td><td><i>Neighbour-joining</i>, a tree-building method</td></tr>
+      <tr><td><b>d.f.</b></td><td>Degrees of freedom</td><td><b>OTU</b></td><td>Operational taxonomic unit: each tip of a tree</td></tr>
+      <tr><td><b>dpi</b></td><td>Dots per inch</td><td><b>PCA</b></td><td>Principal component analysis</td></tr>
+      <tr><td><b>EM</b></td><td>Expectation–maximisation algorithm</td><td><b>PCoA</b></td><td>Principal coordinates analysis</td></tr>
+      <tr><td><b>ESS</b></td><td>Effective sample size of an MCMC chain</td><td><b>PIC</b></td><td>Polymorphism information content</td></tr>
+      <tr><td><b>FDR</b></td><td>False discovery rate</td><td><b>RAPD</b></td><td>Random amplified polymorphic DNA</td></tr>
+      <tr><td><b>GTR</b></td><td>General time-reversible substitution model</td><td><b>SD · SE</b></td><td>Standard deviation · standard error</td></tr>
+      <tr><td><b>HKY</b></td><td>Hasegawa, Kishino and Yano substitution model</td><td><b>SMM</b></td><td>Stepwise mutation model</td></tr>
+      <tr><td><b>HPD</b></td><td>Highest posterior density interval</td><td><b>SNP</b></td><td>Single nucleotide polymorphism</td></tr>
+      <tr><td><b>HWE</b></td><td>Hardy–Weinberg equilibrium</td><td><b>SRAP</b></td><td>Sequence-related amplified polymorphism</td></tr>
+      <tr><td><b>IAM</b></td><td>Infinite alleles model</td><td><b>SSR</b></td><td>Simple sequence repeats: microsatellites</td></tr>
+      <tr><td><b>ISSR</b></td><td>Inter-simple sequence repeats</td><td><b>TPM</b></td><td>Two-phase mutation model</td></tr>
+      <tr><td><b>ITS</b></td><td>Internal transcribed spacers of ribosomal DNA</td><td><b>UPGMA</b></td><td>Unweighted pair group method with arithmetic mean</td></tr>
+    </tbody>
+  </table>
+
+  <h3>C.2 Terms</h3>
+  <table class="compacta">
+    <caption><b>Table C.2.</b> Glossary in alphabetical order.</caption>
+    <thead><tr><th style="width:25%">Term</th><th>Definition</th><th style="width:9%" class="c">Section</th></tr></thead>
+    <tbody>
+      <tr class="letra"><td colspan="3">A</td></tr>
+      <tr><td class="termino"><b>Allele</b><br><span class="small">alelo</span></td><td>Each variant that exists at a locus. A diploid plant carries two alleles per locus.</td><td class="c">1.3</td></tr>
+      <tr><td class="termino"><b>Allele frequency</b></td><td>The proportion of the gene copies in a population that belong to a given allele. It is the basic unit of population genetics.</td><td class="c">1.3</td></tr>
+      <tr><td class="termino"><b>Allelic richness</b> (A<sub>r</sub>)</td><td>The number of alleles expected with the same number of gene copies in every population (rarefaction). An exact calculation, not a random draw.</td><td class="c">4.1</td></tr>
+      <tr><td class="termino"><b>AMOVA</b><br><span class="small">análisis de varianza molecular</span></td><td>Partitions the squared genetic distances among the levels of the sampling design (regions, populations, individuals). Each level yields a variance component and a Φ.</td><td class="c">6.2</td></tr>
+      <tr><td class="termino"><b>Assignment test</b><br><span class="small">asignación</span></td><td>Computes the probability of each individual’s genotype in each population, assuming Hardy–Weinberg, and assigns it to the most probable one.</td><td class="c">8.4</td></tr>
+
+      <tr class="letra"><td colspan="3">B</td></tr>
+      <tr><td class="termino"><b>Bootstrap</b></td><td>Resampling with replacement (of loci, or of sites with sequences) to obtain intervals or support values. It shows how much the result would change with other loci, not with other plants.</td><td class="c">4.3</td></tr>
+      <tr><td class="termino"><b>Bootstrap support</b></td><td>Percentage of replicates in which a grouping of the tree reappears. It measures how much the grouping depends on a few loci, not the probability that it is true.</td><td class="c">7.3</td></tr>
+      <tr><td class="termino"><b>Bottleneck</b><br><span class="small">cuello de botella</span></td><td>A sharp, recent reduction in the size of a population. Rare alleles are lost first, leaving a transient heterozygosity excess.</td><td class="c">10.1</td></tr>
+      <tr><td class="termino"><b>Bulk sample</b><br><span class="small">muestra compuesta</span></td><td>A single sample per unit (for example, per landrace). It does not allow within-population analyses.</td><td class="c">3.3</td></tr>
+      <tr><td class="termino"><b>Burn-in</b></td><td>Initial iterations of an MCMC chain that are discarded while it stabilises.</td><td class="c">8.1</td></tr>
+
+      <tr class="letra"><td colspan="3">C</td></tr>
+      <tr><td class="termino"><b>Calibration</b><br><span class="small">calibración</span></td><td>A known age that sets the clock of a tree: a fossil (minimum age of a node) or a published age (secondary calibration).</td><td class="c">9.5</td></tr>
+      <tr><td class="termino"><b>Coalescent</b><br><span class="small">coalescente</span></td><td>A model that traces the genealogies of a sample backwards in time to their common ancestor. The app uses it to simulate the P values of the neutrality and bottleneck tests.</td><td class="c">9.2</td></tr>
+      <tr><td class="termino"><b>Codominant</b><br><span class="small">marcador codominante</span></td><td>A marker in which both alleles of each individual are scored (SSR, SNP, isozymes). It allows all the equilibrium and inbreeding tests.</td><td class="c">1.4</td></tr>
+      <tr><td class="termino"><b>Complete deletion</b><br><span class="small">deleción completa</span></td><td>A site with a gap or an ambiguous base in any sequence is excluded from all diversity, neutrality and network analyses.</td><td class="c">9.1</td></tr>
+      <tr><td class="termino"><b>Confidence interval</b></td><td>The range of values compatible with the data. If it includes values with opposite readings, the data cannot distinguish between them.</td><td class="c">1.9</td></tr>
+      <tr><td class="termino"><b>Cophenetic correlation</b></td><td>Correlation between the original distances and those reproduced by a tree. Above 0.85, the tree represents them well.</td><td class="c">7.3</td></tr>
+
+      <tr class="letra"><td colspan="3">D</td></tr>
+      <tr><td class="termino"><b>D<sub>A</sub>, net</b><br><span class="small">divergencia nucleotídica neta</span></td><td>Mean divergence between sequences from two populations minus the divergence within each. The default distance with sequences.</td><td class="c">7.1</td></tr>
+      <tr><td class="termino"><b>DAPC</b></td><td>Summarises the genotypes with principal components and finds the axes that best separate the groups. It does not assume Hardy–Weinberg; its probabilities measure the certainty of the classification, not ancestry.</td><td class="c">8.3</td></tr>
+      <tr><td class="termino"><b>Delta K</b> (ΔK)</td><td>How abrupt the change in Ln P(D) is between consecutive values of K. It finds the uppermost level of structure; it cannot choose K = 1 and needs two or more replicates.</td><td class="c">8.2</td></tr>
+      <tr><td class="termino"><b>Dominant</b><br><span class="small">marcador dominante</span></td><td>A marker that records only the presence or absence of a band (AFLP, ISSR, RAPD); it does not distinguish heterozygotes. Frequencies are estimated assuming Hardy–Weinberg.</td><td class="c">1.4</td></tr>
+
+      <tr class="letra"><td colspan="3">E</td></tr>
+      <tr><td class="termino"><b>Effective number of alleles</b> (N<sub>e</sub>)<br><span class="small">alelos efectivos</span></td><td>1/Σp<sub>i</sub>²: how many equally frequent alleles would give the same diversity. Not to be confused with effective population size.</td><td class="c">4.2</td></tr>
+      <tr><td class="termino"><b>ESS</b></td><td>The number of independent samples to which an MCMC chain is equivalent. Below 200, lengthen the chain or repeat it with another seed.</td><td class="c">9.5</td></tr>
+
+      <tr class="letra"><td colspan="3">F</td></tr>
+      <tr><td class="termino"><b>F</b> (fixation index)</td><td>(H<sub>e</sub> − H<sub>o</sub>)/H<sub>e</sub>: positive with a heterozygote deficit and negative with an excess. It is a description; the cause is decided in Block 4.</td><td class="c">4.2</td></tr>
+      <tr><td class="termino"><b>F<sub>ij</sub></b> (Loiselle’s kinship)</td><td>Kinship coefficient between two plants with codominant markers: 0 between random plants, 0.25 between full sibs and 0.125 between half sibs.</td><td class="c">10.3</td></tr>
+      <tr><td class="termino"><b>F<sub>IS</sub></b></td><td>Inbreeding coefficient: 1 − H<sub>o</sub>/H<sub>e</sub>. It is 0 under random mating, positive when heterozygotes are lacking and negative when they are in excess.</td><td class="c">5.2</td></tr>
+      <tr><td class="termino"><b>F<sub>ST</sub></b></td><td>The fraction of total diversity due to differences among populations: 0 if all have the same frequencies, 1 if each is fixed for a different allele. Weir and Cockerham’s θ is reported.</td><td class="c">6.1</td></tr>
+      <tr><td class="termino"><b>First-generation migrant</b></td><td>An individual whose genotype is much less probable in its own population than in another; it is tested against simulated resident genotypes.</td><td class="c">8.4</td></tr>
+      <tr><td class="termino"><b>Fisher’s method</b></td><td>Combines the P values of independent tests (−2 Σ ln P against χ²) to ask whether a population as a whole departs from equilibrium.</td><td class="c">5.4</td></tr>
+      <tr><td class="termino"><b>Fu’s Fs</b></td><td>Tests whether there are more haplotypes than expected for the observed diversity. Strongly negative: population growth; it is significant at P &lt; 0.02.</td><td class="c">9.2</td></tr>
+
+      <tr class="letra"><td colspan="3">G</td></tr>
+      <tr><td class="termino"><b>G<sub>ST</sub> and G′<sub>ST</sub></b></td><td>G<sub>ST</sub>: the fraction of diversity among populations, with a ceiling at 1 − H<sub>S</sub>. G′<sub>ST</sub>: G<sub>ST</sub> divided by its maximum possible value, comparable across markers.</td><td class="c">6.1</td></tr>
+      <tr><td class="termino"><b>Gene flow</b><br><span class="small">flujo génico</span></td><td>Movement of genes between populations through pollen or seed. It increases diversity within populations and reduces differentiation.</td><td class="c">1.3</td></tr>
+      <tr><td class="termino"><b>Genetic distance</b></td><td>A number that summarises how different two individuals or two populations are. Each coefficient has its own scale: do not compare values from different coefficients.</td><td class="c">7.1</td></tr>
+      <tr><td class="termino"><b>Genetic drift</b><br><span class="small">deriva génica</span></td><td>Random change in allele frequencies, stronger in small populations. It removes 1/(2N<sub>e</sub>) of the heterozygosity per generation and differentiates populations.</td><td class="c">2.3</td></tr>
+      <tr><td class="termino"><b>Genotype</b></td><td>The alleles of an individual at a locus: homozygous if they are the same (152/152), heterozygous if they differ (152/158).</td><td class="c">1.3</td></tr>
+
+      <tr class="letra"><td colspan="3">H</td></tr>
+      <tr><td class="termino"><b>H′</b> (phenotypic)</td><td>Standardised Shannon index of a morphological character, from 0 (all plants in one class) to 1.</td><td class="c">4.6</td></tr>
+      <tr><td class="termino"><b>H′</b> (between replicates)</td><td>Similarity between the Q matrices of two clustering runs: 1 if they are identical; below 0.90, they reached different solutions.</td><td class="c">8.2</td></tr>
+      <tr><td class="termino"><b>H<sub>e</sub></b> (expected heterozygosity)</td><td>The probability that two gene copies drawn at random are different; also called gene diversity. uH<sub>e</sub> corrects it for sample size.</td><td class="c">4.1</td></tr>
+      <tr><td class="termino"><b>H<sub>o</sub></b> (observed heterozygosity)</td><td>The proportion of individuals counted as heterozygous. Codominant markers only.</td><td class="c">4.2</td></tr>
+      <tr><td class="termino"><b>H<sub>S</sub> and H<sub>T</sub></b></td><td>Mean gene diversity within populations and in all of them pooled.</td><td class="c">6.1</td></tr>
+      <tr><td class="termino"><b>Haploid</b></td><td>Data with a single allele per individual: chloroplast or mitochondrial codes, inherited from one parent only.</td><td class="c">1.4</td></tr>
+      <tr><td class="termino"><b>Haplotype</b></td><td>Each distinct sequence, or each distinct combination of alleles in a haploid genome.</td><td class="c">9.1</td></tr>
+      <tr><td class="termino"><b>Haplotype diversity</b> (Hd)</td><td>The probability that two sequences drawn at random are different haplotypes, corrected for sample size. It ranges from 0 to 1.</td><td class="c">9.1</td></tr>
+      <tr><td class="termino"><b>Hardy–Weinberg equilibrium</b></td><td>With random mating and no other forces, genotype proportions are p², 2pq and q². A deviation is informative: inbreeding, null alleles or admixture.</td><td class="c">5.1</td></tr>
+      <tr><td class="termino"><b>Hardy–Weinberg exact test</b></td><td>Keeps the allele counts fixed, distributes them at random among the plants and asks how unusual the observed table of genotypes is.</td><td class="c">5.1</td></tr>
+      <tr><td class="termino"><b>Heterozygosity excess</b> (H<sub>eq</sub>)<br><span class="small">exceso de heterocigosis</span></td><td>The observed H<sub>e</sub> exceeds the value expected for its number of alleles in a population at equilibrium; a sign of a recent bottleneck. It is not the heterozygote excess (H<sub>o</sub> &gt; H<sub>e</sub>).</td><td class="c">10.1</td></tr>
+      <tr><td class="termino"><b>Holm correction</b></td><td>Orders the P values and multiplies the smallest by the number of tests m, the next by m − 1, and so on. It controls false positives and never rejects fewer than Bonferroni.</td><td class="c">5.4</td></tr>
+      <tr><td class="termino"><b>HPD</b></td><td>The shortest interval containing 95% of the posterior distribution of an age.</td><td class="c">9.5</td></tr>
+
+      <tr class="letra"><td colspan="3">I</td></tr>
+      <tr><td class="termino"><b>I</b></td><td>Two quantities: the Shannon index of allelic diversity (4.2) and Nei’s genetic identity, whose negative logarithm is the distance (7.1).</td><td class="c">4.2 · 7.1</td></tr>
+      <tr><td class="termino"><b>I<sub>A</sub> and r̄<sub>d</sub></b></td><td>Index of association between loci and its standardised version. r̄<sub>d</sub> does not depend on the number of loci and can be compared across studies.</td><td class="c">5.3</td></tr>
+      <tr><td class="termino"><b>Inbreeding</b><br><span class="small">endogamia</span></td><td>Mating between relatives, or selfing. It raises F<sub>IS</sub> at almost all loci by a similar amount.</td><td class="c">5.2</td></tr>
+      <tr><td class="termino"><b>Island model</b></td><td>Populations of equal size that exchange migrants equally. It relates F<sub>ST</sub> to Nm, but no real population fulfils it.</td><td class="c">6.3</td></tr>
+      <tr><td class="termino"><b>Isolation by distance</b><br><span class="small">aislamiento por distancia</span></td><td>Nearby populations exchange more migrants than distant ones and are more alike. It is tested with a Mantel test between θ/(1 − θ) and the logarithm of distance; a positive, significant slope indicates it.</td><td class="c">7.5</td></tr>
+
+      <tr class="letra"><td colspan="3">J · K</td></tr>
+      <tr><td class="termino"><b><i>Jackknife</i></b></td><td>Resampling that removes one locus at a time to estimate standard errors or intervals.</td><td class="c">6.1</td></tr>
+      <tr><td class="termino"><b>Jost’s D</b></td><td>How distinct the sets of alleles of the populations are: 0 if identical, 1 if they share none. It says nothing about migration.</td><td class="c">6.1</td></tr>
+      <tr><td class="termino"><b>K</b></td><td>The number of genetic groups tested in Bayesian clustering or in k-means.</td><td class="c">8.1</td></tr>
+
+      <tr class="letra"><td colspan="3">L</td></tr>
+      <tr><td class="termino"><b>Leave-one-out</b><br><span class="small">dejando uno fuera</span></td><td>Each individual is classified with an analysis built without it. This is the success percentage worth reporting from a DAPC.</td><td class="c">8.3</td></tr>
+      <tr><td class="termino"><b>Lingoes correction</b></td><td>Adds a constant to the squared distances to remove the negative eigenvalues of a PCoA; the percentages become exact, though somewhat smaller.</td><td class="c">7.2</td></tr>
+      <tr><td class="termino"><b>Linkage disequilibrium</b><br><span class="small">desequilibrio de ligamiento</span></td><td>Non-random association between alleles at different loci. It is created by physical proximity, selfing, clonality, population admixture, drift and selection.</td><td class="c">5.3</td></tr>
+      <tr><td class="termino"><b>Ln P(D)</b></td><td>The likelihood of the data for a given K. It usually rises up to the best-supported K and then levels off or falls.</td><td class="c">8.2</td></tr>
+      <tr><td class="termino"><b>Locus</b> (plural loci)</td><td>A specific place in the genome: a microsatellite, an AFLP band or a fragment of chloroplast DNA.</td><td class="c">1.3</td></tr>
+
+      <tr class="letra"><td colspan="3">M</td></tr>
+      <tr><td class="termino"><b>M ratio</b></td><td>The number of alleles divided by the range of sizes in repeats plus 1. Below 0.68 it suggests an old or prolonged reduction.</td><td class="c">10.1</td></tr>
+      <tr><td class="termino"><b>Mantel test</b></td><td>Correlation between two distance matrices (genetic and geographic), tested by permuting rows and columns.</td><td class="c">7.5</td></tr>
+      <tr><td class="termino"><b>MCMC</b></td><td>A method that explores a posterior distribution by taking random steps; the samples after the <i>burn-in</i> describe the parameters.</td><td class="c">8.1</td></tr>
+      <tr><td class="termino"><b>Median-joining</b> (network)</td><td>A haplotype network in which loops show alternative paths and median vectors are inferred haplotypes, extinct or unsampled.</td><td class="c">9.4</td></tr>
+      <tr><td class="termino"><b><i>Mismatch</i> distribution</b></td><td>The frequencies of the number of differences between all pairs of sequences. A single peak suggests sudden expansion; several peaks, a stable size.</td><td class="c">9.2</td></tr>
+      <tr><td class="termino"><b>Mode shift</b><br><span class="small">cambio de moda</span></td><td>A stable population has more rare alleles (0–0.1) than alleles in any other frequency class; if that class is no longer the largest, the distribution has been shifted by a reduction.</td><td class="c">10.1</td></tr>
+      <tr><td class="termino"><b>Molecular clock</b></td><td>Converts substitutions into time. Strict: one rate for all branches; relaxed: one rate per branch.</td><td class="c">9.5</td></tr>
+      <tr><td class="termino"><b>Mutation–drift equilibrium</b></td><td>The state in which the variation created by mutation balances the variation removed by drift.</td><td class="c">2.3</td></tr>
+
+      <tr class="letra"><td colspan="3">N · O</td></tr>
+      <tr><td class="termino"><b>N<sub>a</sub></b></td><td>The number of distinct alleles observed. It increases with sample size.</td><td class="c">4.2</td></tr>
+      <tr><td class="termino"><b>Nb</b> (neighbourhood)</td><td>Nb ≈ 1/Sp = 4πDσ²: the number of plants that act as a local reproductive unit. With the density D it gives the gene dispersal σ².</td><td class="c">10.3</td></tr>
+      <tr><td class="termino"><b>N<sub>e</sub></b> (effective size)</td><td>The number of plants in an ideal population that would lose diversity through drift at the same rate as the real one; it is usually around one tenth of the adults.</td><td class="c">10.2</td></tr>
+      <tr><td class="termino"><b>Neighbour-joining</b> (NJ)</td><td>A tree-building method that allows branches of different lengths and produces an unrooted tree.</td><td class="c">7.3</td></tr>
+      <tr><td class="termino"><b>Neutrality tests</b></td><td>Compare the footprints in the sequences (Tajima’s D, Fu’s Fs, R<sub>2</sub>) with what is expected in a neutral population of constant size.</td><td class="c">9.2</td></tr>
+      <tr><td class="termino"><b>Newick and NEXUS</b></td><td>Text formats for trees; NEXUS also accepts annotations such as ages and intervals (table A.9).</td><td class="c">A.8</td></tr>
+      <tr><td class="termino"><b>Nm</b></td><td>(1 − θ)/(4θ): the migrants per generation that would produce that θ under the island model. An order of magnitude only.</td><td class="c">6.3</td></tr>
+      <tr><td class="termino"><b>N<sub>ST</sub></b></td><td>Differentiation that weights each pair of haplotypes by the mutations separating them. If it exceeds G<sub>ST</sub>, there is phylogeographic structure.</td><td class="c">9.3</td></tr>
+      <tr><td class="termino"><b>Nucleotide diversity</b> (π)</td><td>The mean number of differences per site between two sequences. It allows fragments of different lengths to be compared.</td><td class="c">9.1</td></tr>
+      <tr><td class="termino"><b>Null allele</b><br><span class="small">alelo nulo</span></td><td>An allele that fails to amplify because of a mutation at the primer site: its heterozygotes are scored as homozygotes. It affects one locus in almost all populations.</td><td class="c">5.2</td></tr>
+      <tr><td class="termino"><b>Outcrossing and selfing</b><br><span class="small">alógama, autógama</span></td><td>A plant that crosses with others, or one that fertilises itself. In outcrossing species, 80 to 95% of the variation lies within populations; in selfing species the opposite is usually true.</td><td class="c">2.4</td></tr>
+      <tr><td class="termino"><b>Outgroup</b><br><span class="small">grupo externo</span></td><td>Tips known to lie outside the group of interest, which provide the root of a tree. Without one, the root is placed at the midpoint of the longest path.</td><td class="c">7.3</td></tr>
+
+      <tr class="letra"><td colspan="3">P</td></tr>
+      <tr><td class="termino"><b>P value</b></td><td>The probability of obtaining a result as extreme as the one observed if there were no effect. A P ≥ 0.05 does not prove that there is no effect.</td><td class="c">1.9</td></tr>
+      <tr><td class="termino"><b>PCoA</b></td><td>Turns a distance matrix into a map with a few axes; it works with any coefficient.</td><td class="c">7.2</td></tr>
+      <tr><td class="termino"><b>Permutation test</b></td><td>Shuffles the data to destroy the association and counts how many times the observed value is equalled or exceeded: P = (b + 1)/(B + 1), never 0.</td><td class="c">5.3</td></tr>
+      <tr><td class="termino"><b>Φ<sub>ST</sub>, Φ<sub>PT</sub>, Φ<sub>CT</sub></b></td><td>Fractions of the molecular variation among populations (Φ<sub>PT</sub> with bands) and among regions estimated by the AMOVA.</td><td class="c">6.2</td></tr>
+      <tr><td class="termino"><b>PIC</b></td><td>The ability of a marker to distinguish individuals: above 0.5, highly informative; below 0.25, slightly informative.</td><td class="c">4.3</td></tr>
+      <tr><td class="termino"><b>Polymorphic locus</b></td><td>A locus whose most common allele does not exceed 95% (default criterion). A monomorphic locus has a single allele and provides no information.</td><td class="c">4.2</td></tr>
+      <tr><td class="termino"><b>Private alleles</b><br><span class="small">alelos privados</span></td><td>Alleles present in only one population (with dominant markers, exclusive bands). A frequent one (≥ 5%) suggests a distinct gene pool.</td><td class="c">4.2</td></tr>
+      <tr><td class="termino"><b>P<sub>ST</sub> and Q<sub>ST</sub></b></td><td>Differentiation of quantitative characters. Q<sub>ST</sub> uses additive variances from a common garden; P<sub>ST</sub>, phenotypic variances with assumed c and h². They are compared with F<sub>ST</sub>.</td><td class="c">10.5</td></tr>
+
+      <tr class="letra"><td colspan="3">Q · R</td></tr>
+      <tr><td class="termino"><b>Q</b> (membership)</td><td>The fraction of each individual’s genome that comes from each group in Bayesian clustering.</td><td class="c">8.1</td></tr>
+      <tr><td class="termino"><b>R<sub>2</sub></b></td><td>A neutrality test based on the unique mutations of each sequence; the most powerful with small samples.</td><td class="c">9.2</td></tr>
+      <tr><td class="termino"><b>Raggedness</b> r<br><span class="small">r de irregularidad</span></td><td>How jagged the <i>mismatch</i> distribution is; a smooth distribution suggests expansion.</td><td class="c">9.2</td></tr>
+      <tr><td class="termino"><b>Ramet and genet</b><br><span class="small">rameto, geneto</span></td><td>In a clonal plant, each independent shoot is a ramet; all those that arose from the same original individual form a genet.</td><td class="c">3.5</td></tr>
+      <tr><td class="termino"><b>Random seed</b><br><span class="small">semilla aleatoria</span></td><td>A number that fixes the randomness of permutations, resampling and chains: the same seed and the same data give the same results.</td><td class="c">1.6</td></tr>
+
+      <tr class="letra"><td colspan="3">S</td></tr>
+      <tr><td class="termino"><b>Sample sheet</b><br><span class="small">hoja de muestras</span></td><td>A table with ID, population, region and coordinates that supplements a FASTA, a VCF or another file that lacks them.</td><td class="c">3.1</td></tr>
+      <tr><td class="termino"><b>Segregating sites</b> (S) and η</td><td>S: sites with more than one base. η: the minimum number of mutations; equal to S if no site has three or four bases.</td><td class="c">9.1</td></tr>
+      <tr><td class="termino"><b>Selection</b></td><td>Change in frequencies because some genotypes leave more offspring. Divergent selection differentiates populations; stabilising selection keeps them alike.</td><td class="c">2.3</td></tr>
+      <tr><td class="termino"><b>Selfing</b> (rate s)<br><span class="small">autofecundación</span></td><td>The proportion of seeds produced by self-pollination. At equilibrium F = s/(2 − s), whence s = 2F/(1 + F); the outcrossing rate is t = 1 − s.</td><td class="c">10.4</td></tr>
+      <tr><td class="termino"><b>Sign, T<sub>2</sub> and Wilcoxon tests</b></td><td>Three ways of testing whether more loci show a heterozygosity excess than expected. Wilcoxon is the most powerful with few loci.</td><td class="c">10.1</td></tr>
+      <tr><td class="termino"><b>Sp</b></td><td>−b<sub>F</sub>/(1 − F<sub>1</sub>), where b<sub>F</sub> is the slope of kinship on the logarithm of distance and F<sub>1</sub> the kinship of the first class. The strength of spatial structure, comparable across studies.</td><td class="c">10.3</td></tr>
+      <tr><td class="termino"><b>Spatial autocorrelation</b> r<br><span class="small">autocorrelación espacial</span></td><td>Genetic correlation between plants in a distance class, computed from a squared genetic distance. It works with any marker; without structure it equals −1/(n − 1), not 0.</td><td class="c">10.3</td></tr>
+      <tr><td class="termino"><b>Spatial genetic structure</b><br><span class="small">estructura genética espacial</span></td><td>Relatedness between neighbouring plants caused by short-distance pollen and seed dispersal. It is measured as the decline of kinship with distance (correlogram).</td><td class="c">10.3</td></tr>
+      <tr><td class="termino"><b>Substitution model</b></td><td>Describes how bases change over time (JC, K80, HKY, GTR, with or without Γ rate variation among sites); the app chooses the one with the lowest AICc.</td><td class="c">9.5</td></tr>
+
+      <tr class="letra"><td colspan="3">T</td></tr>
+      <tr><td class="termino"><b>τ</b> (tau)</td><td>Time since an expansion in mutational units: τ = 2ut.</td><td class="c">9.2</td></tr>
+      <tr><td class="termino"><b>θ</b> of Weir and Cockerham</td><td>An estimator of F<sub>ST</sub> that corrects for the size and number of samples; θ<sub>B</sub> is its version for bands.</td><td class="c">6.1</td></tr>
+      <tr><td class="termino"><b>θ<sub>W</sub></b> (Watterson)</td><td>Estimate of θ = 4N<sub>e</sub>μ from the number of segregating sites.</td><td class="c">9.1</td></tr>
+      <tr><td class="termino"><b>Tajima’s D</b></td><td>Compares pairwise diversity with the diversity predicted by the number of segregating sites. Negative: excess of rare variants (expansion or purifying selection); positive: excess of intermediate variants.</td><td class="c">9.2</td></tr>
+      <tr><td class="termino"><b>Template</b><br><span class="small">plantilla</span></td><td>A sheet written by the designer in Block 2 with the layout declared in row 1.</td><td class="c">3.3</td></tr>
+      <tr><td class="termino"><b>TPM, SMM and IAM</b></td><td>Mutation models for microsatellites: two-phase (mostly one-repeat steps), stepwise and infinite alleles. The TPM is the recommended one; the SMM, the most conservative.</td><td class="c">10.1</td></tr>
+
+      <tr class="letra"><td colspan="3">U · V · W</td></tr>
+      <tr><td class="termino"><b>UPGMA</b></td><td>A tree-building method that joins the closest pairs first and assumes the same rate on all branches: all tips end up at the same height.</td><td class="c">7.3</td></tr>
+      <tr><td class="termino"><b>Variance component</b></td><td>The part of the variation that corresponds to one level of the AMOVA. A negative one is not an error: it is interpreted as zero.</td><td class="c">6.2</td></tr>
+      <tr><td class="termino"><b>Vector format</b> (SVG)</td><td>A figure saved as a drawing: it can be enlarged without losing sharpness, and every text or colour can be edited.</td><td class="c">11.2</td></tr>
+      <tr><td class="termino"><b>Wahlund effect</b></td><td>A heterozygote deficit that appears when plants from different gene pools are pooled in one sample. It raises F<sub>IS</sub> at many loci and creates linkage disequilibrium.</td><td class="c">5.2</td></tr>
+    </tbody>
+  </table>
+
+  <h3>C.3 Symbols with more than one meaning</h3>
+  <table class="compacta">
+    <caption><b>Table C.3.</b> The literature uses the same letters for different quantities; the block and the section make clear which one is meant.</caption>
+    <thead><tr><th style="width:9%">Symbol</th><th>Meanings (section)</th></tr></thead>
+    <tbody>
+      <tr><td class="f">N<sub>e</sub></td><td>Effective number of alleles (4.2) · effective population size (10.2).</td></tr>
+      <tr><td class="f">H′</td><td>Standardised phenotypic diversity (4.6) · similarity between clustering replicates (8.2).</td></tr>
+      <tr><td class="f">I</td><td>Shannon index (4.2) · Nei’s genetic identity (7.1).</td></tr>
+      <tr><td class="f">D</td><td>Jost’s D (6.1) · Nei’s distance (7.1) · Tajima’s D (9.2) · Pudovkin’s heterozygote deviation (10.2) · plant density (10.3).</td></tr>
+      <tr><td class="f">θ</td><td>Weir and Cockerham’s F<sub>ST</sub> estimator (6.1) · population parameter 4N<sub>e</sub>μ (9.1).</td></tr>
+      <tr><td class="f">s, S</td><td>Selfing rate (10.4) · selection coefficient in the simulator (2.3) · segregating sites (9.1).</td></tr>
+      <tr><td class="f">α</td><td>Significance level (1.9) · admixture parameter in clustering (8.1) · shape of the Γ rate variation among sites (9.5).</td></tr>
+      <tr><td class="f">λ</td><td>Prior on the frequencies in clustering (8.1) · likelihood ratio of a migrant (8.4) · variance ratio of P<sub>ST</sub> (10.5).</td></tr>
+      <tr><td class="f">k</td><td>Number of alleles (4.2) · mean pairwise differences between sequences (9.1) · number of clades of a cut tree (7.4).</td></tr>
+      <tr><td class="f">r</td><td>Spatial autocorrelation (10.3) · raggedness index (9.2) · substitution rate (9.5) · Mantel correlation (7.5).</td></tr>
+      <tr><td class="f">t</td><td>Time or generations (2.2, 9.5) · outcrossing rate (10.4).</td></tr>
+      <tr><td class="f">σ</td><td>Gene dispersal (10.3) · variation of rates in the relaxed clock (9.5).</td></tr>
+      <tr><td class="f">F</td><td>Fixation index (4.2) · Weir and Cockerham’s F<sub>IT</sub> (6.1) · ratio in the analysis of variance (10.5).</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ====================================================================== D -->
+  <h2 id="ap-d" data-nueva-hoja><span class="num">D</span>Troubleshooting</h2>
+  <p class="lead">The most common problems, grouped by the moment at which they arise. The app’s messages are quoted exactly as they appear on screen; <code>{n}</code> marks a part that varies.</p>
+
+  <h3>D.1 Opening the app and keeping your work</h3>
+  <table class="compacta">
+    <caption><b>Table D.1.</b> Problems when opening the app and when returning to it.</caption>
+    <thead><tr><th style="width:27%">Symptom or message</th><th style="width:27%">Cause</th><th>What to do</th><th style="width:7%" class="c">See</th></tr></thead>
+    <tbody>
+      <tr><td>The page does not respond, or appears without colours or buttons.</td><td>Folders are missing (<code>js/</code>, <code>css/</code>, <code>vendor/</code>) or the browser is out of date: the app uses recent features and an old browser neither runs it nor shows an error.</td><td>Keep the complete folder and use an up-to-date browser.</td><td class="c">1.5</td></tr>
+      <tr><td><code>server.ps1</code> says it could not start on the port.</td><td>The port is in use, almost always by another open copy.</td><td>Close the other window or use the port suggested by the message (<code>-Port 9001</code>). Leave the PowerShell window open while you work.</td><td class="c">1.5</td></tr>
+      <tr><td>The data sheet, the OTU images or the figure style “disappear”.</td><td>They are stored in the browser, separately for each way of opening the app: what was saved after a double-click does not appear from <code>localhost</code>, nor in another browser or a private window. Clearing the site data deletes them.</td><td>Always open the app the same way. Save the sheet with <span class="ui">Save as</span> and keep the original image files.</td><td class="c">3.2 · 7.4</td></tr>
+      <tr><td>The OTU images do not appear when the data are reloaded.</td><td>They are tied to the name of the data file; under another name, or from the built-in sheet, the app cannot find them.</td><td>Always load the same file under the same name.</td><td class="c">7.4</td></tr>
+      <tr><td>The page freezes during the MCMC of Block 7 or of dating, and <span class="ui">Cancel</span> is slow to respond.</td><td>The browser did not allow the background thread, and the chain runs in the page.</td><td>Wait for the current run to finish; open the app with <code>server.ps1</code>. For exploration, use fewer iterations or replicates.</td><td class="c">8.1</td></tr>
+      <tr><td>There is no way to stop a long calculation.</td><td>Only Block 7 clustering and the dating MCMC have <span class="ui">Cancel</span>.</td><td>While exploring, lower the permutations and resamples; raise them for the final result.</td><td class="c">1.6</td></tr>
+      <tr><td>Seeds 0 and 1 give the same result.</td><td>An empty seed or 0 is taken as 1.</td><td>Use integers from 1 upwards and record them in your methods.</td><td class="c">1.6</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D.2 Loading the data</h3>
+  <table class="compacta">
+    <caption><b>Table D.2.</b> Problems when reading a file in Block 2.</caption>
+    <thead><tr><th style="width:27%">Symptom or message</th><th style="width:27%">Cause</th><th>What to do</th><th style="width:7%" class="c">See</th></tr></thead>
+    <tbody>
+      <tr><td><code>The file could not be read.</code></td><td>The file is open in another program or stored in the cloud without being downloaded.</td><td>Close it or copy it to a folder on your computer.</td><td class="c">—</td></tr>
+      <tr><td>Spreadsheet reader error when opening an <code>.xlsx</code>.</td><td>Password-protected or damaged workbook.</td><td>Remove the protection or save it again as <code>.xlsx</code> or CSV.</td><td class="c">A.1</td></tr>
+      <tr><td>Accented letters turned into “�” (<code>Poblaci�n</code>).</td><td>CSV saved with an old encoding, not UTF-8.</td><td>Save it as CSV UTF-8, use <code>.xlsx</code> or paste the data into the built-in sheet.</td><td class="c">A.1</td></tr>
+      <tr><td><code>This file looks like {format} but could not be parsed: …</code></td><td>Incomplete structure in a FASTA, VCF, .str, .gen or .arp file.</td><td>Check it against table A.7.</td><td class="c">A.6</td></tr>
+      <tr><td>A genotype file with two rows per individual is read as a single-column table.</td><td>That format is recognised only with the extension <code>.str</code> or <code>.stru</code>.</td><td>Change the file extension.</td><td class="c">A.1</td></tr>
+      <tr><td>A row containing <code>19,43</code> is split into two columns.</td><td>Comma-separated CSV with a decimal comma.</td><td>Save it as a semicolon-separated CSV or use a decimal point.</td><td class="c">A.3</td></tr>
+      <tr><td>The IDs <code>001</code>, <code>002</code> in a CSV do not match those in the FASTA or in the sample sheet.</td><td>In delimited text, numbers lose their leading zeros.</td><td>Use IDs with letters (<code>P001</code>) or an <code>.xlsx</code> with those cells as text.</td><td class="c">A.3</td></tr>
+      <tr><td><code>None of the IDs in {file} matches the names in the data file</code> or <code>{m} of {n} … matched</code>.</td><td>The IDs in the sample sheet are not those in the data.</td><td>Press <span class="ui">Download an empty sample sheet with these IDs</span> and fill in that sheet.</td><td class="c">A.7</td></tr>
+      <tr><td>Unexpected data were loaded from a workbook with several sheets.</td><td>The first sheet is read.</td><td>Choose the right sheet in <span class="ui">Sheet</span>.</td><td class="c">3.1</td></tr>
+      <tr><td>Rows or columns are missing from a very large table pasted into the built-in sheet.</td><td>The sheet holds up to 20,000 rows and 5,000 columns; anything beyond that is discarded without warning.</td><td>Load the data from a file.</td><td class="c">3.2</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D.3 Interpretation, column roles and quality control</h3>
+  <table class="compacta">
+    <caption><b>Table D.3.</b> Problems when checking how the data were read.</caption>
+    <thead><tr><th style="width:27%">Symptom or message</th><th style="width:27%">Cause</th><th>What to do</th><th style="width:7%" class="c">See</th></tr></thead>
+    <tbody>
+      <tr><td>The app infers a different marker type (<code>…because no clearer pattern was found</code>).</td><td>None of the detection rules was met; for example, bands with <code>−1</code> as missing, or genotypes written as <code>182186</code>.</td><td>Choose <span class="ui">Marker type</span> and <span class="ui">How genotypes are written</span>.</td><td class="c">3.4</td></tr>
+      <tr><td>A character or a locus disappears from the list of data.</td><td>Its name matches that of a label and it took on that role.</td><td>In the column roles card, give it back the <span class="ui">Data</span> role.</td><td class="c">A.3</td></tr>
+      <tr><td><code>no population column — each row will be treated as its own {unit}</code></td><td>The population column was not detected.</td><td>Assign it the <span class="ui">Population</span> role.</td><td class="c">3.4</td></tr>
+      <tr><td><code>{n} further columns are treated as data.</code></td><td>There are more than 10 columns and the hidden ones (notes, dates) count as data.</td><td>Tick <span class="ui">Show every column</span> and assign them <span class="ui">Ignore this column</span>.</td><td class="c">3.4</td></tr>
+      <tr><td><code>The dataset could not be built: No data columns were left after assigning roles.</code></td><td>All columns ended up as labels or ignored.</td><td>Give the <span class="ui">Data</span> role back to the locus columns.</td><td class="c">3.4</td></tr>
+      <tr><td><code>coordinates out of range (latitude ±90°, longitude ±180°) were set to missing</code></td><td>A typing error in coordinates in degrees, or latitude and longitude swapped.</td><td>Correct the value. With UTM, make sure the whole column is in metres.</td><td class="c">A.3</td></tr>
+      <tr><td>A population appears twice under almost identical names.</td><td>Names are compared exactly: <code>Tlaxco</code> and <code>tlaxco</code> are different.</td><td>Make the spelling consistent in the file.</td><td class="c">3.1</td></tr>
+      <tr><td><code>{n} value(s) in the sheet could not be read as intended</code></td><td>Invalid cells: bands that are not 0/1, half genotypes, letters in sizes…</td><td>Correct each cell using the row and column given by <span class="ui">Values to fix in the sheet</span>.</td><td class="c">3.5</td></tr>
+      <tr><td>Monomorphic loci remain in the analysis.</td><td>The app flags them but does not remove them.</td><td>Delete them from the file if you do not want them.</td><td class="c">3.5</td></tr>
+      <tr><td>Near-identical genotype pairs do not appear.</td><td>That search is only run with 400 individuals or fewer and three or more loci.</td><td>Check the distances between individuals in Block 6.</td><td class="c">3.5</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D.4 Analyses</h3>
+  <table class="compacta">
+    <caption><b>Table D.4.</b> Messages and missing results in the analysis blocks.</caption>
+    <thead><tr><th style="width:27%">Symptom or message</th><th style="width:27%">Cause</th><th>What to do</th><th style="width:7%" class="c">See</th></tr></thead>
+    <tbody>
+      <tr><td>A block appears greyed out, or <code>…so it is not available for these data</code>.</td><td>The data do not meet its requirement (marker type, replicates, number of loci).</td><td>Check the card of available analyses in Block 2.</td><td class="c">3.6</td></tr>
+      <tr><td><code>…the difference is not tested here</code></td><td>Fewer than three loci, or resampling set to 0.</td><td>With few loci, compare without intervals and with caution.</td><td class="c">4.3</td></tr>
+      <tr><td><code>No population has the five or more plants needed to test linkage disequilibrium</code></td><td>All populations have fewer than five plants.</td><td>Only the pooled sample is reported.</td><td class="c">5.5</td></tr>
+      <tr><td>Block 4 says <code>Dominant or haploid data</code> or <code>{n}-ploid genotypes</code>.</td><td>Hardy–Weinberg, F<sub>IS</sub> and null alleles are defined only for diploid codominant data.</td><td>Linkage disequilibrium is still computed.</td><td class="c">5.5</td></tr>
+      <tr><td>The tick box for leaving out loci with null alleles does not appear.</td><td>Block 4 has not been run or did not flag any locus.</td><td>Open Block 4 and return to Block 5.</td><td class="c">6.5</td></tr>
+      <tr><td><code>∞ · {n} pair(s) share no allele</code></td><td>Two populations share no alleles: Nei’s distance is infinite.</td><td>Choose the chord distance or Rogers’ distance; with sequences, D<sub>A</sub>.</td><td class="c">7.1</td></tr>
+      <tr><td>There is no tree of individuals, or it has no support.</td><td>Trees of individuals up to 400 units (NJ up to 150); support for individuals between 4 and 60.</td><td>Use the population tree or a subset of individuals.</td><td class="c">7.3</td></tr>
+      <tr><td><code>outgroup not monophyletic — root left as it was</code> or <code>outgroup names not found</code></td><td>Misspelt names or tips that do not form a single clade.</td><td>Type the exact names, separated by commas, or root at the midpoint.</td><td class="c">7.3</td></tr>
+      <tr><td><code>ΔK could not be computed: it needs at least three consecutive K values and two replicates per K</code></td><td>Short range of K or a single replicate.</td><td>Test three or more K values with two or more replicates.</td><td class="c">8.2</td></tr>
+      <tr><td><code>Assignment needs at least two populations with five or more individuals.</code></td><td>Populations with fewer than five individuals are excluded from assignment.</td><td>Combine samples or extend the sampling.</td><td class="c">8.4</td></tr>
+      <tr><td><code>…sites with gaps or ambiguous bases were excluded (complete deletion)</code> and few sites remain.</td><td>Ends of the alignment with gaps in some sequences.</td><td>Trim the ends before loading the alignment.</td><td class="c">9.1</td></tr>
+      <tr><td><code>the search stopped at {n} median vectors, so the network may be incomplete</code></td><td>A very complex network: the cap of 100 median vectors was reached.</td><td>Use fewer sequences or a shorter fragment.</td><td class="c">9.4</td></tr>
+      <tr><td><code>{n} tips are too many to date in the browser</code></td><td>More than 400 tips.</td><td>Choose <span class="ui">One tip per haplotype</span> or a subset.</td><td class="c">9.5</td></tr>
+      <tr><td><code>Tips of the tree not found among the sequences</code></td><td>The names in the imported tree are not those in the FASTA (a space and an underscore count as the same).</td><td>Make the names match.</td><td class="c">9.5</td></tr>
+      <tr><td><code>Unexpected “{c}” at position {i} of the Newick string.</code></td><td>A malformed tree: parentheses, commas or the final <code>;</code>.</td><td>Check the tree text at that position.</td><td class="c">9.5</td></tr>
+      <tr><td><code>The starting ages violate a calibration…</code></td><td>Incompatible minimum and maximum ages between nested nodes.</td><td>Correct the calibrations.</td><td class="c">9.5</td></tr>
+      <tr><td><code>too low: run a longer chain</code> (ESS below 200)</td><td>The chain did not explore the posterior distribution well.</td><td>Lengthen it or repeat it with another seed.</td><td class="c">9.5</td></tr>
+      <tr><td>The dating disappears.</td><td>Loading other data deletes the dating and stops the running chain.</td><td>Export trees, ages and log before changing data.</td><td class="c">9.5</td></tr>
+      <tr><td><code>{population}: too few locus pairs above the frequency threshold for the LD estimate.</code></td><td>Few loci, or alleles that are almost all rare.</td><td>Use more loci or lower the rare-allele threshold.</td><td class="c">10.2</td></tr>
+      <tr><td><code>Spatial genetic structure: not computed — fewer than 30 pairs of plants at different locations</code></td><td>Coordinates per population rather than per plant, or few plants.</td><td>Give each plant its own coordinates, or use the isolation by distance analysis of Block 6.</td><td class="c">10.3</td></tr>
+      <tr><td><code>{populations} left out with fewer than 5 mapped plants</code></td><td>Those populations have fewer than five plants with coordinates.</td><td>This is a warning: the remaining populations are analysed.</td><td class="c">10.3</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D.5 Figures, report and package</h3>
+  <table class="compacta">
+    <caption><b>Table D.5.</b> Problems when exporting.</caption>
+    <thead><tr><th style="width:27%">Symptom or message</th><th style="width:27%">Cause</th><th>What to do</th><th style="width:7%" class="c">See</th></tr></thead>
+    <tbody>
+      <tr><td>Orange warning <code>This figure is too large for {n} dpi in a browser…</code>, or <code>Export failed: The browser could not create an image this large.</code></td><td>The image would exceed 16,000 pixels on a side or 120 megapixels.</td><td>Export as SVG, lower the resolution or reduce the size of the figure or the row height.</td><td class="c">11.2</td></tr>
+      <tr><td><code>Allow pop-ups to print.</code></td><td>The browser blocked the report window for printing.</td><td>Allow pop-ups for the app and press the button again.</td><td class="c">11.3</td></tr>
+      <tr><td>The PDF comes out without the colours of the key figures.</td><td>Background graphics are switched off in the print dialogue.</td><td>Turn on background graphics.</td><td class="c">11.4</td></tr>
+      <tr><td><code>Could not build the package: {message}</code>, or images of some figures are missing from the ZIP.</td><td>Not enough memory, almost always with TIFF at high resolutions.</td><td>Lower the resolution of the ZIP or choose SVG only.</td><td class="c">11.3</td></tr>
+      <tr><td>A table in the report says <code>Showing {n} of {m} rows.</code></td><td>The report copies the on-screen table, which shows only the first rows.</td><td>Use the complete CSV in the <code>tables/</code> folder of the ZIP.</td><td class="c">11.3</td></tr>
+      <tr><td><code>Select and copy the text below.</code></td><td>The browser did not allow the methods paragraph to be copied to the clipboard.</td><td>Select the text in the box and copy it by hand.</td><td class="c">11.3</td></tr>
+      <tr><td>A CSV opens in a single column in your spreadsheet program.</td><td>The computer uses a decimal comma and expects semicolons between columns.</td><td>Import it as text, specifying the comma as separator.</td><td class="c">A.8</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · corrections made to the app while preparing the appendices</div>
+    <p>Checking the formats and messages against the code led to the following corrections in the app:</p>
+    <ul style="margin:0">
+      <li>A column written entirely with a decimal comma (<code>13,5</code>) was read as text; it is now numeric.</li>
+      <li>UTM coordinates became missing because they did not fit in degrees; they are now used as map distances.</li>
+      <li>Columns called <code>Longitud_mazorca</code> or <code>Area_foliar</code> were taken as a coordinate or a region; the whole name now counts.</li>
+      <li>A <code>0/0</code> in a cell was flagged as a half genotype.</li>
+      <li>The U of an RNA FASTA file was not converted to T.</li>
+      <li>The dated tree in NEXUS stored branches in substitutions and ages in millions of years; both are now in millions of years.</li>
+      <li>Block 4 called polyploids “dominant or haploid”, and the card of available analyses treated them as valid for Hardy–Weinberg and demography.</li>
+      <li>In Block 9, a rare-allele threshold of 0 was changed to 0.02.</li>
+      <li>With hundreds of plants, the note on distances between individuals and the isolation by distance figure of Block 6, and the spatial structure of Block 9, could stop with an error.</li>
+      <li>The list of references on the Home page had truncated titles.</li>
+    </ul>
+  </div>
+
+  <!-- ====================================================================== E -->
+  <h2 id="ap-e" data-nueva-hoja><span class="num">E</span>References</h2>
+  <p class="lead">The works cited in the manual and in the app’s texts, with full bibliographic details.</p>
+  <p>The symbol <span class="m" style="color:var(--marino)">◆</span> marks those that the methods paragraph of Block 10 may cite: use them to complete the reference list of your paper (section 11.3). Five original titles include the name of a program; it is replaced by <b>[…]</b>. The records were checked against the publishers’ and journals’ databases.</p>
+  <ul class="refs">
+    <li>Agapow, P.-M. and Burt, A. (2001). Indices of multilocus linkage disequilibrium. <i>Molecular Ecology Notes</i> 1: 101–102. <span class="doi">doi:10.1046/j.1471-8278.2000.00014.x</span> <span class="m">◆</span></li>
+    <li>Bandelt, H.-J., Forster, P. and Röhl, A. (1999). Median-joining networks for inferring intraspecific phylogenies. <i>Molecular Biology and Evolution</i> 16: 37–48. <span class="doi">doi:10.1093/oxfordjournals.molbev.a026036</span> <span class="m">◆</span></li>
+    <li>Benjamini, Y. and Yekutieli, D. (2001). The control of the false discovery rate in multiple testing under dependency. <i>Annals of Statistics</i> 29: 1165–1188. <span class="doi">doi:10.1214/aos/1013699998</span></li>
+    <li>Botstein, D., White, R.L., Skolnick, M. and Davis, R.W. (1980). Construction of a genetic linkage map in man using restriction fragment length polymorphisms. <i>American Journal of Human Genetics</i> 32: 314–331. <span class="m">◆</span></li>
+    <li>Bowcock, A.M., Ruiz-Linares, A., Tomfohrde, J., Minch, E., Kidd, J.R. and Cavalli-Sforza, L.L. (1994). High resolution of human evolutionary trees with polymorphic microsatellites. <i>Nature</i> 368: 455–457. <span class="doi">doi:10.1038/368455a0</span></li>
+    <li>Brommer, J.E. (2011). Whither P<sub>ST</sub>? The approximation of Q<sub>ST</sub> by P<sub>ST</sub> in evolutionary and conservation biology. <i>Journal of Evolutionary Biology</i> 24: 1160–1168. <span class="doi">doi:10.1111/j.1420-9101.2011.02268.x</span> <span class="m">◆</span></li>
+    <li>Brookfield, J.F.Y. (1996). A simple new method for estimating null allele frequency from heterozygote deficiency. <i>Molecular Ecology</i> 5: 453–455. <span class="doi">doi:10.1111/j.1365-294X.1996.tb00336.x</span> <span class="m">◆</span></li>
+    <li>Brown, A.H.D., Feldman, M.W. and Nevo, E. (1980). Multilocus structure of natural populations of <i>Hordeum spontaneum</i>. <i>Genetics</i> 96: 523–536. <span class="doi">doi:10.1093/genetics/96.2.523</span></li>
+    <li>Cavalli-Sforza, L.L. and Edwards, A.W.F. (1967). Phylogenetic analysis: models and estimation procedures. <i>American Journal of Human Genetics</i> 19: 233–257.</li>
+    <li>Chakraborty, R., de Andrade, M., Daiger, S.P. and Budowle, B. (1992). Apparent heterozygote deficiencies observed in DNA typing data and their implications in forensic applications. <i>Annals of Human Genetics</i> 56: 45–57. <span class="doi">doi:10.1111/j.1469-1809.1992.tb01128.x</span> <span class="m">◆</span></li>
+    <li>Chapuis, M.-P. and Estoup, A. (2007). Microsatellite null alleles and estimation of population differentiation. <i>Molecular Biology and Evolution</i> 24: 621–631. <span class="doi">doi:10.1093/molbev/msl191</span> <span class="m">◆</span></li>
+    <li>Cohen, K.M., Finney, S.C., Gibbard, P.L. and Fan, J.-X. (2013, updated). The ICS International Chronostratigraphic Chart. <i>Episodes</i> 36: 199–204. The app uses version 2020/03. <span class="doi">doi:10.18814/epiiugs/2013/v36i3/002</span></li>
+    <li>Cornuet, J.-M. and Luikart, G. (1996). Description and power analysis of two tests for detecting recent population bottlenecks from allele frequency data. <i>Genetics</i> 144: 2001–2014. <span class="doi">doi:10.1093/genetics/144.4.2001</span> <span class="m">◆</span></li>
+    <li>Cornuet, J.-M., Piry, S., Luikart, G., Estoup, A. and Solignac, M. (1999). New methods employing multilocus genotypes to select or exclude populations as origins of individuals. <i>Genetics</i> 153: 1989–2000. <span class="doi">doi:10.1093/genetics/153.4.1989</span></li>
+    <li>Dempster, A.P., Laird, N.M. and Rubin, D.B. (1977). Maximum likelihood from incomplete data via the EM algorithm. <i>Journal of the Royal Statistical Society, Series B</i> 39: 1–38. <span class="doi">doi:10.1111/j.2517-6161.1977.tb01600.x</span> <span class="m">◆</span></li>
+    <li>Di Rienzo, A., Peterson, A.C., Garza, J.C., Valdes, A.M., Slatkin, M. and Freimer, N.B. (1994). Mutational processes of simple-sequence repeat loci in human populations. <i>Proceedings of the National Academy of Sciences USA</i> 91: 3166–3170. <span class="doi">doi:10.1073/pnas.91.8.3166</span></li>
+    <li>Drummond, A.J., Ho, S.Y.W., Phillips, M.J. and Rambaut, A. (2006). Relaxed phylogenetics and dating with confidence. <i>PLoS Biology</i> 4: e88. <span class="doi">doi:10.1371/journal.pbio.0040088</span> <span class="m">◆</span></li>
+    <li>El Mousadik, A. and Petit, R.J. (1996). High level of genetic differentiation for allelic richness among populations of the argan tree [<i>Argania spinosa</i> (L.) Skeels] endemic to Morocco. <i>Theoretical and Applied Genetics</i> 92: 832–839. <span class="doi">doi:10.1007/BF00221895</span> <span class="m">◆</span></li>
+    <li>Evanno, G., Regnaut, S. and Goudet, J. (2005). Detecting the number of clusters of individuals using the software […]: a simulation study. <i>Molecular Ecology</i> 14: 2611–2620. <span class="doi">doi:10.1111/j.1365-294X.2005.02553.x</span> <span class="m">◆</span></li>
+    <li>Excoffier, L. and Slatkin, M. (1995). Maximum-likelihood estimation of molecular haplotype frequencies in a diploid population. <i>Molecular Biology and Evolution</i> 12: 921–927. <span class="doi">doi:10.1093/oxfordjournals.molbev.a040269</span> <span class="m">◆</span></li>
+    <li>Excoffier, L., Smouse, P.E. and Quattro, J.M. (1992). Analysis of molecular variance inferred from metric distances among DNA haplotypes: application to human mitochondrial DNA restriction data. <i>Genetics</i> 131: 479–491. <span class="doi">doi:10.1093/genetics/131.2.479</span> <span class="m">◆</span></li>
+    <li>Felsenstein, J. (1981). Evolutionary trees from DNA sequences: a maximum likelihood approach. <i>Journal of Molecular Evolution</i> 17: 368–376. <span class="doi">doi:10.1007/BF01734359</span> <span class="m">◆</span></li>
+    <li>Felsenstein, J. (1985). Confidence limits on phylogenies: an approach using the bootstrap. <i>Evolution</i> 39: 783–791. <span class="doi">doi:10.1111/j.1558-5646.1985.tb00420.x</span> <span class="m">◆</span></li>
+    <li>Fitzpatrick, B.M. (2009). Power and sample size for nested analysis of molecular variance. <i>Molecular Ecology</i> 18: 3961–3966. <span class="doi">doi:10.1111/j.1365-294X.2009.04314.x</span></li>
+    <li>Frankham, R. (1995). Effective population size/adult population size ratios in wildlife: a review. <i>Genetical Research</i> 66: 95–107. <span class="doi">doi:10.1017/S0016672300034455</span></li>
+    <li>Frankham, R., Bradshaw, C.J.A. and Brook, B.W. (2014). Genetics in conservation management: revised recommendations for the 50/500 rules, Red List criteria and population viability analyses. <i>Biological Conservation</i> 170: 56–63. <span class="doi">doi:10.1016/j.biocon.2013.12.036</span></li>
+    <li>Franklin, I.R. (1980). Evolutionary change in small populations. In: Soulé, M.E. and Wilcox, B.A. (eds.), <i>Conservation Biology: An Evolutionary-Ecological Perspective</i>, pp. 135–149. Sinauer Associates, Sunderland, Massachusetts.</li>
+    <li>Fu, Y.-X. (1997). Statistical tests of neutrality of mutations against population growth, hitchhiking and background selection. <i>Genetics</i> 147: 915–925. <span class="doi">doi:10.1093/genetics/147.2.915</span> <span class="m">◆</span></li>
+    <li>Fu, Y.-X. and Li, W.-H. (1993). Statistical tests of neutrality of mutations. <i>Genetics</i> 133: 693–709. <span class="doi">doi:10.1093/genetics/133.3.693</span> <span class="m">◆</span></li>
+    <li>Garza, J.C. and Williamson, E.G. (2001). Detection of reduction in population size using data from microsatellite loci. <i>Molecular Ecology</i> 10: 305–318. <span class="doi">doi:10.1046/j.1365-294X.2001.01190.x</span> <span class="m">◆</span></li>
+    <li>Gernhard, T. (2008). The conditioned reconstructed process. <i>Journal of Theoretical Biology</i> 253: 769–778. <span class="doi">doi:10.1016/j.jtbi.2008.04.005</span> <span class="m">◆</span></li>
+    <li>Gower, J.C. (1966). Some distance properties of latent root and vector methods used in multivariate analysis. <i>Biometrika</i> 53: 325–338. <span class="doi">doi:10.1093/biomet/53.3-4.325</span> <span class="m">◆</span></li>
+    <li>Gower, J.C. (1971). A general coefficient of similarity and some of its properties. <i>Biometrics</i> 27: 857–871. <span class="doi">doi:10.2307/2528823</span></li>
+    <li>Grant, W.S. and Bowen, B.W. (1998). Shallow population histories in deep evolutionary lineages of marine fishes: insights from sardines and anchovies and lessons for conservation. <i>Journal of Heredity</i> 89: 415–426. <span class="doi">doi:10.1093/jhered/89.5.415</span></li>
+    <li>Guo, S.W. and Thompson, E.A. (1992). Performing the exact test of Hardy–Weinberg proportion for multiple alleles. <i>Biometrics</i> 48: 361–372. <span class="doi">doi:10.2307/2532296</span> <span class="m">◆</span></li>
+    <li>Hale, M.L., Burg, T.M. and Steeves, T.E. (2012). Sampling for microsatellite-based population genetic studies: 25 to 30 individuals per population is enough to accurately estimate allele frequencies. <i>PLoS ONE</i> 7: e45170. <span class="doi">doi:10.1371/journal.pone.0045170</span></li>
+    <li>Harpending, H.C. (1994). Signature of ancient population growth in a low-resolution mitochondrial DNA mismatch distribution. <i>Human Biology</i> 66: 591–600. <span class="m">◆</span></li>
+    <li>Hasegawa, M., Kishino, H. and Yano, T. (1985). Dating of the human–ape splitting by a molecular clock of mitochondrial DNA. <i>Journal of Molecular Evolution</i> 22: 160–174. <span class="doi">doi:10.1007/BF02101694</span> <span class="m">◆</span></li>
+    <li>Hedrick, P.W. (2005). A standardized genetic differentiation measure. <i>Evolution</i> 59: 1633–1638. <span class="doi">doi:10.1111/j.0014-3820.2005.tb01814.x</span> <span class="m">◆</span></li>
+    <li>Hill, W.G. (1981). Estimation of effective population size from data on linkage disequilibrium. <i>Genetical Research</i> 38: 209–216. <span class="doi">doi:10.1017/S0016672300020553</span> <span class="m">◆</span></li>
+    <li>Holm, S. (1979). A simple sequentially rejective multiple test procedure. <i>Scandinavian Journal of Statistics</i> 6: 65–70.</li>
+    <li>Hudson, R.R. (1990). Gene genealogies and the coalescent process. <i>Oxford Surveys in Evolutionary Biology</i> 7: 1–44. <span class="m">◆</span></li>
+    <li>Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique and alternative parameters. <i>Ecology</i> 52: 577–586. <span class="doi">doi:10.2307/1934145</span> <span class="m">◆</span></li>
+    <li>Jakobsson, M. and Rosenberg, N.A. (2007). […]: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. <i>Bioinformatics</i> 23: 1801–1806. <span class="doi">doi:10.1093/bioinformatics/btm233</span> <span class="m">◆</span></li>
+    <li>Jombart, T., Devillard, S. and Balloux, F. (2010). Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. <i>BMC Genetics</i> 11: 94. <span class="doi">doi:10.1186/1471-2156-11-94</span> <span class="m">◆</span></li>
+    <li>Jost, L. (2008). G<sub>ST</sub> and its relatives do not measure differentiation. <i>Molecular Ecology</i> 17: 4015–4026. <span class="doi">doi:10.1111/j.1365-294X.2008.03887.x</span> <span class="m">◆</span></li>
+    <li>Jukes, T.H. and Cantor, C.R. (1969). Evolution of protein molecules. In: Munro, H.N. (ed.), <i>Mammalian Protein Metabolism</i>, vol. III, pp. 21–132. Academic Press, New York. <span class="doi">doi:10.1016/B978-1-4832-3211-9.50009-7</span> <span class="m">◆</span></li>
+    <li>Kay, K.M., Whittall, J.B. and Hodges, S.A. (2006). A survey of nuclear ribosomal internal transcribed spacer substitution rates across angiosperms: an approximate molecular clock with life history effects. <i>BMC Evolutionary Biology</i> 6: 36. <span class="doi">doi:10.1186/1471-2148-6-36</span></li>
+    <li>Kimura, M. (1980). A simple method for estimating evolutionary rates of base substitutions through comparative studies of nucleotide sequences. <i>Journal of Molecular Evolution</i> 16: 111–120. <span class="doi">doi:10.1007/BF01731581</span> <span class="m">◆</span></li>
+    <li>Kingman, J.F.C. (1982). The coalescent. <i>Stochastic Processes and their Applications</i> 13: 235–248. <span class="doi">doi:10.1016/0304-4149(82)90011-4</span> <span class="m">◆</span></li>
+    <li>Leinonen, T., McCairns, R.J.S., O’Hara, R.B. and Merilä, J. (2013). Q<sub>ST</sub>–F<sub>ST</sub> comparisons: evolutionary and ecological insights from genomic heterogeneity. <i>Nature Reviews Genetics</i> 14: 179–190. <span class="doi">doi:10.1038/nrg3395</span> <span class="m">◆</span></li>
+    <li>Levene, H. (1949). On a matching problem arising in genetics. <i>Annals of Mathematical Statistics</i> 20: 91–94. <span class="doi">doi:10.1214/aoms/1177730093</span></li>
+    <li>Loiselle, B.A., Sork, V.L., Nason, J. and Graham, C. (1995). Spatial genetic structure of a tropical understory shrub, <i>Psychotria officinalis</i> (Rubiaceae). <i>American Journal of Botany</i> 82: 1420–1425. <span class="doi">doi:10.1002/j.1537-2197.1995.tb12679.x</span> <span class="m">◆</span></li>
+    <li>Luikart, G., Allendorf, F.W., Cornuet, J.-M. and Sherwin, W.B. (1998). Distortion of allele frequency distributions provides a test for recent population bottlenecks. <i>Journal of Heredity</i> 89: 238–247. <span class="doi">doi:10.1093/jhered/89.3.238</span> <span class="m">◆</span></li>
+    <li>Luikart, G. and Cornuet, J.-M. (1998). Empirical evaluation of a test for identifying recently bottlenecked populations from allele frequency data. <i>Conservation Biology</i> 12: 228–237. <span class="doi">doi:10.1046/j.1523-1739.1998.96388.x</span></li>
+    <li>Lynch, M. and Milligan, B.G. (1994). Analysis of population genetic structure with RAPD markers. <i>Molecular Ecology</i> 3: 91–99. <span class="doi">doi:10.1111/j.1365-294X.1994.tb00109.x</span> <span class="m">◆</span></li>
+    <li>Mantel, N. (1967). The detection of disease clustering and a generalized regression approach. <i>Cancer Research</i> 27: 209–220.</li>
+    <li>Meirmans, P.G. and Hedrick, P.W. (2011). Assessing population structure: F<sub>ST</sub> and related measures. <i>Molecular Ecology Resources</i> 11: 5–18. <span class="doi">doi:10.1111/j.1755-0998.2010.02927.x</span></li>
+    <li>Nei, M. (1972). Genetic distance between populations. <i>American Naturalist</i> 106: 283–292. <span class="doi">doi:10.1086/282771</span></li>
+    <li>Nei, M. (1973). Analysis of gene diversity in subdivided populations. <i>Proceedings of the National Academy of Sciences USA</i> 70: 3321–3323. <span class="doi">doi:10.1073/pnas.70.12.3321</span> <span class="m">◆</span></li>
+    <li>Nei, M. (1978). Estimation of average heterozygosity and genetic distance from a small number of individuals. <i>Genetics</i> 89: 583–590. <span class="doi">doi:10.1093/genetics/89.3.583</span> <span class="m">◆</span></li>
+    <li>Nei, M. (1987). <i>Molecular Evolutionary Genetics</i>. Columbia University Press, New York. <span class="doi">doi:10.7312/nei-92038</span> <span class="m">◆</span></li>
+    <li>Nei, M. and Chesser, R.K. (1983). Estimation of fixation indices and gene diversities. <i>Annals of Human Genetics</i> 47: 253–259. <span class="doi">doi:10.1111/j.1469-1809.1983.tb00993.x</span> <span class="m">◆</span></li>
+    <li>Nei, M. and Li, W.-H. (1979). Mathematical model for studying genetic variation in terms of restriction endonucleases. <i>Proceedings of the National Academy of Sciences USA</i> 76: 5269–5273. <span class="doi">doi:10.1073/pnas.76.10.5269</span></li>
+    <li>Núñez, J.R., Anderton, C.R. and Renslow, R.S. (2018). Optimizing colormaps with consideration for color vision deficiency to enable accurate interpretation of scientific data. <i>PLoS ONE</i> 13: e0199239. <span class="doi">doi:10.1371/journal.pone.0199239</span></li>
+    <li>Nybom, H. (2004). Comparison of different nuclear DNA markers for estimating intraspecific genetic diversity in plants. <i>Molecular Ecology</i> 13: 1143–1155. <span class="doi">doi:10.1111/j.1365-294X.2004.02141.x</span></li>
+    <li>Okabe, M. and Ito, K. (2008). […]: how to make figures and presentations that are friendly to colorblind people. Web page. <span class="doi">https://jfly.uni-koeln.de/color/</span></li>
+    <li>Paetkau, D., Calvert, W., Stirling, I. and Strobeck, C. (1995). Microsatellite analysis of population structure in Canadian polar bears. <i>Molecular Ecology</i> 4: 347–354. <span class="doi">doi:10.1111/j.1365-294X.1995.tb00227.x</span> <span class="m">◆</span></li>
+    <li>Paetkau, D., Slade, R., Burden, M. and Estoup, A. (2004). Genetic assignment methods for the direct, real-time estimation of migration rate: a simulation-based exploration of accuracy and power. <i>Molecular Ecology</i> 13: 55–65. <span class="doi">doi:10.1046/j.1365-294X.2004.02008.x</span> <span class="m">◆</span></li>
+    <li>Parham, J.F., Donoghue, P.C.J., Bell, C.J. et al. (2012). Best practices for justifying fossil calibrations. <i>Systematic Biology</i> 61: 346–359. <span class="doi">doi:10.1093/sysbio/syr107</span></li>
+    <li>Peakall, R., Smouse, P.E. and Huff, D.R. (1995). Evolutionary implications of allozyme and RAPD variation in diploid populations of dioecious buffalograss <i>Buchloë dactyloides</i>. <i>Molecular Ecology</i> 4: 135–148. <span class="doi">doi:10.1111/j.1365-294X.1995.tb00203.x</span></li>
+    <li>Piry, S., Luikart, G. and Cornuet, J.-M. (1999). […]: a computer program for detecting recent reductions in the effective population size using allele frequency data. <i>Journal of Heredity</i> 90: 502–503. <span class="doi">doi:10.1093/jhered/90.4.502</span> <span class="m">◆</span></li>
+    <li>Pons, O. and Petit, R.J. (1996). Measuring and testing genetic differentiation with ordered versus unordered alleles. <i>Genetics</i> 144: 1237–1245. <span class="doi">doi:10.1093/genetics/144.3.1237</span> <span class="m">◆</span></li>
+    <li>Prevosti, A., Ocaña, J. and Alonso, G. (1975). Distances between populations of <i>Drosophila subobscura</i>, based on chromosome arrangement frequencies. <i>Theoretical and Applied Genetics</i> 45: 231–241. <span class="doi">doi:10.1007/BF00831894</span></li>
+    <li>Pritchard, J.K., Stephens, M. and Donnelly, P. (2000). Inference of population structure using multilocus genotype data. <i>Genetics</i> 155: 945–959. <span class="doi">doi:10.1093/genetics/155.2.945</span> <span class="m">◆</span></li>
+    <li>Pudovkin, A.I., Zaykin, D.V. and Hedgecock, D. (1996). On the potential for estimating the effective number of breeders from heterozygote-excess in progeny. <i>Genetics</i> 144: 383–387. <span class="doi">doi:10.1093/genetics/144.1.383</span> <span class="m">◆</span></li>
+    <li>Puechmaille, S.J. (2016). The program […] does not reliably recover the correct population structure when sampling is uneven: subsampling and new estimators alleviate the problem. <i>Molecular Ecology Resources</i> 16: 608–627. <span class="doi">doi:10.1111/1755-0998.12512</span> <span class="m">◆</span></li>
+    <li>Ramos-Onsins, S.E. and Rozas, J. (2002). Statistical properties of new neutrality tests against population growth. <i>Molecular Biology and Evolution</i> 19: 2092–2100. <span class="doi">doi:10.1093/oxfordjournals.molbev.a004034</span> <span class="m">◆</span></li>
+    <li>Rannala, B. and Mountain, J.L. (1997). Detecting immigration by using multilocus genotypes. <i>Proceedings of the National Academy of Sciences USA</i> 94: 9197–9201. <span class="doi">doi:10.1073/pnas.94.17.9197</span> <span class="m">◆</span></li>
+    <li>Reynolds, J., Weir, B.S. and Cockerham, C.C. (1983). Estimation of the coancestry coefficient: basis for a short-term genetic distance. <i>Genetics</i> 105: 767–779. <span class="doi">doi:10.1093/genetics/105.3.767</span></li>
+    <li>Ritland, K. (2002). Extensions of models for the estimation of mating systems using <i>n</i> independent loci. <i>Heredity</i> 88: 221–228. <span class="doi">doi:10.1038/sj.hdy.6800029</span></li>
+    <li>Rogers, J.S. (1972). Measures of genetic similarity and genetic distance. <i>Studies in Genetics VII</i>, University of Texas Publication 7213: 145–153.</li>
+    <li>Rogers, A.R. and Harpending, H. (1992). Population growth makes waves in the distribution of pairwise genetic differences. <i>Molecular Biology and Evolution</i> 9: 552–569. <span class="doi">doi:10.1093/oxfordjournals.molbev.a040727</span> <span class="m">◆</span></li>
+    <li>Rousset, F. (1997). Genetic differentiation and estimation of gene flow from F-statistics under isolation by distance. <i>Genetics</i> 145: 1219–1228. <span class="doi">doi:10.1093/genetics/145.4.1219</span> <span class="m">◆</span></li>
+    <li>Rousset, F. and Raymond, M. (1995). Testing heterozygote excess and deficiency. <i>Genetics</i> 140: 1413–1419. <span class="doi">doi:10.1093/genetics/140.4.1413</span> <span class="m">◆</span></li>
+    <li>Saitou, N. and Nei, M. (1987). The neighbor-joining method: a new method for reconstructing phylogenetic trees. <i>Molecular Biology and Evolution</i> 4: 406–425. <span class="doi">doi:10.1093/oxfordjournals.molbev.a040454</span> <span class="m">◆</span></li>
+    <li>Searle, S.R., Casella, G. and McCulloch, C.E. (1992). <i>Variance Components</i>. John Wiley and Sons, New York. <span class="doi">doi:10.1002/9780470316856</span> <span class="m">◆</span></li>
+    <li>Smouse, P.E. and Peakall, R. (1999). Spatial autocorrelation analysis of individual multiallele and multilocus genetic structure. <i>Heredity</i> 82: 561–573. <span class="doi">doi:10.1038/sj.hdy.6885180</span> <span class="m">◆</span></li>
+    <li>Sokal, R.R. and Michener, C.D. (1958). A statistical method for evaluating systematic relationships. <i>University of Kansas Science Bulletin</i> 38: 1409–1438.</li>
+    <li>Tajima, F. (1989). Statistical method for testing the neutral mutation hypothesis by DNA polymorphism. <i>Genetics</i> 123: 585–595. <span class="doi">doi:10.1093/genetics/123.3.585</span> <span class="m">◆</span></li>
+    <li>Takezaki, N. and Nei, M. (1996). Genetic distances and reconstruction of phylogenetic trees from microsatellite DNA. <i>Genetics</i> 144: 389–399. <span class="doi">doi:10.1093/genetics/144.1.389</span></li>
+    <li>Tavaré, S. (1986). Some probabilistic and statistical problems in the analysis of DNA sequences. <i>Lectures on Mathematics in the Life Sciences</i> 17: 57–86. <span class="m">◆</span></li>
+    <li>To, T.-H., Jung, M., Lycett, S. and Gascuel, O. (2016). Fast dating using least-squares criteria and algorithms. <i>Systematic Biology</i> 65: 82–97. <span class="doi">doi:10.1093/sysbio/syv068</span> <span class="m">◆</span></li>
+    <li>Tol, P. (2021). <i>Colour Schemes</i>. Technical note SRON/EPS/TN/09-002, version 3.2. <span class="doi">https://sronpersonalpages.nl/~pault/data/colourschemes.pdf</span></li>
+    <li>Vekemans, X. and Hardy, O.J. (2004). New insights from fine-scale spatial genetic structure analyses in plant populations. <i>Molecular Ecology</i> 13: 921–935. <span class="doi">doi:10.1046/j.1365-294X.2004.02076.x</span> <span class="m">◆</span></li>
+    <li>Wahlund, S. (1928). Zusammensetzung von Populationen und Korrelationserscheinungen vom Standpunkt der Vererbungslehre aus betrachtet. <i>Hereditas</i> 11: 65–106. <span class="doi">doi:10.1111/j.1601-5223.1928.tb02483.x</span></li>
+    <li>Waples, R.S. (2006). A bias correction for estimates of effective population size based on linkage disequilibrium at unlinked gene loci. <i>Conservation Genetics</i> 7: 167–184. <span class="doi">doi:10.1007/s10592-005-9100-y</span> <span class="m">◆</span></li>
+    <li>Waples, R.S. and Do, C. (2008). […]: a program for estimating effective population size from data on linkage disequilibrium. <i>Molecular Ecology Resources</i> 8: 753–756. <span class="doi">doi:10.1111/j.1755-0998.2007.02061.x</span></li>
+    <li>Waples, R.S. and Do, C. (2010). Linkage disequilibrium estimates of contemporary N<sub>e</sub> using highly variable genetic markers: a largely untapped resource for applied conservation and evolution. <i>Evolutionary Applications</i> 3: 244–262. <span class="doi">doi:10.1111/j.1752-4571.2009.00104.x</span></li>
+    <li>Watterson, G.A. (1975). On the number of segregating sites in genetical models without recombination. <i>Theoretical Population Biology</i> 7: 256–276. <span class="doi">doi:10.1016/0040-5809(75)90020-9</span> <span class="m">◆</span></li>
+    <li>Weir, B.S. (1979). Inferences about linkage disequilibrium. <i>Biometrics</i> 35: 235–254. <span class="doi">doi:10.2307/2529947</span> <span class="m">◆</span></li>
+    <li>Weir, B.S. (1996). <i>Genetic Data Analysis II: Methods for Discrete Population Genetic Data</i>. Sinauer Associates, Sunderland, Massachusetts. <span class="m">◆</span></li>
+    <li>Weir, B.S. and Cockerham, C.C. (1984). Estimating F-statistics for the analysis of population structure. <i>Evolution</i> 38: 1358–1370. <span class="doi">doi:10.1111/j.1558-5646.1984.tb05657.x</span> <span class="m">◆</span></li>
+    <li>Whitlock, M.C. (2008). Evolutionary inference from Q<sub>ST</sub>. <i>Molecular Ecology</i> 17: 1885–1896. <span class="doi">doi:10.1111/j.1365-294X.2008.03712.x</span></li>
+    <li>Whitlock, M.C. and McCauley, D.E. (1999). Indirect measures of gene flow and migration: F<sub>ST</sub> ≠ 1/(4Nm + 1). <i>Heredity</i> 82: 117–125. <span class="doi">doi:10.1038/sj.hdy.6884960</span></li>
+    <li>Wolfe, K.H., Li, W.-H. and Sharp, P.M. (1987). Rates of nucleotide substitution vary greatly among plant mitochondrial, chloroplast, and nuclear DNAs. <i>Proceedings of the National Academy of Sciences USA</i> 84: 9054–9058. <span class="doi">doi:10.1073/pnas.84.24.9054</span></li>
+    <li>Wright, S. (1978). <i>Evolution and the Genetics of Populations. Vol. 4: Variability Within and Among Natural Populations</i>. University of Chicago Press, Chicago.</li>
+    <li>Yang, Z. (1994). Maximum likelihood phylogenetic estimation from DNA sequences with variable rates over sites: approximate methods. <i>Journal of Molecular Evolution</i> 39: 306–314. <span class="doi">doi:10.1007/BF00160154</span> <span class="m">◆</span></li>
+    <li>Zhivotovsky, L.A. (1999). Estimating population structure in diploids with multilocus dominant DNA markers. <i>Molecular Ecology</i> 8: 907–913. <span class="doi">doi:10.1046/j.1365-294x.1999.00620.x</span> <span class="m">◆</span></li>
+  </ul>
+
+  <!-- ====================================================================== F -->
+  <h2 id="ap-f" data-nueva-hoja><span class="num">F</span>Third-party components</h2>
+  <p class="lead">PopGeneticsPro is an original work: its code, its figure engine, its colour palettes and scales, its illustrations and its practice data were made for this program. Only one software component comes from a third party. The app and the manual also use some published data and designs, which are declared here together with their terms of use.</p>
+
+  <table class="compacta">
+    <caption><b>Table F.1.</b> Third-party software component included in the app.</caption>
+    <thead><tr><th style="width:27%">Component</th><th style="width:9%">Version</th><th style="width:15%">Licence</th><th>Use and notice</th></tr></thead>
+    <tbody>
+      <tr><td><b>Spreadsheet reading and writing library</b><br><code>vendor/xlsx.full.min.js</code></td><td>0.18.5</td><td>Apache 2.0</td><td>Reads <code>.xlsx</code>, <code>.xls</code> and <code>.ods</code> workbooks and writes <code>.xlsx</code> and <code>.ods</code> in Block 2: data loading, the built-in sheet and templates. It is an unmodified copy that is not part of the original work. Its copyright notice, its source and the full text of the licence are in <code>vendor/THIRD-PARTY-NOTICES.txt</code>, which must always accompany the app.</td></tr>
+    </tbody>
+  </table>
+
+  <table class="compacta">
+    <caption><b>Table F.2.</b> Published data and designs used by the app.</caption>
+    <thead><tr><th style="width:25%">Resource</th><th style="width:25%">Authorship</th><th style="width:25%">Terms</th><th>Where it is used</th></tr></thead>
+    <tbody>
+      <tr><td><b>Colour-blind-safe palette</b></td><td>Okabe and Ito (2008): eight colours; the app adds a grey and a dark brown.</td><td>Freely accessible guide; the app and the manual cite its authors.</td><td>Palette <span class="ui">Okabe &amp; Ito 2008 (colour-blind safe)</span>.</td></tr>
+      <tr><td><b>Qualitative colour schemes</b></td><td>Tol (2021): the <i>bright</i> scheme plus black and two colours from the <i>vibrant</i> scheme.</td><td>Freely accessible technical note; the author is cited.</td><td>Palette <span class="ui">Tol 2021 (colour-blind safe)</span>.</td></tr>
+      <tr><td><b>Viridis, Magma, Inferno and Plasma colour maps</b></td><td>Nathaniel J. Smith and Stéfan van der Walt; Viridis also with Eric Firing (2015).</td><td>Dedicated to the public domain (CC0 1.0); their authors appreciate credit.</td><td>Continuous scales for heatmaps (five colours from each).</td></tr>
+      <tr><td><b>Cividis colour map</b></td><td>Núñez, Anderton and Renslow (2018).</td><td>Open-access article (CC BY 4.0); it is cited.</td><td>Scale <span class="ui">Cividis (colour-blind safe)</span>.</td></tr>
+      <tr><td><b>Geological time scale</b></td><td>Boundaries and colours of the International Chronostratigraphic Chart, version 2020/03 (Cohen et al., 2013, updated).</td><td>The app cites the chart and its version.</td><td>Dated trees and the aid for reading the age of a stage (Block 8).</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 700 262" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif" role="img" aria-label="The app’s eight own colour scales">
+      <defs>
+        <linearGradient id="gRdylbu"><stop offset="0" stop-color="#274387"/><stop offset=".25" stop-color="#69aed5"/><stop offset=".5" stop-color="#fcf5c7"/><stop offset=".75" stop-color="#ed9c55"/><stop offset="1" stop-color="#a51e24"/></linearGradient>
+        <linearGradient id="gRdbu"><stop offset="0" stop-color="#023869"/><stop offset=".25" stop-color="#97c5de"/><stop offset=".5" stop-color="#f6efe6"/><stop offset=".75" stop-color="#e5a692"/><stop offset="1" stop-color="#902822"/></linearGradient>
+        <linearGradient id="gSpectral"><stop offset="0" stop-color="#564597"/><stop offset=".25" stop-color="#52c8b4"/><stop offset=".5" stop-color="#f1f4b6"/><stop offset=".75" stop-color="#f89a56"/><stop offset="1" stop-color="#a61f47"/></linearGradient>
+        <linearGradient id="gBluered"><stop offset="0" stop-color="#1e4798"/><stop offset=".5" stop-color="#f3ede6"/><stop offset="1" stop-color="#be3025"/></linearGradient>
+        <linearGradient id="gGreens"><stop offset="0" stop-color="#f1f7dd"/><stop offset=".5" stop-color="#59b47d"/><stop offset="1" stop-color="#003f33"/></linearGradient>
+        <linearGradient id="gYlgn"><stop offset="0" stop-color="#fcfacb"/><stop offset=".333" stop-color="#bde07e"/><stop offset=".667" stop-color="#47944c"/><stop offset="1" stop-color="#034741"/></linearGradient>
+        <linearGradient id="gBrowns"><stop offset="0" stop-color="#fdf5e6"/><stop offset=".5" stop-color="#cc9966"/><stop offset="1" stop-color="#663300"/></linearGradient>
+        <linearGradient id="gHeat"><stop offset="0" stop-color="#fff7d9"/><stop offset=".5" stop-color="#fd923e"/><stop offset="1" stop-color="#9e122b"/></linearGradient>
+      </defs>
+      <text x="0" y="12" font-size="10" letter-spacing="1.2" font-weight="500" fill="#111">THE APP’S OWN HEATMAP SCALES</text>
+      <g font-size="11" fill="#111">
+        <text x="0" y="41">Red–Yellow–Blue</text><rect x="150" y="28" width="440" height="18" fill="url(#gRdylbu)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="41" fill="#5d6472">diverging</text>
+        <text x="0" y="69">Red–Blue</text><rect x="150" y="56" width="440" height="18" fill="url(#gRdbu)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="69" fill="#5d6472">diverging</text>
+        <text x="0" y="97">Spectral</text><rect x="150" y="84" width="440" height="18" fill="url(#gSpectral)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="97" fill="#5d6472">diverging</text>
+        <text x="0" y="125">Blue–White–Red</text><rect x="150" y="112" width="440" height="18" fill="url(#gBluered)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="125" fill="#5d6472">diverging</text>
+        <text x="0" y="153">Greens</text><rect x="150" y="140" width="440" height="18" fill="url(#gGreens)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="153" fill="#5d6472">sequential</text>
+        <text x="0" y="181">Yellow–Green</text><rect x="150" y="168" width="440" height="18" fill="url(#gYlgn)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="181" fill="#5d6472">sequential</text>
+        <text x="0" y="209">Browns (soil)</text><rect x="150" y="196" width="440" height="18" fill="url(#gBrowns)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="209" fill="#5d6472">sequential</text>
+        <text x="0" y="237">Heat</text><rect x="150" y="224" width="440" height="18" fill="url(#gHeat)" stroke="#c9ced8" stroke-width=".6"/><text x="604" y="237" fill="#5d6472">sequential</text>
+      </g>
+      <g font-size="9" fill="#5d6472" text-anchor="middle"><text x="150" y="258">minimum</text><text x="370" y="258">centre</text><text x="590" y="258">maximum</text></g>
+    </svg>
+    <figcaption><b>Figure F.1.</b> The eight heatmap scales designed for the app, with their names as they appear in the menu. They are built from colours anchored in a perceptual colour space: in the diverging scales, lightness rises towards the centre and falls equally towards the ends; in the sequential scales, it falls continuously. The ends of the diverging scales remain distinguishable with red–green colour blindness.</figcaption>
+  </figure>
+
+  <div class="caja nota">
+    <div class="caja-t"><span class="ico">i</span>Note · review of components</div>
+    <p style="margin:0">While preparing this appendix, the origin of every colour in the app was reviewed. Seven of the heatmap scales copied published colour specifications whose licence requires an acknowledgement in the documentation. They were replaced by the original scales of figure F.1, keeping the same names in the menu, and the screenshots in the chapters that showed them were redone (the figures for null alleles, pairwise differentiation, phenotypic diversity and assignment). The values in the figures do not change, only their colours.</p>
+  </div>
+
+  <table class="compacta">
+    <caption><b>Table F.3.</b> Resources used in the manual.</caption>
+    <thead><tr><th style="width:27%">Resource</th><th style="width:33%">Authorship and licence</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><b>Typefaces</b> Cormorant, Crimson Pro and Jost</td><td>Christian Thalmann; Jacques Le Bailly; Owen Earl. SIL Open Font License (OFL), version 1.1.</td><td>Headings, text and labels. The HTML pages load them from a public font service and the PDF embeds them, as the licence permits; offline, the browser uses system fonts.</td></tr>
+      <tr><td><b>Illustrations and diagrams</b></td><td>Original to this manual.</td><td>Vector cover, explanatory figures and the illustrations of the invented genera in the dating example.</td></tr>
+      <tr><td><b>Practice data</b></td><td>By the author. The ISSR matrix of 15 maize landraces contains real data; the other examples were simulated with the programs included (<code>data/generate_examples.pl</code>, <code>data/generate_dating_example.pl</code> and <code>manual/herramientas/generar-demografia.pl</code>), with fixed seeds.</td><td>The app’s examples and the files in <code>manual/herramientas/</code>. The locus names in the maize microsatellite example are public marker names; their genotypes are simulated.</td></tr>
+      <tr><td><b>Screenshots</b></td><td>Of the app itself.</td><td>Chapter figures.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja importante">
+    <div class="caja-t"><span class="ico">!</span>Important · when sharing or redistributing the app</div>
+    <p style="margin:0">The PopGeneticsPro code is distributed under the GNU General Public License, version 3 or later (file <code>LICENSE</code>). If you share the folder, keep it complete: <code>LICENSE</code>, <code>vendor/THIRD-PARTY-NOTICES.txt</code> and the library in <code>vendor/</code> must travel together. If you publish a figure made with the Okabe and Ito palette, the Tol palette or the Cividis scale, cite their authors.</p>
+  </div>
+
+  <p style="margin-top:0.25in">This appendix concludes the English edition of the manual.</p>
+</section>
+
+</body>
+</html>

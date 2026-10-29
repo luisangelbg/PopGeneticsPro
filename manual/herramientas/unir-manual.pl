@@ -9,6 +9,7 @@ use strict; use warnings; use utf8;
 use open qw(:std :encoding(UTF-8));
 
 my $lang = shift or die "uso: perl herramientas/unir-manual.pl <carpeta del idioma>\n";
+my $titulo = $lang eq 'en' ? "PopGeneticsPro \x{b7} User's Manual" : "PopGeneticsPro \x{b7} Manual de usuario";
 opendir my $dh, $lang or die "$lang: $!";
 my @parts = sort grep { /^(0[1-9]|1\d)-.*\.html$/ && $_ ne 'manual-completo.html' } readdir $dh;
 closedir $dh;
@@ -78,7 +79,7 @@ my $html = <<"HTML";
 <html lang="$lang">
 <head>
 <meta charset="utf-8">
-<title>PopGeneticsPro · Manual de usuario</title>
+<title>$titulo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- documento generado por herramientas/unir-manual.pl: no se edita a mano; se corrigen las partes -->
 $links
